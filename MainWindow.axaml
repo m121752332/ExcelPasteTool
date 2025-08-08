@@ -1,0 +1,36 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="ExcelPasteTool.MainWindow"
+        Title="資料分隔處理器" Width="800" Height="450">
+
+	<Grid ColumnDefinitions="3*,2*" RowDefinitions="Auto,*">
+		<!-- 左側 -->
+		<StackPanel Grid.Column="0" Margin="10">
+			<TextBlock Text="PIP 分隔資料" />
+			<TextBox Name="TopBox" Height="40" TextChanged="TopBoxChanged"/>
+
+			<TextBlock Text="SQL 條件" Margin="0,10,0,0"/>
+			<TextBox Name="BottomBox" Height="40" IsReadOnly="True"/>
+
+			<StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+				<TextBlock Text="分隔符號：" VerticalAlignment="Center"/>
+				<TextBox Name="SeparatorBox" Width="30" Text="|" TextChanged="SeparatorChanged"/>
+			</StackPanel>
+		</StackPanel>
+
+		<!-- 右側 -->
+		<StackPanel Grid.Column="1" Margin="10">
+			<Button Content="資料貼上" Click="PasteData_Click" Width="100"/>
+			<ListBox ItemsSource="{Binding Items}" Height="350" Margin="0,10,0,0">
+				<ListBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding}" />
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+			</ListBox>
+		</StackPanel>
+	</Grid>
+</Window>
