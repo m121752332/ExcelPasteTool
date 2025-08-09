@@ -16,6 +16,9 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow();
+            
+            // 初始化主題系統
+            ThemeManager.ApplyTheme(ThemeManager.CurrentTheme);
         }
 
         base.OnFrameworkInitializationCompleted();

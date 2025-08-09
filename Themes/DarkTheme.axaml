@@ -1,0 +1,259 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  
+  <!-- 暗黑模式主題（黑底橘色字體） -->
+  <Style Selector="Window">
+    <Setter Property="Background" Value="#1E1E1E"/>
+  </Style>
+  
+  <!-- 響應式面板樣式 -->
+  <Style Selector="Border.panel">
+    <Setter Property="Background" Value="#2D2D30"/>
+    <Setter Property="BoxShadow" Value="0 2 8 0 #40000000"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="BorderBrush" Value="#3E3E42"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="Margin" Value="5"/>
+  </Style>
+  
+  <Style Selector="TextBlock.section-title">
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="FontSize" Value="16"/>
+    <Setter Property="Foreground" Value="#FF8C00"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+  </Style>
+  
+  <!-- 響應式輸入區域 -->
+  <Style Selector="Border.input-area">
+    <Setter Property="Background" Value="#383838"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="BorderBrush" Value="#484848"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="MinHeight" Value="120"/>
+  </Style>
+  
+  <!-- 響應式文字輸入框 - 強制換行，防止無限寬度 -->
+  <Style Selector="TextBox.input">
+    <Setter Property="FontFamily" Value="Consolas, Segoe UI Symbol, Segoe UI Emoji, Microsoft JhengHei, SimSun"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Foreground" Value="#FFAA44"/>
+    <Setter Property="CaretBrush" Value="#FF8C00"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+    <Setter Property="AcceptsReturn" Value="True"/>
+    <Setter Property="VerticalContentAlignment" Value="Top"/>
+    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    <Setter Property="VerticalAlignment" Value="Stretch"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="SelectionBrush" Value="#FF8C00"/>
+    <Setter Property="SelectionForegroundBrush" Value="Black"/>
+    <!-- 強制文字換行，防止水平滾動 -->
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+  </Style>
+  
+  <Style Selector="TextBox.sql-output">
+    <Setter Property="Foreground" Value="#FF6600"/>
+  </Style>
+  
+  <!-- 響應式按鈕樣式 -->
+  <Style Selector="Button.primary">
+    <Setter Property="Background" Value="#FF8C00"/>
+    <Setter Property="Foreground" Value="Black"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="MinWidth" Value="100"/>
+    <Setter Property="MinHeight" Value="35"/>
+    <Setter Property="FontSize" Value="12"/>
+  </Style>
+  
+  <Style Selector="Button.primary:pointerover">
+    <Setter Property="Background" Value="#FFB347"/>
+  </Style>
+
+  <!-- 響應式清空按鈕樣式 -->
+  <Style Selector="Button.secondary">
+    <Setter Property="Background" Value="#2D2D30"/>
+    <Setter Property="Foreground" Value="#FF8C00"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="FontSize" Value="11"/>
+    <Setter Property="BorderBrush" Value="#FF8C00"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="MinWidth" Value="90"/>
+    <Setter Property="MinHeight" Value="35"/>
+  </Style>
+  
+  <Style Selector="Button.secondary:pointerover">
+    <Setter Property="Background" Value="#FF8C00"/>
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+
+  <!-- 響應式主題選擇器樣式 -->
+  <Style Selector="ComboBox.theme-selector">
+    <Setter Property="Background" Value="#4D4D4D"/>
+    <Setter Property="Foreground" Value="#FF8C00"/>
+    <Setter Property="BorderBrush" Value="#6D6D6D"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="Padding" Value="10,8"/>
+    <Setter Property="MinWidth" Value="120"/>
+    <Setter Property="MaxWidth" Value="200"/>
+  </Style>
+
+  <Style Selector="ComboBox.theme-selector:pointerover">
+    <Setter Property="Background" Value="#5D5D5D"/>
+  </Style>
+
+  <Style Selector="ComboBox.theme-selector:focus">
+    <Setter Property="BorderBrush" Value="#FF8C00"/>
+  </Style>
+
+  <!-- 響應式語言選擇器樣式 -->
+  <Style Selector="ComboBox.language-selector">
+    <Setter Property="Background" Value="#4D4D4D"/>
+    <Setter Property="Foreground" Value="#FF8C00"/>
+    <Setter Property="BorderBrush" Value="#6D6D6D"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="Padding" Value="10,8"/>
+    <Setter Property="MinWidth" Value="110"/>
+    <Setter Property="MaxWidth" Value="130"/>
+  </Style>
+
+  <Style Selector="ComboBox.language-selector:pointerover">
+    <Setter Property="Background" Value="#5D5D5D"/>
+  </Style>
+
+  <Style Selector="ComboBox.language-selector:focus">
+    <Setter Property="BorderBrush" Value="#FF8C00"/>
+  </Style>
+
+  <!-- 響應式分隔符號選擇器樣式 -->
+  <Style Selector="ComboBox.separator-selector">
+    <Setter Property="Background" Value="#4D4D4D"/>
+    <Setter Property="Foreground" Value="#FF8C00"/>
+    <Setter Property="BorderBrush" Value="#6D6D6D"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="FontFamily" Value="Consolas"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="Padding" Value="8,6"/>
+    <Setter Property="MinWidth" Value="80"/>
+    <Setter Property="MaxWidth" Value="150"/>
+  </Style>
+
+  <Style Selector="ComboBox.separator-selector:pointerover">
+    <Setter Property="Background" Value="#5D5D5D"/>
+  </Style>
+
+  <Style Selector="ComboBox.separator-selector:focus">
+    <Setter Property="BorderBrush" Value="#FF8C00"/>
+  </Style>
+
+  <!-- 響應式下拉選單項目樣式 -->
+  <Style Selector="ComboBoxItem">
+    <Setter Property="Background" Value="#4D4D4D"/>
+    <Setter Property="Foreground" Value="#FFAA44"/>
+    <Setter Property="Padding" Value="10,8"/>
+    <Setter Property="MinHeight" Value="30"/>
+  </Style>
+
+  <Style Selector="ComboBoxItem:pointerover">
+    <Setter Property="Background" Value="#FF8C00"/>
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+
+  <Style Selector="ComboBoxItem:selected">
+    <Setter Property="Background" Value="#FF8C00"/>
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+
+  <!-- 響應式表格樣式 -->
+  <Style Selector="Grid.data-row">
+    <Setter Property="Background" Value="#333333"/>
+    <Setter Property="Margin" Value="0,0,0,1"/>
+    <Setter Property="MinHeight" Value="30"/>
+  </Style>
+
+  <Style Selector="Grid.data-row:nth-child(even)">
+    <Setter Property="Background" Value="#383838"/>
+  </Style>
+
+  <Style Selector="Grid.data-row:pointerover">
+    <Setter Property="Background" Value="#4D4D4D"/>
+  </Style>
+
+  <!-- 響應式表格文字樣式 -->
+  <Style Selector="TextBlock.row-number">
+    <Setter Property="Background" Value="#2D2D30"/>
+    <Setter Property="Foreground" Value="#FF8C00"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="FontFamily" Value="Consolas"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="HorizontalAlignment" Value="Center"/>
+  </Style>
+
+  <Style Selector="TextBlock.row-data">
+    <Setter Property="Foreground" Value="#FFAA44"/>
+    <Setter Property="FontFamily" Value="Consolas"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+  </Style>
+  
+  <!-- 響應式滾動檢視器樣式 -->
+  <Style Selector="ScrollViewer">
+    <Setter Property="AllowAutoHide" Value="True"/>
+  </Style>
+  
+  <!-- 左側面板內的滾動檢視器 - 禁用水平滾動 -->
+  <Style Selector="Border.panel ScrollViewer">
+    <Setter Property="HorizontalScrollBarVisibility" Value="Disabled"/>
+    <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+  </Style>
+  
+  <!-- 滾動條樣式 -->
+  <Style Selector="ScrollBar">
+    <Setter Property="Background" Value="#2D2D30"/>
+  </Style>
+  
+  <Style Selector="ScrollBar:horizontal">
+    <Setter Property="Height" Value="12"/>
+  </Style>
+  
+  <Style Selector="ScrollBar:vertical">
+    <Setter Property="Width" Value="12"/>
+  </Style>
+  
+  <!-- 響應式分隔符號區域 -->
+  <Style Selector="Border.separator-area">
+    <Setter Property="Background" Value="#383838"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="BorderBrush" Value="#484848"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="MinHeight" Value="40"/>
+  </Style>
+  
+  <!-- 響應式標籤文字樣式 -->
+  <Style Selector="TextBlock">
+    <Setter Property="Foreground" Value="#FFAA44"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+    <Setter Property="FontFamily" Value="Segoe UI Symbol, Segoe UI Emoji, Microsoft JhengHei, SimSun, Arial Unicode MS"/>
+  </Style>
+
+  <!-- 語言特定字型樣式 -->
+  <Style Selector="Button">
+    <Setter Property="FontFamily" Value="Segoe UI Symbol, Segoe UI Emoji, Microsoft JhengHei, SimSun, Arial Unicode MS"/>
+  </Style>
+
+  <Style Selector="ComboBox">
+    <Setter Property="FontFamily" Value="Segoe UI Symbol, Segoe UI Emoji, Microsoft JhengHei, SimSun, Arial Unicode MS"/>
+  </Style>
+  
+</Styles>

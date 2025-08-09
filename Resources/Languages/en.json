@@ -1,0 +1,22 @@
+{
+  "AppTitle": "Data Separator Tool",
+  "SeparatorLabel": "?? Separator:",
+  "ThemeLabel": "?? Theme:",
+  "LanguageLabel": "?? Language:",
+  "PipDataTitle": "?? PIP Separated Data",
+  "SqlConditionTitle": "?? SQL Condition",
+  "DataListTitle": "?? Data List",
+  "PasteDataButton": "?? Paste Data",
+  "ClearDataButton": "??? Clear Data",
+  "RowNumberHeader": "Row",
+  "DataContentHeader": "Data Content",
+  "SeparatorPipe": "Pipe |",
+  "SeparatorSemicolon": "Semicolon ;",
+  "SeparatorColon": "Colon :",
+  "SeparatorSpace": "Space",
+  "ThemeDark": "Dark Mode",
+  "ThemeModern": "Modern Theme",
+  "LanguageTraditionalChinese": "�c�餤��",
+  "LanguageSimplifiedChinese": "?�^����",
+  "LanguageEnglish": "English"
+}
