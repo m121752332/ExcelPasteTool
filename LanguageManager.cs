@@ -6,9 +6,9 @@ namespace ExcelPasteTool;
 
 public enum AppLanguage
 {
-    TraditionalChinese,  // ÁcÅé¤¤¤å
-    SimplifiedChinese,   // Â²Åé¤¤¤å
-    English              // ­^¤å
+    TraditionalChinese,  // ç¹é«”ä¸­æ–‡
+    SimplifiedChinese,   // ç°¡é«”ä¸­æ–‡
+    English              // è‹±æ–‡
 }
 
 public static class LanguageManager
@@ -57,10 +57,10 @@ public static class LanguageManager
     {
         return language switch
         {
-            AppLanguage.TraditionalChinese => "ÁcÅé¤¤¤å",
-            AppLanguage.SimplifiedChinese => "?Ê^¤¤¤å",
+            AppLanguage.TraditionalChinese => "ç¹é«”ä¸­æ–‡",
+            AppLanguage.SimplifiedChinese => "ç®€ä½“ä¸­æ–‡",
             AppLanguage.English => "English",
-            _ => "ÁcÅé¤¤¤å"
+            _ => "ç¹é«”ä¸­æ–‡"
         };
     }
 
@@ -68,8 +68,8 @@ public static class LanguageManager
     {
         return language switch
         {
-            AppLanguage.TraditionalChinese => "Microsoft JhengHei",  // ·L³n¥¿¶ÂÅé
-            AppLanguage.SimplifiedChinese => "Source Han Sans SC",  // «ä·½¶ÂÅé SC
+            AppLanguage.TraditionalChinese => "Microsoft JhengHei",  // å¾®è»Ÿæ­£é»‘é«”
+            AppLanguage.SimplifiedChinese => "Source Han Sans SC",  // æ€æºé»‘é«” SC
             AppLanguage.English => "Segoe UI",                      // Segoe UI
             _ => "Microsoft JhengHei"
         };
@@ -89,23 +89,23 @@ public static class LanguageManager
     {
         return new Dictionary<string, string>
         {
-            ["AppTitle"] = "¸ê®Æ¤À¹j³B²z¾¹",
-            ["SeparatorLabel"] = "? ¤À¹j²Å¸¹¡G",
-            ["ThemeLabel"] = "?? ¥DÃD:",
-            ["LanguageLabel"] = "?? »y¨¥:",
-            ["PipDataTitle"] = "?? PIP ¤À¹j¸ê®Æ",
-            ["SqlConditionTitle"] = "?? SQL ±ø¥ó",
-            ["DataListTitle"] = "?? ¸ê®Æ²M³æ",
-            ["PasteDataButton"] = "?? ¸ê®Æ¶K¤W",
-            ["ClearDataButton"] = "?? ²MªÅ¸ê®Æ",
-            ["RowNumberHeader"] = "¦æ¸¹",
-            ["DataContentHeader"] = "¸ê®Æ¤º®e",
-            ["SeparatorPipe"] = "½İ½u |",
-            ["SeparatorSemicolon"] = "¤À¸¹ ;",
-            ["SeparatorColon"] = "«_¸¹ :",
-            ["SeparatorSpace"] = "ªÅ¥Õ",
-            ["ThemeDark"] = "·t¶Â¼Ò¦¡",
-            ["ThemeModern"] = "²{¥N¤Æ¥DÃD"
+            ["AppTitle"] = "è³‡æ–™åˆ†éš”è™•ç†å™¨",
+            ["SeparatorLabel"] = "åˆ†éš”ç¬¦è™Ÿï¼š",
+            ["ThemeLabel"] = "ä¸»é¡Œ:",
+            ["LanguageLabel"] = "èªè¨€:",
+            ["PipDataTitle"] = "PIP åˆ†éš”è³‡æ–™",
+            ["SqlConditionTitle"] = "SQL æ¢ä»¶",
+            ["DataListTitle"] = "è³‡æ–™æ¸…å–®",
+            ["PasteDataButton"] = "è³‡æ–™è²¼ä¸Š",
+            ["ClearDataButton"] = "æ¸…ç©ºè³‡æ–™",
+            ["RowNumberHeader"] = "è¡Œè™Ÿ",
+            ["DataContentHeader"] = "è³‡æ–™å…§å®¹",
+            ["SeparatorPipe"] = "è±ç·š |",
+            ["SeparatorSemicolon"] = "åˆ†è™Ÿ ;",
+            ["SeparatorColon"] = "å†’è™Ÿ :",
+            ["SeparatorSpace"] = "ç©ºç™½",
+            ["ThemeDark"] = "æš—é»‘æ¨¡å¼",
+            ["ThemeLight"] = "å…‰ç·šæ¨¡å¼"
         };
     }
 
@@ -113,23 +113,23 @@ public static class LanguageManager
     {
         return new Dictionary<string, string>
         {
-            ["AppTitle"] = "?Õu¤À¹j?²z¾¹",
-            ["SeparatorLabel"] = "? ¤À¹j²Å?¡G",
-            ["ThemeLabel"] = "?? ¥D?:",
-            ["LanguageLabel"] = "?? ?¨¥:",
-            ["PipDataTitle"] = "?? PIP ¤À¹j?Õu",
-            ["SqlConditionTitle"] = "?? SQL ?¥ó",
-            ["DataListTitle"] = "?? ?Õu²M?",
-            ["PasteDataButton"] = "?? ?ÕuÖß?",
-            ["ClearDataButton"] = "?? ²MªÅ?Õu",
-            ["RowNumberHeader"] = "¦æ?",
-            ["DataContentHeader"] = "?Õu?®e",
-            ["SeparatorPipe"] = "?? |",
-            ["SeparatorSemicolon"] = "¤À? ;",
-            ["SeparatorColon"] = "«_? :",
-            ["SeparatorSpace"] = "ªÅ®æ",
-            ["ThemeDark"] = "·t¶Â¼Ò¦¡",
-            ["ThemeModern"] = "?¥N¤Æ¥D?"
+            ["AppTitle"] = "æ•°æ®åˆ†éš”å¤„ç†å™¨",
+            ["SeparatorLabel"] = "åˆ†éš”ç¬¦å·ï¼š",
+            ["ThemeLabel"] = "ä¸»é¢˜:",
+            ["LanguageLabel"] = "è¯­è¨€:",
+            ["PipDataTitle"] = "PIP åˆ†éš”æ•°æ®",
+            ["SqlConditionTitle"] = "SQL æ¡ä»¶",
+            ["DataListTitle"] = "æ•°æ®æ¸…å•",
+            ["PasteDataButton"] = "æ•°æ®ç²˜è´´",
+            ["ClearDataButton"] = "æ¸…ç©ºæ•°æ®",
+            ["RowNumberHeader"] = "è¡Œå·",
+            ["DataContentHeader"] = "æ•°æ®å†…å®¹",
+            ["SeparatorPipe"] = "ç«–çº¿ |",
+            ["SeparatorSemicolon"] = "åˆ†å· ;",
+            ["SeparatorColon"] = "å†’å· :",
+            ["SeparatorSpace"] = "ç©ºæ ¼",
+            ["ThemeDark"] = "æš—é»‘æ¨¡å¼",
+            ["ThemeLight"] = "å…‰ç·šæ¨¡å¼"
         };
     }
 
@@ -138,14 +138,14 @@ public static class LanguageManager
         return new Dictionary<string, string>
         {
             ["AppTitle"] = "Data Separator Tool",
-            ["SeparatorLabel"] = "? Separator:",
-            ["ThemeLabel"] = "?? Theme:",
-            ["LanguageLabel"] = "?? Language:",
-            ["PipDataTitle"] = "?? PIP Separated Data",
-            ["SqlConditionTitle"] = "?? SQL Condition",
-            ["DataListTitle"] = "?? Data List",
-            ["PasteDataButton"] = "?? Paste Data",
-            ["ClearDataButton"] = "?? Clear Data",
+            ["SeparatorLabel"] = "Separator:",
+            ["ThemeLabel"] = "Theme:",
+            ["LanguageLabel"] = "Language:",
+            ["PipDataTitle"] = "PIP Separated Data",
+            ["SqlConditionTitle"] = "SQL Condition",
+            ["DataListTitle"] = "Data List",
+            ["PasteDataButton"] = "Paste Data",
+            ["ClearDataButton"] = "Clear Data",
             ["RowNumberHeader"] = "Row",
             ["DataContentHeader"] = "Data Content",
             ["SeparatorPipe"] = "Pipe |",
@@ -153,12 +153,12 @@ public static class LanguageManager
             ["SeparatorColon"] = "Colon :",
             ["SeparatorSpace"] = "Space",
             ["ThemeDark"] = "Dark Mode",
-            ["ThemeModern"] = "Modern Theme"
+            ["ThemeLight"] = "Light Mode"
         };
     }
 }
 
-// ¥iÆ[¹îªº¥»¦a¤Æ¤å¦rÃş§O
+// å¯è§€å¯Ÿçš„æœ¬åœ°åŒ–æ–‡å­—é¡åˆ¥
 public class LocalizedText : INotifyPropertyChanged
 {
     private readonly string _key;

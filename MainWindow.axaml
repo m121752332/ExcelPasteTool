@@ -2,222 +2,69 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ExcelPasteTool"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
         x:Class="ExcelPasteTool.MainWindow"
         x:Name="MainWindowInstance"
         Width="800" Height="600"
-        MinWidth="600" MinHeight="450"
-        MaxWidth="1600" MaxHeight="1200"
+        MinWidth="1024" MinHeight="600"
+        MaxHeight="1200"
         WindowStartupLocation="CenterScreen">
-
-	<!-- 主要響應式容器 -->
-	<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-		<Grid MinWidth="600" MinHeight="400" MaxWidth="1600">
-			<Grid.RowDefinitions>
-				<!-- 頂部控制列 -->
-				<RowDefinition Height="Auto"/>
-				<!-- 主要內容區域 -->
-				<RowDefinition Height="*"/>
-			</Grid.RowDefinitions>
-			
-			<!-- 頂部控制區域 -->
-			<Border Grid.Row="0" Classes="panel" Margin="10" Padding="15">
-				<Grid>
-					<Grid.ColumnDefinitions>
-						<!-- 分隔符號區域 -->
-						<ColumnDefinition Width="Auto" MinWidth="220"/>
-						<ColumnDefinition Width="Auto"/>
-						<!-- 語言選擇器區域 -->
-						<ColumnDefinition Width="Auto" MinWidth="150"/>
-						<ColumnDefinition Width="Auto"/>
-						<!-- 主題選擇器區域 -->
-						<ColumnDefinition Width="Auto" MinWidth="170"/>
-						<ColumnDefinition Width="*"/>
-					</Grid.ColumnDefinitions>
-					
-					<!-- 分隔符號區域 -->
-					<StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-						<TextBlock Name="SeparatorLabel" FontWeight="Bold" FontSize="14" 
-						           VerticalAlignment="Center" MinWidth="100" Margin="0,0,10,0"/>
-						<ComboBox Name="SeparatorComboBox" Classes="separator-selector" 
-						          MinWidth="80" MaxWidth="120" SelectedIndex="0"
-						          SelectionChanged="SeparatorComboBox_SelectionChanged">
-						</ComboBox>
-					</StackPanel>
-					
-					<!-- 間距 -->
-					<Rectangle Grid.Column="1" Width="20"/>
-					
-					<!-- 語言選擇器 -->
-					<StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-						<TextBlock Name="LanguageLabel" VerticalAlignment="Center" Margin="0,0,10,0"/>
-						<ComboBox Name="LanguageSelector" Classes="language-selector" 
-						          MinWidth="110" MaxWidth="130" SelectedIndex="0"
-						          SelectionChanged="LanguageSelector_SelectionChanged">
-						</ComboBox>
-					</StackPanel>
-					
-					<!-- 間距 -->
-					<Rectangle Grid.Column="3" Width="20"/>
-					
-					<!-- 主題選擇器 -->
-					<StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
-						<TextBlock Name="ThemeLabel" VerticalAlignment="Center" Margin="0,0,10,0"/>
-						<ComboBox Name="ThemeSelector" Classes="theme-selector" 
-						          MinWidth="120" MaxWidth="150" SelectedIndex="0"
-						          SelectionChanged="ThemeSelector_SelectionChanged">
-						</ComboBox>
-					</StackPanel>
-					
-					<!-- 彈性空間 -->
-					<Grid Grid.Column="5"/>
-				</Grid>
-			</Border>
-			
-			<!-- 主要內容區域 -->
-			<Grid Grid.Row="1" Margin="10">
-				<Grid.ColumnDefinitions>
-					<!-- 左側面板 - 固定寬度比例，不會無限擴大 -->
-					<ColumnDefinition Width="2*" MinWidth="300" MaxWidth="500"/>
-					<!-- 間距 -->
-					<ColumnDefinition Width="Auto"/>
-					<!-- 右側面板 - 固定寬度比例 -->
-					<ColumnDefinition Width="3*" MinWidth="350"/>
-				</Grid.ColumnDefinitions>
-				
-				<!-- 左側面板 - 改用 Grid 實現響應式高度 -->
-				<Border Grid.Column="0" Classes="panel" Padding="20">
-					<Grid>
-						<Grid.RowDefinitions>
-							<!-- PIP 分隔資料標題 -->
-							<RowDefinition Height="Auto"/>
-							<!-- PIP 分隔資料輸入區 - 彈性高度 -->
-							<RowDefinition Height="*" MinHeight="120"/>
-							<!-- 間距 -->
-							<RowDefinition Height="Auto"/>
-							<!-- SQL 條件標題 -->
-							<RowDefinition Height="Auto"/>
-							<!-- SQL 條件輸入區 - 彈性高度 -->
-							<RowDefinition Height="*" MinHeight="120"/>
-						</Grid.RowDefinitions>
-						
-						<!-- PIP 分隔資料標題 -->
-						<TextBlock Grid.Row="0" Name="PipDataTitle" Classes="section-title" 
-						           Margin="0,0,0,10"/>
-						
-						<!-- PIP 分隔資料輸入區域 -->
-						<Border Grid.Row="1" Classes="input-area" Padding="10">
-							<ScrollViewer VerticalScrollBarVisibility="Auto" 
-							              HorizontalScrollBarVisibility="Disabled">
-								<TextBox Name="TopBox" Classes="input"
-								         TextWrapping="Wrap" AcceptsReturn="True"
-								         VerticalAlignment="Stretch"
-								         HorizontalAlignment="Stretch"
-								         VerticalContentAlignment="Top"
-								         MaxWidth="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
-								         TextChanged="TopBoxChanged"/>
-							</ScrollViewer>
-						</Border>
-						
-						<!-- 間距 -->
-						<Rectangle Grid.Row="2" Height="20"/>
-						
-						<!-- SQL 條件標題 -->
-						<TextBlock Grid.Row="3" Name="SqlConditionTitle" Classes="section-title" 
-						           Margin="0,0,0,10"/>
-						
-						<!-- SQL 條件輸入區域 -->
-						<Border Grid.Row="4" Classes="input-area" Padding="10">
-							<ScrollViewer VerticalScrollBarVisibility="Auto" 
-							              HorizontalScrollBarVisibility="Disabled">
-								<TextBox Name="BottomBox" Classes="input sql-output"
-								         TextWrapping="Wrap" AcceptsReturn="True"
-								         VerticalAlignment="Stretch"
-								         HorizontalAlignment="Stretch"
-								         VerticalContentAlignment="Top"
-								         MaxWidth="{Binding RelativeSource={RelativeSource AncestorType=Border}, Path=ActualWidth}"
-								         IsReadOnly="True"/>
-							</ScrollViewer>
-						</Border>
-					</Grid>
-				</Border>
-
-				<!-- 間距 -->
-				<Rectangle Grid.Column="1" Width="15"/>
-
-				<!-- 右側面板 -->
-				<Border Grid.Column="2" Classes="panel" Padding="20">
-					<Grid>
-						<Grid.RowDefinitions>
-							<!-- 按鈕區域 -->
-							<RowDefinition Height="Auto"/>
-							<!-- 資料表格區域 -->
-							<RowDefinition Height="*"/>
-						</Grid.RowDefinitions>
-						
-						<!-- 標題和按鈕區域 -->
-						<Grid Grid.Row="0" Margin="0,0,0,15">
-							<Grid.ColumnDefinitions>
-								<ColumnDefinition Width="Auto"/>
-								<ColumnDefinition Width="*"/>
-								<ColumnDefinition Width="Auto"/>
-							</Grid.ColumnDefinitions>
-							
-							<!-- 貼上按鈕 -->
-							<Button Grid.Column="0" Name="PasteDataButton" Click="PasteData_Click" 
-							        Classes="primary" Padding="12,8" Cursor="Hand"
-							        MinWidth="120">
-								<TextBlock Name="PasteButtonText" VerticalAlignment="Center"/>
-							</Button>
-							
-							<!-- 資料清單標題 -->
-							<TextBlock Grid.Column="1" Name="DataListTitle" Classes="section-title"
-							           VerticalAlignment="Center" HorizontalAlignment="Center"
-							           Margin="15,0"/>
-							
-							<!-- 清空按鈕 -->
-							<Button Grid.Column="2" Name="ClearDataButton" Click="ClearData_Click" 
-							        Classes="secondary" Padding="10,8" Cursor="Hand"
-							        MinWidth="110">
-								<TextBlock Name="ClearButtonText" VerticalAlignment="Center"/>
-							</Button>
-						</Grid>
-
-						<!-- 資料表格 -->
-						<Border Grid.Row="1" Classes="input-area">
-							<ScrollViewer HorizontalScrollBarVisibility="Auto" 
-							              VerticalScrollBarVisibility="Auto">
-								<StackPanel Name="DataTable" MinHeight="300">
-									<!-- 表格標題 -->
-									<Grid ColumnDefinitions="60,*" Background="#2D2D30" Margin="0,0,0,1">
-										<TextBlock Grid.Column="0" Name="RowNumberHeader" FontWeight="Bold" 
-										           Padding="8,6" HorizontalAlignment="Center"/>
-										<TextBlock Grid.Column="1" Name="DataContentHeader" FontWeight="Bold" 
-										           Padding="8,6"/>
-									</Grid>
-									<!-- 資料行 -->
-									<ItemsControl ItemsSource="{Binding DataItems}">
-										<ItemsControl.ItemTemplate>
-											<DataTemplate>
-												<Grid ColumnDefinitions="60,*" Classes="data-row" MinHeight="30">
-													<TextBlock Grid.Column="0" Text="{Binding RowNumber}" 
-													           Padding="8,4" HorizontalAlignment="Center"
-													           VerticalAlignment="Center"
-													           Classes="row-number"/>
-													<TextBlock Grid.Column="1" Text="{Binding Value}" 
-													           Padding="8,4" VerticalAlignment="Center"
-													           TextWrapping="Wrap"
-													           Classes="row-data"/>
-												</Grid>
-											</DataTemplate>
-										</ItemsControl.ItemTemplate>
-									</ItemsControl>
-								</StackPanel>
-							</ScrollViewer>
-						</Border>
-					</Grid>
-				</Border>
-			</Grid>
-		</Grid>
-	</ScrollViewer>
+  <Window.Resources>
+    <local:EvenRowBackgroundConverter x:Key="EvenRowBackgroundConverter" />
+    <SolidColorBrush x:Key="EvenRowBackgroundBrush" Color="#f5f8fd"/>
+    <local:SidebarWidthConverter x:Key="SidebarWidthConverter" />
+    <local:SidebarExpandVisibilityConverter x:Key="SidebarExpandVisibilityConverter" />
+    <local:SidebarSelectedBarConverter x:Key="SidebarSelectedBarConverter" />
+    <local:SidebarSelectedBackgroundConverter x:Key="SidebarSelectedBackgroundConverter" />
+    <local:SidebarPageToContentConverter x:Key="SidebarPageToContentConverter" />
+    <SolidColorBrush x:Key="SidebarBackgroundBrush" Color="#232323"/>
+  </Window.Resources>
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <Border x:Name="SidebarBorder" Grid.Column="0"
+            Background="{DynamicResource SidebarBackgroundBrush}"
+            Width="{Binding Sidebar.IsExpanded, Converter={StaticResource SidebarWidthConverter}}"
+            MinWidth="56" MaxWidth="100">
+      <StackPanel VerticalAlignment="Stretch">
+        <!-- 漢堡選單 -->
+        <Button Name="SidebarToggleButton"
+                Click="SidebarToggleButton_Click"
+                Padding="0"
+                Margin="0,8,0,8"
+                Width="48"
+                Height="48"
+                HorizontalAlignment="Center"
+                Background="#232323"
+                BorderThickness="0">
+          <Path Data="M4,8 L28,8 M4,16 L28,16 M4,24 L28,24" Stroke="#bbb" StrokeThickness="2"/>
+        </Button>
+        <!-- 導覽按鈕 -->
+        <ItemsControl ItemsSource="{Binding SidebarItems}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Border Background="{Binding IsSelected, Converter={StaticResource SidebarSelectedBackgroundConverter}}" CornerRadius="8" Margin="4,2">
+                <StackPanel Orientation="Horizontal" Height="48" VerticalAlignment="Center">
+                  <!-- 綠色導引條 -->
+                  <Border Width="4" Background="{Binding IsSelected, Converter={StaticResource SidebarSelectedBarConverter}}"/>
+                  <!-- ICON -->
+                  <Button Command="{Binding DataContext.SidebarItemClickCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                          CommandParameter="{Binding Page}"
+                          Background="Transparent" BorderThickness="0" Padding="0" Margin="0" Width="36" Height="48">
+                    <Path Data="{Binding Icon}" Width="24" Height="24" Fill="#bbb"/>
+                  </Button>
+                  <!-- 名稱 -->
+                  <TextBlock Text="{Binding Name}" Margin="12,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold" IsVisible="{Binding DataContext.Sidebar.IsExpanded, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource SidebarExpandVisibilityConverter}}"/>
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </Border>
+    <ContentControl Grid.Column="1" x:Name="MainContent" Content="{Binding Sidebar.SelectedPage, Converter={StaticResource SidebarPageToContentConverter}}" />
+  </Grid>
 </Window>

@@ -1,0 +1,15 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!-- Windows 11 風格主背景：淡灰藍漸層 -->
+  <Style Selector="Window">
+    <Setter Property="Background">
+      <Setter.Value>
+        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+          <GradientStop Color="#e6ecf5" Offset="0"/>
+          <GradientStop Color="#c9d6e3" Offset="1"/>
+        </LinearGradientBrush>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <!-- ... 其餘內容與 ModernTheme.axaml 相同 ... -->
+</Styles>

@@ -16,6 +16,7 @@ public class DataItem : INotifyPropertyChanged
             {
                 _rowNumber = value;
                 OnPropertyChanged(nameof(RowNumber));
+                OnPropertyChanged(nameof(IsEven));
             }
         }
     }
@@ -32,6 +33,8 @@ public class DataItem : INotifyPropertyChanged
             }
         }
     }
+
+    public bool IsEven => RowNumber % 2 == 0;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

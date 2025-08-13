@@ -13,6 +13,14 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        ConfigServices.Load();
+        // 應用預設語言
+        if (Enum.TryParse<AppLanguage>(ConfigServices.Config.Language, out var lang))
+            LanguageManager.CurrentLanguage = lang;
+        // 應用預設主題
+        if (Enum.TryParse<AppTheme>(ConfigServices.Config.Theme, out var theme))
+            ThemeManager.CurrentTheme = theme;
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow();

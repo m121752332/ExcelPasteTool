@@ -1,0 +1,16 @@
+<Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!-- 側邊欄預設深色，hover/選取時變灰 -->
+  <Style Selector="#SidebarBorder" x:SetterTargetType="Border">
+    <Setter Property="Background" Value="#232323"/>
+  </Style>
+  <!-- 導覽按鈕 hover/選取，預設黑色，滑鼠移上去變深灰，選取時變亮灰 -->
+  <Style Selector="#SidebarBorder ItemsControl > Border" x:SetterTargetType="Border">
+    <Setter Property="Background" Value="#232323"/>
+  </Style>
+  <Style Selector="#SidebarBorder ItemsControl > Border:pointerover" x:SetterTargetType="Border">
+    <Setter Property="Background" Value="#323232"/>
+  </Style>
+  <Style Selector="#SidebarBorder ItemsControl > Border:selected" x:SetterTargetType="Border">
+    <Setter Property="Background" Value="#444"/>
+  </Style>
+</Styles>

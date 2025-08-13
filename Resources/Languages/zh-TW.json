@@ -1,0 +1,22 @@
+{
+  "AppTitle": "資料分隔處理器",
+  "SeparatorLabel": "分隔符號：",
+  "ThemeLabel": "主題:",
+  "LanguageLabel": "語言:",
+  "PipDataTitle": "PIP 分隔資料",
+  "SqlConditionTitle": "SQL 條件",
+  "DataListTitle": "資料清單",
+  "PasteDataButton": "資料貼上",
+  "ClearDataButton": "清空資料",
+  "RowNumberHeader": "行號",
+  "DataContentHeader": "資料內容",
+  "SeparatorPipe": "豎線 |",
+  "SeparatorSemicolon": "分號 ;",
+  "SeparatorColon": "冒號 :",
+  "SeparatorSpace": "空白",
+  "ThemeDark": "深色模式",
+  "ThemeModern": "現代化主題",
+  "LanguageTraditionalChinese": "繁體中文",
+  "LanguageSimplifiedChinese": "簡体中文",
+  "LanguageEnglish": "English"
+}

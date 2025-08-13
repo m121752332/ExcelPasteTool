@@ -1,0 +1,200 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ExcelPasteTool"
+             x:Class="ExcelPasteTool.DataToolView">
+    <UserControl.Resources>
+        <local:EvenRowBackgroundConverter x:Key="EvenRowBackgroundConverter" />
+    </UserControl.Resources>
+    <Grid>
+        <!-- Toast 通知 -->
+        <Border Name="ToastPanel"
+                Background="#CC222222"
+                CornerRadius="8"
+                Padding="18,10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+                Margin="0,40,0,0"
+                IsVisible="False"
+                ZIndex="1000">
+            <TextBlock Name="ToastText" Foreground="White" FontWeight="Bold" FontSize="15" Text="已複製到剪貼簿！"/>
+        </Border>
+        <!-- 主要響應式容器 -->
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Grid MinWidth="600" MinHeight="400" MaxWidth="1600">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!-- 頂部控制區域 -->
+                <Border Grid.Row="0" Classes="panel" Margin="10" Padding="15">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" MinWidth="220"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto" MinWidth="150"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto" MinWidth="170"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <!-- 分隔符號區域 -->
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Name="SeparatorLabel" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" MinWidth="80" Margin="0,0,10,0"/>
+                            <ComboBox Name="SeparatorComboBox" Classes="separator-selector" MinWidth="80" MaxWidth="120" SelectedIndex="0"/>
+                        </StackPanel>
+                        <Rectangle Grid.Column="1" Width="20"/>
+                        <!-- 語言選擇器 -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{x:Static local:IconManager.LanguageIcon}" Fill="#4FC3F7" Width="16" Height="16" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <TextBlock Name="LanguageLabel" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            </StackPanel>
+                            <ComboBox Name="LanguageSelector" Classes="language-selector" MinWidth="90" MaxWidth="110" SelectedIndex="0"/>
+                        </StackPanel>
+                        <Rectangle Grid.Column="3" Width="20"/>
+                        <!-- 主題選擇器 -->
+                        <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Path Data="{x:Static local:IconManager.ThemeIcon}" Fill="#4FC3F7" Width="16" Height="16" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,5,0"/>
+                                <TextBlock Name="ThemeLabel" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                            </StackPanel>
+                            <ComboBox Name="ThemeSelector" Classes="theme-selector" MinWidth="100" MaxWidth="130" SelectedIndex="0"/>
+                        </StackPanel>
+                        <Grid Grid.Column="5"/>
+                    </Grid>
+                </Border>
+                <!-- 主要內容區域 -->
+                <Grid Grid.Row="1" Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" MinWidth="200"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="2*" MinWidth="250"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- 左側面板 -->
+                    <Border Grid.Column="0" Classes="panel" Padding="20">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*" MinHeight="120"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*" MinHeight="120"/>
+                            </Grid.RowDefinitions>
+                            <!-- PIP 分隔資料標題 -->
+                            <Grid Grid.Row="0" Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                    <Path Data="{x:Static local:IconManager.DataIcon}" Fill="#4FC3F7" Width="18" Height="18" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <TextBlock Name="PipDataTitle" Classes="section-title" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <Button Name="CopyTopBoxButton" Classes="copy-button" Width="24" Height="24" Grid.Column="1" ToolTip.Tip="複製分隔資料" VerticalAlignment="Top" HorizontalAlignment="Right">
+                                    <Path Data="{x:Static local:IconManager.PasteIcon}" Width="16" Height="16" Stretch="Uniform" VerticalAlignment="Center"/>
+                                </Button>
+                            </Grid>
+                            <!-- PIP 分隔資料輸入區域 -->
+                            <Border Grid.Row="1" Classes="input-area" Padding="10" Height="100">
+                                <TextBox Name="TopBox" Classes="input" TextWrapping="Wrap" AcceptsReturn="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Top" MaxWidth="400"/>
+                            </Border>
+                            <Rectangle Grid.Row="2" Height="20"/>
+                            <!-- SQL 條件標題 -->
+                            <Grid Grid.Row="3" Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                    <Path Data="{x:Static local:IconManager.ContentIcon}" Fill="#4FC3F7" Width="18" Height="18" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                    <TextBlock Name="SqlConditionTitle" Classes="section-title" VerticalAlignment="Center"/>
+                                </StackPanel>
+                                <Button Name="CopyBottomBoxButton" Classes="copy-button" Width="24" Height="24" Grid.Column="1" ToolTip.Tip="複製SQL條件" VerticalAlignment="Top" HorizontalAlignment="Right">
+                                    <Path Data="{x:Static local:IconManager.PasteIcon}" Width="16" Height="16" Stretch="Uniform" VerticalAlignment="Center"/>
+                                </Button>
+                            </Grid>
+                            <!-- SQL 條件輸入區域 -->
+                            <Border Grid.Row="4" Classes="input-area" Padding="10" Height="100">
+                                <TextBox Name="BottomBox" Classes="input sql-output" TextWrapping="Wrap" AcceptsReturn="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Top" MaxWidth="400" IsReadOnly="True"/>
+                            </Border>
+                        </Grid>
+                    </Border>
+                    <!-- Splitter -->
+                    <GridSplitter Grid.Column="1" Width="5" ShowsPreview="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Cursor="SizeWestEast"/>
+                    <!-- 右側面板 -->
+                    <Border Grid.Column="2" Classes="panel" Padding="20">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <!-- 標題和按鈕區域 -->
+                            <Grid Grid.Row="0" Margin="0,0,0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Button Grid.Column="0" Name="PasteDataButton" Classes="primary" Padding="12,8" Cursor="Hand" MinWidth="120">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Data="{x:Static local:IconManager.PasteIcon}" Fill="White" Width="16" Height="16" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                        <TextBlock Name="PasteButtonText" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                                <Grid Grid.Column="1"/>
+                                <Button Grid.Column="2" Name="ClearDataButton" Classes="secondary" Padding="10,8" Cursor="Hand" MinWidth="110">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Path Data="{x:Static local:IconManager.ClearIcon}" Fill="{Binding $parent[Button].Foreground}" Width="16" Height="16" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                        <TextBlock Name="ClearButtonText" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </Grid>
+                            <!-- 資料表格區域 -->
+                            <Border Grid.Row="1" Classes="table-container" MaxHeight="355">
+                                <ScrollViewer Classes="table-scroll" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AllowAutoHide="False" IsScrollChainingEnabled="True">
+                                    <Grid Name="DataTable" MinWidth="300">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <!-- 表格標題 -->
+                                        <Grid Grid.Row="0" ColumnDefinitions="60,*" Classes="data-table-header" MinWidth="300" Height="35">
+                                            <Border Grid.Column="0" BorderBrush="#484848" BorderThickness="0,0,1,1">
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,6">
+                                                    <TextBlock Name="RowNumberHeader" FontWeight="Bold" VerticalAlignment="Center" Classes="data-table-header"/>
+                                                </StackPanel>
+                                            </Border>
+                                            <Border Grid.Column="1" BorderBrush="#484848" BorderThickness="0,0,0,1">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,6">
+                                                    <Path Data="{x:Static local:IconManager.ContentIcon}" Fill="#4FC3F7" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                                    <TextBlock Name="DataContentHeader" FontWeight="Bold" VerticalAlignment="Center" Classes="data-table-header"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </Grid>
+                                        <!-- 資料行 -->
+                                        <ItemsControl Grid.Row="1" ItemsSource="{Binding DataItems}" MinWidth="200">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid ColumnDefinitions="60,*" MinHeight="30" MinWidth="200">
+                                                        <Grid.Background>
+                                                            <Binding Path="IsEven" Converter="{StaticResource EvenRowBackgroundConverter}" />
+                                                        </Grid.Background>
+                                                        <Border Grid.Column="0" BorderBrush="#484848" BorderThickness="0,0,1,1">
+                                                            <TextBlock Text="{Binding RowNumber}" Padding="8,4" HorizontalAlignment="Center" VerticalAlignment="Center" Classes="row-number"/>
+                                                        </Border>
+                                                        <Border Grid.Column="1" BorderBrush="#484848" BorderThickness="0,0,0,1">
+                                                            <TextBlock Text="{Binding Value}" Padding="8,4" VerticalAlignment="Center" TextWrapping="Wrap" Classes="row-data"/>
+                                                        </Border>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Grid>
+                                </ScrollViewer>
+                            </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
