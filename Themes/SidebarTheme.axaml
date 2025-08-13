@@ -1,16 +1,19 @@
 <Styles xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-  <!-- °¼ÃäÄæ¹w³]²`¦â¡Ahover/¿ï¨ú®ÉÅÜ¦Ç -->
+  <!-- å´é‚Šæ¬„é è¨­æ·±è‰²ï¼Œhover/é¸å–æ™‚éƒ½ä¿æŒé»‘è‰² -->
   <Style Selector="#SidebarBorder" x:SetterTargetType="Border">
     <Setter Property="Background" Value="#232323"/>
   </Style>
-  <!-- ¾ÉÄý«ö¶s hover/¿ï¨ú¡A¹w³]¶Â¦â¡A·Æ¹«²¾¤W¥hÅÜ²`¦Ç¡A¿ï¨ú®ÉÅÜ«G¦Ç -->
+  <!-- å°Žè¦½æŒ‰éˆ•é è¨­é»‘è‰²ï¼Œæ»‘é¼ ç§»ä¸ŠåŽ»å’Œé¸å–éƒ½ä¿æŒé»‘è‰² -->
   <Style Selector="#SidebarBorder ItemsControl > Border" x:SetterTargetType="Border">
     <Setter Property="Background" Value="#232323"/>
   </Style>
   <Style Selector="#SidebarBorder ItemsControl > Border:pointerover" x:SetterTargetType="Border">
-    <Setter Property="Background" Value="#323232"/>
+    <Setter Property="Background" Value="#232323"/>
   </Style>
   <Style Selector="#SidebarBorder ItemsControl > Border:selected" x:SetterTargetType="Border">
-    <Setter Property="Background" Value="#444"/>
+    <Setter Property="Background" Value="#232323"/>
+  </Style>
+  <Style Selector="#SidebarBorder ItemsControl > Border:pressed" x:SetterTargetType="Border">
+    <Setter Property="Background" Value="#232323"/>
   </Style>
 </Styles>

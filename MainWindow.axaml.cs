@@ -14,9 +14,12 @@ public partial class MainWindow : Window
     public SidebarViewModel Sidebar { get; } = new();
     public ObservableCollection<SidebarItem> SidebarItems { get; } = new()
     {
-        new SidebarItem(SidebarPage.Tools, "工具", "M3,6h18v2H3V6zm0,5h18v2H3v-2zm0,5h18v2H3v-2z"),
-        new SidebarItem(SidebarPage.Settings, "設定", "M12,8a4,4 0 1,0 0,8a4,4 0 1,0 0,-8zm8.94,4a7.97,7.97 0 0,0 -.34-2l2.12-1.65a.5.5 0 0,0 .12-.64l-2-3.46a.5.5 0 0,0 -.6-.22l-2.49,1a8.12,8.12 0 0,0 -1.7-.99l-.38-2.65A.5.5 0 0,0 14,2h-4a.5.5 0 0,0 -.5.42l-.38,2.65a8.12,8.12 0 0,0 -1.7.99l-2.49-1a.5.5 0 0,0 -.6.22l-2,3.46a.5.5 0 0,0 .12.64l2.12,1.65a7.97,7.97 0 0,0 -.34,2l-2.12,1.65a.5.5 0 0,0 -.12.64l2,3.46a.5.5 0 0,0 .6.22l2.49-1c.54.38,1.12.71,1.7.99l.38,2.65A.5.5 0 0,0 10,22h4a.5.5 0 0,0 .5-.42l.38-2.65c.58-.28,1.16-.61,1.7-.99l2.49,1a.5.5 0 0,0 .6-.22l2-3.46a.5.5 0 0,0 -.12-.64l-2.12-1.65z"),
-        new SidebarItem(SidebarPage.About, "關於", "M12,2a10,10 0 1,0 0,20a10,10 0 1,0 0,-20zm1,17h-2v-2h2v2zm1.07-7.75l-.9.92C12.45,12.9 12,13.5 12,15h-2v-.5c0-1 .45-1.99 1.17-2.71l1.24-1.26a2,2 0 1,0 -2.83-2.83a2,2 0 0,0 0,2.83l.88.88"),
+        // 工具：使用 DataIcon
+        new SidebarItem(SidebarPage.Tools, "工具", IconManager.DataIcon),
+        // 設定：使用 SettingsIcon
+        new SidebarItem(SidebarPage.Settings, "設定", IconManager.SettingsIcon),
+        // 關於：使用 HelpIcon (預設)
+        new SidebarItem(SidebarPage.About, "關於", IconManager.GetIcon("help")),
     };
     public ICommand SidebarItemClickCommand { get; }
 
@@ -30,6 +33,8 @@ public partial class MainWindow : Window
         ThemeManager.ThemeChanged += OnThemeChanged;
         // 載入側邊欄主題樣式
         LoadSidebarTheme();
+        // 設定視窗標題
+        this.Title = "DataSplitter Pro";
     }
 
     private void OnSidebarItemClick(SidebarPage page)

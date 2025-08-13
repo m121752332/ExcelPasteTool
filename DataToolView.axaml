@@ -6,26 +6,26 @@
         <local:EvenRowBackgroundConverter x:Key="EvenRowBackgroundConverter" />
     </UserControl.Resources>
     <Grid>
-        <!-- Toast ³qª¾ -->
+        <!-- Toast é€šçŸ¥ -->
         <Border Name="ToastPanel"
                 Background="#CC222222"
                 CornerRadius="8"
                 Padding="18,10"
-                HorizontalAlignment="Center"
+                HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Margin="0,40,0,0"
+                Margin="0,20,40,0"
                 IsVisible="False"
                 ZIndex="1000">
-            <TextBlock Name="ToastText" Foreground="White" FontWeight="Bold" FontSize="15" Text="¤w½Æ»s¨ì°Å¶KÃ¯¡I"/>
+            <TextBlock Name="ToastText" Foreground="#FFA726" FontWeight="Bold" FontSize="15" Text="å·²è¤‡è£½åˆ°å‰ªè²¼ç°¿ï¼"/>
         </Border>
-        <!-- ¥D­nÅTÀ³¦¡®e¾¹ -->
+        <!-- ä¸»è¦éŸ¿æ‡‰å¼å®¹å™¨ -->
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <Grid MinWidth="600" MinHeight="400" MaxWidth="1600">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <!-- ³»³¡±±¨î°Ï°ì -->
+                <!-- é ‚éƒ¨æŽ§åˆ¶å€åŸŸ -->
                 <Border Grid.Row="0" Classes="panel" Margin="10" Padding="15">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -36,13 +36,13 @@
                             <ColumnDefinition Width="Auto" MinWidth="170"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <!-- ¤À¹j²Å¸¹°Ï°ì -->
+                        <!-- åˆ†éš”ç¬¦è™Ÿå€åŸŸ -->
                         <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Name="SeparatorLabel" FontWeight="Bold" FontSize="14" VerticalAlignment="Center" MinWidth="80" Margin="0,0,10,0"/>
                             <ComboBox Name="SeparatorComboBox" Classes="separator-selector" MinWidth="80" MaxWidth="120" SelectedIndex="0"/>
                         </StackPanel>
                         <Rectangle Grid.Column="1" Width="20"/>
-                        <!-- »y¨¥¿ï¾Ü¾¹ -->
+                        <!-- èªžè¨€é¸æ“‡å™¨ -->
                         <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <Path Data="{x:Static local:IconManager.LanguageIcon}" Fill="#4FC3F7" Width="16" Height="16" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,5,0"/>
@@ -51,7 +51,7 @@
                             <ComboBox Name="LanguageSelector" Classes="language-selector" MinWidth="90" MaxWidth="110" SelectedIndex="0"/>
                         </StackPanel>
                         <Rectangle Grid.Column="3" Width="20"/>
-                        <!-- ¥DÃD¿ï¾Ü¾¹ -->
+                        <!-- ä¸»é¡Œé¸æ“‡å™¨ -->
                         <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center">
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <Path Data="{x:Static local:IconManager.ThemeIcon}" Fill="#4FC3F7" Width="16" Height="16" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,5,0"/>
@@ -62,14 +62,14 @@
                         <Grid Grid.Column="5"/>
                     </Grid>
                 </Border>
-                <!-- ¥D­n¤º®e°Ï°ì -->
+                <!-- ä¸»è¦å…§å®¹å€åŸŸ -->
                 <Grid Grid.Row="1" Margin="10">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" MinWidth="200"/>
                         <ColumnDefinition Width="5"/>
                         <ColumnDefinition Width="2*" MinWidth="250"/>
                     </Grid.ColumnDefinitions>
-                    <!-- ¥ª°¼­±ªO -->
+                    <!-- å·¦å´é¢æ¿ -->
                     <Border Grid.Column="0" Classes="panel" Padding="20">
                         <Grid>
                             <Grid.RowDefinitions>
@@ -79,7 +79,7 @@
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*" MinHeight="120"/>
                             </Grid.RowDefinitions>
-                            <!-- PIP ¤À¹j¸ê®Æ¼ÐÃD -->
+                            <!-- PIP åˆ†éš”è³‡æ–™æ¨™é¡Œ -->
                             <Grid Grid.Row="0" Margin="0,0,0,10">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -89,16 +89,16 @@
                                     <Path Data="{x:Static local:IconManager.DataIcon}" Fill="#4FC3F7" Width="18" Height="18" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,8,0"/>
                                     <TextBlock Name="PipDataTitle" Classes="section-title" VerticalAlignment="Center"/>
                                 </StackPanel>
-                                <Button Name="CopyTopBoxButton" Classes="copy-button" Width="24" Height="24" Grid.Column="1" ToolTip.Tip="½Æ»s¤À¹j¸ê®Æ" VerticalAlignment="Top" HorizontalAlignment="Right">
+                                <Button Name="CopyTopBoxButton" Classes="copy-button" Width="24" Height="24" Grid.Column="1" ToolTip.Tip="è¤‡è£½åˆ†éš”è³‡æ–™" VerticalAlignment="Top" HorizontalAlignment="Right">
                                     <Path Data="{x:Static local:IconManager.PasteIcon}" Width="16" Height="16" Stretch="Uniform" VerticalAlignment="Center"/>
                                 </Button>
                             </Grid>
-                            <!-- PIP ¤À¹j¸ê®Æ¿é¤J°Ï°ì -->
+                            <!-- PIP åˆ†éš”è³‡æ–™è¼¸å…¥å€åŸŸ -->
                             <Border Grid.Row="1" Classes="input-area" Padding="10" Height="100">
                                 <TextBox Name="TopBox" Classes="input" TextWrapping="Wrap" AcceptsReturn="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Top" MaxWidth="400"/>
                             </Border>
                             <Rectangle Grid.Row="2" Height="20"/>
-                            <!-- SQL ±ø¥ó¼ÐÃD -->
+                            <!-- SQL æ¢ä»¶æ¨™é¡Œ -->
                             <Grid Grid.Row="3" Margin="0,0,0,10">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -108,11 +108,11 @@
                                     <Path Data="{x:Static local:IconManager.ContentIcon}" Fill="#4FC3F7" Width="18" Height="18" Stretch="Uniform" VerticalAlignment="Center" Margin="0,0,8,0"/>
                                     <TextBlock Name="SqlConditionTitle" Classes="section-title" VerticalAlignment="Center"/>
                                 </StackPanel>
-                                <Button Name="CopyBottomBoxButton" Classes="copy-button" Width="24" Height="24" Grid.Column="1" ToolTip.Tip="½Æ»sSQL±ø¥ó" VerticalAlignment="Top" HorizontalAlignment="Right">
+                                <Button Name="CopyBottomBoxButton" Classes="copy-button" Width="24" Height="24" Grid.Column="1" ToolTip.Tip="è¤‡è£½SQLæ¢ä»¶" VerticalAlignment="Top" HorizontalAlignment="Right">
                                     <Path Data="{x:Static local:IconManager.PasteIcon}" Width="16" Height="16" Stretch="Uniform" VerticalAlignment="Center"/>
                                 </Button>
                             </Grid>
-                            <!-- SQL ±ø¥ó¿é¤J°Ï°ì -->
+                            <!-- SQL æ¢ä»¶è¼¸å…¥å€åŸŸ -->
                             <Border Grid.Row="4" Classes="input-area" Padding="10" Height="100">
                                 <TextBox Name="BottomBox" Classes="input sql-output" TextWrapping="Wrap" AcceptsReturn="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Top" MaxWidth="400" IsReadOnly="True"/>
                             </Border>
@@ -120,14 +120,14 @@
                     </Border>
                     <!-- Splitter -->
                     <GridSplitter Grid.Column="1" Width="5" ShowsPreview="True" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Cursor="SizeWestEast"/>
-                    <!-- ¥k°¼­±ªO -->
+                    <!-- å³å´é¢æ¿ -->
                     <Border Grid.Column="2" Classes="panel" Padding="20">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <!-- ¼ÐÃD©M«ö¶s°Ï°ì -->
+                            <!-- æ¨™é¡Œå’ŒæŒ‰éˆ•å€åŸŸ -->
                             <Grid Grid.Row="0" Margin="0,0,0,15">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -148,7 +148,7 @@
                                     </StackPanel>
                                 </Button>
                             </Grid>
-                            <!-- ¸ê®Æªí®æ°Ï°ì -->
+                            <!-- è³‡æ–™è¡¨æ ¼å€åŸŸ -->
                             <Border Grid.Row="1" Classes="table-container" MaxHeight="355">
                                 <ScrollViewer Classes="table-scroll" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AllowAutoHide="False" IsScrollChainingEnabled="True">
                                     <Grid Name="DataTable" MinWidth="300">
@@ -156,12 +156,12 @@
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
-                                        <!-- ªí®æ¼ÐÃD -->
+                                        <!-- è¡¨æ ¼æ¨™é¡Œ -->
                                         <Grid Grid.Row="0" ColumnDefinitions="60,*" Classes="data-table-header" MinWidth="300" Height="35">
-                                            <Border Grid.Column="0" BorderBrush="#484848" BorderThickness="0,0,1,1">
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="8,6">
-                                                    <TextBlock Name="RowNumberHeader" FontWeight="Bold" VerticalAlignment="Center" Classes="data-table-header"/>
-                                                </StackPanel>
+                                            <Border Grid.Column="0" BorderBrush="#484848" BorderThickness="0,0,1,1" Background="Transparent">
+                                                <Button Name="CopyTableButton" Background="Transparent" BorderThickness="0" Padding="0" Cursor="Hand" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Classes="data-table-header" Click="CopyTableButton_Click">
+                                                    <TextBlock Name="RowNumberHeader" FontWeight="Bold" VerticalAlignment="Center" Foreground="#4FC3F7" HorizontalAlignment="Center"/>
+                                                </Button>
                                             </Border>
                                             <Border Grid.Column="1" BorderBrush="#484848" BorderThickness="0,0,0,1">
                                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="8,6">
@@ -170,7 +170,7 @@
                                                 </StackPanel>
                                             </Border>
                                         </Grid>
-                                        <!-- ¸ê®Æ¦æ -->
+                                        <!-- è³‡æ–™è¡Œ -->
                                         <ItemsControl Grid.Row="1" ItemsSource="{Binding DataItems}" MinWidth="200">
                                             <ItemsControl.ItemTemplate>
                                                 <DataTemplate>

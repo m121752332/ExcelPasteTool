@@ -9,6 +9,7 @@
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <Copyright>GameStudioPro@2025</Copyright>
 	<RuntimeIdentifiers>win-x64;osx-x64;osx-arm64;linux-x64</RuntimeIdentifiers>
+    <AppTitle>DataSplitter Pro</AppTitle>
   </PropertyGroup>
 
   <ItemGroup>

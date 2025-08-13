@@ -7,6 +7,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using ExcelPasteTool.Helpers;
 
 namespace ExcelPasteTool;
 
@@ -41,11 +42,13 @@ public partial class DataToolView : UserControl
     private TextBlock? _clearButtonText;
     private TextBlock? _rowNumberHeader;
     private TextBlock? _dataContentHeader;
+    private ToastQueueHelper _toastHelper;
 
     public DataToolView()
     {
         InitializeComponent();
         DataContext = this;
+        _toastHelper = new ToastQueueHelper(this);
         Loaded += OnLoaded;
     }
 
@@ -332,6 +335,7 @@ public partial class DataToolView : UserControl
         if (_bottomBox != null)
             _bottomBox.Text = "";
         ResetSeparatorToDefault();
+        EnqueueToast("畫面已清理回初始狀態");
     }
     private void ResetSeparatorToDefault()
     {
@@ -373,17 +377,9 @@ public partial class DataToolView : UserControl
         FontManager.FontChanged -= OnFontChanged;
         base.OnDetachedFromVisualTree(e);
     }
-    private async void ShowToast(string message)
+    private void EnqueueToast(string message)
     {
-        var toastPanel = this.FindControl<Border>("ToastPanel");
-        var toastText = this.FindControl<TextBlock>("ToastText");
-        if (toastPanel != null && toastText != null)
-        {
-            toastText.Text = message;
-            toastPanel.IsVisible = true;
-            await Task.Delay(3000);
-            toastPanel.IsVisible = false;
-        }
+        _toastHelper.EnqueueToast(message);
     }
     private async void CopyTopBoxButton_Click(object? sender, RoutedEventArgs e)
     {
@@ -399,9 +395,9 @@ public partial class DataToolView : UserControl
                 await clipboard.SetTextAsync(_topBox.Text);
                 var check = await clipboard.GetTextAsync();
                 if (check == _topBox.Text)
-                    ShowToast("已複製到剪貼簿！");
+                    EnqueueToast("已複製到剪貼簿！");
                 else
-                    ShowToast("複製失敗，請重試");
+                    EnqueueToast("複製失敗，請重試");
             }
         }
     }
@@ -419,10 +415,20 @@ public partial class DataToolView : UserControl
                 await clipboard.SetTextAsync(_bottomBox.Text);
                 var check = await clipboard.GetTextAsync();
                 if (check == _bottomBox.Text)
-                    ShowToast("已複製到剪貼簿！");
+                    EnqueueToast("已複製到剪貼簿！");
                 else
-                    ShowToast("複製失敗，請重試");
+                    EnqueueToast("複製失敗，請重試");
             }
+        }
+    }
+    private async void CopyTableButton_Click(object? sender, RoutedEventArgs e)
+    {
+        var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
+        if (clipboard != null && DataItems.Count > 0)
+        {
+            var text = string.Join("\r\n", DataItems.Select(x => x.Value));
+            await clipboard.SetTextAsync(text);
+            EnqueueToast("已複製到剪貼簿！");
         }
     }
     public class SeparatorOption

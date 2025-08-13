@@ -9,10 +9,18 @@ namespace ExcelPasteTool
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            if (value is bool isEven && isEven)
+            if (value is bool isEven)
             {
-                // 取用 Application.Current.Resources 的 Brush
-                return Avalonia.Application.Current?.Resources["EvenRowBackgroundBrush"] ?? Brushes.Transparent;
+                if (isEven)
+                {
+                    // 偶數行 #141414
+                    return new SolidColorBrush(Color.Parse("#141414"));
+                }
+                else
+                {
+                    // 奇數行 #1a1a1a
+                    return new SolidColorBrush(Color.Parse("#1a1a1a"));
+                }
             }
             return Brushes.Transparent;
         }
