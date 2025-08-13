@@ -3,7 +3,7 @@ using Avalonia.Media;
 using System;
 using System.Globalization;
 
-namespace ExcelPasteTool
+namespace ExcelPasteTool.Converters
 {
     public class EvenRowBackgroundConverter : IValueConverter
     {

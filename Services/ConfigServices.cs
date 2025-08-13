@@ -27,6 +27,10 @@ public static class ConfigServices
             }
             catch { }
         }
+        else
+        {
+            Console.WriteLine($"[警告] 未找到設定檔: {ConfigPath}");
+        }
     }
 
     public static void Save()

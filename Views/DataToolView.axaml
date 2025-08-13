@@ -1,9 +1,10 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ExcelPasteTool"
+             xmlns:converters="clr-namespace:ExcelPasteTool.Converters"
              x:Class="ExcelPasteTool.DataToolView">
     <UserControl.Resources>
-        <local:EvenRowBackgroundConverter x:Key="EvenRowBackgroundConverter" />
+        <converters:EvenRowBackgroundConverter x:Key="EvenRowBackgroundConverter" />
     </UserControl.Resources>
     <Grid>
         <!-- Toast 通知 -->

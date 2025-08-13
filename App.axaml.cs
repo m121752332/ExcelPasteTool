@@ -27,6 +27,8 @@ public partial class App : Application
             
             // 初始化主題系統
             ThemeManager.ApplyTheme(ThemeManager.CurrentTheme);
+            // 初始化語言系統
+            LanguageManager.Initialize();
         }
 
         base.OnFrameworkInitializationCompleted();

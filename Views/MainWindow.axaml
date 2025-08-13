@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExcelPasteTool"
+        xmlns:converters="clr-namespace:ExcelPasteTool.Converters"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
         x:Class="ExcelPasteTool.MainWindow"
         x:Name="MainWindowInstance"
@@ -11,7 +12,7 @@
         MaxHeight="1200"
         WindowStartupLocation="CenterScreen">
 	<Window.Resources>
-		<local:EvenRowBackgroundConverter x:Key="EvenRowBackgroundConverter" />
+		<converters:EvenRowBackgroundConverter x:Key="EvenRowBackgroundConverter" />
 		<SolidColorBrush x:Key="EvenRowBackgroundBrush" Color="#f5f8fd"/>
 		<local:SidebarWidthConverter x:Key="SidebarWidthConverter" />
 		<local:SidebarExpandVisibilityConverter x:Key="SidebarExpandVisibilityConverter" />
