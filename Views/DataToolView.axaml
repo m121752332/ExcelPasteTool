@@ -95,8 +95,9 @@
                                 </Button>
                             </Grid>
                             <!-- PIP 分隔資料輸入區域 -->
-                            <Border Grid.Row="1" Classes="input-area" Padding="10" Height="100">
-                                <TextBox Name="TopBox" Classes="input" TextWrapping="Wrap" AcceptsReturn="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Top" MaxWidth="400"/>
+                            <Border Grid.Row="1" Classes="input-area" Padding="10" Height="100" MaxWidth="500">
+                                <TextBox Name="TopBox" Classes="input" TextWrapping="Wrap" AcceptsReturn="True"
+                                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Top"/>
                             </Border>
                             <Rectangle Grid.Row="2" Height="20"/>
                             <!-- SQL 條件標題 -->
@@ -114,8 +115,9 @@
                                 </Button>
                             </Grid>
                             <!-- SQL 條件輸入區域 -->
-                            <Border Grid.Row="4" Classes="input-area" Padding="10" Height="100">
-                                <TextBox Name="BottomBox" Classes="input sql-output" TextWrapping="Wrap" AcceptsReturn="True" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Top" MaxWidth="400" IsReadOnly="True"/>
+                            <Border Grid.Row="4" Classes="input-area" Padding="10" Height="100" MaxWidth="500">
+                                <TextBox Name="BottomBox" Classes="input sql-output" TextWrapping="Wrap" AcceptsReturn="True"
+                                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Top" IsReadOnly="True"/>
                             </Border>
                         </Grid>
                     </Border>

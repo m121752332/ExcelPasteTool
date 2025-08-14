@@ -2,8 +2,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ExcelPasteTool.SettingsView">
     <Grid Background="#181818">
+        <!-- ToastPanel 右上角，位置下移 -->
+        <Border Name="ToastPanel"
+                Background="#CC222222"
+                CornerRadius="8"
+                Padding="18,10"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Margin="0,40,40,0"
+                ZIndex="1000">
+            <TextBlock Name="ToastText" Foreground="#FFA726" FontWeight="Bold" FontSize="15" />
+        </Border>
         <StackPanel Margin="40,30,40,30" Spacing="32">
-            <TextBlock Text="設置" FontSize="22" FontWeight="Bold" Foreground="#F5F5F5" Margin="0,0,0,16"/>
+            <!-- 灰底標題區塊 -->
+            <Border Background="#232323" CornerRadius="8" Padding="32,18" Margin="0,0,0,12">
+                <TextBlock Text="設置" FontSize="22" FontWeight="Bold" Foreground="#F5F5F5"/>
+            </Border>
             <!-- 語言區塊 -->
             <Border Background="#232323" CornerRadius="8" Padding="24,18" Margin="0,0,0,12">
                 <StackPanel Spacing="10">
@@ -18,17 +32,6 @@
                     <TextBlock Text="主題" FontSize="16" FontWeight="Bold" Foreground="#F5F5F5"/>
                     <ComboBox Width="320" ItemsSource="{Binding Themes}" SelectedItem="{Binding SelectedTheme}" HorizontalAlignment="Left"/>
                 </StackPanel>
-            </Border>
-            <!-- Toast 提示 -->
-            <Border Name="ToastPanel"
-                    Background="#CC222222"
-                    CornerRadius="8"
-                    Padding="18,10"
-                    HorizontalAlignment="Right"
-                    VerticalAlignment="Top"
-                    Margin="0,20,40,0"
-                    ZIndex="1000">葉面
-                <TextBlock Name="ToastText" Foreground="#FFA726" FontWeight="Bold" FontSize="15" />
             </Border>
         </StackPanel>
     </Grid>

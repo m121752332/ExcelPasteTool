@@ -1,7 +1,10 @@
 using Avalonia.Controls;
 using Avalonia.Media;
+using Avalonia.Animation;
+using Avalonia.Animation.Easings;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System;
 
 namespace ExcelPasteTool.Helpers
 {
@@ -60,15 +63,50 @@ namespace ExcelPasteTool.Helpers
                 transform.X = 0;
                 toastPanel.RenderTransform = transform;
                 await Task.Delay(2000);
-                for (int i = 0; i <= 10; i++)
+                // 最後一則訊息時執行煙火動畫
+                if (_toastQueue.Count == 0)
                 {
-                    transform.X = i * 10;
-                    toastPanel.RenderTransform = transform;
-                    await Task.Delay(15);
+                    await FireworkFadeOut(toastPanel, toastText);
                 }
-                toastPanel.IsVisible = false;
+                else
+                {
+                    for (int i = 0; i <= 10; i++)
+                    {
+                        transform.X = i * 10;
+                        toastPanel.RenderTransform = transform;
+                        await Task.Delay(15);
+                    }
+                    toastPanel.IsVisible = false;
+                }
             }
             _isShowingToast = false;
+        }
+
+        // 煙火散開動畫：淡出、縮放、分散
+        private async Task FireworkFadeOut(Border toastPanel, TextBlock toastText)
+        {
+            var originalOpacity = toastPanel.Opacity;
+            var originalScale = toastPanel.RenderTransform;
+            var scaleTransform = new ScaleTransform { ScaleX = 1, ScaleY = 1 };
+            var random = new Random();
+            toastPanel.RenderTransform = scaleTransform;
+            for (int i = 0; i < 15; i++)
+            {
+                // 淡出
+                toastPanel.Opacity = 1 - i * 0.07;
+                // 放大
+                scaleTransform.ScaleX = 1 + i * 0.05;
+                scaleTransform.ScaleY = 1 + i * 0.05;
+                // 隨機分散（上下左右偏移）
+                var offsetX = random.Next(-8, 8);
+                var offsetY = random.Next(-8, 8);
+                toastPanel.Margin = new Avalonia.Thickness(0, 40 + offsetY, 40 + offsetX, 0);
+                await Task.Delay(18);
+            }
+            toastPanel.Opacity = originalOpacity;
+            toastPanel.RenderTransform = originalScale;
+            toastPanel.Margin = new Avalonia.Thickness(0, 40, 40, 0);
+            toastPanel.IsVisible = false;
         }
     }
 }
