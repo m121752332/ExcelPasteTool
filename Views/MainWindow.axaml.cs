@@ -76,7 +76,7 @@ public partial class MainWindow : Window
         // 動態組合 avares 路徑
         var sidebarTheme = new StyleInclude(new System.Uri($"avares://{assemblyName}/"))
         {
-            Source = new System.Uri($"avares://{assemblyName}/Themes/SidebarTheme.axaml")
+            Source = new System.Uri($"avares://{assemblyName}/Assets/Styles/SidebarTheme.axaml")
         };
         app.Styles.Add(sidebarTheme);
     }

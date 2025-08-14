@@ -32,8 +32,12 @@ ExcelPasteTool/
 │   ├── 📂 Images/             # 一般圖片 (png/jpg/svg)
 │   ├── 📂 Icons/              # App icon / Toolbar icon / 系統托盤圖示
 │   ├── 📂 Logos/              # 專案 LOGO 或品牌相關圖
+│   │   └── logo.ico            # 應用程式圖示
 │   ├── 📂 Fonts/              # 自訂字型檔
 │   └── 📂 Styles/             # 全局樣式（Theme.axaml、字型設定等）
+│       ├── DarkTheme.axaml     # 黑暗主題樣式
+│       ├── LightTheme.axaml    # 光線主題樣式
+│       └── SidebarTheme.axaml  # 側邊欄主題樣式
 │
 ├── 📂 Controls/                # 自訂可重用控件（UserControl）
 │   └── ...
@@ -75,9 +79,6 @@ ExcelPasteTool/
 │   ├── 📂 Languages/          # 語言包
 │
 ├── 📂 Themes/                  # 主題資源（黑暗、光線）
-│   ├── DarkTheme.axaml         # 黑暗主題樣式
-│   ├── LightTheme.axaml        # 光線主題樣式
-│   └── SidebarTheme.axaml      # 側邊欄主題樣式
 │
 └── 📂 Properties/              # 專案屬性
     └── Resources.Designer.cs    # 資源設計器（自動生成）

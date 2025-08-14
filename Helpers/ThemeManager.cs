@@ -55,9 +55,9 @@ public static class ThemeManager
             // 載入新主題
             string themePath = theme switch
             {
-                AppTheme.Light => $"avares://{Global.AssemblyName}/Themes/LightTheme.axaml",
-                AppTheme.Dark => $"avares://{Global.AssemblyName}/Themes/DarkTheme.axaml",
-                _ => $"avares://{Global.AssemblyName}/Themes/DarkTheme.axaml"
+                AppTheme.Light => $"avares://{Global.AssemblyName}/Assets/Styles/LightTheme.axaml",
+                AppTheme.Dark => $"avares://{Global.AssemblyName}/Assets/Styles/DarkTheme.axaml",
+                _ => $"avares://{Global.AssemblyName}/Assets/Styles/DarkTheme.axaml"
             };
 
             try

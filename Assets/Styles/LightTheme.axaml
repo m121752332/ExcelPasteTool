@@ -1,0 +1,287 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!-- Window 背景使用 Windows 系統配色 -->
+  <Style Selector="Window">
+    <Setter Property="Background">
+      <Setter.Value>
+        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+          <GradientStop Color="#e6ecf5" Offset="0"/>
+          <GradientStop Color="#c9d6e3" Offset="1"/>
+        </LinearGradientBrush>
+      </Setter.Value>
+    </Setter>
+  </Style>
+  <!-- 主要面板 -->
+  <Style Selector="Border.panel">
+    <Setter Property="Background" Value="White"/>
+    <Setter Property="BoxShadow" Value="0 2 8 0 #20000000"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="Margin" Value="5"/>
+  </Style>
+  <!-- 區塊標題 -->
+  <Style Selector="TextBlock.section-title">
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="FontSize" Value="16"/>
+    <Setter Property="Foreground" Value="Black"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+    <Setter Property="FontFamily" Value="Microsoft JhengHei, Segoe UI, Arial"/>
+  </Style>
+  <!-- 全域文字 -->
+  <Style Selector="TextBlock">
+    <Setter Property="Foreground" Value="Black"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+    <Setter Property="FontFamily" Value="Microsoft JhengHei, Segoe UI, Arial"/>
+  </Style>
+  <!-- 輸入區域 -->
+  <Style Selector="Border.input-area">
+    <Setter Property="Background" Value="#F5F5F5"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="MinHeight" Value="120"/>
+  </Style>
+  <!-- 文字輸入框 -->
+  <Style Selector="TextBox.input">
+    <Setter Property="FontFamily" Value="Consolas, Microsoft JhengHei"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Foreground" Value="Black"/>
+    <Setter Property="CaretBrush" Value="#1976D2"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+    <Setter Property="AcceptsReturn" Value="True"/>
+    <Setter Property="VerticalContentAlignment" Value="Top"/>
+    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    <Setter Property="VerticalAlignment" Value="Stretch"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="SelectionBrush" Value="#1976D2"/>
+    <Setter Property="SelectionForegroundBrush" Value="White"/>
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+  </Style>
+  <!-- 文字輸入框所有狀態都保持亮色背景 -->
+  <Style Selector="TextBox.input:focus">
+    <Setter Property="Background" Value="#e3eaf5"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="BorderBrush" Value="#1976D2"/>
+  </Style>
+  <Style Selector="TextBox.input:pointerover">
+    <Setter Property="Background" Value="#e3eaf5"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="BorderBrush" Value="#1976D2"/>
+  </Style>
+  <Style Selector="TextBox.input:selected">
+    <Setter Property="Background" Value="#e3eaf5"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="BorderBrush" Value="#1976D2"/>
+  </Style>
+  <Style Selector="TextBox.input:disabled">
+    <Setter Property="Background" Value="#f5f5f5"/>
+    <Setter Property="Foreground" Value="#888"/>
+    <Setter Property="BorderBrush" Value="#CCC"/>
+  </Style>
+  <Style Selector="TextBox.input:readonly">
+    <Setter Property="Background" Value="#f5f5f5"/>
+    <Setter Property="Foreground" Value="#1976D2"/>
+    <Setter Property="BorderBrush" Value="#CCC"/>
+  </Style>
+  <Style Selector="TextBox.sql-output">
+    <Setter Property="Foreground" Value="#1976D2"/>
+  </Style>
+  <!-- 主要按鈕 -->
+  <Style Selector="Button.primary">
+    <Setter Property="Background" Value="#1976D2"/>
+    <Setter Property="Foreground" Value="White"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="MinWidth" Value="100"/>
+    <Setter Property="MinHeight" Value="35"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="BorderThickness" Value="0"/>
+  </Style>
+  <Style Selector="Button.primary:pointerover">
+    <Setter Property="Background" Value="#1565C0"/>
+  </Style>
+  <Style Selector="Button.primary:pressed">
+    <Setter Property="Background" Value="#0D47A1"/>
+  </Style>
+  <!-- 次要按鈕 -->
+  <Style Selector="Button.secondary">
+    <Setter Property="Background" Value="#F5F5F5"/>
+    <Setter Property="Foreground" Value="#F44336"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="FontSize" Value="11"/>
+    <Setter Property="BorderBrush" Value="#F44336"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="MinWidth" Value="90"/>
+    <Setter Property="MinHeight" Value="35"/>
+  </Style>
+  <Style Selector="Button.secondary:pointerover">
+    <Setter Property="Background" Value="#F44336"/>
+    <Setter Property="Foreground" Value="White"/>
+  </Style>
+  <Style Selector="Button.secondary:pressed">
+    <Setter Property="Background" Value="#D32F2F"/>
+    <Setter Property="Foreground" Value="White"/>
+  </Style>
+  <!-- ComboBox 樣式（下拉選單） -->
+  <Style Selector="ComboBox.theme-selector">
+    <Setter Property="Background" Value="White"/>
+    <Setter Property="Foreground" Value="Black"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="Padding" Value="10,8"/>
+    <Setter Property="MinWidth" Value="120"/>
+    <Setter Property="MaxWidth" Value="200"/>
+  </Style>
+  <Style Selector="ComboBox.theme-selector:pointerover">
+    <Setter Property="Background" Value="#E3F2FD"/>
+  </Style>
+  <Style Selector="ComboBox.theme-selector:focus">
+    <Setter Property="BorderBrush" Value="#1976D2"/>
+  </Style>
+  <!-- 自訂 language-selector ComboBox 樣式，光線模式下拉底色灰白、選中項目淺藍色 -->
+  <Style Selector="ComboBox.language-selector">
+    <Setter Property="Background" Value="#F8F8F8"/>
+    <Setter Property="Foreground" Value="Black"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="Padding" Value="10,8"/>
+    <Setter Property="MinWidth" Value="110"/>
+    <Setter Property="MaxWidth" Value="130"/>
+  </Style>
+  <Style Selector="ComboBox.language-selector:pointerover">
+    <Setter Property="Background" Value="#E3F2FD"/>
+  </Style>
+  <Style Selector="ComboBox.language-selector:focus">
+    <Setter Property="BorderBrush" Value="#1976D2"/>
+  </Style>
+  <!-- 下拉選單項目（語言選擇） -->
+  <Style Selector="ComboBox.language-selector ComboBoxItem">
+    <Setter Property="Background" Value="#F8F8F8"/>
+    <Setter Property="Foreground" Value="Black"/>
+    <Setter Property="Padding" Value="10,8"/>
+    <Setter Property="MinHeight" Value="30"/>
+  </Style>
+  <Style Selector="ComboBox.language-selector ComboBoxItem:pointerover">
+    <Setter Property="Background" Value="#E3F2FD"/>
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <Style Selector="ComboBox.language-selector ComboBoxItem:selected">
+    <Setter Property="Background" Value="#E3F2FD"/>
+    <Setter Property="Foreground" Value="Black"/>
+  </Style>
+  <!-- ComboBox.separator-selector 樣式 -->
+  <Style Selector="ComboBox.separator-selector">
+    <Setter Property="Background" Value="White"/>
+    <Setter Property="Foreground" Value="Black"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="FontFamily" Value="Consolas"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="Padding" Value="8,6"/>
+    <Setter Property="MinWidth" Value="80"/>
+    <Setter Property="MaxWidth" Value="150"/>
+  </Style>
+  <Style Selector="ComboBox.separator-selector:pointerover">
+    <Setter Property="Background" Value="#F5F5F5"/>
+  </Style>
+  <Style Selector="ComboBox.separator-selector:focus">
+    <Setter Property="BorderBrush" Value="#1976D2"/>
+  </Style>
+  <!-- 表格樣式 -->
+  <Style Selector="Grid.data-row">
+    <Setter Property="Background" Value="#F5F5F5"/>
+    <Setter Property="Margin" Value="0,0,0,1"/>
+    <Setter Property="MinHeight" Value="30"/>
+  </Style>
+  <Style Selector="Grid.data-row:nth-child(even)">
+    <Setter Property="Background" Value="#e6ecf5"/>
+  </Style>
+  <Style Selector="Grid.data-row:pointerover">
+    <Setter Property="Background" Value="#e3eaf5"/>
+  </Style>
+  <Style Selector="TextBlock.row-number">
+    <Setter Property="Background" Value="White"/>
+    <Setter Property="Foreground" Value="Black"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="FontFamily" Value="Consolas"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="HorizontalAlignment" Value="Center"/>
+  </Style>
+  <Style Selector="TextBlock.row-data">
+    <Setter Property="Foreground" Value="Black"/>
+    <Setter Property="FontFamily" Value="Consolas"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+  </Style>
+  <!-- 表格標題行樣式（header） -->
+  <Style Selector="Grid.data-table-header">
+    <Setter Property="Background" Value="White"/>
+  </Style>
+  <Style Selector="TextBlock.data-table-header">
+    <Setter Property="Foreground" Value="Black"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+  </Style>
+  <!-- 表格容器 -->
+  <Style Selector="Border.table-container">
+    <Setter Property="Background" Value="#e6ecf5"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="BorderBrush" Value="Black"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="MinHeight" Value="300"/>
+    <Setter Property="MaxHeight" Value="600"/>
+  </Style>
+  <!-- 複製按鈕藍色樣式（圓角正方形） -->
+  <Style Selector="Button.copy-button">
+    <Setter Property="Background" Value="#1976D2"/>
+    <Setter Property="Foreground" Value="White"/>
+    <Setter Property="BorderBrush" Value="#1976D2"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="Width" Value="28"/>
+    <Setter Property="Height" Value="28"/>
+    <Setter Property="Padding" Value="0"/>
+  </Style>
+  <!-- Splitter 顏色 -->
+  <Style Selector="GridSplitter">
+    <Setter Property="Background" Value="#c9d6e3"/>
+  </Style>
+  <!-- ScrollViewer/ScrollBar -->
+  <Style Selector="ScrollViewer">
+    <Setter Property="AllowAutoHide" Value="True"/>
+  </Style>
+  <Style Selector="Border.panel ScrollViewer">
+    <Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
+    <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+  </Style>
+  <Style Selector="ScrollBar">
+    <Setter Property="Background" Value="#e6ecf5"/>
+  </Style>
+  <Style Selector="ScrollBar:horizontal">
+    <Setter Property="Height" Value="12"/>
+  </Style>
+  <Style Selector="ScrollBar:vertical">
+    <Setter Property="Width" Value="12"/>
+  </Style>
+  <!-- 圖示 -->
+  <Style Selector="Path">
+    <Setter Property="Fill" Value="#1976D2"/>
+  </Style>
+  <Style Selector="Button Path">
+    <Setter Property="Fill" Value="{Binding $parent[Button].Foreground}"/>
+  </Style>
+</Styles>
