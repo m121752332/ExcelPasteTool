@@ -6,6 +6,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Markup.Xaml.Styling;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using System.Reflection;
 
 namespace ExcelPasteTool;
 
@@ -33,8 +34,8 @@ public partial class MainWindow : Window
         ThemeManager.ThemeChanged += OnThemeChanged;
         // 載入側邊欄主題樣式
         LoadSidebarTheme();
-        // 設定視窗標題
-        this.Title = "DataSplitter Pro";
+        // 設定視窗標題為 AssemblyName
+        this.Title = System.Reflection.Assembly.GetEntryAssembly()?.GetName().Name ?? "App";
     }
 
     private void OnSidebarItemClick(SidebarPage page)
@@ -58,6 +59,10 @@ public partial class MainWindow : Window
     {
         var app = Avalonia.Application.Current;
         if (app == null) return;
+
+        // 使用 Global.AssemblyName
+        var assemblyName = Global.AssemblyName;
+
         // 先移除舊的 SidebarTheme
         for (int i = app.Styles.Count - 1; i >= 0; i--)
         {
@@ -68,10 +73,10 @@ public partial class MainWindow : Window
                 app.Styles.RemoveAt(i);
             }
         }
-        // 重新載入 SidebarTheme.axaml
-        var sidebarTheme = new StyleInclude(new System.Uri("avares://ExcelPasteTool/"))
+        // 動態組合 avares 路徑
+        var sidebarTheme = new StyleInclude(new System.Uri($"avares://{assemblyName}/"))
         {
-            Source = new System.Uri("avares://ExcelPasteTool/Themes/SidebarTheme.axaml")
+            Source = new System.Uri($"avares://{assemblyName}/Themes/SidebarTheme.axaml")
         };
         app.Styles.Add(sidebarTheme);
     }

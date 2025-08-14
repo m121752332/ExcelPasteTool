@@ -55,14 +55,14 @@ public static class ThemeManager
             // 載入新主題
             string themePath = theme switch
             {
-                AppTheme.Light => "avares://ExcelPasteTool/Themes/LightTheme.axaml",
-                AppTheme.Dark => "avares://ExcelPasteTool/Themes/DarkTheme.axaml",
-                _ => "avares://ExcelPasteTool/Themes/DarkTheme.axaml"  // 默認設定深色模式
+                AppTheme.Light => $"avares://{Global.AssemblyName}/Themes/LightTheme.axaml",
+                AppTheme.Dark => $"avares://{Global.AssemblyName}/Themes/DarkTheme.axaml",
+                _ => $"avares://{Global.AssemblyName}/Themes/DarkTheme.axaml"
             };
 
             try
             {
-                var themeStyle = new StyleInclude(new Uri("avares://ExcelPasteTool/"))
+                var themeStyle = new StyleInclude(new Uri($"avares://{Global.AssemblyName}/"))
                 {
                     Source = new Uri(themePath)
                 };

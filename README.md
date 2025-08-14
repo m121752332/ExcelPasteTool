@@ -1,4 +1,23 @@
-# 專案目錄結構
+# 專案說明
+ExcelPasteTool 是一個用於快速處理 Excel 資料的桌面應用處理工具，支援多種資料格式的貼上與轉換，並提供直觀的使用者介面。
+
+## 發布檔案指令
+```bash
+# Windows x64
+dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
+
+# macOS x64
+dotnet publish -c Release -r osx-x64 --self-contained true -p:PublishSingleFile=true
+
+# macOS ARM64 (M1/M2)
+dotnet publish -c Release -r osx-arm64 --self-contained true -p:PublishSingleFile=true
+
+# Linux x64
+dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true
+```
+
+
+## 專案目錄結構
 ```
 ExcelPasteTool/
 │
