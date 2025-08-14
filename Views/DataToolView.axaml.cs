@@ -238,10 +238,10 @@ public partial class DataToolView : UserControl
                 var selectedLanguage = allLanguages[_languageSelector.SelectedIndex].Language;
                 if (LanguageManager.CurrentLanguage != selectedLanguage)
                 {
-                    LanguageManager.CurrentLanguage = selectedLanguage;
-                    ConfigServices.Config.Language = selectedLanguage.ToString();
-                    ConfigServices.Save();
+                    // ㄣ粂ēち传琌羬ぃ玂皌竚郎
+                    LanguageController.SetLanguage(selectedLanguage, false); // saveConfig = false
                     FontManager.ApplyLanguageFont(selectedLanguage);
+                    _toastHelper.EnqueueToast("粂ē羬ち传ゼ玂");
                 }
             }
         }
@@ -256,9 +256,9 @@ public partial class DataToolView : UserControl
                 var selectedTheme = allThemes[_themeSelector.SelectedIndex].Theme;
                 if (ThemeManager.CurrentTheme != selectedTheme)
                 {
+                    // ㄣ肈ち传琌羬ぃ玂皌竚郎
                     ThemeManager.CurrentTheme = selectedTheme;
-                    ConfigServices.Config.Theme = selectedTheme.ToString();
-                    ConfigServices.Save();
+                    _toastHelper.EnqueueToast("肈羬ち传ゼ玂");
                 }
             }
         }

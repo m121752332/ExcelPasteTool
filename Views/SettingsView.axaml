@@ -16,21 +16,27 @@
         <StackPanel Margin="40,30,40,30" Spacing="32">
             <!-- 灰底標題區塊 -->
             <Border Background="#232323" CornerRadius="8" Padding="32,18" Margin="0,0,0,12">
-                <TextBlock Text="設置" FontSize="22" FontWeight="Bold" Foreground="#F5F5F5"/>
+                <TextBlock Text="{Binding TitleText.Text}" FontSize="22" FontWeight="Bold" Foreground="#F5F5F5"/>
             </Border>
             <!-- 語言區塊 -->
             <Border Background="#232323" CornerRadius="8" Padding="24,18" Margin="0,0,0,12">
                 <StackPanel Spacing="10">
-                    <TextBlock Text="語言" FontSize="16" FontWeight="Bold" Foreground="#F5F5F5"/>
-                    <TextBlock Text="變更 App 的語言設定" FontSize="13" Foreground="#B0B0B0" Margin="0,2,0,10"/>
-                    <ComboBox Width="320" ItemsSource="{Binding Languages}" SelectedItem="{Binding SelectedLanguage}" HorizontalAlignment="Left"/>
+                    <TextBlock Text="{Binding LanguageTitleText.Text}" FontSize="16" FontWeight="Bold" Foreground="#F5F5F5"/>
+                    <TextBlock Text="{Binding LanguageDescText.Text}" FontSize="13" Foreground="#B0B0B0" Margin="0,2,0,10"/>
+                    <ComboBox Width="320" 
+                              ItemsSource="{Binding Languages, Mode=OneWay}" 
+                              SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" 
+                              HorizontalAlignment="Left"/>
                 </StackPanel>
             </Border>
             <!-- 主題區塊 -->
             <Border Background="#232323" CornerRadius="8" Padding="24,18">
                 <StackPanel Spacing="10">
-                    <TextBlock Text="主題" FontSize="16" FontWeight="Bold" Foreground="#F5F5F5"/>
-                    <ComboBox Width="320" ItemsSource="{Binding Themes}" SelectedItem="{Binding SelectedTheme}" HorizontalAlignment="Left"/>
+                    <TextBlock Text="{Binding ThemeTitleText.Text}" FontSize="16" FontWeight="Bold" Foreground="#F5F5F5"/>
+                    <ComboBox Width="320" 
+                              ItemsSource="{Binding Themes, Mode=OneWay}" 
+                              SelectedItem="{Binding SelectedTheme, Mode=TwoWay}" 
+                              HorizontalAlignment="Left"/>
                 </StackPanel>
             </Border>
         </StackPanel>

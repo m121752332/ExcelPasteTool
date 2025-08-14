@@ -90,6 +90,7 @@ public static class LanguageManager
         return new Dictionary<string, string>
         {
             ["AppTitle"] = "資料分隔處理器",
+            ["SettingsTitle"] = "設定",
             ["SeparatorLabel"] = "分隔符號：",
             ["ThemeLabel"] = "主題:",
             ["LanguageLabel"] = "語言:",
@@ -105,7 +106,10 @@ public static class LanguageManager
             ["SeparatorColon"] = "冒號 :",
             ["SeparatorSpace"] = "空白",
             ["ThemeDark"] = "暗黑模式",
-            ["ThemeLight"] = "光線模式"
+            ["ThemeLight"] = "光線模式",
+            ["LanguageChangedToast"] = "已將語言設定變更完成",
+            ["ThemeChangedToast"] = "已將主題設定變更完成",
+            ["LanguageDesc"] = "變更 App 的語言設定"
         };
     }
 
@@ -114,6 +118,7 @@ public static class LanguageManager
         return new Dictionary<string, string>
         {
             ["AppTitle"] = "数据分隔处理器",
+            ["SettingsTitle"] = "设定",
             ["SeparatorLabel"] = "分隔符号：",
             ["ThemeLabel"] = "主题:",
             ["LanguageLabel"] = "语言:",
@@ -129,7 +134,10 @@ public static class LanguageManager
             ["SeparatorColon"] = "冒号 :",
             ["SeparatorSpace"] = "空格",
             ["ThemeDark"] = "暗黑模式",
-            ["ThemeLight"] = "光線模式"
+            ["ThemeLight"] = "光线模式",
+            ["LanguageChangedToast"] = "已将语言设定变更完成",
+            ["ThemeChangedToast"] = "已将主题设定变更完成",
+            ["LanguageDesc"] = "变更 App 的语言设定"
         };
     }
 
@@ -138,6 +146,7 @@ public static class LanguageManager
         return new Dictionary<string, string>
         {
             ["AppTitle"] = "Data Separator Tool",
+            ["SettingsTitle"] = "Settings",
             ["SeparatorLabel"] = "Separator:",
             ["ThemeLabel"] = "Theme:",
             ["LanguageLabel"] = "Language:",
@@ -153,7 +162,10 @@ public static class LanguageManager
             ["SeparatorColon"] = "Colon :",
             ["SeparatorSpace"] = "Space",
             ["ThemeDark"] = "Dark Mode",
-            ["ThemeLight"] = "Light Mode"
+            ["ThemeLight"] = "Light Mode",
+            ["LanguageChangedToast"] = "Language settings changed successfully",
+            ["ThemeChangedToast"] = "Theme settings changed successfully",
+            ["LanguageDesc"] = "Change the app's language settings"
         };
     }
 }

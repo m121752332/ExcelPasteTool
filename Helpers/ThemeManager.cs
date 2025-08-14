@@ -88,19 +88,19 @@ public static class ThemeManager
     {
         return theme switch
         {
-            AppTheme.Light => "絬家Α",
-            AppTheme.Dark => "穞堵家Α",
-            _ => "ゼ肈"
+            AppTheme.Light => LanguageManager.GetText("ThemeLight", "絬家Α"),
+            AppTheme.Dark => LanguageManager.GetText("ThemeDark", "穞堵家Α"),
+            _ => LanguageManager.GetText("ThemeDark", "穞堵家Α")
         };
     }
 
-    // 穝糤莉眔┮Τノ肈
+    // 穝糤莉┮Τノ肈
     public static List<(AppTheme Theme, string Name)> GetAllThemes()
     {
         return new List<(AppTheme, string)>
         {
-            (AppTheme.Dark, "穞堵家Α"),
-            (AppTheme.Light, "絬家Α")
+            (AppTheme.Dark, LanguageManager.GetText("ThemeDark", "穞堵家Α")),
+            (AppTheme.Light, LanguageManager.GetText("ThemeLight", "絬家Α"))
         };
     }
 }

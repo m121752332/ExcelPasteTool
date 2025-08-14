@@ -14,7 +14,7 @@
                 Padding="18,10"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Margin="0,20,40,0"
+                Margin="0,40,40,0"
                 IsVisible="False"
                 ZIndex="1000">
             <TextBlock Name="ToastText" Foreground="#FFA726" FontWeight="Bold" FontSize="15" Text="已複製到剪貼簿！"/>

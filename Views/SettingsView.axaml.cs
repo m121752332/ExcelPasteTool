@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using ExcelPasteTool.Helpers;
+using System.Diagnostics;
 
 namespace ExcelPasteTool;
 
@@ -9,10 +10,10 @@ public partial class SettingsView : UserControl
 
     public SettingsView()
     {
+        Debug.WriteLine($"SettingsView ctor: {SettingsViewModel.Instance.GetHashCode()}");
         InitializeComponent();
         _toastHelper = new ToastQueueHelper(this);
-        var vm = new SettingsViewModel();
-        vm.EnqueueToast = _toastHelper.EnqueueToast;
-        this.DataContext = vm;
+        SettingsViewModel.Instance.EnqueueToast = _toastHelper.EnqueueToast;
+        DataContext = SettingsViewModel.Instance;
     }
 }
