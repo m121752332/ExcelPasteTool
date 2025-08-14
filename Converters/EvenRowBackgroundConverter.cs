@@ -1,5 +1,7 @@
+using Avalonia;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
+using Avalonia.Styling;
 using System;
 using System.Globalization;
 
@@ -9,20 +11,36 @@ namespace ExcelPasteTool.Converters
     {
         public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
-            if (value is bool isEven)
+            bool isEven = value is bool b && b;
+            var app = Application.Current;
+            var theme = app?.ActualThemeVariant ?? ThemeVariant.Light;
+
+            // 1) 纔ノ肈戈方Light 矗ㄑフ/睭ηDark ┛菠┪矗ㄑ瞏︹
+            if (app != null && app.TryGetResource(isEven ? "TableEvenRowBrush" : "TableOddRowBrush", theme, out var brushObj))
             {
-                if (isEven)
-                {
-                    // 案计︽ #141414
-                    return new SolidColorBrush(Color.Parse("#141414"));
-                }
-                else
-                {
-                    // 计︽ #1a1a1a
-                    return new SolidColorBrush(Color.Parse("#1a1a1a"));
-                }
+                if (brushObj is IBrush themed) return themed;
             }
-            return Brushes.Transparent;
+
+            // 2) 侣 EvenRowBackgroundBrush度案计
+            if (app != null && isEven && app.TryGetResource("EvenRowBackgroundBrush", theme, out var evenObj))
+            {
+                if (evenObj is IBrush evenBrush) return evenBrush;
+            }
+
+            // 3) Fallbackㄌ肈倒箇砞肅︹
+            bool isLight = theme == ThemeVariant.Light;
+            if (isLight)
+            {
+                var lightEven = Color.Parse("#F2F5FA"); // 睭η
+                var lightOdd  = Color.Parse("#FFFFFF"); // フ
+                return new SolidColorBrush(isEven ? lightEven : lightOdd);
+            }
+            else
+            {
+                var darkEven = Color.Parse("#141414");
+                var darkOdd  = Color.Parse("#1a1a1a");
+                return new SolidColorBrush(isEven ? darkEven : darkOdd);
+            }
         }
 
         public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

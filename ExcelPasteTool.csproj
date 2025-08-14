@@ -34,6 +34,11 @@
   <ItemGroup>
     <AvaloniaResource Include="Resources\Languages\*.json" />
   </ItemGroup>
+	
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\Styles\DarkTheme.axaml" />
+    <AvaloniaResource Include="Assets\Styles\LightTheme.axaml" />
+  </ItemGroup>
 
   <ItemGroup>
     <Content Include="Assets\Logos\logo.ico" />

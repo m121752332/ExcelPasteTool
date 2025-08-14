@@ -8,15 +8,15 @@ namespace ExcelPasteTool;
 
 public enum AppTheme
 {
-    Light,      // 光線模式
-    Dark         // 暗黑模式
+    Light,
+    Dark
 }
 
 public static class ThemeManager
 {
     private static readonly object _themeLock = new();
 
-    // 設定深色模式為默認主題
+    // 預設主題
     private static AppTheme _currentTheme = AppTheme.Dark;
 
     public static AppTheme CurrentTheme 
@@ -42,17 +42,30 @@ public static class ThemeManager
             var app = Application.Current;
             if (app?.Styles == null) return;
 
-            // 清除現有的自定義主題
+            // 1) 讓 FluentTheme 跟著切換 Light/Dark，避免內建控件（TextBox、ComboBox 下拉、Popup 等）出現黑色
+            app.RequestedThemeVariant = theme switch
+            {
+                AppTheme.Light => ThemeVariant.Light,
+                AppTheme.Dark => ThemeVariant.Dark,
+                _ => ThemeVariant.Dark
+            };
+
+            // 2) 移除既有的自訂主題 StyleInclude（避免重覆加入）
             for (int i = app.Styles.Count - 1; i >= 0; i--)
             {
-                if (app.Styles[i] is StyleInclude styleInclude && 
-                    styleInclude.Source?.AbsolutePath?.Contains("Themes") == true)
+                if (app.Styles[i] is StyleInclude styleInclude &&
+                    styleInclude.Source is not null)
                 {
-                    app.Styles.RemoveAt(i);
+                    var path = styleInclude.Source.ToString() ?? string.Empty;
+                    if (path.Contains("Assets/Styles/LightTheme.axaml", StringComparison.OrdinalIgnoreCase) ||
+                        path.Contains("Assets/Styles/DarkTheme.axaml", StringComparison.OrdinalIgnoreCase))
+                    {
+                        app.Styles.RemoveAt(i);
+                    }
                 }
             }
 
-            // 載入新主題
+            // 3) 載入對應主題的自訂樣式
             string themePath = theme switch
             {
                 AppTheme.Light => $"avares://{Global.AssemblyName}/Assets/Styles/LightTheme.axaml",
@@ -70,12 +83,11 @@ public static class ThemeManager
             }
             catch
             {
-                // 如果主題載入失敗，則保持原有主題
+                // 載入失敗時忽略，避免崩潰
             }
         }
     }
 
-    // 保留循環方法以便將來擴充
     public static void NextTheme()
     {
         var values = Enum.GetValues<AppTheme>();
@@ -94,7 +106,6 @@ public static class ThemeManager
         };
     }
 
-    // 新增：獲取所有可用主題的列表
     public static List<(AppTheme Theme, string Name)> GetAllThemes()
     {
         return new List<(AppTheme, string)>

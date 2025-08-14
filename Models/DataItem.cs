@@ -48,4 +48,10 @@ public class DataItem : INotifyPropertyChanged
         RowNumber = rowNumber;
         Value = value;
     }
+
+    // 讓外部可在主題或語言切換後，強制刷新與樣式相關的屬性（例如行底色）
+    public void NotifyStyleChanged()
+    {
+        OnPropertyChanged(nameof(IsEven));
+    }
 }

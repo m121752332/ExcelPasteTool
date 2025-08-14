@@ -1,5 +1,11 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Styles.Resources>
+    <!-- 表格用配色（暗黑模式） -->
+    <SolidColorBrush x:Key="TableHeaderBackgroundBrush" Color="#232324"/>
+    <SolidColorBrush x:Key="TableOddRowBrush" Color="#2D2D30"/>
+    <SolidColorBrush x:Key="TableEvenRowBrush" Color="#383838"/>
+  </Styles.Resources>
   
   <!-- 深色模式主題 -->
   <Style Selector="Window">
@@ -187,9 +193,9 @@
     <Setter Property="Foreground" Value="Black"/>
   </Style>
 
-  <!-- 表格樣式 -->
+  <!-- 表格樣式（若未使用 Converter 的情況下的預設） -->
   <Style Selector="Grid.data-row">
-    <Setter Property="Background" Value="#333333"/>
+    <Setter Property="Background" Value="#2D2D30"/>
     <Setter Property="Margin" Value="0,0,0,1"/>
     <Setter Property="MinHeight" Value="30"/>
   </Style>
@@ -311,7 +317,7 @@
 
   <!-- 表格標題行樣式（header） -->
   <Style Selector="Grid.data-table-header">
-    <Setter Property="Background" Value="#232324"/>
+    <Setter Property="Background" Value="{DynamicResource TableHeaderBackgroundBrush}"/>
   </Style>
   <Style Selector="TextBlock.data-table-header">
     <Setter Property="Foreground" Value="#4FC3F7"/>

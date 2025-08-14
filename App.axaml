@@ -3,5 +3,8 @@
              x:Class="ExcelPasteTool.App">
   <Application.Styles>
     <FluentTheme />
+	  <!-- 確保你的自訂主題在 FluentTheme 之後載入 -->
+	  <StyleInclude Source="avares://DataSplitter/Assets/Styles/LightTheme.axaml"/>
+	  <StyleInclude Source="avares://DataSplitter/Assets/Styles/DarkTheme.axaml"/>
   </Application.Styles>
 </Application>

@@ -1,5 +1,11 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Styles.Resources>
+    <!-- 表格用配色（光線模式） -->
+    <SolidColorBrush x:Key="TableHeaderBackgroundBrush" Color="#F3F6FA"/>
+    <SolidColorBrush x:Key="TableOddRowBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="TableEvenRowBrush" Color="#F2F5FA"/>
+  </Styles.Resources>
   <!-- Window 背景使用 Windows 系統配色 -->
   <Style Selector="Window">
     <Setter Property="Background">
@@ -11,6 +17,7 @@
       </Setter.Value>
     </Setter>
   </Style>
+  	
   <!-- 主要面板 -->
   <Style Selector="Border.panel">
     <Setter Property="Background" Value="White"/>
@@ -228,7 +235,7 @@
   </Style>
   <!-- 表格標題行樣式（header） -->
   <Style Selector="Grid.data-table-header">
-    <Setter Property="Background" Value="White"/>
+    <Setter Property="Background" Value="{DynamicResource TableHeaderBackgroundBrush}"/>
   </Style>
   <Style Selector="TextBlock.data-table-header">
     <Setter Property="Foreground" Value="Black"/>
@@ -284,4 +291,45 @@
   <Style Selector="Button Path">
     <Setter Property="Fill" Value="{Binding $parent[Button].Foreground}"/>
   </Style>
+
+
+	<!-- 強制覆蓋所有 ComboBoxItem 樣式 - 使用更高的優先級 -->
+	<Style Selector="ComboBox ComboBoxItem">
+		<Setter Property="Background" Value="White"/>
+		<Setter Property="Foreground" Value="Black"/>
+		<Setter Property="Padding" Value="10,8"/>
+		<Setter Property="MinHeight" Value="30"/>
+		<Setter Property="FontFamily" Value="Microsoft JhengHei, Segoe UI, Arial"/>
+	</Style>
+
+	<Style Selector="ComboBox ComboBoxItem:pointerover">
+		<Setter Property="Background" Value="#E3F2FD"/>
+		<Setter Property="Foreground" Value="Black"/>
+	</Style>
+
+	<Style Selector="ComboBox ComboBoxItem:selected">
+		<Setter Property="Background" Value="#E3F2FD"/>
+		<Setter Property="Foreground" Value="Black"/>
+	</Style>
+
+	<Style Selector="ComboBox ComboBoxItem:focus">
+		<Setter Property="Background" Value="#E3F2FD"/>
+		<Setter Property="Foreground" Value="Black"/>
+	</Style>
+
+	<!-- 更高優先級的特定選擇器 -->
+	<Style Selector="ComboBox.language-selector > ComboBoxItem">
+		<Setter Property="Background" Value="#F8F8F8"/>
+		<Setter Property="Foreground" Value="Black"/>
+	</Style>
+
+	<Style Selector="ComboBox.language-selector > ComboBoxItem:pointerover">
+		<Setter Property="Background" Value="#E3F2FD"/>
+		<Setter Property="Foreground" Value="Black"/>
+	</Style>
+
+	<Style Selector="ComboBox.language-selector > ComboBoxItem:selected">
+		<Setter Property="Background" Value="#E3F2FD"/>
+		<Setter Property="Foreground" Value="Black"/>
+	</Style>
 </Styles>

@@ -212,7 +212,10 @@ public partial class DataToolView : UserControl
     {
         UpdateLanguageSelection();
         UpdateUITexts();
+        // 語言切換後，部分資源/字型可能改變，強制刷新資料列背景（讓 Converter 重新執行）
+        RefreshDataItemRowStyles();
     }
+
     private void OnThemeChanged()
     {
         UpdateThemeSelection();
@@ -226,8 +229,37 @@ public partial class DataToolView : UserControl
             var sidebarColor = isDark ? "#232323" : "#F7F7F7";
             app.Resources["SidebarBackgroundBrush"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse(sidebarColor));
         }
+        // 主題切換後也刷新資料列背景
+        RefreshDataItemRowStyles();
     }
-    private void OnFontChanged() { }
+
+    // 字型切換後，也強制刷新資料列樣式，避免不同字型造成行高/測量後未重繪
+    private void OnFontChanged()
+    {
+        RefreshDataItemRowStyles();
+    }
+
+    private void RefreshDataItemRowStyles()
+    {
+        if (DataItems.Count == 0) return;
+        // 1) 做一個 no-op 指派，確保 UI 觸發更新
+        for (int i = 0; i < DataItems.Count; i++)
+        {
+            var item = DataItems[i];
+            // 觸發 IsEven 屬性變更
+            item.NotifyStyleChanged();
+        }
+        // 2) 重新 assign ItemsSource（可選，保守做法）
+        var items = DataItems.ToList();
+        DataItems.Clear();
+        int row = 1;
+        foreach (var it in items)
+        {
+            it.RowNumber = row++;
+            DataItems.Add(it);
+        }
+    }
+
     private void LanguageSelector_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (_languageSelector != null && _languageSelector.SelectedIndex >= 0)
