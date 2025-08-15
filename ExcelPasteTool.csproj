@@ -11,7 +11,7 @@
 	  <AssemblyName>DataSplitter</AssemblyName>
 	  <!-- AssemblyInfo 資訊 -->
 	  <AssemblyTitle>DataSplitter Pro</AssemblyTitle>
-	  <AssemblyDescription>Excel Data Splitter Tool</AssemblyDescription>
+	  <AssemblyDescription>一個幫助EXCEL做資料處理的分隔工具</AssemblyDescription>
 	  <AssemblyCompany>GameStudioPro</AssemblyCompany>
 	  <Product>DataSplitter Pro</Product>
 	  <Copyright>GameStudioPro@2025</Copyright>

@@ -2,50 +2,163 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ExcelPasteTool"
              x:Class="ExcelPasteTool.AboutView">
-  <Grid Margin="20">
-    <Grid.RowDefinitions>
-      <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*"/>
-    </Grid.RowDefinitions>
 
-    <!-- Header with logo and title -->
-    <StackPanel Grid.Row="0" Orientation="Vertical" Spacing="8" HorizontalAlignment="Center" Margin="0,10,0,16">
-      <!-- Round logo badge with gradient -->
-      <Border Width="80" Height="80" CornerRadius="40" Padding="12" HorizontalAlignment="Center">
-        <Border.Background>
-          <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-            <GradientStop Color="#4FC3F7" Offset="0"/>
-            <GradientStop Color="#1976D2" Offset="1"/>
-          </LinearGradientBrush>
-        </Border.Background>
-        <Grid>
-          <Image Source="avares://DataSplitter/Assets/Images/about.png" Width="40" Height="40" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Grid>
-      </Border>
-      <TextBlock x:Name="AppTitleText" Text="DataSplitter Pro" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
-      <TextBlock x:Name="VersionText" Text="v1.0.0" FontSize="13" HorizontalAlignment="Center"/>
-    </StackPanel>
+	<Grid x:Name="RootGrid" Margin="20" RowDefinitions="Auto,*" RowSpacing="20">
 
-    <!-- Info card -->
-    <Border Grid.Row="1" Classes="panel" Padding="16">
-      <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="10">
-        <Grid Grid.Row="0" ColumnDefinitions="Auto,*" ColumnSpacing="10">
-          <TextBlock Text="版權" FontWeight="Bold"/>
-          <TextBlock Grid.Column="1" x:Name="CopyrightText"/>
-        </Grid>
-        <Grid Grid.Row="1" ColumnDefinitions="Auto,*" ColumnSpacing="10">
-          <TextBlock Text="描述" FontWeight="Bold"/>
-          <TextBlock Grid.Column="1" x:Name="DescriptionText" TextWrapping="Wrap"/>
-        </Grid>
-        <Grid Grid.Row="2" ColumnDefinitions="Auto,*" ColumnSpacing="10">
-          <TextBlock Text="框架" FontWeight="Bold"/>
-          <TextBlock Grid.Column="1" Text="使用 Avalonia UI 與 .NET 8 開發"/>
-        </Grid>
-        <Grid Grid.Row="3" ColumnDefinitions="Auto,*" ColumnSpacing="10">
-          <TextBlock Text="作者" FontWeight="Bold"/>
-          <TextBlock Grid.Column="1" Text="Tiger Tseng"/>
-        </Grid>
-      </Grid>
-    </Border>
-  </Grid>
+		<!-- Hero Header Section -->
+		<Border Grid.Row="0" CornerRadius="16" Padding="32,24">
+			<Border.Background>
+				<LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+					<GradientStop Color="#667eea" Offset="0"/>
+					<GradientStop Color="#764ba2" Offset="1"/>
+				</LinearGradientBrush>
+			</Border.Background>
+
+			<StackPanel Spacing="16" HorizontalAlignment="Center">
+
+				<!-- Logo Area -->
+				<Border Width="80" Height="80" CornerRadius="40" Background="White" Padding="16" HorizontalAlignment="Center">
+					<Border CornerRadius="24" Background="#667eea">
+						<TextBlock Text="📊" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Border>
+				</Border>
+
+				<!-- Title and Version -->
+				<StackPanel Spacing="8" HorizontalAlignment="Center">
+					<TextBlock x:Name="AppTitleText" Text="DataSplitter Pro"
+							   FontSize="28" FontWeight="Bold" Foreground="White"
+							   HorizontalAlignment="Center"/>
+					<TextBlock Text="專業的 Excel 資料處理工具"
+							   FontSize="16" Foreground="#E0E7FF"
+							   HorizontalAlignment="Center"/>
+				</StackPanel>
+
+				<!-- Version Badge -->
+				<Border CornerRadius="16" Padding="12,6" HorizontalAlignment="Center">
+					<Border.Background>
+						<LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+							<GradientStop Color="#06b6d4" Offset="0"/>
+							<GradientStop Color="#3b82f6" Offset="1"/>
+						</LinearGradientBrush>
+					</Border.Background>
+					<TextBlock x:Name="VersionText" Text="v1.0.0"
+							   FontSize="12" FontWeight="SemiBold" Foreground="White"/>
+				</Border>
+
+			</StackPanel>
+		</Border>
+
+		<!-- Content Area -->
+		<Grid Grid.Row="1" ColumnDefinitions="1*,1*" ColumnSpacing="20">
+
+			<!-- Left Info Card - 藍色主題 -->
+			<Border Grid.Column="0" CornerRadius="12" BorderThickness="2" Padding="20">
+				<Border.Background>
+					<LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+						<GradientStop Color="#EBF4FF" Offset="0"/>
+						<GradientStop Color="#DBEAFE" Offset="1"/>
+					</LinearGradientBrush>
+				</Border.Background>
+				<Border.BorderBrush>
+					<LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+						<GradientStop Color="#3B82F6" Offset="0"/>
+						<GradientStop Color="#1D4ED8" Offset="1"/>
+					</LinearGradientBrush>
+				</Border.BorderBrush>
+
+				<StackPanel Spacing="16">
+					<TextBlock Text="📋 應用程式資訊" FontSize="18" FontWeight="Bold" Foreground="#1E3A8A"/>
+
+					<StackPanel Spacing="12">
+						<!-- Copyright Info -->
+						<Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+							<Border Background="#3B82F6" CornerRadius="8" Padding="8" VerticalAlignment="Top">
+								<TextBlock Text="©️" FontSize="14" Foreground="White"/>
+							</Border>
+							<StackPanel Grid.Column="1" Spacing="4">
+								<TextBlock Text="版權資訊" FontWeight="SemiBold" FontSize="14" Foreground="#1E3A8A"/>
+								<TextBlock x:Name="CopyrightText" Text="© 2025 GameStudioPro"
+										   FontSize="14" Foreground="#1E40AF" TextWrapping="Wrap"/>
+							</StackPanel>
+						</Grid>
+
+						<!-- Description -->
+						<Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+							<Border Background="#1D4ED8" CornerRadius="8" Padding="8" VerticalAlignment="Top">
+								<TextBlock Text="📝" FontSize="14" Foreground="White"/>
+							</Border>
+							<StackPanel Grid.Column="1" Spacing="4">
+								<TextBlock Text="應用程式描述" FontWeight="SemiBold" FontSize="14" Foreground="#1E3A8A"/>
+								<TextBlock x:Name="DescriptionText" Text="Excel Data Splitter Tool"
+										   FontSize="14" Foreground="#1E40AF" TextWrapping="Wrap"/>
+							</StackPanel>
+						</Grid>
+					</StackPanel>
+
+				</StackPanel>
+			</Border>
+
+			<!-- Right Tech Info Card - 綠色主題 -->
+			<Border Grid.Column="1" CornerRadius="12" BorderThickness="2" Padding="20">
+				<Border.Background>
+					<LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+						<GradientStop Color="#ECFDF5" Offset="0"/>
+						<GradientStop Color="#D1FAE5" Offset="1"/>
+					</LinearGradientBrush>
+				</Border.Background>
+				<Border.BorderBrush>
+					<LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+						<GradientStop Color="#10B981" Offset="0"/>
+						<GradientStop Color="#047857" Offset="1"/>
+					</LinearGradientBrush>
+				</Border.BorderBrush>
+
+				<StackPanel Spacing="16">
+					<TextBlock Text="⚙️ 技術資訊" FontSize="18" FontWeight="Bold" Foreground="#064E3B"/>
+
+					<StackPanel Spacing="12">
+						<!-- Framework Info -->
+						<Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+							<Border Background="#10B981" CornerRadius="8" Padding="8" VerticalAlignment="Top">
+								<TextBlock Text="🛠️" FontSize="14" Foreground="White"/>
+							</Border>
+							<StackPanel Grid.Column="1" Spacing="6">
+								<TextBlock Text="開發框架" FontWeight="SemiBold" FontSize="14" Foreground="#064E3B"/>
+								<TextBlock Text="使用 Avalonia UI 與 .NET 8 開發"
+									   FontSize="14" Foreground="#065F46"/>
+								<StackPanel Orientation="Horizontal" Spacing="6">
+									<Border Background="#3B82F6" CornerRadius="4" Padding="6,2">
+										<TextBlock Text="Avalonia" FontSize="10" Foreground="White"/>
+									</Border>
+									<Border Background="#059669" CornerRadius="4" Padding="6,2">
+										<TextBlock Text=".NET 8" FontSize="10" Foreground="White"/>
+									</Border>
+								</StackPanel>
+							</StackPanel>
+						</Grid>
+
+						<!-- Author Info (Clickable Hot Area) -->
+						<Grid x:Name="DeveloperHotArea" ColumnDefinitions="Auto,*" ColumnSpacing="12"
+							  Background="Transparent" Cursor="Hand"
+							  PointerPressed="DeveloperHotArea_OnPointerPressed">
+							<Border Background="#047857" CornerRadius="8" Padding="8" VerticalAlignment="Top">
+								<TextBlock Text="👨‍💻" FontSize="14" Foreground="White"/>
+							</Border>
+							<StackPanel Grid.Column="1" Spacing="4">
+								<TextBlock Text="開發者" FontWeight="SemiBold" FontSize="14" Foreground="#064E3B"/>
+								<TextBlock Text="Tiger Tseng" FontSize="14" Foreground="#065F46"/>
+								<TextBlock Text="專業軟體開發工程師" FontSize="12" Foreground="#047857"/>
+							</StackPanel>
+						</Grid>
+					</StackPanel>
+
+				</StackPanel>
+			</Border>
+
+		</Grid>
+
+		<!-- Bubble overlay layer -->
+		<Canvas x:Name="BubbleLayer" Grid.RowSpan="2" IsHitTestVisible="False"/>
+
+	</Grid>
 </UserControl>
