@@ -44,12 +44,22 @@ public partial class AboutView : UserControl
         _bubbleLayer = this.FindControl<Canvas>("BubbleLayer");
         _rootGrid = this.FindControl<Grid>("RootGrid");
 
+        var developerHotArea = this.FindControl<Grid>("DeveloperHotArea");
+        if (developerHotArea != null)
+            developerHotArea.PointerPressed += DeveloperHotArea_OnPointerPressed;
+
         var asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
         var name = asm.GetName();
         _appTitleText!.Text = name.Name ?? "DataSplitter Pro";
         _versionText!.Text = $"v{(name.Version?.ToString(3) ?? "1.0.0")}";
 
-        _copyright!.Text = $"{GetAssemblyAttribute<AssemblyCopyrightAttribute>(asm)?.Copyright}";
+        // 公司與版權
+        var company = asm.GetCustomAttribute<AssemblyCompanyAttribute>()?.Company ?? string.Empty;
+        var copyright = asm.GetCustomAttribute<AssemblyCopyrightAttribute>()?.Copyright ?? string.Empty;
+        _copyright!.Text = string.IsNullOrWhiteSpace(company)
+            ? copyright
+            : $"{copyright}";
+
         var desc = asm.GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description ?? "Excel Data Splitter Tool";
         _description!.Text = desc;
     }

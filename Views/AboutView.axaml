@@ -139,8 +139,7 @@
 
 						<!-- Author Info (Clickable Hot Area) -->
 						<Grid x:Name="DeveloperHotArea" ColumnDefinitions="Auto,*" ColumnSpacing="12"
-							  Background="Transparent" Cursor="Hand"
-							  PointerPressed="DeveloperHotArea_OnPointerPressed">
+							  Background="Transparent" Cursor="Hand">
 							<Border Background="#047857" CornerRadius="8" Padding="8" VerticalAlignment="Top">
 								<TextBlock Text="👨‍💻" FontSize="14" Foreground="White"/>
 							</Border>

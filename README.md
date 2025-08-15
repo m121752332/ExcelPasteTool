@@ -17,6 +17,30 @@ dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFil
 ```
 
 
+## 一鍵發布（有結構輸出）
+建議使用發佈設定檔，輸出到 artifacts 目錄，區分平台：
+
+- Windows x64 -> artifacts/win-x64/
+- Linux x64 -> artifacts/linux-x64/
+- macOS x64 -> artifacts/osx-x64/
+- macOS ARM64 (M1/M2/M3) -> artifacts/osx-arm64/
+
+指令：
+```bash
+# Windows x64
+ dotnet publish -c Release -p:PublishProfile=Properties/PublishProfiles/Windows-x64.pubxml
+
+# Linux x64
+ dotnet publish -c Release -p:PublishProfile=Properties/PublishProfiles/Linux-x64.pubxml
+
+# macOS x64
+ dotnet publish -c Release -p:PublishProfile=Properties/PublishProfiles/macOS-x64.pubxml
+
+# macOS ARM64 (M1/M2/M3)
+ dotnet publish -c Release -p:PublishProfile=Properties/PublishProfiles/macOS-arm64.pubxml
+```
+
+
 ## 專案目錄結構
 ```
 ExcelPasteTool/
@@ -89,4 +113,3 @@ ExcelPasteTool/
 │
 └── 📂 Properties/              # 專案屬性
     └── Resources.Designer.cs    # 資源設計器（自動生成）
-```
