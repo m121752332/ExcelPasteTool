@@ -7,8 +7,10 @@ namespace ExcelPasteTool;
 
 public class SidebarPageToContentConverter : IValueConverter
 {
-    // 單例模式，避免資料重置
+    // Cache views to preserve state where helpful
     private static DataToolView? _dataToolViewInstance;
+    private static SettingsView? _settingsViewInstance;
+    private static AboutView? _aboutViewInstance;
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -19,10 +21,9 @@ public class SidebarPageToContentConverter : IValueConverter
                 case SidebarPage.Tools:
                     return _dataToolViewInstance ??= new DataToolView();
                 case SidebarPage.Settings:
-                    // 載入真正的 SettingsView
-                    return new SettingsView();
+                    return _settingsViewInstance ??= new SettingsView();
                 case SidebarPage.About:
-                    return new TextBlock { Text = "關於頁面(待開發)", FontSize = 20, VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center, HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center };
+                    return _aboutViewInstance ??= new AboutView();
                 default:
                     return null;
             }

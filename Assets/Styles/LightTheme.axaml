@@ -35,13 +35,13 @@
     <Setter Property="FontSize" Value="16"/>
     <Setter Property="Foreground" Value="Black"/>
     <Setter Property="TextWrapping" Value="Wrap"/>
-    <Setter Property="FontFamily" Value="Microsoft JhengHei, Segoe UI, Arial"/>
+    <Setter Property="FontFamily" Value="Noto Sans TC, Source Han Sans TC, Microsoft JhengHei, Segoe UI, Arial"/>
   </Style>
   <!-- 全域文字 -->
   <Style Selector="TextBlock">
     <Setter Property="Foreground" Value="Black"/>
     <Setter Property="TextWrapping" Value="Wrap"/>
-    <Setter Property="FontFamily" Value="Microsoft JhengHei, Segoe UI, Arial"/>
+    <Setter Property="FontFamily" Value="Noto Sans TC, Source Han Sans TC, Microsoft JhengHei, Segoe UI, Arial"/>
   </Style>
   <!-- 輸入區域 -->
   <Style Selector="Border.input-area">
@@ -302,7 +302,7 @@
 		<Setter Property="Foreground" Value="Black"/>
 		<Setter Property="Padding" Value="10,8"/>
 		<Setter Property="MinHeight" Value="30"/>
-		<Setter Property="FontFamily" Value="Microsoft JhengHei, Segoe UI, Arial"/>
+		<Setter Property="FontFamily" Value="Noto Sans TC, Source Han Sans TC, Microsoft JhengHei, Segoe UI, Arial"/>
 	</Style>
 
 	<Style Selector="ComboBox ComboBoxItem:pointerover">

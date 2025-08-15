@@ -63,4 +63,8 @@
     <Folder Include="Controls\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AvaloniaResource Include="Assets/Images/*.png" />
+  </ItemGroup>
+
 </Project>

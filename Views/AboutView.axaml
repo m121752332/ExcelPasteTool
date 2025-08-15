@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ExcelPasteTool"
+             x:Class="ExcelPasteTool.AboutView">
+  <Grid Margin="20">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <!-- Header with logo and title -->
+    <StackPanel Grid.Row="0" Orientation="Vertical" Spacing="8" HorizontalAlignment="Center" Margin="0,10,0,16">
+      <!-- Round logo badge with gradient -->
+      <Border Width="80" Height="80" CornerRadius="40" Padding="12" HorizontalAlignment="Center">
+        <Border.Background>
+          <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#4FC3F7" Offset="0"/>
+            <GradientStop Color="#1976D2" Offset="1"/>
+          </LinearGradientBrush>
+        </Border.Background>
+        <Grid>
+          <Image Source="avares://DataSplitter/Assets/Images/about.png" Width="40" Height="40" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+      </Border>
+      <TextBlock x:Name="AppTitleText" Text="DataSplitter Pro" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
+      <TextBlock x:Name="VersionText" Text="v1.0.0" FontSize="13" HorizontalAlignment="Center"/>
+    </StackPanel>
+
+    <!-- Info card -->
+    <Border Grid.Row="1" Classes="panel" Padding="16">
+      <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="10">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*" ColumnSpacing="10">
+          <TextBlock Text="版權" FontWeight="Bold"/>
+          <TextBlock Grid.Column="1" x:Name="CopyrightText"/>
+        </Grid>
+        <Grid Grid.Row="1" ColumnDefinitions="Auto,*" ColumnSpacing="10">
+          <TextBlock Text="描述" FontWeight="Bold"/>
+          <TextBlock Grid.Column="1" x:Name="DescriptionText" TextWrapping="Wrap"/>
+        </Grid>
+        <Grid Grid.Row="2" ColumnDefinitions="Auto,*" ColumnSpacing="10">
+          <TextBlock Text="框架" FontWeight="Bold"/>
+          <TextBlock Grid.Column="1" Text="使用 Avalonia UI 與 .NET 8 開發"/>
+        </Grid>
+        <Grid Grid.Row="3" ColumnDefinitions="Auto,*" ColumnSpacing="10">
+          <TextBlock Text="作者" FontWeight="Bold"/>
+          <TextBlock Grid.Column="1" Text="Tiger Tseng"/>
+        </Grid>
+      </Grid>
+    </Border>
+  </Grid>
+</UserControl>

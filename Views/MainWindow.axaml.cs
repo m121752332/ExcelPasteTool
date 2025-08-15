@@ -19,7 +19,7 @@ public partial class MainWindow : Window
         new SidebarItem(SidebarPage.Tools, "工具", IconManager.DataIcon),
         // 設定：使用 SettingsIcon
         new SidebarItem(SidebarPage.Settings, "設定", IconManager.SettingsIcon),
-        // 關於：使用 HelpIcon (預設)
+        // 關於：使用 HelpIcon（已內建）
         new SidebarItem(SidebarPage.About, "關於", IconManager.GetIcon("help")),
     };
     public ICommand SidebarItemClickCommand { get; }
@@ -34,7 +34,7 @@ public partial class MainWindow : Window
         ThemeManager.ThemeChanged += OnThemeChanged;
         // 載入側邊欄主題樣式
         LoadSidebarTheme();
-        // 設定視窗標題為 AssemblyName
+        // 設定視窗標題為組件名稱
         this.Title = System.Reflection.Assembly.GetEntryAssembly()?.GetName().Name ?? "App";
     }
 
@@ -63,7 +63,7 @@ public partial class MainWindow : Window
         // 使用 Global.AssemblyName
         var assemblyName = Global.AssemblyName;
 
-        // 先移除舊的 SidebarTheme
+        // 先移除現有的 SidebarTheme
         for (int i = app.Styles.Count - 1; i >= 0; i--)
         {
             if (app.Styles[i] is StyleInclude styleInclude &&
@@ -73,7 +73,7 @@ public partial class MainWindow : Window
                 app.Styles.RemoveAt(i);
             }
         }
-        // 動態組合 avares 路徑
+        // 以 avares 路徑重新加入
         var sidebarTheme = new StyleInclude(new System.Uri($"avares://{assemblyName}/"))
         {
             Source = new System.Uri($"avares://{assemblyName}/Assets/Styles/SidebarTheme.axaml")
