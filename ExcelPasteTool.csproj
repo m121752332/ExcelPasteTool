@@ -22,13 +22,13 @@
 	  <!-- 使用自動生成 (預設) -->
 	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
-
+	
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.3.3" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.3.3" />
-    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.3" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.3" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+	<PackageReference Include="Avalonia" />
+	<PackageReference Include="Avalonia.Desktop" />
+	<PackageReference Include="Avalonia.Controls.DataGrid" />
+	<PackageReference Include="Avalonia.Themes.Fluent" />
+	<PackageReference Include="System.ComponentModel.Annotations" />
   </ItemGroup>
 
   <ItemGroup>

@@ -93,5 +93,7 @@ public class RelayCommand<T> : ICommand
     }
     public bool CanExecute(object? parameter) => _canExecute?.Invoke((T)parameter!) ?? true;
     public void Execute(object? parameter) => _execute((T)parameter!);
+#pragma warning disable CS0067
     public event EventHandler? CanExecuteChanged;
+#pragma warning restore CS0067
 }

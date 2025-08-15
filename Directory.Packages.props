@@ -1,0 +1,19 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <AvaloniaVersion>11.3.3</AvaloniaVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 定義一組「Avalonia 家族」 -->
+    <AvaloniaPackages Include="Avalonia" />
+    <AvaloniaPackages Include="Avalonia.Desktop" />
+    <AvaloniaPackages Include="Avalonia.Controls.DataGrid" />
+    <AvaloniaPackages Include="Avalonia.Themes.Fluent" />
+
+    <!-- 對整組一次指定版本 -->
+    <PackageVersion Include="@(AvaloniaPackages)" Version="$(AvaloniaVersion)" />
+
+    <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
+  </ItemGroup>
+</Project>

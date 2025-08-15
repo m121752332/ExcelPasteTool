@@ -1,5 +1,3 @@
-using ExcelPasteTool.Helpers;
-
 namespace ExcelPasteTool;
 
 public static class LanguageController

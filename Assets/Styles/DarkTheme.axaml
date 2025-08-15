@@ -5,7 +5,16 @@
     <SolidColorBrush x:Key="TableHeaderBackgroundBrush" Color="#232324"/>
     <SolidColorBrush x:Key="TableOddRowBrush" Color="#2D2D30"/>
     <SolidColorBrush x:Key="TableEvenRowBrush" Color="#383838"/>
+    <!-- 專用：貼上按鈕 Icon 顏色（深色主題：白色） -->
+    <SolidColorBrush x:Key="PasteIconBrush" Color="White"/>
   </Styles.Resources>
+
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<!-- 這裡放你要預覽 Style 的控制項 -->
+			<TextBlock Text="Preview Text" />
+		</Border>
+	</Design.PreviewWith>
   
   <!-- 深色模式主題 -->
   <Style Selector="Window">

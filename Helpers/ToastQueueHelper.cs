@@ -1,10 +1,5 @@
 using Avalonia.Controls;
 using Avalonia.Media;
-using Avalonia.Animation;
-using Avalonia.Animation.Easings;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System;
 
 namespace ExcelPasteTool.Helpers
 {

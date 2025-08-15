@@ -21,11 +21,13 @@ dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFil
 ```
 ExcelPasteTool/
 │
-├── config.json                 # 設定檔（儲存使用者設定、偏好等）
 ├── App.axaml                   # App 主入口（樣式、資源字典）
 ├── App.axaml.cs                # App 主程式碼（初始化、資源設定）
-├── Program.cs                  # 程式入口
+├── config.json                 # 設定檔（儲存使用者設定、偏好等）
+├── Directory.Packages.props    # NuGet 套件管理設定（版本鎖定）
 ├── ExcelPasteTool.csproj       # 專案檔
+├── global.json                 # .NET SDK 指定版本設定
+├── Program.cs                  # 程式入口
 ├── README.md                   # 專案說明文件
 │
 ├── 📂 Assets/                  # 靜態資源（會在 build 時一併打包）
@@ -43,22 +45,24 @@ ExcelPasteTool/
 │   └── ...
 │
 ├── 📂 Views/                   # 畫面（View）定義
-│   ├── MainWindow.axaml
-│   ├── MainWindow.axaml.cs
-│   ├── DataToolView.axaml
-│   └── DataToolView.axaml.cs
+│   ├── MainWindow.axaml        # 主視窗框架定義UI
+│   ├── MainWindow.axaml.cs    # 主視窗程式碼
+│   ├── DataToolView.axaml     # 資料處理工具視窗UI
+│   ├── DataToolView.axaml.cs  # 資料處理工具視窗程式碼
+│   ├── SettingsView.axaml     # 設定畫面UI
+│   └── SettingsView.axaml.cs  # 設定畫面UI與程式碼
 │
 ├── 📂 ViewModels/              # 畫面邏輯（ViewModel）
-│   ├── SidebarViewModel.cs
-│   └── ...
+│   ├── SettingsViewModel.cs    # 設定畫面邏輯
+│   └── SidebarViewModel.cs     # 側邊欄畫面邏輯
 │
 ├── 📂 Models/                  # 資料模型（Model）
-│   ├── DataItem.cs
-│   ├── SidebarItem.cs
+│   ├── DataItem.cs            # 資料項目模型
+│   ├── [SidebarItem.cs](docs/SidebarItem.md)         # 側邊欄項目模型
 │   └── ...
 │
 ├── 📂 Services/                # 後端服務（存取資料庫、API、設定檔等）
-│   ├── ConfigServices.cs
+│   ├── [ConfigServices.cs](docs/ConfigService.md)      # 設定服務（讀取/寫入 config.json）
 │   └── ...
 │
 ├── 📂 Converters/              # IValueConverter 與 Binding 轉換器
@@ -69,16 +73,19 @@ ExcelPasteTool/
 │
 ├── 📂 Helpers/                  # 工具類（靜態輔助方法）
 │   ├── FontManager.cs          # 字型管理
+│   ├── Global.cs               # 全域靜態方法與常數
 │   ├── IconManager.cs          # 圖示管理
+│   ├── LanguageController.cs   # 語言控制器
 │   ├── LanguageManager.cs      # 語言管理
 │   ├── ThemeManager.cs         # 主題管理
 │   ├── ToastQueueHelper.cs     # 提示訊息佇列
 │   └── ...
 │
 ├── 📂 Resources/               # 資源字串（多語系、文字等）
-│   ├── 📂 Languages/          # 語言包
-│
-├── 📂 Themes/                  # 主題資源（黑暗、光線）
+│   └── 📂 Languages/           # 語言包
+│       ├── en.json             # 英文語言包
+│       ├── zh-TW.json          # 繁體中文語言包
+│       └── zh-CN.json          # 簡體中文語言包
 │
 └── 📂 Properties/              # 專案屬性
     └── Resources.Designer.cs    # 資源設計器（自動生成）

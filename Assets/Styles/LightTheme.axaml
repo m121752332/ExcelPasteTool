@@ -5,6 +5,8 @@
     <SolidColorBrush x:Key="TableHeaderBackgroundBrush" Color="#F3F6FA"/>
     <SolidColorBrush x:Key="TableOddRowBrush" Color="#FFFFFF"/>
     <SolidColorBrush x:Key="TableEvenRowBrush" Color="#F2F5FA"/>
+    <!-- 專用：貼上按鈕 Icon 顏色（亮色主題：藍色） -->
+    <SolidColorBrush x:Key="PasteIconBrush" Color="#1976D2"/>
   </Styles.Resources>
   <!-- Window 背景使用 Windows 系統配色 -->
   <Style Selector="Window">
@@ -99,14 +101,15 @@
   </Style>
   <!-- 主要按鈕 -->
   <Style Selector="Button.primary">
-    <Setter Property="Background" Value="#1976D2"/>
+    <Setter Property="Background" Value="#F5F5F5"/>
     <Setter Property="Foreground" Value="White"/>
     <Setter Property="CornerRadius" Value="6"/>
     <Setter Property="FontWeight" Value="Bold"/>
     <Setter Property="MinWidth" Value="100"/>
     <Setter Property="MinHeight" Value="35"/>
     <Setter Property="FontSize" Value="12"/>
-    <Setter Property="BorderThickness" Value="0"/>
+	<Setter Property="BorderBrush" Value="Blue"/>
+    <Setter Property="BorderThickness" Value="1"/>
   </Style>
   <Style Selector="Button.primary:pointerover">
     <Setter Property="Background" Value="#1565C0"/>
