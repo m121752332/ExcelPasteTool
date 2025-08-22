@@ -5,7 +5,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <ApplicationIcon>Assets\Logos\logo.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Logos\tiptop.ico</ApplicationIcon>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
 	<RuntimeIdentifiers>win-x64;osx-x64;osx-arm64;linux-x64</RuntimeIdentifiers>
 	  <AssemblyName>DataSplitter</AssemblyName>
@@ -41,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Assets\Logos\logo.ico" />
+    <Content Include="Assets\Logos\tiptop.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -60,6 +60,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="artifacts\linux-x64\" />
     <Folder Include="Controls\" />
   </ItemGroup>
 

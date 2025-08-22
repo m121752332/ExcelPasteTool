@@ -42,12 +42,14 @@ namespace ExcelPasteTool.Helpers
                 _isShowingToast = false;
                 return;
             }
+            var defaultMargin = new Avalonia.Thickness(0, 30, 30, 0); // èˆ‡ XAML é è¨­ä¸€è‡´
             while (_toastQueue.Count > 0)
             {
                 string message = _toastQueue.Dequeue();
                 toastText.Text = message;
                 var transform = new TranslateTransform { X = 100, Y = 0 };
                 toastPanel.RenderTransform = transform;
+                toastPanel.Margin = defaultMargin; // é¡¯ç¤ºå‰é‡è¨­ä½ç½®
                 toastPanel.IsVisible = true;
                 for (int i = 0; i <= 10; i++)
                 {
@@ -58,10 +60,10 @@ namespace ExcelPasteTool.Helpers
                 transform.X = 0;
                 toastPanel.RenderTransform = transform;
                 await Task.Delay(2000);
-                // ³Ì«á¤@«h°T®§®É°õ¦æ·Ï¤õ°Êµe
+                // æœ€å¾Œä¸€å‰‡è¨Šæ¯æ™‚åŸ·è¡Œç…™ç«å‹•ç•«
                 if (_toastQueue.Count == 0)
                 {
-                    await FireworkFadeOut(toastPanel, toastText);
+                    await FireworkFadeOut(toastPanel, toastText, defaultMargin);
                 }
                 else
                 {
@@ -72,13 +74,14 @@ namespace ExcelPasteTool.Helpers
                         await Task.Delay(15);
                     }
                     toastPanel.IsVisible = false;
+                    toastPanel.Margin = defaultMargin; // éš±è—æ™‚ä¹Ÿé‡è¨­ä½ç½®
                 }
             }
             _isShowingToast = false;
         }
 
-        // ·Ï¤õ´²¶}°Êµe¡G²H¥X¡BÁY©ñ¡B¤À´²
-        private async Task FireworkFadeOut(Border toastPanel, TextBlock toastText)
+        // ç…™ç«æ•£é–‹å‹•ç•«ï¼šæ·¡å‡ºã€ç¸®æ”¾ã€åˆ†æ•£
+        private async Task FireworkFadeOut(Border toastPanel, TextBlock toastText, Avalonia.Thickness defaultMargin)
         {
             var originalOpacity = toastPanel.Opacity;
             var originalScale = toastPanel.RenderTransform;
@@ -87,20 +90,20 @@ namespace ExcelPasteTool.Helpers
             toastPanel.RenderTransform = scaleTransform;
             for (int i = 0; i < 15; i++)
             {
-                // ²H¥X
+                // æ·¡å‡º
                 toastPanel.Opacity = 1 - i * 0.07;
-                // ©ñ¤j
+                // æ”¾å¤§
                 scaleTransform.ScaleX = 1 + i * 0.05;
                 scaleTransform.ScaleY = 1 + i * 0.05;
-                // ÀH¾÷¤À´²¡]¤W¤U¥ª¥k°¾²¾¡^
+                // éš¨æ©Ÿåˆ†æ•£ï¼ˆä¸Šä¸‹å·¦å³åç§»ï¼‰
                 var offsetX = random.Next(-8, 8);
                 var offsetY = random.Next(-8, 8);
-                toastPanel.Margin = new Avalonia.Thickness(0, 40 + offsetY, 40 + offsetX, 0);
+                toastPanel.Margin = new Avalonia.Thickness(0, 20 + offsetY, 20 + offsetX, 0);
                 await Task.Delay(18);
             }
             toastPanel.Opacity = originalOpacity;
             toastPanel.RenderTransform = originalScale;
-            toastPanel.Margin = new Avalonia.Thickness(0, 40, 40, 0);
+            toastPanel.Margin = defaultMargin; // å‹•ç•«çµæŸé‡è¨­ä½ç½®
             toastPanel.IsVisible = false;
         }
     }

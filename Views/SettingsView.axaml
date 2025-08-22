@@ -9,17 +9,23 @@
                 Padding="18,10"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Margin="0,40,40,0"
+                Margin="0,30,30,0"
+                IsVisible="False"
                 ZIndex="1000">
             <TextBlock Name="ToastText" Foreground="#FFA726" FontWeight="Bold" FontSize="15" />
         </Border>
-        <StackPanel Margin="40,30,40,30" Spacing="32">
+        <Grid Margin="40,30,40,30">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <!-- 灰底標題區塊 -->
-            <Border Background="#232323" CornerRadius="8" Padding="32,18" Margin="0,0,0,12">
-                <TextBlock Text="{Binding TitleText.Text}" FontSize="22" FontWeight="Bold" Foreground="#F5F5F5"/>
+            <Border Grid.Row="0" Background="#232323" CornerRadius="8" Padding="32,18" Margin="0,0,0,12" HorizontalAlignment="Left">
+                <TextBlock Text="{Binding TitleText.Text}" FontSize="32" FontWeight="Bold" Foreground="#F5F5F5"/>
             </Border>
             <!-- 語言區塊 -->
-            <Border Background="#232323" CornerRadius="8" Padding="24,18" Margin="0,0,0,12">
+            <Border Grid.Row="1" Background="#232323" CornerRadius="8" Padding="24,18" Margin="0,0,0,12">
                 <StackPanel Spacing="10">
                     <TextBlock Text="{Binding LanguageTitleText.Text}" FontSize="16" FontWeight="Bold" Foreground="#F5F5F5"/>
                     <TextBlock Text="{Binding LanguageDescText.Text}" FontSize="13" Foreground="#B0B0B0" Margin="0,2,0,10"/>
@@ -30,7 +36,7 @@
                 </StackPanel>
             </Border>
             <!-- 主題區塊 -->
-            <Border Background="#232323" CornerRadius="8" Padding="24,18">
+            <Border Grid.Row="2" Background="#232323" CornerRadius="8" Padding="24,18">
                 <StackPanel Spacing="10">
                     <TextBlock Text="{Binding ThemeTitleText.Text}" FontSize="16" FontWeight="Bold" Foreground="#F5F5F5"/>
                     <ComboBox Width="320" 
@@ -39,6 +45,6 @@
                               HorizontalAlignment="Left"/>
                 </StackPanel>
             </Border>
-        </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

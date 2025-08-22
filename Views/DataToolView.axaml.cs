@@ -19,10 +19,10 @@ public partial class DataToolView : UserControl
     private readonly char _defaultSeparator = '|';
     private readonly List<SeparatorOption> _separatorOptions = new()
     {
-        new('|', "½İ½u |"),
-        new(';', "¤À¸¹ ;"),
-        new(':', "«_¸¹ :"),
-        new(' ', "ªÅ¥Õ")
+        new('|', "è±ç·š |"),
+        new(';', "åˆ†è™Ÿ ;"),
+        new(':', "å†’è™Ÿ :"),
+        new(' ', "ç©ºç™½")
     };
 
     private ComboBox? _themeSelector;
@@ -101,7 +101,16 @@ public partial class DataToolView : UserControl
             _languageSelector.Items.Clear();
             var allLanguages = LanguageManager.GetAllLanguages();
             foreach (var (language, name) in allLanguages)
-                _languageSelector.Items.Add(name);
+            {
+                var item = new ComboBoxItem
+                {
+                    Content = name
+                };
+                // ä¸»å‹•æŒ‡å®šé¡è‰²ï¼Œé¿å…ä¸»é¡Œåˆ‡æ›æ™‚å¤±æ•ˆ
+                item.Foreground = Avalonia.Media.Brushes.Black;
+                item.Background = Avalonia.Media.Brushes.Transparent;
+                _languageSelector.Items.Add(item);
+            }
             UpdateLanguageSelection();
         }
     }
@@ -150,25 +159,25 @@ public partial class DataToolView : UserControl
     private void UpdateUITexts()
     {
         if (_separatorLabel != null)
-            _separatorLabel.Text = LanguageManager.GetText("SeparatorLabel", "¤À¹j²Å¸¹:");
+            _separatorLabel.Text = LanguageManager.GetText("SeparatorLabel", "åˆ†éš”ç¬¦è™Ÿ:");
         if (_languageLabel != null)
-            _languageLabel.Text = LanguageManager.GetText("LanguageLabel", "»y¨¥:");
+            _languageLabel.Text = LanguageManager.GetText("LanguageLabel", "èªè¨€:");
         if (_themeLabel != null)
-            _themeLabel.Text = LanguageManager.GetText("ThemeLabel", "¥DÃD:");
+            _themeLabel.Text = LanguageManager.GetText("ThemeLabel", "ä¸»é¡Œ:");
         if (_pipDataTitle != null)
-            _pipDataTitle.Text = LanguageManager.GetText("PipDataTitle", "PIP ¤À¹j¸ê®Æ");
+            _pipDataTitle.Text = LanguageManager.GetText("PipDataTitle", "PIP åˆ†éš”è³‡æ–™");
         if (_sqlConditionTitle != null)
-            _sqlConditionTitle.Text = LanguageManager.GetText("SqlConditionTitle", "SQL ±ø¥ó");
+            _sqlConditionTitle.Text = LanguageManager.GetText("SqlConditionTitle", "SQL æ¢ä»¶");
         if (_dataListTitle != null)
-            _dataListTitle.Text = LanguageManager.GetText("DataListTitle", "¸ê®Æ²M³æ");
+            _dataListTitle.Text = LanguageManager.GetText("DataListTitle", "è³‡æ–™æ¸…å–®");
         if (_pasteButtonText != null)
-            _pasteButtonText.Text = LanguageManager.GetText("PasteDataButton", "¸ê®Æ¶K¤W");
+            _pasteButtonText.Text = LanguageManager.GetText("PasteDataButton", "è³‡æ–™è²¼ä¸Š");
         if (_clearButtonText != null)
-            _clearButtonText.Text = LanguageManager.GetText("ClearDataButton", "²MªÅ¸ê®Æ");
+            _clearButtonText.Text = LanguageManager.GetText("ClearDataButton", "æ¸…ç©ºè³‡æ–™");
         if (_rowNumberHeader != null)
-            _rowNumberHeader.Text = LanguageManager.GetText("RowNumberHeader", "¦æ¸¹");
+            _rowNumberHeader.Text = LanguageManager.GetText("RowNumberHeader", "è¡Œè™Ÿ");
         if (_dataContentHeader != null)
-            _dataContentHeader.Text = LanguageManager.GetText("DataContentHeader", "¸ê®Æ¤º®e");
+            _dataContentHeader.Text = LanguageManager.GetText("DataContentHeader", "è³‡æ–™å…§å®¹");
         UpdateSeparatorOptions();
         UpdateThemeOptions();
     }
@@ -180,10 +189,10 @@ public partial class DataToolView : UserControl
             _separatorComboBox.Items.Clear();
             var separatorOptions = new List<string>
             {
-                LanguageManager.GetText("SeparatorPipe", "½İ½u |"),
-                LanguageManager.GetText("SeparatorSemicolon", "¤À¸¹ ;"),
-                LanguageManager.GetText("SeparatorColon", "«_¸¹ :"),
-                LanguageManager.GetText("SeparatorSpace", "ªÅ¥Õ")
+                LanguageManager.GetText("SeparatorPipe", "è±ç·š |"),
+                LanguageManager.GetText("SeparatorSemicolon", "åˆ†è™Ÿ ;"),
+                LanguageManager.GetText("SeparatorColon", "å†’è™Ÿ :"),
+                LanguageManager.GetText("SeparatorSpace", "ç©ºç™½")
             };
             foreach (var option in separatorOptions)
                 _separatorComboBox.Items.Add(option);
@@ -199,8 +208,8 @@ public partial class DataToolView : UserControl
             _themeSelector.Items.Clear();
             var themeOptions = new List<string>
             {
-                LanguageManager.GetText("ThemeDark", "·t¶Â¼Ò¦¡"),
-                LanguageManager.GetText("ThemeLight", "¥ú½u¼Ò¦¡")
+                LanguageManager.GetText("ThemeDark", "æš—é»‘æ¨¡å¼"),
+                LanguageManager.GetText("ThemeLight", "å…‰ç·šæ¨¡å¼")
             };
             foreach (var option in themeOptions)
                 _themeSelector.Items.Add(option);
@@ -212,7 +221,7 @@ public partial class DataToolView : UserControl
     {
         UpdateLanguageSelection();
         UpdateUITexts();
-        // »y¨¥¤Á´««á¡A³¡¤À¸ê·½/¦r«¬¥i¯à§ïÅÜ¡A±j¨î¨ê·s¸ê®Æ¦C­I´º¡]Åı Converter ­«·s°õ¦æ¡^
+        // èªè¨€åˆ‡æ›å¾Œï¼Œéƒ¨åˆ†è³‡æº/å­—å‹å¯èƒ½æ”¹è®Šï¼Œå¼·åˆ¶åˆ·æ–°è³‡æ–™åˆ—èƒŒæ™¯ï¼ˆè®“ Converter é‡æ–°åŸ·è¡Œï¼‰
         RefreshDataItemRowStyles();
     }
 
@@ -229,11 +238,31 @@ public partial class DataToolView : UserControl
             var sidebarColor = isDark ? "#232323" : "#F7F7F7";
             app.Resources["SidebarBackgroundBrush"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse(sidebarColor));
         }
-        // ¥DÃD¤Á´««á¤]¨ê·s¸ê®Æ¦C­I´º
+        // ä¸»é¡Œåˆ‡æ›å¾Œä¹Ÿåˆ·æ–°è³‡æ–™åˆ—èƒŒæ™¯
         RefreshDataItemRowStyles();
+        // ä¸»é¡Œåˆ‡æ›å¾Œåˆ·æ–°èªè¨€ä¸‹æ‹‰é¸å–®æ¨£å¼
+        RefreshLanguageSelectorItemsStyle();
     }
 
-    // ¦r«¬¤Á´««á¡A¤]±j¨î¨ê·s¸ê®Æ¦C¼Ë¦¡¡AÁ×§K¤£¦P¦r«¬³y¦¨¦æ°ª/´ú¶q«á¥¼­«Ã¸
+    private void RefreshLanguageSelectorItemsStyle()
+    {
+        if (_languageSelector != null)
+        {
+            foreach (var obj in _languageSelector.Items)
+            {
+                if (obj is ComboBoxItem item)
+                {
+                    var isDark = ThemeManager.CurrentTheme.ToString().ToLower().Contains("dark");
+                    item.Foreground = isDark
+                        ? new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#E3F2FD"))
+                        : Avalonia.Media.Brushes.Black;
+                    item.Background = Avalonia.Media.Brushes.Transparent;
+                }
+            }
+        }
+    }
+
+    // å­—å‹åˆ‡æ›å¾Œï¼Œä¹Ÿå¼·åˆ¶åˆ·æ–°è³‡æ–™åˆ—æ¨£å¼ï¼Œé¿å…ä¸åŒå­—å‹é€ æˆè¡Œé«˜/æ¸¬é‡å¾Œæœªé‡ç¹ª
     private void OnFontChanged()
     {
         RefreshDataItemRowStyles();
@@ -242,14 +271,14 @@ public partial class DataToolView : UserControl
     private void RefreshDataItemRowStyles()
     {
         if (DataItems.Count == 0) return;
-        // 1) °µ¤@­Ó no-op «ü¬£¡A½T«O UI Ä²µo§ó·s
+        // 1) åšä¸€å€‹ no-op æŒ‡æ´¾ï¼Œç¢ºä¿ UI è§¸ç™¼æ›´æ–°
         for (int i = 0; i < DataItems.Count; i++)
         {
             var item = DataItems[i];
-            // Ä²µo IsEven Äİ©ÊÅÜ§ó
+            // è§¸ç™¼ IsEven å±¬æ€§è®Šæ›´
             item.NotifyStyleChanged();
         }
-        // 2) ­«·s assign ItemsSource¡]¥i¿ï¡A«O¦u°µªk¡^
+        // 2) é‡æ–° assign ItemsSourceï¼ˆå¯é¸ï¼Œä¿å®ˆåšæ³•ï¼‰
         var items = DataItems.ToList();
         DataItems.Clear();
         int row = 1;
@@ -270,10 +299,10 @@ public partial class DataToolView : UserControl
                 var selectedLanguage = allLanguages[_languageSelector.SelectedIndex].Language;
                 if (LanguageManager.CurrentLanguage != selectedLanguage)
                 {
-                    // ¤u¨ã­¶­±ªº»y¨¥¤Á´«¬OÁ{®Éªº¡A¤£«O¦s¨ì°t¸mÀÉ®×
+                    // å·¥å…·é é¢çš„èªè¨€åˆ‡æ›æ˜¯è‡¨æ™‚çš„ï¼Œä¸ä¿å­˜åˆ°é…ç½®æª”æ¡ˆ
                     LanguageController.SetLanguage(selectedLanguage, false); // saveConfig = false
                     FontManager.ApplyLanguageFont(selectedLanguage);
-                    _toastHelper.EnqueueToast("»y¨¥¤wÁ{®É¤Á´«¡]¥¼«O¦s¡^");
+                    _toastHelper.EnqueueToast("èªè¨€å·²è‡¨æ™‚åˆ‡æ›ï¼ˆæœªä¿å­˜ï¼‰");
                 }
             }
         }
@@ -288,9 +317,9 @@ public partial class DataToolView : UserControl
                 var selectedTheme = allThemes[_themeSelector.SelectedIndex].Theme;
                 if (ThemeManager.CurrentTheme != selectedTheme)
                 {
-                    // ¤u¨ã­¶­±ªº¥DÃD¤Á´«¬OÁ{®Éªº¡A¤£«O¦s¨ì°t¸mÀÉ®×
+                    // å·¥å…·é é¢çš„ä¸»é¡Œåˆ‡æ›æ˜¯è‡¨æ™‚çš„ï¼Œä¸ä¿å­˜åˆ°é…ç½®æª”æ¡ˆ
                     ThemeManager.CurrentTheme = selectedTheme;
-                    _toastHelper.EnqueueToast("¥DÃD¤wÁ{®É¤Á´«¡]¥¼«O¦s¡^");
+                    _toastHelper.EnqueueToast("ä¸»é¡Œå·²è‡¨æ™‚åˆ‡æ›ï¼ˆæœªä¿å­˜ï¼‰");
                 }
             }
         }
@@ -367,7 +396,7 @@ public partial class DataToolView : UserControl
         if (_bottomBox != null)
             _bottomBox.Text = "";
         ResetSeparatorToDefault();
-        EnqueueToast("µe­±¤w²M²z¦^ªì©lª¬ºA");
+        EnqueueToast("ç•«é¢å·²æ¸…ç†å›åˆå§‹ç‹€æ…‹");
     }
     private void ResetSeparatorToDefault()
     {
@@ -427,9 +456,9 @@ public partial class DataToolView : UserControl
                 await clipboard.SetTextAsync(_topBox.Text);
                 var check = await clipboard.GetTextAsync();
                 if (check == _topBox.Text)
-                    EnqueueToast("¤w½Æ»s¨ì°Å¶KÃ¯¡I");
+                    EnqueueToast("å·²è¤‡è£½åˆ°å‰ªè²¼ç°¿ï¼");
                 else
-                    EnqueueToast("½Æ»s¥¢±Ñ¡A½Ğ­«¸Õ");
+                    EnqueueToast("è¤‡è£½å¤±æ•—ï¼Œè«‹é‡è©¦");
             }
         }
     }
@@ -447,9 +476,9 @@ public partial class DataToolView : UserControl
                 await clipboard.SetTextAsync(_bottomBox.Text);
                 var check = await clipboard.GetTextAsync();
                 if (check == _bottomBox.Text)
-                    EnqueueToast("¤w½Æ»s¨ì°Å¶KÃ¯¡I");
+                    EnqueueToast("å·²è¤‡è£½åˆ°å‰ªè²¼ç°¿ï¼");
                 else
-                    EnqueueToast("½Æ»s¥¢±Ñ¡A½Ğ­«¸Õ");
+                    EnqueueToast("è¤‡è£½å¤±æ•—ï¼Œè«‹é‡è©¦");
             }
         }
     }
@@ -460,7 +489,7 @@ public partial class DataToolView : UserControl
         {
             var text = string.Join("\r\n", DataItems.Select(x => x.Value));
             await clipboard.SetTextAsync(text);
-            EnqueueToast("¤w½Æ»s¨ì°Å¶KÃ¯¡I");
+            EnqueueToast("å·²è¤‡è£½åˆ°å‰ªè²¼ç°¿ï¼");
         }
     }
     public class SeparatorOption
