@@ -308,4 +308,4 @@ dotnet publish -p:PublishProfile=Properties/PublishProfiles/Windows-x64.pubxml
 `App.axaml` 內的 `avares://DataSplitter/...` 需一併修改（見 5.5）。
 
 **Q5. 部分舊檔案的中文註解在編輯器中顯示為亂碼。**
-專案中約有 15 個檔案是以 Big5 編碼儲存（例如 `App.axaml.cs`、`Services/ConfigServices.cs`、`Helpers/ThemeManager.cs`、`Directory.Packages.props`、`docs/ConfigService.md`、`AI_CONTEXT.md`），其他檔案是 UTF-8。編譯不受影響（只有註解與字串常值含中文），但在預設 UTF-8 的編輯器或 GitHub 網頁上會顯示亂碼。請以 Big5 開啟這些檔案閱讀；新檔案一律使用 **UTF-8** 儲存，建議日後將舊檔統一轉為 UTF-8。
+專案中約有 15 個檔案是以 Big5 編碼儲存（例如 `App.axaml.cs`、`Services/ConfigServices.cs`、`Helpers/ThemeManager.cs`、`Directory.Packages.props`、`docs/ConfigService.md`、`AI_CONTEXT.md`），其他檔案是 UTF-8。這些檔案可以正常編譯，但 C# 編譯器預設以 UTF-8 讀取，所以**檔案內的中文字串常值在執行時也會變成亂碼**（例如 `ThemeManager` 的預設名稱「暗黑模式」、`ConfigServices` 的「[警告] 未找到設定檔」），在 GitHub 網頁上同樣顯示亂碼。請以 Big5 開啟這些檔案閱讀；新檔案一律使用 **UTF-8** 儲存，建議日後將舊檔統一轉為 UTF-8。
