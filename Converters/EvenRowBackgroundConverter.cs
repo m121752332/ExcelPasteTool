@@ -15,24 +15,24 @@ namespace ExcelPasteTool.Converters
             var app = Application.Current;
             var theme = app?.ActualThemeVariant ?? ThemeVariant.Light;
 
-            // 1) Àu¥ı¥Î¥DÃD¸ê·½¡]Light ¤U´£¨Ñ¥Õ/²H¦Ç¡FDark ¥i©¿²¤©Î´£¨Ñ²`¦â¡^
+            // 1) å„ªå…ˆç”¨ä¸»é¡Œè³‡æºï¼ˆLight ä¸‹æä¾›ç™½/æ·¡ç°ï¼›Dark å¯å¿½ç•¥æˆ–æä¾›æ·±è‰²ï¼‰
             if (app != null && app.TryGetResource(isEven ? "TableEvenRowBrush" : "TableOddRowBrush", theme, out var brushObj))
             {
                 if (brushObj is IBrush themed) return themed;
             }
 
-            // 2) ÂÂªº EvenRowBackgroundBrush¡]¶È°¸¼Æ¦C¡^
+            // 2) èˆŠçš„ EvenRowBackgroundBrushï¼ˆåƒ…å¶æ•¸åˆ—ï¼‰
             if (app != null && isEven && app.TryGetResource("EvenRowBackgroundBrush", theme, out var evenObj))
             {
                 if (evenObj is IBrush evenBrush) return evenBrush;
             }
 
-            // 3) Fallback¡G¨Ì¥DÃDµ¹¹w³]ÃC¦â
+            // 3) Fallbackï¼šä¾ä¸»é¡Œçµ¦é è¨­é¡è‰²
             bool isLight = theme == ThemeVariant.Light;
             if (isLight)
             {
-                var lightEven = Color.Parse("#F2F5FA"); // ²H¦Ç
-                var lightOdd  = Color.Parse("#FFFFFF"); // ¥Õ
+                var lightEven = Color.Parse("#F2F5FA"); // æ·¡ç°
+                var lightOdd  = Color.Parse("#FFFFFF"); // ç™½
                 return new SolidColorBrush(isEven ? lightEven : lightOdd);
             }
             else

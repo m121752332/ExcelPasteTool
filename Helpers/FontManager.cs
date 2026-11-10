@@ -8,7 +8,7 @@ public static class FontManager
 
     public static void ApplyLanguageFont(AppLanguage language)
     {
-        // Â²¤Æ¦r«¬ºÞ²z¡A³q¹LÄ²µo¨Æ¥óÅý UI §ó·s
+        // ç°¡åŒ–å­—åž‹ç®¡ç†ï¼Œé€šéŽè§¸ç™¼äº‹ä»¶è®“ UI æ›´æ–°
         FontChanged?.Invoke();
     }
 
@@ -19,7 +19,7 @@ public static class FontManager
 
     public static string GetCodeFontFamily(AppLanguage language)
     {
-        // µ{¦¡½X¿é¤J®Ø¨Ï¥Îµ¥¼e¦r«¬
+        // ç¨‹å¼ç¢¼è¼¸å…¥æ¡†ä½¿ç”¨ç­‰å¯¬å­—åž‹
         return language switch
         {
             AppLanguage.TraditionalChinese => "Consolas, Microsoft JhengHei",

@@ -14,10 +14,10 @@ public partial class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         ConfigServices.Load();
-        // À³¥Î¹w³]»y¨¥
+        // æ‡‰ç”¨é è¨­èªè¨€
         if (Enum.TryParse<AppLanguage>(ConfigServices.Config.Language, out var lang))
             LanguageManager.CurrentLanguage = lang;
-        // À³¥Î¹w³]¥DÃD
+        // æ‡‰ç”¨é è¨­ä¸»é¡Œ
         if (Enum.TryParse<AppTheme>(ConfigServices.Config.Theme, out var theme))
             ThemeManager.CurrentTheme = theme;
 
@@ -25,9 +25,9 @@ public partial class App : Application
         {
             desktop.MainWindow = new MainWindow();
             
-            // ªì©l¤Æ¥DÃD¨t²Î
+            // åˆå§‹åŒ–ä¸»é¡Œç³»çµ±
             ThemeManager.ApplyTheme(ThemeManager.CurrentTheme);
-            // ªì©l¤Æ»y¨¥¨t²Î
+            // åˆå§‹åŒ–èªè¨€ç³»çµ±
             LanguageManager.Initialize();
         }
 

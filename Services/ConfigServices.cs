@@ -29,7 +29,7 @@ public static class ConfigServices
         }
         else
         {
-            Console.WriteLine($"[Äµ§i] ¥¼§ä¨ì³]©wÀÉ: {ConfigPath}");
+            Console.WriteLine($"[è­¦å‘Š] æœªæ‰¾åˆ°è¨­å®šæª”: {ConfigPath}");
         }
     }
 

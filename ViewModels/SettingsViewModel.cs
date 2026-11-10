@@ -11,10 +11,10 @@ public class SettingsViewModel : INotifyPropertyChanged
 {
     public static SettingsViewModel Instance { get; } = new SettingsViewModel();
     
-    public LocalizedText TitleText { get; } = new("SettingsTitle", "³]©w");
-    public LocalizedText LanguageTitleText { get; } = new("LanguageLabel", "»y¨¥");
-    public LocalizedText LanguageDescText { get; } = new("LanguageDesc", "ÅÜ§ó App ªº»y¨¥³]©w");
-    public LocalizedText ThemeTitleText { get; } = new("ThemeLabel", "¥DÃD");
+    public LocalizedText TitleText { get; } = new("SettingsTitle", "è¨­å®š");
+    public LocalizedText LanguageTitleText { get; } = new("LanguageLabel", "èªè¨€");
+    public LocalizedText LanguageDescText { get; } = new("LanguageDesc", "è®Šæ›´ App çš„èªè¨€è¨­å®š");
+    public LocalizedText ThemeTitleText { get; } = new("ThemeLabel", "ä¸»é¡Œ");
 
     public ObservableCollection<string> Languages { get; } = new();
     public ObservableCollection<string> Themes { get; } = new();
@@ -45,8 +45,8 @@ public class SettingsViewModel : INotifyPropertyChanged
                 if (langData != default)
                 {
                     Debug.WriteLine($"Found language data: {langData.Language}");
-                    LanguageController.SetLanguage(langData.Language, true); // ³]©w­¶­±­n«O¦s
-                    EnqueueToast?.Invoke(LanguageManager.GetText("LanguageChangedToast", "¤w±N»y¨¥³]©wÅÜ§ó§¹¦¨"));
+                    LanguageController.SetLanguage(langData.Language, true); // è¨­å®šé é¢è¦ä¿å­˜
+                    EnqueueToast?.Invoke(LanguageManager.GetText("LanguageChangedToast", "å·²å°‡èªè¨€è¨­å®šè®Šæ›´å®Œæˆ"));
                 }
                 
                 OnPropertyChanged();
@@ -81,7 +81,7 @@ public class SettingsViewModel : INotifyPropertyChanged
                     ConfigServices.Config.Theme = selectedThemeData.Theme.ToString();
                     ConfigServices.Save();
                     
-                    EnqueueToast?.Invoke(LanguageManager.GetText("ThemeChangedToast", "¤w±N¥DÃD³]©wÅÜ§ó§¹¦¨"));
+                    EnqueueToast?.Invoke(LanguageManager.GetText("ThemeChangedToast", "å·²å°‡ä¸»é¡Œè¨­å®šè®Šæ›´å®Œæˆ"));
                 }
                 
                 OnPropertyChanged();
@@ -93,10 +93,10 @@ public class SettingsViewModel : INotifyPropertyChanged
     {
         Debug.WriteLine("SettingsViewModel constructor started");
         
-        // ªì©l¤Æ¶°¦X
+        // åˆå§‹åŒ–é›†åˆ
         RefreshAllCollections();
         
-        // ­q¾\¨Æ¥ó¡]¦bªì©l¤Æ¤§«á¡^
+        // è¨‚é–±äº‹ä»¶ï¼ˆåœ¨åˆå§‹åŒ–ä¹‹å¾Œï¼‰
         LanguageManager.LanguageChanged += OnLanguageOrThemeChanged;
         ThemeManager.ThemeChanged += OnLanguageOrThemeChanged;
         
@@ -111,7 +111,7 @@ public class SettingsViewModel : INotifyPropertyChanged
         if (!_isUpdating)
         {
             Debug.WriteLine("Scheduling RefreshAllCollections on UI thread");
-            // ¨Ï¥Î Dispatcher ½T«O¦b UI ½uµ{¤W°õ¦æ
+            // ä½¿ç”¨ Dispatcher ç¢ºä¿åœ¨ UI ç·šç¨‹ä¸ŠåŸ·è¡Œ
             Avalonia.Threading.Dispatcher.UIThread.Post(() =>
             {
                 RefreshAllCollections();
@@ -128,22 +128,22 @@ public class SettingsViewModel : INotifyPropertyChanged
         Debug.WriteLine("RefreshAllCollections started");
         _isUpdating = true;
         
-        // «O¦s·í«eª¬ºA
+        // ä¿å­˜ç•¶å‰ç‹€æ…‹
         var currentLanguage = LanguageManager.CurrentLanguage;
         var currentTheme = ThemeManager.CurrentTheme;
         
         Debug.WriteLine($"Current language: {currentLanguage}, Current theme: {currentTheme}");
         
-        // ¥ı²MªÅ¿ï¤¤¶µ
+        // å…ˆæ¸…ç©ºé¸ä¸­é …
         _selectedLanguage = "";
         _selectedTheme = "";
         OnPropertyChanged(nameof(SelectedLanguage));
         OnPropertyChanged(nameof(SelectedTheme));
         
-        // ­«·s¶ñ¥R»y¨¥¿ï¶µ
+        // é‡æ–°å¡«å……èªè¨€é¸é …
         var oldLanguageCount = Languages.Count;
         Languages.Clear();
-        OnPropertyChanged(nameof(Languages)); // ¥ß§Y³qª¾²MªÅ
+        OnPropertyChanged(nameof(Languages)); // ç«‹å³é€šçŸ¥æ¸…ç©º
         
         foreach (var (_, name) in LanguageManager.GetAllLanguages())
         {
@@ -151,12 +151,12 @@ public class SettingsViewModel : INotifyPropertyChanged
             Debug.WriteLine($"Added language: '{name}'");
         }
         Debug.WriteLine($"Languages: {oldLanguageCount} -> {Languages.Count}");
-        OnPropertyChanged(nameof(Languages)); // ³qª¾­«·s¶ñ¥R
+        OnPropertyChanged(nameof(Languages)); // é€šçŸ¥é‡æ–°å¡«å……
         
-        // ­«·s¶ñ¥R¥DÃD¿ï¶µ
+        // é‡æ–°å¡«å……ä¸»é¡Œé¸é …
         var oldThemeCount = Themes.Count;
         Themes.Clear();
-        OnPropertyChanged(nameof(Themes)); // ¥ß§Y³qª¾²MªÅ
+        OnPropertyChanged(nameof(Themes)); // ç«‹å³é€šçŸ¥æ¸…ç©º
         
         foreach (var (_, name) in ThemeManager.GetAllThemes())
         {
@@ -164,21 +164,21 @@ public class SettingsViewModel : INotifyPropertyChanged
             Debug.WriteLine($"Added theme: '{name}'");
         }
         Debug.WriteLine($"Themes: {oldThemeCount} -> {Themes.Count}");
-        OnPropertyChanged(nameof(Themes)); // ³qª¾­«·s¶ñ¥R
+        OnPropertyChanged(nameof(Themes)); // é€šçŸ¥é‡æ–°å¡«å……
         
-        // ³]©w·í«e¿ï¤¤¶µ
+        // è¨­å®šç•¶å‰é¸ä¸­é …
         var newLanguageName = LanguageManager.GetLanguageName(currentLanguage);
         var newThemeName = ThemeManager.GetThemeName(currentTheme);
         
         Debug.WriteLine($"New language name: '{newLanguageName}'");
         Debug.WriteLine($"New theme name: '{newThemeName}'");
         
-        // ÀË¬d¿ï¶µ¬O§_¦s¦b
+        // æª¢æŸ¥é¸é …æ˜¯å¦å­˜åœ¨
         var languageExists = Languages.Contains(newLanguageName);
         var themeExists = Themes.Contains(newThemeName);
         Debug.WriteLine($"Language exists: {languageExists}, Theme exists: {themeExists}");
         
-        // ³]©w¿ï¤¤¶µ
+        // è¨­å®šé¸ä¸­é …
         _selectedLanguage = languageExists ? newLanguageName : (Languages.FirstOrDefault() ?? "");
         _selectedTheme = themeExists ? newThemeName : (Themes.FirstOrDefault() ?? "");
         
@@ -187,11 +187,11 @@ public class SettingsViewModel : INotifyPropertyChanged
         
         _isUpdating = false;
         
-        // ³Ì«á³qª¾¿ï¤¤¶µ§ó·s
+        // æœ€å¾Œé€šçŸ¥é¸ä¸­é …æ›´æ–°
         OnPropertyChanged(nameof(SelectedLanguage));
         OnPropertyChanged(nameof(SelectedTheme));
         
-        // §ó·s¥»¦a¤Æ¤å¦r
+        // æ›´æ–°æœ¬åœ°åŒ–æ–‡å­—
         OnPropertyChanged(nameof(TitleText));
         OnPropertyChanged(nameof(LanguageTitleText));
         OnPropertyChanged(nameof(LanguageDescText));

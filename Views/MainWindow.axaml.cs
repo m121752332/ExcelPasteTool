@@ -15,12 +15,12 @@ public partial class MainWindow : Window
     public SidebarViewModel Sidebar { get; } = new();
     public ObservableCollection<SidebarItem> SidebarItems { get; } = new()
     {
-        // ¤u¨ã¡G¨Ï¥Î DataIcon
-        new SidebarItem(SidebarPage.Tools, "¤u¨ã", IconManager.DataIcon),
-        // ³]©w¡G¨Ï¥Î SettingsIcon
-        new SidebarItem(SidebarPage.Settings, "³]©w", IconManager.SettingsIcon),
-        // Ãö©ó¡G¨Ï¥Î HelpIcon¡]¤w¤º«Ø¡^
-        new SidebarItem(SidebarPage.About, "Ãö©ó", IconManager.GetIcon("help")),
+        // å·¥å…·ï¼šä½¿ç”¨ DataIcon
+        new SidebarItem(SidebarPage.Tools, "å·¥å…·", IconManager.DataIcon),
+        // è¨­å®šï¼šä½¿ç”¨ SettingsIcon
+        new SidebarItem(SidebarPage.Settings, "è¨­å®š", IconManager.SettingsIcon),
+        // é—œæ–¼ï¼šä½¿ç”¨ HelpIconï¼ˆå·²å…§å»ºï¼‰
+        new SidebarItem(SidebarPage.About, "é—œæ–¼", IconManager.GetIcon("help")),
     };
     public ICommand SidebarItemClickCommand { get; }
 
@@ -32,9 +32,9 @@ public partial class MainWindow : Window
             item.SidebarViewModelInstance = Sidebar;
         SidebarItemClickCommand = new RelayCommand<SidebarPage>(OnSidebarItemClick);
         ThemeManager.ThemeChanged += OnThemeChanged;
-        // ¸ü¤J°¼ÃäÄæ¥DÃD¼Ë¦¡
+        // è¼‰å…¥å´é‚Šæ¬„ä¸»é¡Œæ¨£å¼
         LoadSidebarTheme();
-        // ³]©wµøµ¡¼ĞÃD¬°²Õ¥ó¦WºÙ
+        // è¨­å®šè¦–çª—æ¨™é¡Œç‚ºçµ„ä»¶åç¨±
         this.Title = System.Reflection.Assembly.GetEntryAssembly()?.GetName().Name ?? "App";
     }
 
@@ -60,10 +60,10 @@ public partial class MainWindow : Window
         var app = Avalonia.Application.Current;
         if (app == null) return;
 
-        // ¨Ï¥Î Global.AssemblyName
+        // ä½¿ç”¨ Global.AssemblyName
         var assemblyName = Global.AssemblyName;
 
-        // ¥ı²¾°£²{¦³ªº SidebarTheme
+        // å…ˆç§»é™¤ç¾æœ‰çš„ SidebarTheme
         for (int i = app.Styles.Count - 1; i >= 0; i--)
         {
             if (app.Styles[i] is StyleInclude styleInclude &&
@@ -73,7 +73,7 @@ public partial class MainWindow : Window
                 app.Styles.RemoveAt(i);
             }
         }
-        // ¥H avares ¸ô®|­«·s¥[¤J
+        // ä»¥ avares è·¯å¾‘é‡æ–°åŠ å…¥
         var sidebarTheme = new StyleInclude(new System.Uri($"avares://{assemblyName}/"))
         {
             Source = new System.Uri($"avares://{assemblyName}/Assets/Styles/SidebarTheme.axaml")

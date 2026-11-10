@@ -16,7 +16,7 @@ public static class ThemeManager
 {
     private static readonly object _themeLock = new();
 
-    // ¹w³]¥DÃD
+    // é è¨­ä¸»é¡Œ
     private static AppTheme _currentTheme = AppTheme.Dark;
 
     public static AppTheme CurrentTheme 
@@ -42,7 +42,7 @@ public static class ThemeManager
             var app = Application.Current;
             if (app?.Styles == null) return;
 
-            // 1) Åı FluentTheme ¸òµÛ¤Á´« Light/Dark¡AÁ×§K¤º«Ø±±¥ó¡]TextBox¡BComboBox ¤U©Ô¡BPopup µ¥¡^¥X²{¶Â¦â
+            // 1) è®“ FluentTheme è·Ÿè‘—åˆ‡æ› Light/Darkï¼Œé¿å…å…§å»ºæ§ä»¶ï¼ˆTextBoxã€ComboBox ä¸‹æ‹‰ã€Popup ç­‰ï¼‰å‡ºç¾é»‘è‰²
             app.RequestedThemeVariant = theme switch
             {
                 AppTheme.Light => ThemeVariant.Light,
@@ -50,7 +50,7 @@ public static class ThemeManager
                 _ => ThemeVariant.Dark
             };
 
-            // 2) ²¾°£¬J¦³ªº¦Û­q¥DÃD StyleInclude¡]Á×§K­«ÂĞ¥[¤J¡^
+            // 2) ç§»é™¤æ—¢æœ‰çš„è‡ªè¨‚ä¸»é¡Œ StyleIncludeï¼ˆé¿å…é‡è¦†åŠ å…¥ï¼‰
             for (int i = app.Styles.Count - 1; i >= 0; i--)
             {
                 if (app.Styles[i] is StyleInclude styleInclude &&
@@ -65,7 +65,7 @@ public static class ThemeManager
                 }
             }
 
-            // 3) ¸ü¤J¹ïÀ³¥DÃDªº¦Û­q¼Ë¦¡
+            // 3) è¼‰å…¥å°æ‡‰ä¸»é¡Œçš„è‡ªè¨‚æ¨£å¼
             string themePath = theme switch
             {
                 AppTheme.Light => $"avares://{Global.AssemblyName}/Assets/Styles/LightTheme.axaml",
@@ -83,7 +83,7 @@ public static class ThemeManager
             }
             catch
             {
-                // ¸ü¤J¥¢±Ñ®É©¿²¤¡AÁ×§K±Y¼ì
+                // è¼‰å…¥å¤±æ•—æ™‚å¿½ç•¥ï¼Œé¿å…å´©æ½°
             }
         }
     }
@@ -100,9 +100,9 @@ public static class ThemeManager
     {
         return theme switch
         {
-            AppTheme.Light => LanguageManager.GetText("ThemeLight", "¥ú½u¼Ò¦¡"),
-            AppTheme.Dark => LanguageManager.GetText("ThemeDark", "·t¶Â¼Ò¦¡"),
-            _ => LanguageManager.GetText("ThemeDark", "·t¶Â¼Ò¦¡")
+            AppTheme.Light => LanguageManager.GetText("ThemeLight", "å…‰ç·šæ¨¡å¼"),
+            AppTheme.Dark => LanguageManager.GetText("ThemeDark", "æš—é»‘æ¨¡å¼"),
+            _ => LanguageManager.GetText("ThemeDark", "æš—é»‘æ¨¡å¼")
         };
     }
 
@@ -110,8 +110,8 @@ public static class ThemeManager
     {
         return new List<(AppTheme, string)>
         {
-            (AppTheme.Dark, LanguageManager.GetText("ThemeDark", "·t¶Â¼Ò¦¡")),
-            (AppTheme.Light, LanguageManager.GetText("ThemeLight", "¥ú½u¼Ò¦¡"))
+            (AppTheme.Dark, LanguageManager.GetText("ThemeDark", "æš—é»‘æ¨¡å¼")),
+            (AppTheme.Light, LanguageManager.GetText("ThemeLight", "å…‰ç·šæ¨¡å¼"))
         };
     }
 }
