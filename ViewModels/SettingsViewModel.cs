@@ -11,13 +11,24 @@ public class SettingsViewModel : INotifyPropertyChanged
 {
     public static SettingsViewModel Instance { get; } = new SettingsViewModel();
     
-    public LocalizedText TitleText { get; } = new("SettingsTitle", "�]�w");
-    public LocalizedText LanguageTitleText { get; } = new("LanguageLabel", "�y��");
-    public LocalizedText LanguageDescText { get; } = new("LanguageDesc", "�ܧ� App ���y���]�w");
-    public LocalizedText ThemeTitleText { get; } = new("ThemeLabel", "�D�D");
+    public LocalizedText TitleText { get; } = new("SettingsTitle", "設定");
+    public LocalizedText LanguageTitleText { get; } = new("LanguageLabel", "語言");
+    public LocalizedText LanguageDescText { get; } = new("LanguageDesc", "變更 App 的語言設定");
+    public LocalizedText ThemeTitleText { get; } = new("ThemeLabel", "主題");
+    public LocalizedText ThemeDescText { get; } = new("ThemeDesc", "選擇 App 的配色主題");
+    public LocalizedText FontTitleText { get; } = new("FontTitle", "字型");
+    public LocalizedText FontDescText { get; } = new("FontDesc", "選擇介面與資料區使用的字型");
+    public LocalizedText FontSizeTitleText { get; } = new("FontSizeTitle", "字體大小");
+    public LocalizedText FontSizeDescText { get; } = new("FontSizeDesc", "調整整個 App 的文字大小");
+    public LocalizedText FontPreviewText { get; } = new("FontPreviewText", "預覽：TIPTOP 料號 A-001 | 資料分隔 1234567890");
+    public LocalizedText FontResetText { get; } = new("FontResetButton", "還原預設");
+
+    public double MinFontSize => FontManager.MinFontSize;
+    public double MaxFontSize => FontManager.MaxFontSize;
 
     public ObservableCollection<string> Languages { get; } = new();
     public ObservableCollection<string> Themes { get; } = new();
+    public ObservableCollection<string> FontFamilies { get; } = new();
 
     public Action<string>? EnqueueToast { get; set; }
 
@@ -45,8 +56,8 @@ public class SettingsViewModel : INotifyPropertyChanged
                 if (langData != default)
                 {
                     Debug.WriteLine($"Found language data: {langData.Language}");
-                    LanguageController.SetLanguage(langData.Language, true); // �]�w�����n�O�s
-                    EnqueueToast?.Invoke(LanguageManager.GetText("LanguageChangedToast", "�w�N�y���]�w�ܧ󧹦�"));
+                    LanguageController.SetLanguage(langData.Language, true); // 設定頁面要保存
+                    EnqueueToast?.Invoke(LanguageManager.GetText("LanguageChangedToast", "已將語言設定變更完成"));
                 }
                 
                 OnPropertyChanged();
@@ -81,7 +92,7 @@ public class SettingsViewModel : INotifyPropertyChanged
                     ConfigServices.Config.Theme = selectedThemeData.Theme.ToString();
                     ConfigServices.Save();
                     
-                    EnqueueToast?.Invoke(LanguageManager.GetText("ThemeChangedToast", "�w�N�D�D�]�w�ܧ󧹦�"));
+                    EnqueueToast?.Invoke(LanguageManager.GetText("ThemeChangedToast", "已將主題設定變更完成"));
                 }
                 
                 OnPropertyChanged();
@@ -89,14 +100,82 @@ public class SettingsViewModel : INotifyPropertyChanged
         }
     }
 
+    private string _selectedFontFamily = "";
+
+    /// <summary>下拉選單顯示用的字型名稱；第一項（內建字型）對應 config 中的空字串。</summary>
+    public string SelectedFontFamily
+    {
+        get => _selectedFontFamily;
+        set
+        {
+            if (_selectedFontFamily == value || string.IsNullOrEmpty(value) || _isUpdating) return;
+            _selectedFontFamily = value;
+            var fontKey = value == FontManager.BuiltInFontDisplayName ? FontManager.DefaultFontKey : value;
+            FontManager.ApplyAndSave(fontKey, FontManager.CurrentFontSize);
+            EnqueueToast?.Invoke(LanguageManager.GetText("FontChangedToast", "字型設定已儲存"));
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>基本字體大小，變更後立即套用並存檔。</summary>
+    public double FontSize
+    {
+        get => FontManager.CurrentFontSize;
+        set
+        {
+            var size = FontManager.ClampSize(value);
+            if (size == FontManager.CurrentFontSize) return;
+            FontManager.ApplyAndSave(FontManager.CurrentFontFamily, size);
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(FontSizeDisplay));
+        }
+    }
+
+    public string FontSizeDisplay => $"{FontManager.CurrentFontSize:0} pt";
+
+    public void IncreaseFontSize() => FontSize = FontManager.CurrentFontSize + 1;
+    public void DecreaseFontSize() => FontSize = FontManager.CurrentFontSize - 1;
+
+    /// <summary>字型與字體大小還原為預設值。</summary>
+    public void ResetFont()
+    {
+        FontManager.ApplyAndSave(FontManager.DefaultFontKey, FontManager.DefaultFontSize);
+        _selectedFontFamily = FontManager.BuiltInFontDisplayName;
+        OnPropertyChanged(nameof(SelectedFontFamily));
+        OnPropertyChanged(nameof(FontSize));
+        OnPropertyChanged(nameof(FontSizeDisplay));
+        EnqueueToast?.Invoke(LanguageManager.GetText("FontChangedToast", "字型設定已儲存"));
+    }
+
+    private void RefreshFontFamilies()
+    {
+        FontFamilies.Clear();
+        FontFamilies.Add(FontManager.BuiltInFontDisplayName);
+        foreach (var name in FontManager.GetSystemFontFamilies())
+            FontFamilies.Add(name);
+
+        var current = FontManager.CurrentFontFamily;
+        if (string.IsNullOrEmpty(current))
+        {
+            _selectedFontFamily = FontManager.BuiltInFontDisplayName;
+        }
+        else
+        {
+            // 設定檔裡的字型這台電腦沒有時，仍保留在清單中，避免下拉選單顯示空白
+            if (!FontFamilies.Contains(current))
+                FontFamilies.Insert(1, current);
+            _selectedFontFamily = current;
+        }
+    }
+
     private SettingsViewModel()
     {
         Debug.WriteLine("SettingsViewModel constructor started");
         
-        // ��l�ƶ��X
+        // 初始化集合
         RefreshAllCollections();
         
-        // �q�\�ƥ�]�b��l�Ƥ���^
+        // 訂閱事件（在初始化之後）
         LanguageManager.LanguageChanged += OnLanguageOrThemeChanged;
         ThemeManager.ThemeChanged += OnLanguageOrThemeChanged;
         
@@ -111,7 +190,7 @@ public class SettingsViewModel : INotifyPropertyChanged
         if (!_isUpdating)
         {
             Debug.WriteLine("Scheduling RefreshAllCollections on UI thread");
-            // �ϥ� Dispatcher �T�O�b UI �u�{�W����
+            // 使用 Dispatcher 確保在 UI 線程上執行
             Avalonia.Threading.Dispatcher.UIThread.Post(() =>
             {
                 RefreshAllCollections();
@@ -128,22 +207,24 @@ public class SettingsViewModel : INotifyPropertyChanged
         Debug.WriteLine("RefreshAllCollections started");
         _isUpdating = true;
         
-        // �O�s���e���A
+        // 保存當前狀態
         var currentLanguage = LanguageManager.CurrentLanguage;
         var currentTheme = ThemeManager.CurrentTheme;
         
         Debug.WriteLine($"Current language: {currentLanguage}, Current theme: {currentTheme}");
         
-        // ���M�ſ襤��
+        // 先清空選中項
         _selectedLanguage = "";
         _selectedTheme = "";
+        _selectedFontFamily = "";
         OnPropertyChanged(nameof(SelectedLanguage));
         OnPropertyChanged(nameof(SelectedTheme));
+        OnPropertyChanged(nameof(SelectedFontFamily));
         
-        // ���s��R�y���ﶵ
+        // 重新填充語言選項
         var oldLanguageCount = Languages.Count;
         Languages.Clear();
-        OnPropertyChanged(nameof(Languages)); // �ߧY�q���M��
+        OnPropertyChanged(nameof(Languages)); // 立即通知清空
         
         foreach (var (_, name) in LanguageManager.GetAllLanguages())
         {
@@ -151,12 +232,12 @@ public class SettingsViewModel : INotifyPropertyChanged
             Debug.WriteLine($"Added language: '{name}'");
         }
         Debug.WriteLine($"Languages: {oldLanguageCount} -> {Languages.Count}");
-        OnPropertyChanged(nameof(Languages)); // �q�����s��R
+        OnPropertyChanged(nameof(Languages)); // 通知重新填充
         
-        // ���s��R�D�D�ﶵ
+        // 重新填充主題選項
         var oldThemeCount = Themes.Count;
         Themes.Clear();
-        OnPropertyChanged(nameof(Themes)); // �ߧY�q���M��
+        OnPropertyChanged(nameof(Themes)); // 立即通知清空
         
         foreach (var (_, name) in ThemeManager.GetAllThemes())
         {
@@ -164,34 +245,39 @@ public class SettingsViewModel : INotifyPropertyChanged
             Debug.WriteLine($"Added theme: '{name}'");
         }
         Debug.WriteLine($"Themes: {oldThemeCount} -> {Themes.Count}");
-        OnPropertyChanged(nameof(Themes)); // �q�����s��R
+        OnPropertyChanged(nameof(Themes)); // 通知重新填充
         
-        // �]�w���e�襤��
+        // 設定當前選中項
         var newLanguageName = LanguageManager.GetLanguageName(currentLanguage);
         var newThemeName = ThemeManager.GetThemeName(currentTheme);
         
         Debug.WriteLine($"New language name: '{newLanguageName}'");
         Debug.WriteLine($"New theme name: '{newThemeName}'");
         
-        // �ˬd�ﶵ�O�_�s�b
+        // 檢查選項是否存在
         var languageExists = Languages.Contains(newLanguageName);
         var themeExists = Themes.Contains(newThemeName);
         Debug.WriteLine($"Language exists: {languageExists}, Theme exists: {themeExists}");
         
-        // �]�w�襤��
+        // 設定選中項
         _selectedLanguage = languageExists ? newLanguageName : (Languages.FirstOrDefault() ?? "");
         _selectedTheme = themeExists ? newThemeName : (Themes.FirstOrDefault() ?? "");
         
         Debug.WriteLine($"Final selected language: '{_selectedLanguage}'");
         Debug.WriteLine($"Final selected theme: '{_selectedTheme}'");
         
+        RefreshFontFamilies();
+
         _isUpdating = false;
         
-        // �̫�q���襤����s
+        // 最後通知選中項更新
         OnPropertyChanged(nameof(SelectedLanguage));
         OnPropertyChanged(nameof(SelectedTheme));
+        OnPropertyChanged(nameof(SelectedFontFamily));
+        OnPropertyChanged(nameof(FontSize));
+        OnPropertyChanged(nameof(FontSizeDisplay));
         
-        // ��s���a�Ƥ�r
+        // 更新本地化文字
         OnPropertyChanged(nameof(TitleText));
         OnPropertyChanged(nameof(LanguageTitleText));
         OnPropertyChanged(nameof(LanguageDescText));

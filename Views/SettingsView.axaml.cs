@@ -15,5 +15,9 @@ public partial class SettingsView : UserControl
         _toastHelper = new ToastQueueHelper(this);
         SettingsViewModel.Instance.EnqueueToast = _toastHelper.EnqueueToast;
         DataContext = SettingsViewModel.Instance;
+
+        DecreaseFontButton.Click += (_, _) => SettingsViewModel.Instance.DecreaseFontSize();
+        IncreaseFontButton.Click += (_, _) => SettingsViewModel.Instance.IncreaseFontSize();
+        ResetFontButton.Click += (_, _) => SettingsViewModel.Instance.ResetFont();
     }
 }

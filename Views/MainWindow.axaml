@@ -3,82 +3,51 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ExcelPasteTool"
-        xmlns:converters="clr-namespace:ExcelPasteTool.Converters"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600"
+        mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="700"
         x:Class="ExcelPasteTool.MainWindow"
         x:Name="MainWindowInstance"
-        Width="800" Height="600"
-        MinWidth="1024" MinHeight="600"
-        MaxHeight="1200"
+        Width="1100" Height="700"
+        MinWidth="900" MinHeight="560"
         WindowStartupLocation="CenterScreen">
 	<Window.Resources>
-		<converters:EvenRowBackgroundConverter x:Key="EvenRowBackgroundConverter" />
-		<SolidColorBrush x:Key="EvenRowBackgroundBrush" Color="#f5f8fd"/>
 		<local:SidebarWidthConverter x:Key="SidebarWidthConverter" />
 		<local:SidebarExpandVisibilityConverter x:Key="SidebarExpandVisibilityConverter" />
-		<local:SidebarSelectedBarConverter x:Key="SidebarSelectedBarConverter" />
-		<local:SidebarSelectedBackgroundConverter x:Key="SidebarSelectedBackgroundConverter" />
 		<local:SidebarPageToContentConverter x:Key="SidebarPageToContentConverter" />
-		<SolidColorBrush x:Key="SidebarBackgroundBrush" Color="#232323"/>
 	</Window.Resources>
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto"/>
-			<ColumnDefinition Width="*"/>
-		</Grid.ColumnDefinitions>
+	<Grid ColumnDefinitions="Auto,*">
 		<Border x:Name="SidebarBorder" Grid.Column="0"
-				Background="{DynamicResource SidebarBackgroundBrush}"
-				Width="{Binding Sidebar.IsExpanded, Converter={StaticResource SidebarWidthConverter}}"
-				MinWidth="56" MaxWidth="100">
-			<StackPanel VerticalAlignment="Stretch">
-				<!-- 漢堡選單 -->
-				<!-- 這是一個按鈕，點擊展開側邊欄 -->
+				Width="{Binding Sidebar.IsExpanded, Converter={StaticResource SidebarWidthConverter}}">
+			<StackPanel>
+				<!-- 漢堡選單：點擊展開 / 收合側邊欄 -->
 				<Button Name="SidebarToggleButton"
-						  Click="SidebarToggleButton_Click"
-						  Height="56"
-						  Padding="4"
-						  Margin="0,8,0,8"
-						  HorizontalAlignment="Stretch"
-						  VerticalAlignment="Top"
-						  Background="#232323"
-						  BorderThickness="0">
-					<!-- 漢堡選單線條 -->
-					<Path Data="M6,16 L38,16 M6,28 L38,28 M6,40 L38,40"
-						  Stroke="#bbb"
-						  StrokeThickness="1"/>
+						Classes="sidebar-toggle"
+						Click="SidebarToggleButton_Click"
+						Height="48" Margin="4,8,4,8"
+						HorizontalAlignment="Stretch"
+						HorizontalContentAlignment="Center">
+					<Path Data="M4,8 L24,8 M4,14 L24,14 M4,20 L24,20" StrokeThickness="1.6"
+						  Width="28" Height="28"/>
 				</Button>
 				<!-- 導覽按鈕 -->
 				<ItemsControl ItemsSource="{Binding SidebarItems}">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
-							<Border Background="{Binding IsSelected, Converter={StaticResource SidebarSelectedBackgroundConverter}}" CornerRadius="8" Margin="4,2">
-								<Button Command="{Binding DataContext.SidebarItemClickCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+							<Border Classes="sidebar-item" Classes.selected="{Binding IsSelected}" Margin="4,2">
+								<Button Classes="sidebar-button"
+										Command="{Binding DataContext.SidebarItemClickCommand, RelativeSource={RelativeSource AncestorType=Window}}"
 										CommandParameter="{Binding Page}"
-										Background="Transparent" BorderThickness="0" Padding="0" Margin="0" Height="48">
-									<Grid Height="48">
-										<Grid.ColumnDefinitions>
-											<ColumnDefinition Width="4"/>
-											<ColumnDefinition Width="36"/>
-											<ColumnDefinition Width="*"/>
-										</Grid.ColumnDefinitions>
-										<!-- 綠色導引條 -->
-										<Border Grid.Column="0" Width="4" Background="{Binding IsSelected, Converter={StaticResource SidebarSelectedBarConverter}}"/>
-										<!-- ICON 完全置中顯示 -->
-										<Grid Grid.Column="1" Width="36" Height="48" HorizontalAlignment="Center" VerticalAlignment="Center">
-											<Path Data="{Binding Icon}" Width="24" Height="24" Fill="#4FC3F7" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-										</Grid>
-										<!-- 名稱 -->
-										<TextBlock Grid.Column="2" Text="{Binding Name}" Margin="12,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold" IsVisible="{Binding DataContext.Sidebar.IsExpanded, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource SidebarExpandVisibilityConverter}}"/>
+										Height="44"
+										ToolTip.Tip="{Binding Name}">
+									<Grid ColumnDefinitions="4,40,*">
+										<!-- 選取導引條 -->
+										<Border Grid.Column="0" Classes="sidebar-indicator" Classes.selected="{Binding IsSelected}" Width="3" Height="22"/>
+										<Path Grid.Column="1" Classes="sidebar-icon" Data="{Binding Icon}" Width="20" Height="20" Stretch="Uniform"
+											  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+										<TextBlock Grid.Column="2" Text="{Binding Name}" Margin="4,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold"
+												   TextTrimming="CharacterEllipsis"
+												   IsVisible="{Binding DataContext.Sidebar.IsExpanded, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource SidebarExpandVisibilityConverter}}"/>
 									</Grid>
 								</Button>
-								<Border.Styles>
-									<Style Selector="Border:pointerover">
-										<Setter Property="Background" Value="#232323"/>
-									</Style>
-									<Style Selector="Border:selected">
-										<Setter Property="Background" Value="#232323"/>
-									</Style>
-								</Border.Styles>
 							</Border>
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>

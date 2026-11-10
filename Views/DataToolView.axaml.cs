@@ -1,12 +1,11 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Input.Platform;
 using Avalonia.VisualTree;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using ExcelPasteTool.Helpers;
 
 namespace ExcelPasteTool;
@@ -19,361 +18,205 @@ public partial class DataToolView : UserControl
     private readonly char _defaultSeparator = '|';
     private readonly List<SeparatorOption> _separatorOptions = new()
     {
-        new('|', "豎線 |"),
-        new(';', "分號 ;"),
-        new(':', "冒號 :"),
-        new(' ', "空白")
+        new('|', "SeparatorPipe", "豎線 |"),
+        new(';', "SeparatorSemicolon", "分號 ;"),
+        new(':', "SeparatorColon", "冒號 :"),
+        new(' ', "SeparatorSpace", "空白")
     };
 
-    private ComboBox? _themeSelector;
-    private ComboBox? _languageSelector;
-    private ComboBox? _separatorComboBox;
-    private TextBox? _topBox;
-    private TextBox? _bottomBox;
-    private TextBlock? _separatorLabel;
-    private TextBlock? _languageLabel;
-    private TextBlock? _themeLabel;
-    private TextBlock? _pipDataTitle;
-    private TextBlock? _sqlConditionTitle;
-    private TextBlock? _dataListTitle;
-    private Button? _pasteDataButton;
-    private Button? _clearDataButton;
-    private TextBlock? _pasteButtonText;
-    private TextBlock? _clearButtonText;
-    private TextBlock? _rowNumberHeader;
-    private TextBlock? _dataContentHeader;
-    private ToastQueueHelper _toastHelper;
+    private readonly ToastQueueHelper _toastHelper;
+
+    // 重新填充下拉選單 / 程式改寫 TopBox 時，避免觸發使用者操作事件
+    private bool _suppressEvents;
+    private bool _initialized;
 
     public DataToolView()
     {
         InitializeComponent();
         DataContext = this;
         _toastHelper = new ToastQueueHelper(this);
+        DataItems.CollectionChanged += OnDataItemsChanged;
         Loaded += OnLoaded;
     }
 
     private void OnLoaded(object? sender, RoutedEventArgs e)
     {
-        _themeSelector = this.FindControl<ComboBox>("ThemeSelector");
-        _languageSelector = this.FindControl<ComboBox>("LanguageSelector");
-        _separatorComboBox = this.FindControl<ComboBox>("SeparatorComboBox");
-        _topBox = this.FindControl<TextBox>("TopBox");
-        _bottomBox = this.FindControl<TextBox>("BottomBox");
-        _separatorLabel = this.FindControl<TextBlock>("SeparatorLabel");
-        _languageLabel = this.FindControl<TextBlock>("LanguageLabel");
-        _themeLabel = this.FindControl<TextBlock>("ThemeLabel");
-        _pipDataTitle = this.FindControl<TextBlock>("PipDataTitle");
-        _sqlConditionTitle = this.FindControl<TextBlock>("SqlConditionTitle");
-        _dataListTitle = this.FindControl<TextBlock>("DataListTitle");
-        _pasteDataButton = this.FindControl<Button>("PasteDataButton");
-        _clearDataButton = this.FindControl<Button>("ClearDataButton");
-        _pasteButtonText = this.FindControl<TextBlock>("PasteButtonText");
-        _clearButtonText = this.FindControl<TextBlock>("ClearButtonText");
-        _rowNumberHeader = this.FindControl<TextBlock>("RowNumberHeader");
-        _dataContentHeader = this.FindControl<TextBlock>("DataContentHeader");
+        // 頁面有快取，切換分頁回來會再次觸發 Loaded；事件只需要掛一次，否則按一次會執行多次
+        if (!_initialized)
+        {
+            _initialized = true;
+            ThemeSelector.SelectionChanged += ThemeSelector_SelectionChanged;
+            LanguageSelector.SelectionChanged += LanguageSelector_SelectionChanged;
+            SeparatorComboBox.SelectionChanged += SeparatorComboBox_SelectionChanged;
+            TopBox.TextChanged += TopBoxChanged;
+            PasteDataButton.Click += PasteData_Click;
+            ClearDataButton.Click += ClearData_Click;
+            CopyTopBoxButton.Click += CopyTopBoxButton_Click;
+            CopyBottomBoxButton.Click += CopyBottomBoxButton_Click;
+        }
 
-        InitializeLanguageSelector();
-        InitializeSeparatorSelector();
-        InitializeThemeSelector();
-
-        if (_themeSelector != null) _themeSelector.SelectionChanged += ThemeSelector_SelectionChanged;
-        if (_languageSelector != null) _languageSelector.SelectionChanged += LanguageSelector_SelectionChanged;
-        if (_separatorComboBox != null) _separatorComboBox.SelectionChanged += SeparatorComboBox_SelectionChanged;
-        if (_topBox != null) _topBox.TextChanged += TopBoxChanged;
-        if (_pasteDataButton != null) _pasteDataButton.Click += PasteData_Click;
-        if (_clearDataButton != null) _clearDataButton.Click += ClearData_Click;
-        var copyTop = this.FindControl<Button>("CopyTopBoxButton");
-        if (copyTop != null) copyTop.Click += CopyTopBoxButton_Click;
-        var copyBottom = this.FindControl<Button>("CopyBottomBoxButton");
-        if (copyBottom != null) copyBottom.Click += CopyBottomBoxButton_Click;
-
+        // 主題 / 語言事件在離開畫面時解除，回來時重新訂閱
+        ThemeManager.ThemeChanged -= OnThemeChanged;
+        LanguageManager.LanguageChanged -= OnLanguageChanged;
         ThemeManager.ThemeChanged += OnThemeChanged;
         LanguageManager.LanguageChanged += OnLanguageChanged;
-        FontManager.FontChanged += OnFontChanged;
+
         UpdateUITexts();
-        FontManager.ApplyLanguageFont(LanguageManager.CurrentLanguage);
+        UpdateTableState();
     }
 
-    private void InitializeLanguageSelector()
+    protected override void OnDetachedFromVisualTree(Avalonia.VisualTreeAttachmentEventArgs e)
     {
-        if (_languageSelector != null)
-        {
-            _languageSelector.Items.Clear();
-            var allLanguages = LanguageManager.GetAllLanguages();
-            foreach (var (language, name) in allLanguages)
-            {
-                var item = new ComboBoxItem
-                {
-                    Content = name
-                };
-                // 主動指定顏色，避免主題切換時失效
-                item.Foreground = Avalonia.Media.Brushes.Black;
-                item.Background = Avalonia.Media.Brushes.Transparent;
-                _languageSelector.Items.Add(item);
-            }
-            UpdateLanguageSelection();
-        }
+        ThemeManager.ThemeChanged -= OnThemeChanged;
+        LanguageManager.LanguageChanged -= OnLanguageChanged;
+        base.OnDetachedFromVisualTree(e);
     }
-    private void InitializeSeparatorSelector()
-    {
-        if (_separatorComboBox != null)
-        {
-            _separatorComboBox.Items.Clear();
-            foreach (var option in _separatorOptions)
-                _separatorComboBox.Items.Add(option.DisplayName);
-            _separatorComboBox.SelectedIndex = 0;
-            _separator = _defaultSeparator;
-        }
-    }
-    private void InitializeThemeSelector()
-    {
-        if (_themeSelector != null)
-        {
-            _themeSelector.Items.Clear();
-            var allThemes = ThemeManager.GetAllThemes();
-            foreach (var (theme, name) in allThemes)
-                _themeSelector.Items.Add(name);
-            UpdateThemeSelection();
-        }
-    }
-    private void UpdateLanguageSelection()
-    {
-        if (_languageSelector != null)
-        {
-            var allLanguages = LanguageManager.GetAllLanguages();
-            var currentLanguageIndex = allLanguages.FindIndex(l => l.Language == LanguageManager.CurrentLanguage);
-            if (currentLanguageIndex >= 0)
-                _languageSelector.SelectedIndex = currentLanguageIndex;
-        }
-    }
-    private void UpdateThemeSelection()
-    {
-        if (_themeSelector != null)
-        {
-            var allThemes = ThemeManager.GetAllThemes();
-            var currentThemeIndex = allThemes.FindIndex(t => t.Theme == ThemeManager.CurrentTheme);
-            if (currentThemeIndex >= 0)
-                _themeSelector.SelectedIndex = currentThemeIndex;
-        }
-    }
+
+    // ===== 文字與下拉選單 =====
+
     private void UpdateUITexts()
     {
-        if (_separatorLabel != null)
-            _separatorLabel.Text = LanguageManager.GetText("SeparatorLabel", "分隔符號:");
-        if (_languageLabel != null)
-            _languageLabel.Text = LanguageManager.GetText("LanguageLabel", "語言:");
-        if (_themeLabel != null)
-            _themeLabel.Text = LanguageManager.GetText("ThemeLabel", "主題:");
-        if (_pipDataTitle != null)
-            _pipDataTitle.Text = LanguageManager.GetText("PipDataTitle", "PIP 分隔資料");
-        if (_sqlConditionTitle != null)
-            _sqlConditionTitle.Text = LanguageManager.GetText("SqlConditionTitle", "SQL 條件");
-        if (_dataListTitle != null)
-            _dataListTitle.Text = LanguageManager.GetText("DataListTitle", "資料清單");
-        if (_pasteButtonText != null)
-            _pasteButtonText.Text = LanguageManager.GetText("PasteDataButton", "資料貼上");
-        if (_clearButtonText != null)
-            _clearButtonText.Text = LanguageManager.GetText("ClearDataButton", "清空資料");
-        if (_rowNumberHeader != null)
-            _rowNumberHeader.Text = LanguageManager.GetText("RowNumberHeader", "行號");
-        if (_dataContentHeader != null)
-            _dataContentHeader.Text = LanguageManager.GetText("DataContentHeader", "資料內容");
-        UpdateSeparatorOptions();
-        UpdateThemeOptions();
-    }
-    private void UpdateSeparatorOptions()
-    {
-        if (_separatorComboBox != null)
+        SeparatorLabel.Text = LanguageManager.GetText("SeparatorLabel", "分隔符號:");
+        LanguageLabel.Text = LanguageManager.GetText("LanguageLabel", "語言:");
+        ThemeLabel.Text = LanguageManager.GetText("ThemeLabel", "主題:");
+        PipDataTitle.Text = LanguageManager.GetText("PipDataTitle", "PIP 分隔資料");
+        SqlConditionTitle.Text = LanguageManager.GetText("SqlConditionTitle", "SQL 條件");
+        PasteButtonText.Text = LanguageManager.GetText("PasteDataButton", "資料貼上");
+        ClearButtonText.Text = LanguageManager.GetText("ClearDataButton", "清空資料");
+        RowNumberHeader.Text = LanguageManager.GetText("RowNumberHeader", "行號");
+        DataContentHeader.Text = LanguageManager.GetText("DataContentHeader", "資料內容");
+        EmptyStateText.Text = LanguageManager.GetText("EmptyStateText", "尚無資料\n從 Excel 複製一欄後，按「資料貼上」");
+        TopBox.Watermark = LanguageManager.GetText("TopBoxWatermark", "也可以直接在這裡輸入以分隔符號串接的資料");
+
+        _suppressEvents = true;
+        try
         {
-            var currentIndex = _separatorComboBox.SelectedIndex;
-            _separatorComboBox.Items.Clear();
-            var separatorOptions = new List<string>
-            {
-                LanguageManager.GetText("SeparatorPipe", "豎線 |"),
-                LanguageManager.GetText("SeparatorSemicolon", "分號 ;"),
-                LanguageManager.GetText("SeparatorColon", "冒號 :"),
-                LanguageManager.GetText("SeparatorSpace", "空白")
-            };
-            foreach (var option in separatorOptions)
-                _separatorComboBox.Items.Add(option);
-            if (currentIndex >= 0 && currentIndex < separatorOptions.Count)
-                _separatorComboBox.SelectedIndex = currentIndex;
+            FillComboBox(SeparatorComboBox,
+                _separatorOptions.Select(o => LanguageManager.GetText(o.TextKey, o.DefaultText)),
+                _separatorOptions.FindIndex(o => o.Character == _separator));
+            var languages = LanguageManager.GetAllLanguages();
+            FillComboBox(LanguageSelector, languages.Select(l => l.Name),
+                languages.FindIndex(l => l.Language == LanguageManager.CurrentLanguage));
+            FillThemeSelector();
         }
-    }
-    private void UpdateThemeOptions()
-    {
-        if (_themeSelector != null)
+        finally
         {
-            var currentIndex = _themeSelector.SelectedIndex;
-            _themeSelector.Items.Clear();
-            var themeOptions = new List<string>
-            {
-                LanguageManager.GetText("ThemeDark", "暗黑模式"),
-                LanguageManager.GetText("ThemeLight", "光線模式")
-            };
-            foreach (var option in themeOptions)
-                _themeSelector.Items.Add(option);
-            if (currentIndex >= 0 && currentIndex < themeOptions.Count)
-                _themeSelector.SelectedIndex = currentIndex;
+            _suppressEvents = false;
         }
+        UpdateTableState();
     }
-    private void OnLanguageChanged()
+
+    private void FillThemeSelector()
     {
-        UpdateLanguageSelection();
-        UpdateUITexts();
-        // 語言切換後，部分資源/字型可能改變，強制刷新資料列背景（讓 Converter 重新執行）
-        RefreshDataItemRowStyles();
+        var themes = ThemeManager.GetAllThemes();
+        FillComboBox(ThemeSelector, themes.Select(t => t.Name),
+            themes.FindIndex(t => t.Theme == ThemeManager.CurrentTheme));
     }
+
+    private static void FillComboBox(ComboBox comboBox, IEnumerable<string> items, int selectedIndex)
+    {
+        comboBox.Items.Clear();
+        foreach (var item in items)
+            comboBox.Items.Add(item);
+        comboBox.SelectedIndex = selectedIndex;
+    }
+
+    // 語言切換可能是由本頁的下拉選單觸發，不能在它自己的 SelectionChanged 內清空 Items（會造成索引越界），
+    // 因此延後到目前事件處理完畢再重新填充。
+    private void OnLanguageChanged() => Avalonia.Threading.Dispatcher.UIThread.Post(UpdateUITexts);
 
     private void OnThemeChanged()
     {
-        UpdateThemeSelection();
-        var app = Avalonia.Application.Current;
-        if (app != null && app.Resources != null)
-        {
-            var brushKey = "EvenRowBackgroundBrush";
-            var isDark = ThemeManager.CurrentTheme.ToString().ToLower().Contains("dark");
-            var color = isDark ? "#29292B" : "#f5f8fd";
-            app.Resources[brushKey] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse(color));
-            var sidebarColor = isDark ? "#232323" : "#F7F7F7";
-            app.Resources["SidebarBackgroundBrush"] = new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse(sidebarColor));
-        }
-        // 主題切換後也刷新資料列背景
-        RefreshDataItemRowStyles();
-        // 主題切換後刷新語言下拉選單樣式
-        RefreshLanguageSelectorItemsStyle();
-    }
-
-    private void RefreshLanguageSelectorItemsStyle()
-    {
-        if (_languageSelector != null)
-        {
-            foreach (var obj in _languageSelector.Items)
-            {
-                if (obj is ComboBoxItem item)
-                {
-                    var isDark = ThemeManager.CurrentTheme.ToString().ToLower().Contains("dark");
-                    item.Foreground = isDark
-                        ? new Avalonia.Media.SolidColorBrush(Avalonia.Media.Color.Parse("#E3F2FD"))
-                        : Avalonia.Media.Brushes.Black;
-                    item.Background = Avalonia.Media.Brushes.Transparent;
-                }
-            }
-        }
-    }
-
-    // 字型切換後，也強制刷新資料列樣式，避免不同字型造成行高/測量後未重繪
-    private void OnFontChanged()
-    {
-        RefreshDataItemRowStyles();
-    }
-
-    private void RefreshDataItemRowStyles()
-    {
-        if (DataItems.Count == 0) return;
-        // 1) 做一個 no-op 指派，確保 UI 觸發更新
-        for (int i = 0; i < DataItems.Count; i++)
-        {
-            var item = DataItems[i];
-            // 觸發 IsEven 屬性變更
-            item.NotifyStyleChanged();
-        }
-        // 2) 重新 assign ItemsSource（可選，保守做法）
-        var items = DataItems.ToList();
-        DataItems.Clear();
-        int row = 1;
-        foreach (var it in items)
-        {
-            it.RowNumber = row++;
-            DataItems.Add(it);
-        }
+        // 主題名稱不變，只需同步選取項目
+        _suppressEvents = true;
+        try { ThemeSelector.SelectedIndex = ThemeManager.GetAllThemes().FindIndex(t => t.Theme == ThemeManager.CurrentTheme); }
+        finally { _suppressEvents = false; }
     }
 
     private void LanguageSelector_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (_languageSelector != null && _languageSelector.SelectedIndex >= 0)
+        if (_suppressEvents || LanguageSelector.SelectedIndex < 0) return;
+        var allLanguages = LanguageManager.GetAllLanguages();
+        if (LanguageSelector.SelectedIndex >= allLanguages.Count) return;
+        var selectedLanguage = allLanguages[LanguageSelector.SelectedIndex].Language;
+        if (LanguageManager.CurrentLanguage != selectedLanguage)
         {
-            var allLanguages = LanguageManager.GetAllLanguages();
-            if (_languageSelector.SelectedIndex < allLanguages.Count)
-            {
-                var selectedLanguage = allLanguages[_languageSelector.SelectedIndex].Language;
-                if (LanguageManager.CurrentLanguage != selectedLanguage)
-                {
-                    // 工具頁面的語言切換是臨時的，不保存到配置檔案
-                    LanguageController.SetLanguage(selectedLanguage, false); // saveConfig = false
-                    FontManager.ApplyLanguageFont(selectedLanguage);
-                    _toastHelper.EnqueueToast("語言已臨時切換（未保存）");
-                }
-            }
+            // 工具頁面的語言切換是臨時的，不保存到配置檔案（要保存請到設定頁）
+            LanguageController.SetLanguage(selectedLanguage, false);
+            _toastHelper.EnqueueToast("語言已臨時切換（未保存）");
         }
     }
+
     private void ThemeSelector_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (_themeSelector != null && _themeSelector.SelectedIndex >= 0)
+        if (_suppressEvents || ThemeSelector.SelectedIndex < 0) return;
+        var allThemes = ThemeManager.GetAllThemes();
+        if (ThemeSelector.SelectedIndex >= allThemes.Count) return;
+        var selectedTheme = allThemes[ThemeSelector.SelectedIndex].Theme;
+        if (ThemeManager.CurrentTheme != selectedTheme)
         {
-            var allThemes = ThemeManager.GetAllThemes();
-            if (_themeSelector.SelectedIndex < allThemes.Count)
-            {
-                var selectedTheme = allThemes[_themeSelector.SelectedIndex].Theme;
-                if (ThemeManager.CurrentTheme != selectedTheme)
-                {
-                    // 工具頁面的主題切換是臨時的，不保存到配置檔案
-                    ThemeManager.CurrentTheme = selectedTheme;
-                    _toastHelper.EnqueueToast("主題已臨時切換（未保存）");
-                }
-            }
+            // 工具頁面的主題切換是臨時的，不保存到配置檔案（要保存請到設定頁）
+            ThemeManager.CurrentTheme = selectedTheme;
+            _toastHelper.EnqueueToast("主題已臨時切換（未保存）");
         }
     }
+
     private void SeparatorComboBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (_separatorComboBox != null && _separatorComboBox.SelectedIndex >= 0)
+        if (_suppressEvents) return;
+        var selectedIndex = SeparatorComboBox.SelectedIndex;
+        if (selectedIndex < 0 || selectedIndex >= _separatorOptions.Count) return;
+        var newSeparator = _separatorOptions[selectedIndex].Character;
+        if (_separator != newSeparator)
         {
-            var selectedIndex = _separatorComboBox.SelectedIndex;
-            if (selectedIndex < _separatorOptions.Count)
-            {
-                var newSeparator = _separatorOptions[selectedIndex].Character;
-                if (_separator != newSeparator)
-                {
-                    _separator = newSeparator;
-                    UpdateTopAndBottom();
-                }
-            }
+            _separator = newSeparator;
+            UpdateTopAndBottom();
         }
     }
+
+    // ===== 資料處理 =====
+
+    private void OnDataItemsChanged(object? sender, NotifyCollectionChangedEventArgs e) => UpdateTableState();
+
+    /// <summary>更新筆數徽章與「無資料」提示。</summary>
+    private void UpdateTableState()
+    {
+        var count = DataItems.Count;
+        RowCountText.Text = string.Format(LanguageManager.GetText("RowCountFormat", "共 {0} 筆"), count);
+        EmptyStateText.IsVisible = count == 0;
+    }
+
+    private void SetItems(IEnumerable<string> values)
+    {
+        DataItems.Clear();
+        Items.Clear();
+        int rowNumber = 1;
+        foreach (var value in values.Distinct())
+        {
+            DataItems.Add(new DataItem(rowNumber++, value));
+            Items.Add(value);
+        }
+        TableScroll.Offset = default;
+    }
+
     private async void PasteData_Click(object? sender, RoutedEventArgs e)
     {
         var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
-        if (clipboard != null)
-        {
-            var text = await clipboard.GetTextAsync();
-            if (!string.IsNullOrWhiteSpace(text))
-            {
-                var lines = text.Split(new[] {'\r', '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
-                DataItems.Clear();
-                Items.Clear();
-                var processedData = new List<string>();
-                foreach (var line in lines)
-                {
-                    var trimmedLine = line.Trim();
-                    if (!string.IsNullOrEmpty(trimmedLine))
-                    {
-                        var firstColumn = GetFirstColumn(trimmedLine);
-                        processedData.Add(firstColumn);
-                    }
-                }
-                var uniqueData = processedData.Distinct().ToList();
-                int rowNumber = 1;
-                foreach (var data in uniqueData)
-                {
-                    DataItems.Add(new DataItem(rowNumber, data));
-                    Items.Add(data);
-                    rowNumber++;
-                }
-                UpdateTopAndBottom();
-            }
-        }
+        if (clipboard == null) return;
+        var text = await clipboard.GetTextAsync();
+        if (string.IsNullOrWhiteSpace(text)) return;
+
+        var lines = text.Split(new[] { '\r', '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
+        var processedData = lines
+            .Select(l => l.Trim())
+            .Where(l => l.Length > 0)
+            .Select(GetFirstColumn)
+            .Where(v => v.Length > 0);
+        SetItems(processedData);
+        UpdateTopAndBottom();
     }
-    private string GetFirstColumn(string line)
+
+    private static string GetFirstColumn(string line)
     {
         var separators = new char[] { '\t', ',', ';', '|' };
         foreach (var sep in separators)
@@ -387,119 +230,84 @@ public partial class DataToolView : UserControl
         }
         return line.Trim();
     }
+
     private void ClearData_Click(object? sender, RoutedEventArgs e)
     {
-        DataItems.Clear();
-        Items.Clear();
-        if (_topBox != null)
-            _topBox.Text = "";
-        if (_bottomBox != null)
-            _bottomBox.Text = "";
-        ResetSeparatorToDefault();
+        SetItems(Enumerable.Empty<string>());
+        _suppressEvents = true;
+        try
+        {
+            TopBox.Text = "";
+            BottomBox.Text = "";
+            _separator = _defaultSeparator;
+            SeparatorComboBox.SelectedIndex = 0;
+        }
+        finally
+        {
+            _suppressEvents = false;
+        }
         EnqueueToast("畫面已清理回初始狀態");
     }
-    private void ResetSeparatorToDefault()
-    {
-        _separator = _defaultSeparator;
-        if (_separatorComboBox != null)
-            _separatorComboBox.SelectedIndex = 0;
-    }
+
     private void TopBoxChanged(object? sender, TextChangedEventArgs e)
     {
-        var text = _topBox?.Text ?? string.Empty;
-        var parts = text.Split(_separator).Select(x => x.Trim()).Where(x => x.Length > 0);
-        DataItems.Clear();
-        Items.Clear();
-        var uniqueParts = parts.Distinct().ToList();
-        int rowNumber = 1;
-        foreach (var part in uniqueParts)
-        {
-            DataItems.Add(new DataItem(rowNumber, part));
-            Items.Add(part);
-            rowNumber++;
-        }
+        if (_suppressEvents) return;
+        var text = TopBox.Text ?? string.Empty;
+        SetItems(text.Split(_separator).Select(x => x.Trim()).Where(x => x.Length > 0));
         UpdateBottom();
     }
+
     private void UpdateTopAndBottom()
     {
-        if (_topBox != null)
-            _topBox.Text = string.Join(_separator, Items);
+        _suppressEvents = true;
+        try { TopBox.Text = string.Join(_separator, Items); }
+        finally { _suppressEvents = false; }
         UpdateBottom();
     }
+
     private void UpdateBottom()
     {
-        if (_bottomBox != null)
-            _bottomBox.Text = $"({string.Join(", ", Items.Select(x => $"'{x}'"))})";
+        BottomBox.Text = Items.Count == 0
+            ? string.Empty
+            : $"({string.Join(", ", Items.Select(x => $"'{x.Replace("'", "''")}'"))})";
     }
-    protected override void OnDetachedFromVisualTree(Avalonia.VisualTreeAttachmentEventArgs e)
+
+    // ===== 複製 =====
+
+    private void EnqueueToast(string message) => _toastHelper.EnqueueToast(message);
+
+    private async Task CopyTextAsync(string? text)
     {
-        ThemeManager.ThemeChanged -= OnThemeChanged;
-        LanguageManager.LanguageChanged -= OnLanguageChanged;
-        FontManager.FontChanged -= OnFontChanged;
-        base.OnDetachedFromVisualTree(e);
+        if (string.IsNullOrEmpty(text)) return;
+        var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
+        if (clipboard == null) return;
+        (this.GetVisualRoot() as Window)?.Activate();
+        await Task.Delay(50);
+        await clipboard.SetTextAsync(text);
+        var check = await clipboard.GetTextAsync();
+        EnqueueToast(check == text ? "已複製到剪貼簿！" : "複製失敗，請重試");
     }
-    private void EnqueueToast(string message)
-    {
-        _toastHelper.EnqueueToast(message);
-    }
-    private async void CopyTopBoxButton_Click(object? sender, RoutedEventArgs e)
-    {
-        if (_topBox != null && !string.IsNullOrEmpty(_topBox.Text))
-        {
-            var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
-            if (clipboard != null)
-            {
-                var window = this.GetVisualRoot() as Window;
-                if (window != null)
-                    window.Activate();
-                await Task.Delay(50);
-                await clipboard.SetTextAsync(_topBox.Text);
-                var check = await clipboard.GetTextAsync();
-                if (check == _topBox.Text)
-                    EnqueueToast("已複製到剪貼簿！");
-                else
-                    EnqueueToast("複製失敗，請重試");
-            }
-        }
-    }
-    private async void CopyBottomBoxButton_Click(object? sender, RoutedEventArgs e)
-    {
-        if (_bottomBox != null && !string.IsNullOrEmpty(_bottomBox.Text))
-        {
-            var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
-            if (clipboard != null)
-            {
-                var window = this.GetVisualRoot() as Window;
-                if (window != null)
-                    window.Activate();
-                await Task.Delay(50);
-                await clipboard.SetTextAsync(_bottomBox.Text);
-                var check = await clipboard.GetTextAsync();
-                if (check == _bottomBox.Text)
-                    EnqueueToast("已複製到剪貼簿！");
-                else
-                    EnqueueToast("複製失敗，請重試");
-            }
-        }
-    }
+
+    private async void CopyTopBoxButton_Click(object? sender, RoutedEventArgs e) => await CopyTextAsync(TopBox.Text);
+
+    private async void CopyBottomBoxButton_Click(object? sender, RoutedEventArgs e) => await CopyTextAsync(BottomBox.Text);
+
     private async void CopyTableButton_Click(object? sender, RoutedEventArgs e)
     {
-        var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
-        if (clipboard != null && DataItems.Count > 0)
-        {
-            var text = string.Join("\r\n", DataItems.Select(x => x.Value));
-            await clipboard.SetTextAsync(text);
-            EnqueueToast("已複製到剪貼簿！");
-        }
+        if (DataItems.Count > 0)
+            await CopyTextAsync(string.Join("\r\n", DataItems.Select(x => x.Value)));
     }
+
     public class SeparatorOption
     {
         public char Character { get; }
-        public string DisplayName { get; }
-        public SeparatorOption(char character, string displayName)
+        public string TextKey { get; }
+        public string DefaultText { get; }
+        public SeparatorOption(char character, string textKey, string defaultText)
         {
             Character = character;
-            DisplayName = displayName;
+            TextKey = textKey;
+            DefaultText = defaultText;
         }
     }
 }

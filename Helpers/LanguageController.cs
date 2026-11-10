@@ -3,7 +3,7 @@ namespace ExcelPasteTool;
 public static class LanguageController
 {
     /// <summary>
-    /// ¤Á´«»y¨¥¡A®Ú¾Ú saveConfig ¨M©w¬O§_¦sÀÉ
+    /// åˆ‡æ›èªè¨€ï¼Œæ ¹æ“š saveConfig æ±ºå®šæ˜¯å¦å­˜æª”
     /// </summary>
     public static void SetLanguage(AppLanguage language, bool saveConfig)
     {

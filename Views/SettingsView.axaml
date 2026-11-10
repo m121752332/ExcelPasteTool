@@ -1,50 +1,78 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="ExcelPasteTool.SettingsView">
-    <Grid Background="#181818">
-        <!-- ToastPanel 右上角，位置下移 -->
+    <Grid>
+        <!-- Toast 通知 -->
         <Border Name="ToastPanel"
-                Background="#CC222222"
+                Background="#E6222222"
                 CornerRadius="8"
                 Padding="18,10"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Margin="0,30,30,0"
+                Margin="0,24,24,0"
                 IsVisible="False"
                 ZIndex="1000">
-            <TextBlock Name="ToastText" Foreground="#FFA726" FontWeight="Bold" FontSize="15" />
+            <TextBlock Name="ToastText" Foreground="#FFA726" FontWeight="Bold"/>
         </Border>
-        <Grid Margin="40,30,40,30">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <!-- 灰底標題區塊 -->
-            <Border Grid.Row="0" Background="#232323" CornerRadius="8" Padding="32,18" Margin="0,0,0,12" HorizontalAlignment="Left">
-                <TextBlock Text="{Binding TitleText.Text}" FontSize="32" FontWeight="Bold" Foreground="#F5F5F5"/>
-            </Border>
-            <!-- 語言區塊 -->
-            <Border Grid.Row="1" Background="#232323" CornerRadius="8" Padding="24,18" Margin="0,0,0,12">
-                <StackPanel Spacing="10">
-                    <TextBlock Text="{Binding LanguageTitleText.Text}" FontSize="16" FontWeight="Bold" Foreground="#F5F5F5"/>
-                    <TextBlock Text="{Binding LanguageDescText.Text}" FontSize="13" Foreground="#B0B0B0" Margin="0,2,0,10"/>
-                    <ComboBox Width="320" 
-                              ItemsSource="{Binding Languages, Mode=OneWay}" 
-                              SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}" 
-                              HorizontalAlignment="Left"/>
-                </StackPanel>
-            </Border>
-            <!-- 主題區塊 -->
-            <Border Grid.Row="2" Background="#232323" CornerRadius="8" Padding="24,18">
-                <StackPanel Spacing="10">
-                    <TextBlock Text="{Binding ThemeTitleText.Text}" FontSize="16" FontWeight="Bold" Foreground="#F5F5F5"/>
-                    <ComboBox Width="320" 
-                              ItemsSource="{Binding Themes, Mode=OneWay}" 
-                              SelectedItem="{Binding SelectedTheme, Mode=TwoWay}" 
-                              HorizontalAlignment="Left"/>
-                </StackPanel>
-            </Border>
-        </Grid>
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="32,24" Spacing="12" Width="720" HorizontalAlignment="Left">
+                <TextBlock Text="{Binding TitleText.Text}" Classes="page-title" Margin="0,0,0,4"/>
+
+                <!-- 語言 -->
+                <Border Classes="setting-card">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="{Binding LanguageTitleText.Text}" Classes="section-title"/>
+                        <TextBlock Text="{Binding LanguageDescText.Text}" Classes="muted" Margin="0,0,0,6"/>
+                        <ComboBox Width="320"
+                                  ItemsSource="{Binding Languages, Mode=OneWay}"
+                                  SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 主題 -->
+                <Border Classes="setting-card">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="{Binding ThemeTitleText.Text}" Classes="section-title"/>
+                        <TextBlock Text="{Binding ThemeDescText.Text}" Classes="muted" Margin="0,0,0,6"/>
+                        <ComboBox Width="320"
+                                  ItemsSource="{Binding Themes, Mode=OneWay}"
+                                  SelectedItem="{Binding SelectedTheme, Mode=TwoWay}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 字型 -->
+                <Border Classes="setting-card">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="{Binding FontTitleText.Text}" Classes="section-title"/>
+                        <TextBlock Text="{Binding FontDescText.Text}" Classes="muted" Margin="0,0,0,6"/>
+                        <ComboBox Width="320" MaxDropDownHeight="360"
+                                  ItemsSource="{Binding FontFamilies, Mode=OneWay}"
+                                  SelectedItem="{Binding SelectedFontFamily, Mode=TwoWay}"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 字體大小 -->
+                <Border Classes="setting-card">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="{Binding FontSizeTitleText.Text}" Classes="section-title"/>
+                        <TextBlock Text="{Binding FontSizeDescText.Text}" Classes="muted" Margin="0,0,0,6"/>
+                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" Margin="0,0,0,4">
+                            <Button Grid.Column="0" Name="DecreaseFontButton" Classes="ghost" Content="A−" Width="44" HorizontalContentAlignment="Center"/>
+                            <Slider Grid.Column="1" Margin="12,0" VerticalAlignment="Center"
+                                    Minimum="{Binding MinFontSize}" Maximum="{Binding MaxFontSize}"
+                                    TickFrequency="1" IsSnapToTickEnabled="True" SmallChange="1" LargeChange="2"
+                                    Value="{Binding FontSize, Mode=TwoWay}"/>
+                            <Button Grid.Column="2" Name="IncreaseFontButton" Classes="ghost" Content="A+" Width="44" HorizontalContentAlignment="Center"/>
+                            <TextBlock Grid.Column="3" Text="{Binding FontSizeDisplay}" Width="60" TextAlignment="Right"
+                                       VerticalAlignment="Center" FontWeight="SemiBold"/>
+                        </Grid>
+                        <Border Classes="font-preview">
+                            <TextBlock Text="{Binding FontPreviewText.Text}" TextWrapping="Wrap"/>
+                        </Border>
+                        <Button Name="ResetFontButton" Classes="ghost" Content="{Binding FontResetText.Text}" Margin="0,6,0,0"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>
