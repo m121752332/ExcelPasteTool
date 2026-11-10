@@ -48,10 +48,14 @@ public partial class AboutView : UserControl
         if (developerHotArea != null)
             developerHotArea.PointerPressed += DeveloperHotArea_OnPointerPressed;
 
+        var checkUpdateButton = this.FindControl<Button>("CheckUpdateButton");
+        if (checkUpdateButton != null)
+            checkUpdateButton.Click += CheckUpdateButton_OnClick;
+
         var asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
         var name = asm.GetName();
         _appTitleText!.Text = name.Name ?? "DataSplitter Pro";
-        _versionText!.Text = $"v{(name.Version?.ToString(3) ?? "1.0.0")}";
+        _versionText!.Text = $"v{UpdateService.CurrentVersionText}";
 
         // 公司與版權
         var company = asm.GetCustomAttribute<AssemblyCompanyAttribute>()?.Company ?? string.Empty;
@@ -62,6 +66,25 @@ public partial class AboutView : UserControl
 
         var desc = asm.GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description ?? "Excel Data Splitter Tool";
         _description!.Text = desc;
+    }
+
+    private async void CheckUpdateButton_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (sender is not Button button) return;
+        if (TopLevel.GetTopLevel(this) is not Window owner) return;
+
+        var original = button.Content;
+        button.IsEnabled = false;
+        button.Content = "檢查中…";
+        try
+        {
+            await MainWindow.CheckForUpdateManuallyAsync(owner);
+        }
+        finally
+        {
+            button.Content = original;
+            button.IsEnabled = true;
+        }
     }
 
     private async void DeveloperHotArea_OnPointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)
