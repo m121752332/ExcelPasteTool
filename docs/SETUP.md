@@ -15,7 +15,7 @@
 | UI 框架 | [Avalonia UI](https://avaloniaui.net/) 11.3.3（Fluent 主題 + DataGrid） |
 | 目標框架 | .NET 8（`net8.0`） |
 | 架構模式 | MVVM（Views / ViewModels / Models / Services / Helpers） |
-| 版本號 | 定義於 `ExcelPasteTool.csproj`，目前為 `1.0.0` |
+| 版本號 | 定義於 `ExcelPasteTool.csproj`，目前為 `1.1.0` |
 
 ---
 
@@ -190,12 +190,27 @@ avares://DataSplitter/Assets/Styles/DarkTheme.axaml
 版本號定義於 `ExcelPasteTool.csproj`：
 
 ```xml
-<AssemblyVersion>1.0.0.0</AssemblyVersion>
-<AssemblyFileVersion>1.0.0.0</AssemblyFileVersion>
-<AssemblyInformationalVersion>1.0.0</AssemblyInformationalVersion>
+<Version>1.1.0</Version>
+<AssemblyVersion>1.1.0.0</AssemblyVersion>
+<FileVersion>1.1.0.0</FileVersion>
+<InformationalVersion>1.1.0</InformationalVersion>
+<IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 ```
 
-「關於」頁面（`Views/AboutView.axaml.cs`）顯示的是 `AssemblyVersion` 的前三碼（例如 `v1.0.0`）。**發佈新版時請三個欄位一起更新**。
+- 程式內的「目前版本」由 `Services/UpdateService.cs` 的 `CurrentVersion` 取得，來源是 `InformationalVersion`（取不到時退回 `AssemblyVersion`）。「關於」頁面與自動更新都使用這個值。
+- `IncludeSourceRevisionInInformationalVersion=false` 是為了避免 SDK 在版本後面附加 `+commit` 雜湊，影響版本比對，請勿移除。
+- 本機手動發佈時，請四個欄位一起更新；透過 GitHub Actions 推 tag 發佈時，workflow 會依 tag 覆寫版本（見 6.4），但仍建議把 csproj 同步改成新版本號。
+
+### 5.7 自動更新
+
+程式啟動時會查詢 GitHub 的 `releases/latest`（`m121752332/ExcelPasteTool`），若 tag 版本大於目前版本，就提示使用者更新。
+
+- 只會偵測正式 Release：**Draft 與 Pre-release 不會被偵測到**。
+- tag 可寫成 `1.1.0` 或 `v1.1.0`。
+- Release 附件必須是 `.zip`，檔名需包含平台與架構，程式依此挑選對應檔案：
+  `DataSplitter_win_x64.zip`、`DataSplitter_linux_x64.zip`、`DataSplitter_osx_x64.zip`、`DataSplitter_osx_arm64.zip`。
+- 找不到對應的 zip（例如舊版 v1.0.x 的 `.rar` 附件）時，只能提示使用者手動下載。
+- 下載與解壓縮的暫存目錄為系統暫存資料夾下的 `DataSplitter_update/`。
 
 ---
 
@@ -259,18 +274,28 @@ dotnet publish -p:PublishProfile=Properties/PublishProfiles/Windows-x64.pubxml
 - **Linux**：發佈後需給予執行權限：`chmod +x artifacts/linux-x64/DataSplitter`。
 - **Windows**：未簽章的執行檔第一次執行可能出現 SmartScreen 警告，屬正常現象。
 
-### 6.4 GitHub Release 建議流程
+### 6.4 GitHub Actions 與 Release 流程
 
-1. 更新 `.csproj` 的三個版本欄位。
-2. 依 6.1 產出各平台檔案，並分別壓縮（例如 `DataSplitter-1.0.1-win-x64.zip`）。
-3. 建立 Git 標籤 `v1.0.1` 並推送：
+專案有兩個 workflow（`.github/workflows/`）：
+
+| 檔案 | 觸發時機 | 動作 |
+| --- | --- | --- |
+| `build.yml` | 開 PR、推送到 `master` | `dotnet build -c Release` 確認可編譯 |
+| `release.yml` | 推送版本 tag（`1.2.3` 或 `v1.2.3`） | 四個平台各自 `dotnet publish`（自含、單一檔案、內含原生函式庫），附上 `config.json`，打包成 `DataSplitter_<平台>_<架構>.zip`，並建立 GitHub Release 上傳 |
+
+推新版的步驟：
+
+1. 將 `.csproj` 的版本欄位改成新版本（例如 `1.2.0`），合併到 `master`。
+2. 建立 tag 並推送：
    ```bash
-   git tag v1.0.1
-   git push origin v1.0.1
+   git checkout master && git pull
+   git tag 1.2.0
+   git push origin 1.2.0
    ```
-4. 在 GitHub 的 Releases 頁面以該標籤建立 Release 並上傳壓縮檔。
+3. 等 `Release` workflow 跑完，到 GitHub 的 Releases 頁面確認四個 zip 都已上傳。workflow 會自動產生 Release Notes，可再手動補充說明。
+4. 已安裝舊版的使用者下次啟動程式時，就會收到更新提示（見 5.7）。
 
-> 標籤統一使用 `v主.次.修` 格式，方便日後實作「檢查新版本」功能時比對版本。
+> 不要把 Release 設為 Draft 或 Pre-release，也不要改 zip 檔名，否則自動更新偵測不到。
 
 ---
 
