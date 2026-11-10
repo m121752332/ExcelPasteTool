@@ -1,10 +1,25 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="ExcelPasteTool.App">
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+             x:Class="ExcelPasteTool.App"
+             RequestedThemeVariant="Dark">
+  <Application.Resources>
+    <ResourceDictionary>
+      <!-- 字型 / 字體大小的預設值；啟動後由 FontManager 依 config.json 覆寫 -->
+      <FontFamily x:Key="AppFontFamily">avares://DataSplitter/Assets/Fonts#Noto Sans TC</FontFamily>
+      <sys:Double x:Key="AppFontSize">14</sys:Double>
+      <sys:Double x:Key="AppFontSizeSmall">12</sys:Double>
+      <sys:Double x:Key="AppFontSizeLarge">16</sys:Double>
+      <sys:Double x:Key="AppFontSizeTitle">26</sys:Double>
+      <ResourceDictionary.MergedDictionaries>
+        <!-- 目前主題的配色；ThemeManager 切換主題時會替換這一項 -->
+        <ResourceInclude Source="avares://DataSplitter/Assets/Themes/GitHubDarkPalette.axaml"/>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
   <Application.Styles>
     <FluentTheme />
-	  <!-- 確保你的自訂主題在 FluentTheme 之後載入 -->
-	  <StyleInclude Source="avares://DataSplitter/Assets/Styles/LightTheme.axaml"/>
-	  <StyleInclude Source="avares://DataSplitter/Assets/Styles/DarkTheme.axaml"/>
+    <!-- 自訂樣式必須在 FluentTheme 之後載入 -->
+    <StyleInclude Source="avares://DataSplitter/Assets/Styles/AppStyles.axaml"/>
   </Application.Styles>
 </Application>

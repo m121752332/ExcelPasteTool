@@ -3,24 +3,33 @@ using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Styling;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ExcelPasteTool;
 
+/// <summary>
+/// App ä¸»é¡Œã€‚åˆ—èˆ‰åç¨±æœƒå­˜é€² config.jsonï¼Œè«‹å‹¿æ›´åï¼ˆDark ä¿ç•™çµ¦èˆŠè¨­å®šç›¸å®¹ï¼Œç¾åœ¨æ˜¯ GitHub Dark é…è‰²ï¼‰ã€‚
+/// </summary>
 public enum AppTheme
 {
     Light,
-    Dark
+    Dark,
+    Tiffany
 }
 
+/// <summary>
+/// ä¸»é¡Œç®¡ç†ï¼šæ¯å€‹ä¸»é¡Œåªæ˜¯ä¸€ä»½é…è‰² ResourceDictionaryï¼ˆAssets/Themes/*Palette.axamlï¼‰ï¼Œ
+/// åˆ‡æ›æ™‚æ›¿æ› Application.Resources.MergedDictionaries ä¸­çš„é…è‰²ï¼Œ
+/// æ¨£å¼ï¼ˆAssets/Styles/AppStyles.axamlï¼‰é€é DynamicResource è‡ªå‹•å¥—ç”¨æ–°é¡è‰²ã€‚
+/// </summary>
 public static class ThemeManager
 {
-    private static readonly object _themeLock = new();
+    private const string PaletteFolder = "Assets/Themes/";
 
-    // ¹w³]¥DÃD
     private static AppTheme _currentTheme = AppTheme.Dark;
 
-    public static AppTheme CurrentTheme 
-    { 
+    public static AppTheme CurrentTheme
+    {
         get => _currentTheme;
         set
         {
@@ -35,83 +44,65 @@ public static class ThemeManager
 
     public static event Action? ThemeChanged;
 
+    private static string GetPaletteFile(AppTheme theme) => theme switch
+    {
+        AppTheme.Light => "LightPalette.axaml",
+        AppTheme.Tiffany => "TiffanyPalette.axaml",
+        _ => "GitHubDarkPalette.axaml"
+    };
+
+    /// <summary>Fluent å…§å»ºæ§åˆ¶é …ï¼ˆä¸‹æ‹‰ã€æ²è»¸ã€Sliderâ€¦ï¼‰è¦ç”¨äº®æˆ–æš—çš„åº•ç‰ˆã€‚</summary>
+    private static ThemeVariant GetVariant(AppTheme theme) => theme switch
+    {
+        AppTheme.Dark => ThemeVariant.Dark,
+        _ => ThemeVariant.Light
+    };
+
+    public static bool IsDark(AppTheme theme) => GetVariant(theme) == ThemeVariant.Dark;
+
     public static void ApplyTheme(AppTheme theme)
     {
-        lock (_themeLock)
+        var app = Application.Current;
+        if (app == null) return;
+
+        app.RequestedThemeVariant = GetVariant(theme);
+
+        var merged = app.Resources.MergedDictionaries;
+        for (int i = merged.Count - 1; i >= 0; i--)
         {
-            var app = Application.Current;
-            if (app?.Styles == null) return;
-
-            // 1) Åı FluentTheme ¸òµÛ¤Á´« Light/Dark¡AÁ×§K¤º«Ø±±¥ó¡]TextBox¡BComboBox ¤U©Ô¡BPopup µ¥¡^¥X²{¶Â¦â
-            app.RequestedThemeVariant = theme switch
+            if (merged[i] is ResourceInclude include &&
+                include.Source?.ToString().Contains(PaletteFolder, StringComparison.OrdinalIgnoreCase) == true)
             {
-                AppTheme.Light => ThemeVariant.Light,
-                AppTheme.Dark => ThemeVariant.Dark,
-                _ => ThemeVariant.Dark
-            };
-
-            // 2) ²¾°£¬J¦³ªº¦Û­q¥DÃD StyleInclude¡]Á×§K­«ÂĞ¥[¤J¡^
-            for (int i = app.Styles.Count - 1; i >= 0; i--)
-            {
-                if (app.Styles[i] is StyleInclude styleInclude &&
-                    styleInclude.Source is not null)
-                {
-                    var path = styleInclude.Source.ToString() ?? string.Empty;
-                    if (path.Contains("Assets/Styles/LightTheme.axaml", StringComparison.OrdinalIgnoreCase) ||
-                        path.Contains("Assets/Styles/DarkTheme.axaml", StringComparison.OrdinalIgnoreCase))
-                    {
-                        app.Styles.RemoveAt(i);
-                    }
-                }
-            }
-
-            // 3) ¸ü¤J¹ïÀ³¥DÃDªº¦Û­q¼Ë¦¡
-            string themePath = theme switch
-            {
-                AppTheme.Light => $"avares://{Global.AssemblyName}/Assets/Styles/LightTheme.axaml",
-                AppTheme.Dark => $"avares://{Global.AssemblyName}/Assets/Styles/DarkTheme.axaml",
-                _ => $"avares://{Global.AssemblyName}/Assets/Styles/DarkTheme.axaml"
-            };
-
-            try
-            {
-                var themeStyle = new StyleInclude(new Uri($"avares://{Global.AssemblyName}/"))
-                {
-                    Source = new Uri(themePath)
-                };
-                app.Styles.Add(themeStyle);
-            }
-            catch
-            {
-                // ¸ü¤J¥¢±Ñ®É©¿²¤¡AÁ×§K±Y¼ì
+                merged.RemoveAt(i);
             }
         }
+
+        var baseUri = new Uri($"avares://{Global.AssemblyName}/");
+        merged.Add(new ResourceInclude(baseUri)
+        {
+            Source = new Uri($"avares://{Global.AssemblyName}/{PaletteFolder}{GetPaletteFile(theme)}")
+        });
     }
 
     public static void NextTheme()
     {
         var values = Enum.GetValues<AppTheme>();
-        var currentIndex = Array.IndexOf(values, CurrentTheme);
-        var nextIndex = (currentIndex + 1) % values.Length;
+        var nextIndex = (Array.IndexOf(values, CurrentTheme) + 1) % values.Length;
         CurrentTheme = values[nextIndex];
     }
 
-    public static string GetThemeName(AppTheme theme)
+    public static string GetThemeName(AppTheme theme) => theme switch
     {
-        return theme switch
-        {
-            AppTheme.Light => LanguageManager.GetText("ThemeLight", "¥ú½u¼Ò¦¡"),
-            AppTheme.Dark => LanguageManager.GetText("ThemeDark", "·t¶Â¼Ò¦¡"),
-            _ => LanguageManager.GetText("ThemeDark", "·t¶Â¼Ò¦¡")
-        };
-    }
+        AppTheme.Light => LanguageManager.GetText("ThemeLight", "å…‰ç·šæ¨¡å¼"),
+        AppTheme.Tiffany => LanguageManager.GetText("ThemeTiffany", "è’‚èŠ¬å¦®è—"),
+        _ => LanguageManager.GetText("ThemeDark", "GitHub æš—é»‘")
+    };
 
+    /// <summary>ä¸‹æ‹‰é¸å–®é¡¯ç¤ºé †åºã€‚</summary>
     public static List<(AppTheme Theme, string Name)> GetAllThemes()
     {
-        return new List<(AppTheme, string)>
-        {
-            (AppTheme.Dark, LanguageManager.GetText("ThemeDark", "·t¶Â¼Ò¦¡")),
-            (AppTheme.Light, LanguageManager.GetText("ThemeLight", "¥ú½u¼Ò¦¡"))
-        };
+        return new[] { AppTheme.Dark, AppTheme.Light, AppTheme.Tiffany }
+            .Select(t => (t, GetThemeName(t)))
+            .ToList();
     }
 }

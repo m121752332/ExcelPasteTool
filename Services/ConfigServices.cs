@@ -1,5 +1,4 @@
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace ExcelPasteTool;
 
@@ -7,11 +6,19 @@ public class AppConfig
 {
     public string Language { get; set; } = "TraditionalChinese";
     public string Theme { get; set; } = "Dark";
+    /// <summary>字型名稱；空字串代表使用內建 Noto Sans TC。</summary>
+    public string FontFamily { get; set; } = "";
+    /// <summary>基本字體大小（10 ~ 24）。</summary>
+    public double FontSize { get; set; } = 14;
 }
 
 public static class ConfigServices
 {
-    private static readonly string ConfigPath = "config.json";
+    /// <summary>
+    /// 設定檔固定放在執行檔旁邊，避免從不同工作目錄啟動時讀到不同設定。
+    /// </summary>
+    public static readonly string ConfigPath = Path.Combine(AppContext.BaseDirectory, "config.json");
+
     public static AppConfig Config { get; private set; } = new();
 
     public static void Load()
@@ -29,7 +36,7 @@ public static class ConfigServices
         }
         else
         {
-            Console.WriteLine($"[ĵ�i] �����]�w��: {ConfigPath}");
+            Console.WriteLine($"[警告] 找不到設定檔，將使用預設值: {ConfigPath}");
         }
     }
 

@@ -49,7 +49,7 @@ public class DataItem : INotifyPropertyChanged
         Value = value;
     }
 
-    // Åı¥~³¡¥i¦b¥DÃD©Î»y¨¥¤Á´««á¡A±j¨î¨ê·s»P¼Ë¦¡¬ÛÃöªºÄİ©Ê¡]¨Ò¦p¦æ©³¦â¡^
+    // è®“å¤–éƒ¨å¯åœ¨ä¸»é¡Œæˆ–èªè¨€åˆ‡æ›å¾Œï¼Œå¼·åˆ¶åˆ·æ–°èˆ‡æ¨£å¼ç›¸é—œçš„å±¬æ€§ï¼ˆä¾‹å¦‚è¡Œåº•è‰²ï¼‰
     public void NotifyStyleChanged()
     {
         OnPropertyChanged(nameof(IsEven));

@@ -1,4 +1,6 @@
 {
   "Language": "TraditionalChinese",
-  "Theme": "Dark"
+  "Theme": "Dark",
+  "FontFamily": "",
+  "FontSize": 14
 }

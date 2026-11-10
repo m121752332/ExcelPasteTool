@@ -5,13 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- ©w¸q¤@²Õ¡uAvalonia ®a±Ú¡v -->
+    <!-- å®šç¾©ä¸€çµ„ã€ŒAvalonia å®¶æ—ã€ -->
     <AvaloniaPackages Include="Avalonia" />
     <AvaloniaPackages Include="Avalonia.Desktop" />
     <AvaloniaPackages Include="Avalonia.Controls.DataGrid" />
     <AvaloniaPackages Include="Avalonia.Themes.Fluent" />
 
-    <!-- ¹ï¾ã²Õ¤@¦¸«ü©wª©¥» -->
+    <!-- å°æ•´çµ„ä¸€æ¬¡æŒ‡å®šç‰ˆæœ¬ -->
     <PackageVersion Include="@(AvaloniaPackages)" Version="$(AvaloniaVersion)" />
 
     <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />

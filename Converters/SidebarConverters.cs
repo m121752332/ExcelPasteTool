@@ -6,60 +6,30 @@ namespace ExcelPasteTool;
 
 public class SidebarWidthConverter : IValueConverter
 {
-    // ¦¹Âà´«¾¹¥Î©ó°¼ÃäÄæ¼e«×¡A®Ú¾Ú¬O§_®i¶}§ïÅÜ¼e«×
+    // æ­¤è½‰æ›å™¨ç”¨æ–¼å´é‚Šæ¬„å¯¬åº¦ï¼Œæ ¹æ“šæ˜¯å¦å±•é–‹æ”¹è®Šå¯¬åº¦
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        // ¦pªG value ¬O true¡]®i¶}¡^¡A«h¦^¶Ç 180¡A§_«h¦^¶Ç 56
+        // å¦‚æžœ value æ˜¯ trueï¼ˆå±•é–‹ï¼‰ï¼Œå‰‡å›žå‚³ 150ï¼Œå¦å‰‡å›žå‚³ 56
         if (value is bool isExpanded)
-            return isExpanded ? 100 : 56;
-        // ¹w³]¼e«× 56
+            return isExpanded ? 150 : 56;
+        // é è¨­å¯¬åº¦ 56
         return 56;
     }
-    // ¦¹¤èªk¥¼¹ê§@¡A¦]¬°¥u¥Î©ó³æ¦V¸ê®ÆÃ´µ²
+    // æ­¤æ–¹æ³•æœªå¯¦ä½œï¼Œå› ç‚ºåªç”¨æ–¼å–®å‘è³‡æ–™ç¹«çµ
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
 }
 
 public class SidebarExpandVisibilityConverter : IValueConverter
 {
-    // ¦¹Âà´«¾¹¥Î©ó°¼ÃäÄæ®i¶}ª¬ºAªº¥i¨£©Ê
+    // æ­¤è½‰æ›å™¨ç”¨æ–¼å´é‚Šæ¬„å±•é–‹ç‹€æ…‹çš„å¯è¦‹æ€§
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        // ¦pªG value ¬O true¡]®i¶}¡^¡A«h¦^¶Ç true¡A§_«h¦^¶Ç false
+        // å¦‚æžœ value æ˜¯ trueï¼ˆå±•é–‹ï¼‰ï¼Œå‰‡å›žå‚³ trueï¼Œå¦å‰‡å›žå‚³ false
         if (value is bool isExpanded)
             return isExpanded;
-        // ¹w³]¬°¤£¥i¨£
+        // é è¨­ç‚ºä¸å¯è¦‹
         return false;
     }
-    // ¦¹¤èªk¥¼¹ê§@¡A¦]¬°¥u¥Î©ó³æ¦V¸ê®ÆÃ´µ²
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
-}
-
-public class SidebarSelectedBarConverter : IValueConverter
-{
-    // ¦¹Âà´«¾¹¥Î©ó°¼ÃäÄæ¿ï¨ú¾É¤Þ±øªºÃC¦â
-    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        // ¦pªG value ¬O true¡]³Q¿ï¨ú¡^¡A«h¦^¶Çºñ¦â #2ecc40
-        if (value is bool isSelected && isSelected)
-            return "#2ecc40";
-        // ¥¼¿ï¨ú«h¦^¶Ç³z©ú
-        return "Transparent";
-    }
-    // ¦¹¤èªk¥¼¹ê§@¡A¦]¬°¥u¥Î©ó³æ¦V¸ê®ÆÃ´µ²
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
-}
-
-public class SidebarSelectedBackgroundConverter : IValueConverter
-{
-    // ¦¹Âà´«¾¹¥Î©ó°¼ÃäÄæ«ö¶sªº­I´º¦â¡A®Ú¾Ú¬O§_¿ï¨ú§ïÅÜÃC¦â
-    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-    {
-        // ¦pªG value ¬O true¡]³Q¿ï¨ú¡^¡A«h¦^¶Ç¶Â¦â #232323
-        if (value is bool isSelected && isSelected)
-            return "#232323";
-        // ¥¼¿ï¨ú«h¦^¶Ç³z©ú
-        return "Transparent";
-    }
-    // ¦¹¤èªk¥¼¹ê§@¡A¦]¬°¥u¥Î©ó³æ¦V¸ê®ÆÃ´µ²
+    // æ­¤æ–¹æ³•æœªå¯¦ä½œï¼Œå› ç‚ºåªç”¨æ–¼å–®å‘è³‡æ–™ç¹«çµ
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture) => throw new NotImplementedException();
 }
