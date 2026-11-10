@@ -62,10 +62,12 @@ ExcelPasteTool/
 │   ├── 📂 Logos/              # 專案 LOGO 或品牌相關圖
 │   │   └── logo.ico            # 應用程式圖示
 │   ├── 📂 Fonts/              # 自訂字型檔
-│   └── 📂 Styles/             # 全局樣式（Theme.axaml、字型設定等）
-│       ├── DarkTheme.axaml     # 黑暗主題樣式
-│       ├── LightTheme.axaml    # 光線主題樣式
-│       └── SidebarTheme.axaml  # 側邊欄主題樣式
+│   ├── 📂 Themes/             # 各主題配色（只放顏色 Token）
+│   │   ├── GitHubDarkPalette.axaml # GitHub 暗黑配色
+│   │   ├── LightPalette.axaml  # 光線模式配色
+│   │   └── TiffanyPalette.axaml # 蒂芬妮藍配色
+│   └── 📂 Styles/             # 共用樣式
+│       └── AppStyles.axaml     # 所有主題共用的版面樣式
 │
 ├── 📂 Controls/                # 自訂可重用控件（UserControl）
 │   └── ...
