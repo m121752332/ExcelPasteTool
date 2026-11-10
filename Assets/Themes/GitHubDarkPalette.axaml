@@ -1,0 +1,53 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!-- GitHub Dark 配色（參考 github.com 深色主題 Primer 色票） -->
+  <!-- 只放顏色 Token，版面樣式統一寫在 Assets/Styles/AppStyles.axaml -->
+  <SolidColorBrush x:Key="WindowBackgroundBrush" Color="#0D1117"/>
+  <SolidColorBrush x:Key="PanelBackgroundBrush" Color="#161B22"/>
+  <SolidColorBrush x:Key="PanelBorderBrush" Color="#30363D"/>
+  <SolidColorBrush x:Key="InputBackgroundBrush" Color="#0D1117"/>
+  <SolidColorBrush x:Key="InputBorderBrush" Color="#30363D"/>
+  <SolidColorBrush x:Key="InputFocusBorderBrush" Color="#1F6FEB"/>
+  <SolidColorBrush x:Key="TextPrimaryBrush" Color="#E6EDF3"/>
+  <SolidColorBrush x:Key="TextSecondaryBrush" Color="#8B949E"/>
+  <SolidColorBrush x:Key="TextOnAccentBrush" Color="#FFFFFF"/>
+  <SolidColorBrush x:Key="AccentBrush" Color="#238636"/>
+  <SolidColorBrush x:Key="AccentHoverBrush" Color="#2EA043"/>
+  <SolidColorBrush x:Key="AccentPressedBrush" Color="#196C2E"/>
+  <SolidColorBrush x:Key="AccentTextBrush" Color="#58A6FF"/>
+  <SolidColorBrush x:Key="SqlOutputBrush" Color="#3FB950"/>
+  <SolidColorBrush x:Key="DangerBrush" Color="#F85149"/>
+  <SolidColorBrush x:Key="DangerHoverBrush" Color="#DA3633"/>
+  <SolidColorBrush x:Key="ControlBackgroundBrush" Color="#21262D"/>
+  <SolidColorBrush x:Key="ControlHoverBrush" Color="#30363D"/>
+  <SolidColorBrush x:Key="ControlBorderBrush" Color="#363B42"/>
+  <SolidColorBrush x:Key="TableHeaderBackgroundBrush" Color="#161B22"/>
+  <SolidColorBrush x:Key="TableOddRowBrush" Color="#0D1117"/>
+  <SolidColorBrush x:Key="TableEvenRowBrush" Color="#161B22"/>
+  <SolidColorBrush x:Key="TableRowHoverBrush" Color="#1C2128"/>
+  <SolidColorBrush x:Key="TableGridLineBrush" Color="#21262D"/>
+  <SolidColorBrush x:Key="SidebarBackgroundBrush" Color="#010409"/>
+  <SolidColorBrush x:Key="SidebarSelectedBrush" Color="#161B22"/>
+  <SolidColorBrush x:Key="SidebarHoverBrush" Color="#0D1117"/>
+  <SolidColorBrush x:Key="SidebarTextBrush" Color="#E6EDF3"/>
+  <SolidColorBrush x:Key="SidebarIndicatorBrush" Color="#F78166"/>
+  <SolidColorBrush x:Key="SidebarIconBrush" Color="#8B949E"/>
+  <SolidColorBrush x:Key="SelectionBrush" Color="#1F6FEB"/>
+  <SolidColorBrush x:Key="SelectionTextBrush" Color="#FFFFFF"/>
+  <SolidColorBrush x:Key="SplitterBrush" Color="#30363D"/>
+  <SolidColorBrush x:Key="CopyButtonBackgroundBrush" Color="#21262D"/>
+  <SolidColorBrush x:Key="CopyButtonHoverBrush" Color="#30363D"/>
+  <SolidColorBrush x:Key="CopyButtonForegroundBrush" Color="#C9D1D9"/>
+  <SolidColorBrush x:Key="EmptyStateBrush" Color="#6E7681"/>
+  <SolidColorBrush x:Key="PasteIconBrush" Color="#FFFFFF"/>
+  <!-- 下拉選單彈出清單 -->
+  <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#161B22"/>
+  <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#30363D"/>
+  <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="#21262D"/>
+  <!-- 覆寫 Fluent 內建控制項（Slider、ComboBox 焦點等）的強調色 -->
+  <Color x:Key="SystemAccentColor">#1F6FEB</Color>
+  <Color x:Key="SystemAccentColorDark1">#1F6FEB</Color>
+  <Color x:Key="SystemAccentColorDark2">#1F6FEB</Color>
+  <Color x:Key="SystemAccentColorLight1">#1F6FEB</Color>
+  <Color x:Key="SystemAccentColorLight2">#1F6FEB</Color>
+</ResourceDictionary>

@@ -3,24 +3,33 @@ using Avalonia.Markup.Xaml.Styling;
 using Avalonia.Styling;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ExcelPasteTool;
 
+/// <summary>
+/// App 主題。列舉名稱會存進 config.json，請勿更名（Dark 保留給舊設定相容，現在是 GitHub Dark 配色）。
+/// </summary>
 public enum AppTheme
 {
     Light,
-    Dark
+    Dark,
+    Tiffany
 }
 
+/// <summary>
+/// 主題管理：每個主題只是一份配色 ResourceDictionary（Assets/Themes/*Palette.axaml），
+/// 切換時替換 Application.Resources.MergedDictionaries 中的配色，
+/// 樣式（Assets/Styles/AppStyles.axaml）透過 DynamicResource 自動套用新顏色。
+/// </summary>
 public static class ThemeManager
 {
-    private static readonly object _themeLock = new();
+    private const string PaletteFolder = "Assets/Themes/";
 
-    // 預設主題
     private static AppTheme _currentTheme = AppTheme.Dark;
 
-    public static AppTheme CurrentTheme 
-    { 
+    public static AppTheme CurrentTheme
+    {
         get => _currentTheme;
         set
         {
@@ -35,83 +44,65 @@ public static class ThemeManager
 
     public static event Action? ThemeChanged;
 
+    private static string GetPaletteFile(AppTheme theme) => theme switch
+    {
+        AppTheme.Light => "LightPalette.axaml",
+        AppTheme.Tiffany => "TiffanyPalette.axaml",
+        _ => "GitHubDarkPalette.axaml"
+    };
+
+    /// <summary>Fluent 內建控制項（下拉、捲軸、Slider…）要用亮或暗的底版。</summary>
+    private static ThemeVariant GetVariant(AppTheme theme) => theme switch
+    {
+        AppTheme.Dark => ThemeVariant.Dark,
+        _ => ThemeVariant.Light
+    };
+
+    public static bool IsDark(AppTheme theme) => GetVariant(theme) == ThemeVariant.Dark;
+
     public static void ApplyTheme(AppTheme theme)
     {
-        lock (_themeLock)
+        var app = Application.Current;
+        if (app == null) return;
+
+        app.RequestedThemeVariant = GetVariant(theme);
+
+        var merged = app.Resources.MergedDictionaries;
+        for (int i = merged.Count - 1; i >= 0; i--)
         {
-            var app = Application.Current;
-            if (app?.Styles == null) return;
-
-            // 1) 讓 FluentTheme 跟著切換 Light/Dark，避免內建控件（TextBox、ComboBox 下拉、Popup 等）出現黑色
-            app.RequestedThemeVariant = theme switch
+            if (merged[i] is ResourceInclude include &&
+                include.Source?.ToString().Contains(PaletteFolder, StringComparison.OrdinalIgnoreCase) == true)
             {
-                AppTheme.Light => ThemeVariant.Light,
-                AppTheme.Dark => ThemeVariant.Dark,
-                _ => ThemeVariant.Dark
-            };
-
-            // 2) 移除既有的自訂主題 StyleInclude（避免重覆加入）
-            for (int i = app.Styles.Count - 1; i >= 0; i--)
-            {
-                if (app.Styles[i] is StyleInclude styleInclude &&
-                    styleInclude.Source is not null)
-                {
-                    var path = styleInclude.Source.ToString() ?? string.Empty;
-                    if (path.Contains("Assets/Styles/LightTheme.axaml", StringComparison.OrdinalIgnoreCase) ||
-                        path.Contains("Assets/Styles/DarkTheme.axaml", StringComparison.OrdinalIgnoreCase))
-                    {
-                        app.Styles.RemoveAt(i);
-                    }
-                }
-            }
-
-            // 3) 載入對應主題的自訂樣式
-            string themePath = theme switch
-            {
-                AppTheme.Light => $"avares://{Global.AssemblyName}/Assets/Styles/LightTheme.axaml",
-                AppTheme.Dark => $"avares://{Global.AssemblyName}/Assets/Styles/DarkTheme.axaml",
-                _ => $"avares://{Global.AssemblyName}/Assets/Styles/DarkTheme.axaml"
-            };
-
-            try
-            {
-                var themeStyle = new StyleInclude(new Uri($"avares://{Global.AssemblyName}/"))
-                {
-                    Source = new Uri(themePath)
-                };
-                app.Styles.Add(themeStyle);
-            }
-            catch
-            {
-                // 載入失敗時忽略，避免崩潰
+                merged.RemoveAt(i);
             }
         }
+
+        var baseUri = new Uri($"avares://{Global.AssemblyName}/");
+        merged.Add(new ResourceInclude(baseUri)
+        {
+            Source = new Uri($"avares://{Global.AssemblyName}/{PaletteFolder}{GetPaletteFile(theme)}")
+        });
     }
 
     public static void NextTheme()
     {
         var values = Enum.GetValues<AppTheme>();
-        var currentIndex = Array.IndexOf(values, CurrentTheme);
-        var nextIndex = (currentIndex + 1) % values.Length;
+        var nextIndex = (Array.IndexOf(values, CurrentTheme) + 1) % values.Length;
         CurrentTheme = values[nextIndex];
     }
 
-    public static string GetThemeName(AppTheme theme)
+    public static string GetThemeName(AppTheme theme) => theme switch
     {
-        return theme switch
-        {
-            AppTheme.Light => LanguageManager.GetText("ThemeLight", "光線模式"),
-            AppTheme.Dark => LanguageManager.GetText("ThemeDark", "暗黑模式"),
-            _ => LanguageManager.GetText("ThemeDark", "暗黑模式")
-        };
-    }
+        AppTheme.Light => LanguageManager.GetText("ThemeLight", "光線模式"),
+        AppTheme.Tiffany => LanguageManager.GetText("ThemeTiffany", "蒂芬妮藍"),
+        _ => LanguageManager.GetText("ThemeDark", "GitHub 暗黑")
+    };
 
+    /// <summary>下拉選單顯示順序。</summary>
     public static List<(AppTheme Theme, string Name)> GetAllThemes()
     {
-        return new List<(AppTheme, string)>
-        {
-            (AppTheme.Dark, LanguageManager.GetText("ThemeDark", "暗黑模式")),
-            (AppTheme.Light, LanguageManager.GetText("ThemeLight", "光線模式"))
-        };
+        return new[] { AppTheme.Dark, AppTheme.Light, AppTheme.Tiffany }
+            .Select(t => (t, GetThemeName(t)))
+            .ToList();
     }
 }

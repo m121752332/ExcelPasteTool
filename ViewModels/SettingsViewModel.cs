@@ -15,9 +15,20 @@ public class SettingsViewModel : INotifyPropertyChanged
     public LocalizedText LanguageTitleText { get; } = new("LanguageLabel", "語言");
     public LocalizedText LanguageDescText { get; } = new("LanguageDesc", "變更 App 的語言設定");
     public LocalizedText ThemeTitleText { get; } = new("ThemeLabel", "主題");
+    public LocalizedText ThemeDescText { get; } = new("ThemeDesc", "選擇 App 的配色主題");
+    public LocalizedText FontTitleText { get; } = new("FontTitle", "字型");
+    public LocalizedText FontDescText { get; } = new("FontDesc", "選擇介面與資料區使用的字型");
+    public LocalizedText FontSizeTitleText { get; } = new("FontSizeTitle", "字體大小");
+    public LocalizedText FontSizeDescText { get; } = new("FontSizeDesc", "調整整個 App 的文字大小");
+    public LocalizedText FontPreviewText { get; } = new("FontPreviewText", "預覽：TIPTOP 料號 A-001 | 資料分隔 1234567890");
+    public LocalizedText FontResetText { get; } = new("FontResetButton", "還原預設");
+
+    public double MinFontSize => FontManager.MinFontSize;
+    public double MaxFontSize => FontManager.MaxFontSize;
 
     public ObservableCollection<string> Languages { get; } = new();
     public ObservableCollection<string> Themes { get; } = new();
+    public ObservableCollection<string> FontFamilies { get; } = new();
 
     public Action<string>? EnqueueToast { get; set; }
 
@@ -89,6 +100,74 @@ public class SettingsViewModel : INotifyPropertyChanged
         }
     }
 
+    private string _selectedFontFamily = "";
+
+    /// <summary>下拉選單顯示用的字型名稱；第一項（內建字型）對應 config 中的空字串。</summary>
+    public string SelectedFontFamily
+    {
+        get => _selectedFontFamily;
+        set
+        {
+            if (_selectedFontFamily == value || string.IsNullOrEmpty(value) || _isUpdating) return;
+            _selectedFontFamily = value;
+            var fontKey = value == FontManager.BuiltInFontDisplayName ? FontManager.DefaultFontKey : value;
+            FontManager.ApplyAndSave(fontKey, FontManager.CurrentFontSize);
+            EnqueueToast?.Invoke(LanguageManager.GetText("FontChangedToast", "字型設定已儲存"));
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>基本字體大小，變更後立即套用並存檔。</summary>
+    public double FontSize
+    {
+        get => FontManager.CurrentFontSize;
+        set
+        {
+            var size = FontManager.ClampSize(value);
+            if (size == FontManager.CurrentFontSize) return;
+            FontManager.ApplyAndSave(FontManager.CurrentFontFamily, size);
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(FontSizeDisplay));
+        }
+    }
+
+    public string FontSizeDisplay => $"{FontManager.CurrentFontSize:0} pt";
+
+    public void IncreaseFontSize() => FontSize = FontManager.CurrentFontSize + 1;
+    public void DecreaseFontSize() => FontSize = FontManager.CurrentFontSize - 1;
+
+    /// <summary>字型與字體大小還原為預設值。</summary>
+    public void ResetFont()
+    {
+        FontManager.ApplyAndSave(FontManager.DefaultFontKey, FontManager.DefaultFontSize);
+        _selectedFontFamily = FontManager.BuiltInFontDisplayName;
+        OnPropertyChanged(nameof(SelectedFontFamily));
+        OnPropertyChanged(nameof(FontSize));
+        OnPropertyChanged(nameof(FontSizeDisplay));
+        EnqueueToast?.Invoke(LanguageManager.GetText("FontChangedToast", "字型設定已儲存"));
+    }
+
+    private void RefreshFontFamilies()
+    {
+        FontFamilies.Clear();
+        FontFamilies.Add(FontManager.BuiltInFontDisplayName);
+        foreach (var name in FontManager.GetSystemFontFamilies())
+            FontFamilies.Add(name);
+
+        var current = FontManager.CurrentFontFamily;
+        if (string.IsNullOrEmpty(current))
+        {
+            _selectedFontFamily = FontManager.BuiltInFontDisplayName;
+        }
+        else
+        {
+            // 設定檔裡的字型這台電腦沒有時，仍保留在清單中，避免下拉選單顯示空白
+            if (!FontFamilies.Contains(current))
+                FontFamilies.Insert(1, current);
+            _selectedFontFamily = current;
+        }
+    }
+
     private SettingsViewModel()
     {
         Debug.WriteLine("SettingsViewModel constructor started");
@@ -137,8 +216,10 @@ public class SettingsViewModel : INotifyPropertyChanged
         // 先清空選中項
         _selectedLanguage = "";
         _selectedTheme = "";
+        _selectedFontFamily = "";
         OnPropertyChanged(nameof(SelectedLanguage));
         OnPropertyChanged(nameof(SelectedTheme));
+        OnPropertyChanged(nameof(SelectedFontFamily));
         
         // 重新填充語言選項
         var oldLanguageCount = Languages.Count;
@@ -185,11 +266,16 @@ public class SettingsViewModel : INotifyPropertyChanged
         Debug.WriteLine($"Final selected language: '{_selectedLanguage}'");
         Debug.WriteLine($"Final selected theme: '{_selectedTheme}'");
         
+        RefreshFontFamilies();
+
         _isUpdating = false;
         
         // 最後通知選中項更新
         OnPropertyChanged(nameof(SelectedLanguage));
         OnPropertyChanged(nameof(SelectedTheme));
+        OnPropertyChanged(nameof(SelectedFontFamily));
+        OnPropertyChanged(nameof(FontSize));
+        OnPropertyChanged(nameof(FontSizeDisplay));
         
         // 更新本地化文字
         OnPropertyChanged(nameof(TitleText));

@@ -36,8 +36,9 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <AvaloniaResource Include="Assets\Styles\DarkTheme.axaml" />
-    <AvaloniaResource Include="Assets\Styles\LightTheme.axaml" />
+    <!-- 內建字型（預設字型），其餘字重檔案未打包以控制執行檔大小 -->
+    <AvaloniaResource Include="Assets\Fonts\NotoSansTC-Regular.ttf" />
+    <AvaloniaResource Include="Assets\Fonts\NotoSansTC-Bold.ttf" />
   </ItemGroup>
 
   <ItemGroup>

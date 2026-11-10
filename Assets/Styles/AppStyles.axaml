@@ -1,0 +1,323 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!--
+    全 App 共用樣式。
+    顏色一律使用 DynamicResource 取自 Assets/Themes/*Palette.axaml（由 ThemeManager 切換），
+    字型與字體大小取自 AppFontFamily / AppFontSize*（由 FontManager 依設定寫入）。
+    新增主題只要再加一份 Palette，不需要複製這份樣式。
+  -->
+
+  <!-- ===== 全域 ===== -->
+  <Style Selector="Window">
+    <Setter Property="Background" Value="{DynamicResource WindowBackgroundBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}"/>
+    <Setter Property="FontSize" Value="{DynamicResource AppFontSize}"/>
+  </Style>
+
+  <!-- 注意：不要對所有 TextBlock 設定 Foreground，否則按鈕 hover 時文字無法跟著變色；
+       一般文字顏色由 Window.Foreground 繼承。 -->
+
+  <Style Selector="TextBlock.muted">
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+    <Setter Property="FontSize" Value="{DynamicResource AppFontSizeSmall}"/>
+  </Style>
+
+  <Style Selector="Path">
+    <Setter Property="Fill" Value="{DynamicResource AccentTextBrush}"/>
+  </Style>
+
+  <!-- 按鈕內圖示顏色：依按鈕種類指定（Path 不會繼承 Foreground） -->
+  <Style Selector="Button.primary Path">
+    <Setter Property="Fill" Value="{DynamicResource TextOnAccentBrush}"/>
+  </Style>
+  <Style Selector="Button.copy-button Path">
+    <Setter Property="Fill" Value="{DynamicResource CopyButtonForegroundBrush}"/>
+  </Style>
+  <Style Selector="Button.secondary Path">
+    <Setter Property="Fill" Value="{DynamicResource DangerBrush}"/>
+  </Style>
+  <Style Selector="Button.secondary:pointerover Path, Button.secondary:pressed Path">
+    <Setter Property="Fill" Value="White"/>
+  </Style>
+
+  <!-- ===== 面板 ===== -->
+  <Style Selector="Border.panel">
+    <Setter Property="Background" Value="{DynamicResource PanelBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource PanelBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="BoxShadow" Value="0 1 3 0 #1F000000"/>
+  </Style>
+
+  <Style Selector="TextBlock.section-title">
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="FontSize" Value="{DynamicResource AppFontSizeLarge}"/>
+    <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
+  </Style>
+
+  <Style Selector="TextBlock.page-title">
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="FontSize" Value="{DynamicResource AppFontSizeTitle}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+
+  <Style Selector="TextBlock.field-label">
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+
+  <!-- 數量徽章 -->
+  <Style Selector="Border.badge">
+    <Setter Property="Background" Value="{DynamicResource ControlHoverBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="10"/>
+    <Setter Property="Padding" Value="8,1"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+  </Style>
+  <Style Selector="Border.badge TextBlock">
+    <Setter Property="FontSize" Value="{DynamicResource AppFontSizeSmall}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+  </Style>
+
+  <!-- ===== 輸入區 ===== -->
+  <Style Selector="TextBox.input">
+    <Setter Property="FontFamily" Value="{DynamicResource AppFontFamily}"/>
+    <Setter Property="FontSize" Value="{DynamicResource AppFontSize}"/>
+    <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource InputBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="Padding" Value="10,8"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    <Setter Property="CaretBrush" Value="{DynamicResource AccentTextBrush}"/>
+    <Setter Property="SelectionBrush" Value="{DynamicResource SelectionBrush}"/>
+    <Setter Property="SelectionForegroundBrush" Value="{DynamicResource SelectionTextBrush}"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+    <Setter Property="AcceptsReturn" Value="True"/>
+    <Setter Property="VerticalContentAlignment" Value="Top"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="VerticalAlignment" Value="Stretch"/>
+    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+  </Style>
+  <!-- 蓋掉 Fluent 預設的 hover / focus 底色，讓三個主題一致 -->
+  <Style Selector="TextBox.input:pointerover /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource InputFocusBorderBrush}"/>
+  </Style>
+  <Style Selector="TextBox.input:focus /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource InputFocusBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+  </Style>
+  <Style Selector="TextBox.input:pointerover">
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+  <Style Selector="TextBox.input:focus">
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+  <Style Selector="TextBox.input /template/ TextBlock#PART_Watermark">
+    <Setter Property="Foreground" Value="{DynamicResource EmptyStateBrush}"/>
+  </Style>
+  <Style Selector="TextBox.sql-output, TextBox.sql-output:pointerover, TextBox.sql-output:focus">
+    <Setter Property="Foreground" Value="{DynamicResource SqlOutputBrush}"/>
+  </Style>
+
+  <!-- ===== 按鈕 ===== -->
+  <Style Selector="Button.primary">
+    <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="14,7"/>
+  </Style>
+  <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource AccentHoverBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}"/>
+  </Style>
+  <Style Selector="Button.primary:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource AccentPressedBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextOnAccentBrush}"/>
+  </Style>
+
+  <Style Selector="Button.secondary">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="{DynamicResource DangerBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource DangerBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="Padding" Value="12,6"/>
+  </Style>
+  <Style Selector="Button.secondary:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource DangerBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource DangerBrush}"/>
+    <Setter Property="Foreground" Value="White"/>
+  </Style>
+  <Style Selector="Button.secondary:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource DangerHoverBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource DangerHoverBrush}"/>
+    <Setter Property="Foreground" Value="White"/>
+  </Style>
+
+  <Style Selector="Button.ghost">
+    <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="Padding" Value="10,5"/>
+  </Style>
+  <Style Selector="Button.ghost:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource ControlHoverBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource InputFocusBorderBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+
+  <Style Selector="Button.copy-button">
+    <Setter Property="Background" Value="{DynamicResource CopyButtonBackgroundBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource CopyButtonForegroundBrush}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="Width" Value="28"/>
+    <Setter Property="Height" Value="28"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+  </Style>
+  <Style Selector="Button.copy-button:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource CopyButtonHoverBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource CopyButtonForegroundBrush}"/>
+  </Style>
+
+  <!-- ===== 下拉選單 ===== -->
+  <Style Selector="ComboBox">
+    <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+  </Style>
+  <Style Selector="ComboBox:pointerover /template/ Border#Background">
+    <Setter Property="Background" Value="{DynamicResource ControlHoverBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource InputFocusBorderBrush}"/>
+  </Style>
+
+  <!-- ===== 表格 ===== -->
+  <Style Selector="Border.table-container">
+    <Setter Property="Background" Value="{DynamicResource TableOddRowBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource TableGridLineBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="ClipToBounds" Value="True"/>
+  </Style>
+  <Style Selector="Grid.data-table-header">
+    <Setter Property="Background" Value="{DynamicResource TableHeaderBackgroundBrush}"/>
+  </Style>
+  <Style Selector="TextBlock.data-table-header">
+    <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+  </Style>
+  <Style Selector="Border.grid-cell">
+    <Setter Property="BorderBrush" Value="{DynamicResource TableGridLineBrush}"/>
+  </Style>
+  <Style Selector="Grid.data-row">
+    <Setter Property="Background" Value="{DynamicResource TableOddRowBrush}"/>
+  </Style>
+  <Style Selector="Grid.data-row.even">
+    <Setter Property="Background" Value="{DynamicResource TableEvenRowBrush}"/>
+  </Style>
+  <Style Selector="Grid.data-row:pointerover">
+    <Setter Property="Background" Value="{DynamicResource TableRowHoverBrush}"/>
+  </Style>
+  <Style Selector="TextBlock.row-number">
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+    <Setter Property="FontSize" Value="{DynamicResource AppFontSizeSmall}"/>
+  </Style>
+  <Style Selector="TextBlock.row-data">
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+  </Style>
+  <Style Selector="TextBlock.empty-state">
+    <Setter Property="Foreground" Value="{DynamicResource EmptyStateBrush}"/>
+    <Setter Property="TextAlignment" Value="Center"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+  </Style>
+
+  <Style Selector="GridSplitter">
+    <Setter Property="Background" Value="Transparent"/>
+  </Style>
+  <Style Selector="GridSplitter:pointerover">
+    <Setter Property="Background" Value="{DynamicResource SplitterBrush}"/>
+  </Style>
+
+  <!-- ===== 側邊欄 ===== -->
+  <Style Selector="Border#SidebarBorder">
+    <Setter Property="Background" Value="{DynamicResource SidebarBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource PanelBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="0,0,1,0"/>
+  </Style>
+  <Style Selector="Border#SidebarBorder TextBlock">
+    <Setter Property="Foreground" Value="{DynamicResource SidebarTextBrush}"/>
+  </Style>
+  <Style Selector="Border#SidebarBorder Path.sidebar-icon">
+    <Setter Property="Fill" Value="{DynamicResource SidebarIconBrush}"/>
+  </Style>
+  <Style Selector="Button.sidebar-toggle">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+  </Style>
+  <Style Selector="Button.sidebar-toggle:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource SidebarHoverBrush}"/>
+  </Style>
+  <Style Selector="Button.sidebar-toggle Path">
+    <Setter Property="Stroke" Value="{DynamicResource SidebarTextBrush}"/>
+  </Style>
+  <Style Selector="Border.sidebar-item">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="CornerRadius" Value="8"/>
+  </Style>
+  <Style Selector="Border.sidebar-item:pointerover">
+    <Setter Property="Background" Value="{DynamicResource SidebarHoverBrush}"/>
+  </Style>
+  <Style Selector="Border.sidebar-item.selected">
+    <Setter Property="Background" Value="{DynamicResource SidebarSelectedBrush}"/>
+  </Style>
+  <Style Selector="Border.sidebar-indicator">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="CornerRadius" Value="2"/>
+  </Style>
+  <Style Selector="Border.sidebar-indicator.selected">
+    <Setter Property="Background" Value="{DynamicResource SidebarIndicatorBrush}"/>
+  </Style>
+  <Style Selector="Button.sidebar-button">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+  </Style>
+  <Style Selector="Button.sidebar-button:pointerover /template/ ContentPresenter, Button.sidebar-button:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="Transparent"/>
+  </Style>
+
+  <!-- ===== 設定頁 ===== -->
+  <Style Selector="Border.setting-card">
+    <Setter Property="Background" Value="{DynamicResource PanelBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource PanelBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="Padding" Value="24,18"/>
+  </Style>
+  <Style Selector="Border.font-preview">
+    <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource InputBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="Padding" Value="14,10"/>
+  </Style>
+</Styles>

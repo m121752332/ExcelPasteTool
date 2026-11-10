@@ -31,9 +31,6 @@ public partial class MainWindow : Window
         foreach (var item in SidebarItems)
             item.SidebarViewModelInstance = Sidebar;
         SidebarItemClickCommand = new RelayCommand<SidebarPage>(OnSidebarItemClick);
-        ThemeManager.ThemeChanged += OnThemeChanged;
-        // 載入側邊欄主題樣式
-        LoadSidebarTheme();
         // 設定視窗標題為組件名稱
         this.Title = System.Reflection.Assembly.GetEntryAssembly()?.GetName().Name ?? "App";
     }
@@ -48,37 +45,6 @@ public partial class MainWindow : Window
     private void SidebarToggleButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         Sidebar.Toggle();
-    }
-
-    private void OnThemeChanged()
-    {
-        LoadSidebarTheme();
-    }
-
-    private void LoadSidebarTheme()
-    {
-        var app = Avalonia.Application.Current;
-        if (app == null) return;
-
-        // 使用 Global.AssemblyName
-        var assemblyName = Global.AssemblyName;
-
-        // 先移除現有的 SidebarTheme
-        for (int i = app.Styles.Count - 1; i >= 0; i--)
-        {
-            if (app.Styles[i] is StyleInclude styleInclude &&
-                styleInclude.Source != null &&
-                styleInclude.Source.AbsolutePath.Contains("SidebarTheme"))
-            {
-                app.Styles.RemoveAt(i);
-            }
-        }
-        // 以 avares 路徑重新加入
-        var sidebarTheme = new StyleInclude(new System.Uri($"avares://{assemblyName}/"))
-        {
-            Source = new System.Uri($"avares://{assemblyName}/Assets/Styles/SidebarTheme.axaml")
-        };
-        app.Styles.Add(sidebarTheme);
     }
 }
 
