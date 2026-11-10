@@ -227,7 +227,7 @@ dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFil
 | --- | --- |
 | `-p:IncludeNativeLibrariesForSelfExtract=true` | 把 Avalonia 的原生函式庫（如 Skia）一起包進單一檔案，輸出目錄只剩一個執行檔 |
 | `-p:EnableCompressionInSingleFile=true` | 壓縮單一檔案，縮小體積，啟動稍慢 |
-| `--self-contained false` | 不含執行階段，體積小，但使用者需自行安裝 .NET 8 Desktop Runtime |
+| `--self-contained false` | 不含執行階段，體積小，但使用者需自行安裝 .NET 8 Runtime（Avalonia 不需要僅供 WPF/WinForms 使用的 Desktop Runtime） |
 
 ### 6.2 發佈設定檔（PublishProfiles）
 
