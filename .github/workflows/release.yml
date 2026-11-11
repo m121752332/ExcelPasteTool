@@ -7,24 +7,35 @@ on:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
       - '[0-9]+.[0-9]+.[0-9]+'
+  # 改到打包流程時，PR 上也跑一次打包（不建立 Release），先確認 macOS .app 等產出正常
+  pull_request:
+    paths:
+      - '.github/workflows/release.yml'
+      - 'packaging/**'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
   publish:
-    runs-on: ubuntu-latest
+    # macOS 版在 macOS runner 上打包，才能用 codesign 對整個 .app 做 ad-hoc 簽章
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         include:
           - rid: win-x64
             asset: DataSplitter_win_x64
+            os: ubuntu-latest
           - rid: linux-x64
             asset: DataSplitter_linux_x64
+            os: ubuntu-latest
           - rid: osx-x64
             asset: DataSplitter_osx_x64
+            os: macos-latest
           - rid: osx-arm64
             asset: DataSplitter_osx_arm64
+            os: macos-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
@@ -34,8 +45,14 @@ jobs:
       - name: Resolve version from tag
         id: ver
         run: |
-          tag="${GITHUB_REF_NAME}"
-          echo "version=${tag#v}" >> "$GITHUB_OUTPUT"
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            tag="${GITHUB_REF_NAME}"
+            v="${tag#v}"
+          else
+            # 非 tag 觸發（PR 試打包）：用 csproj 的版本
+            v=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' ExcelPasteTool.csproj | head -1)
+          fi
+          echo "version=$v" >> "$GITHUB_OUTPUT"
 
       - name: Publish ${{ matrix.rid }}
         run: |
@@ -82,47 +99,68 @@ jobs:
           sys.exit('::error::macOS 執行檔沒有程式碼簽章，Apple Silicon 上會無法執行')
           PY
 
-      # macOS 版附上首次開啟說明（Gatekeeper 會擋未公證的程式）。
-      - name: Add macOS first-run guide
+      # macOS 版包成 DataSplitter.app，Finder 雙擊時才不會先開「終端機」。
+      # zip 根目錄結構（自動更新依賴，請勿任意更動）：
+      #   DataSplitter.app/      程式本體（Info.plist、圖示、ad-hoc 簽章）
+      #   DataSplitter           相容啟動腳本：1.4.1 以前的舊版更新只認根目錄的 DataSplitter
+      #   README_macOS.txt       首次開啟說明
+      # 設定檔改放 ~/Library/Application Support/DataSplitter，不放進 .app（避免破壞簽章封裝）。
+      - name: Build macOS .app bundle
         if: startsWith(matrix.rid, 'osx-')
         run: |
-          cat > out/${{ matrix.rid }}/README_macOS.txt <<'TXT'
+          v="${{ steps.ver.outputs.version }}"
+          app=pkg/DataSplitter.app
+          mkdir -p "$app/Contents/MacOS" "$app/Contents/Resources"
+          mv out/${{ matrix.rid }}/DataSplitter "$app/Contents/MacOS/DataSplitter"
+          chmod +x "$app/Contents/MacOS/DataSplitter"
+          cp packaging/macos/DataSplitter.icns "$app/Contents/Resources/DataSplitter.icns"
+          sed "s/__VERSION__/$v/g" packaging/macos/Info.plist > "$app/Contents/Info.plist"
+          plutil -lint "$app/Contents/Info.plist"
+          codesign --force --sign - "$app"
+          codesign --verify --strict --verbose=2 "$app"
+          cp packaging/macos/DataSplitter pkg/DataSplitter
+          chmod +x pkg/DataSplitter
+          cat > pkg/README_macOS.txt <<'TXT'
           DataSplitter Pro - macOS 首次開啟說明
           =====================================
 
-          本程式沒有 Apple 開發者簽章與公證，用瀏覽器下載後第一次雙擊會出現：
-          「無法打開『DataSplitter』，因為它來自未識別的開發者」。
+          請雙擊「DataSplitter.app」開啟程式（可以拖到「應用程式」資料夾）。
+          資料夾裡另一個名為 DataSplitter 的檔案是給舊版自動更新用的，不用理它。
+
+          本程式沒有 Apple 開發者簽章與公證，用瀏覽器下載後第一次開啟會出現：
+          「無法打開『DataSplitter』，因為它來自未識別的開發者」或「Apple 無法驗證」。
           請先做一次下面任一種方式，之後就能直接雙擊開啟。
 
           方法一：終端機（建議）
             1. 打開「終端機」
             2. 輸入 cd 加一個空格，把這個資料夾拖進終端機視窗，按 Enter
-            3. 依序執行：
+            3. 執行：
                  xattr -dr com.apple.quarantine .
-                 chmod +x DataSplitter
-                 ./DataSplitter
+            4. 回到 Finder 雙擊 DataSplitter.app
 
           方法二：系統設定
-            1. 先雙擊 DataSplitter 一次，讓它被擋下
+            1. 先雙擊 DataSplitter.app 一次，讓它被擋下
             2. 到「系統設定 > 隱私權與安全性」，往下找到「已阻擋『DataSplitter』」
             3. 按「強制打開」（舊版 macOS 為「仍要打開」），輸入密碼確認
 
+          設定檔位置：~/Library/Application Support/DataSplitter/config.json
           之後透過程式內的「檢查更新」取得的新版不會再被擋。
 
           ---------------------------------------------------------------
-          First run on macOS: this app is not notarized by Apple.
-          Open Terminal in this folder and run:
-            xattr -dr com.apple.quarantine .
-            chmod +x DataSplitter
-            ./DataSplitter
-          Or: System Settings > Privacy & Security > "Open Anyway".
+          Open DataSplitter.app. It is not notarized by Apple; on first run either
+          open Terminal in this folder and run:  xattr -dr com.apple.quarantine .
+          or use System Settings > Privacy & Security > "Open Anyway".
           TXT
 
       - name: Zip
         run: |
-          cd out/${{ matrix.rid }}
+          case "${{ matrix.rid }}" in
+            osx-*) cd pkg ;;
+            *) cd out/${{ matrix.rid }} ;;
+          esac
           chmod +x DataSplitter 2>/dev/null || true
-          zip -r -X ../../${{ matrix.asset }}.zip .
+          zip -r -X "$GITHUB_WORKSPACE/${{ matrix.asset }}.zip" .
+          unzip -l "$GITHUB_WORKSPACE/${{ matrix.asset }}.zip"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -131,6 +169,7 @@ jobs:
 
   release:
     needs: publish
+    if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4

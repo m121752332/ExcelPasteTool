@@ -52,6 +52,9 @@ public readonly record struct DownloadProgress(long BytesReceived, long TotalByt
 ///   - 附件須為 .zip，檔名包含平台與架構，例如：
 ///       DataSplitter_win_x64.zip / DataSplitter_linux_x64.zip / DataSplitter_osx_arm64.zip
 ///   - zip 內可以直接放檔案，或只包一層資料夾
+///   - macOS（1.4.2 起）：zip 根目錄放 DataSplitter.app，另附一個名為 DataSplitter 的啟動腳本，
+///     讓 1.4.1 以前（裸執行檔、只認根目錄 DataSplitter）的舊版也能更新過來。
+///     從 .app 執行時，更新會整個替換 .app。
 /// </summary>
 public static class UpdateService
 {
@@ -75,7 +78,13 @@ public static class UpdateService
     public static string WorkDirectory => Path.Combine(Path.GetTempPath(), "DataSplitter_update");
 
     /// <summary>程式所在資料夾（要被覆蓋的位置）。</summary>
-    public static string AppDirectory => AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+    public static string AppDirectory => AppPaths.ExeDirectory;
+
+    /// <summary>macOS 從 .app 執行時的 .app 路徑；其他情況為 null。</summary>
+    private static string? MacBundlePath => AppPaths.MacBundlePath;
+
+    /// <summary>macOS 版 zip 內的 .app 名稱。</summary>
+    private const string MacBundleName = "DataSplitter.app";
 
     /// <summary>目前執行檔的完整路徑。</summary>
     public static string ExecutablePath =>
@@ -304,6 +313,15 @@ public static class UpdateService
             root = entries[0];
 
         var exeName = Path.GetFileName(ExecutablePath);
+        if (MacBundlePath != null)
+        {
+            // 從 .app 執行：新版必須也是 .app，之後整個替換
+            var newExe = Path.Combine(root, MacBundleName, "Contents", "MacOS", exeName);
+            if (!File.Exists(newExe))
+                throw new InvalidDataException($"更新檔內找不到 {MacBundleName}，可能下載到錯誤平台的檔案。");
+            return root;
+        }
+
         if (!File.Exists(Path.Combine(root, exeName)))
             throw new InvalidDataException($"更新檔內找不到 {exeName}，可能下載到錯誤平台的檔案。");
 
@@ -322,7 +340,9 @@ public static class UpdateService
     {
         try
         {
-            var probe = Path.Combine(AppDirectory, $".write_test_{Guid.NewGuid():N}");
+            // .app 會被整個替換，所以要檢查的是 .app 所在的資料夾
+            var dir = MacBundlePath != null ? Path.GetDirectoryName(MacBundlePath)! : AppDirectory;
+            var probe = Path.Combine(dir, $".write_test_{Guid.NewGuid():N}");
             File.WriteAllText(probe, "ok");
             File.Delete(probe);
         }
@@ -363,7 +383,10 @@ public static class UpdateService
         else
         {
             var script = Path.Combine(WorkDirectory, "apply_update.sh");
-            File.WriteAllText(script, BuildShellScript(pid, newFilesRoot, logPath).Replace("\r\n", "\n"), new UTF8Encoding(false));
+            var content = MacBundlePath != null
+                ? BuildMacBundleScript(pid, Path.Combine(newFilesRoot, MacBundleName), MacBundlePath, logPath)
+                : BuildShellScript(pid, newFilesRoot, logPath);
+            File.WriteAllText(script, content.Replace("\r\n", "\n"), new UTF8Encoding(false));
             File.SetUnixFileMode(script, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
             Process.Start(new ProcessStartInfo
             {
@@ -440,6 +463,66 @@ fi
 
 cd ""$WORKDIR"" || cd ""$DST""
 nohup ""$EXE"" ""$ARG"" >/dev/null 2>&1 &
+";
+    }
+
+    /// <summary>
+    /// macOS .app 的更新腳本：等程式結束 → 複製新版 .app 到原位置旁 → 對調 → 以 open 重新啟動。
+    /// 失敗時還原舊版。設定檔在 ~/Library/Application Support，不受替換影響。
+    /// </summary>
+    internal static string BuildMacBundleScript(int pid, string newApp, string app, string logPath)
+    {
+        var exeName = Path.GetFileName(ExecutablePath);
+        return $@"#!/bin/sh
+PID={pid}
+NEWAPP={ShQuote(newApp)}
+APP={ShQuote(app)}
+EXENAME={ShQuote(exeName)}
+LOG={ShQuote(logPath)}
+STAGE=""$APP.update-new""
+BAK=""$APP.update-old""
+
+log() {{ echo ""[$(date '+%Y-%m-%dT%H:%M:%S')] $1"" >> ""$LOG""; }}
+
+copy_tree() {{
+  if command -v ditto >/dev/null 2>&1; then ditto ""$1"" ""$2""; else cp -R ""$1"" ""$2""; fi
+}}
+
+log 'waiting for app to exit'
+i=0
+while kill -0 ""$PID"" 2>/dev/null && [ $i -lt 120 ]; do
+  sleep 0.5
+  i=$((i+1))
+done
+
+ARG='{UpdateFailedArgument}'
+rm -rf ""$STAGE"" ""$BAK""
+if copy_tree ""$NEWAPP"" ""$STAGE"" >> ""$LOG"" 2>&1; then
+  chmod +x ""$STAGE/Contents/MacOS/$EXENAME"" 2>/dev/null
+  xattr -dr com.apple.quarantine ""$STAGE"" 2>/dev/null
+  if mv ""$APP"" ""$BAK"" >> ""$LOG"" 2>&1; then
+    if mv ""$STAGE"" ""$APP"" >> ""$LOG"" 2>&1; then
+      rm -rf ""$BAK""
+      log 'update applied'
+      ARG='{UpdatedArgument}'
+    else
+      log 'swap failed, restoring'
+      rm -rf ""$APP""
+      mv ""$BAK"" ""$APP""
+    fi
+  else
+    log 'cannot move old app'
+  fi
+else
+  log 'copy failed'
+fi
+rm -rf ""$STAGE""
+
+if command -v open >/dev/null 2>&1 && open -n ""$APP"" --args ""$ARG"" >> ""$LOG"" 2>&1; then
+  :
+else
+  nohup ""$APP/Contents/MacOS/$EXENAME"" ""$ARG"" >/dev/null 2>&1 &
+fi
 ";
     }
 

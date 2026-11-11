@@ -1,0 +1,8 @@
+#!/bin/sh
+# 相容用啟動腳本：1.4.1 以前的舊版自動更新只認 zip 根目錄的 DataSplitter，
+# 更新後會用這個腳本重新啟動，再轉交給同資料夾裡的 DataSplitter.app。
+# 平常請直接雙擊 DataSplitter.app 開啟。
+DIR="$(cd "$(dirname "$0")" && pwd)"
+BIN="$DIR/DataSplitter.app/Contents/MacOS/DataSplitter"
+chmod +x "$BIN" 2>/dev/null
+exec "$BIN" "$@"
