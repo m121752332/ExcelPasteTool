@@ -275,11 +275,38 @@
     <Setter Property="TextWrapping" Value="Wrap"/>
   </Style>
 
+  <!-- 分隔線：參照 VS Code，中間放三個點點的握把，提示可以拖拉。
+       點點用各主題既有的 TextSecondaryBrush / AccentTextBrush，新增主題不用另外定義顏色 -->
   <Style Selector="GridSplitter">
     <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}" CornerRadius="3">
+          <StackPanel Name="PART_Grip" Spacing="3" IsHitTestVisible="False"
+                      HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Ellipse Classes="splitter-dot"/>
+            <Ellipse Classes="splitter-dot"/>
+            <Ellipse Classes="splitter-dot"/>
+          </StackPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+  <Style Selector="GridSplitter[ResizeDirection=Rows] /template/ StackPanel#PART_Grip">
+    <Setter Property="Orientation" Value="Horizontal"/>
+  </Style>
+  <Style Selector="GridSplitter /template/ Ellipse.splitter-dot">
+    <Setter Property="Width" Value="3"/>
+    <Setter Property="Height" Value="3"/>
+    <Setter Property="Fill" Value="{DynamicResource TextSecondaryBrush}"/>
+    <Setter Property="Opacity" Value="0.7"/>
   </Style>
   <Style Selector="GridSplitter:pointerover">
     <Setter Property="Background" Value="{DynamicResource SplitterBrush}"/>
+  </Style>
+  <Style Selector="GridSplitter:pointerover /template/ Ellipse.splitter-dot">
+    <Setter Property="Fill" Value="{DynamicResource AccentTextBrush}"/>
+    <Setter Property="Opacity" Value="1"/>
   </Style>
 
   <!-- ===== 側邊欄 ===== -->

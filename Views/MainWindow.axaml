@@ -63,7 +63,7 @@
 										Command="{Binding DataContext.SidebarItemClickCommand, RelativeSource={RelativeSource AncestorType=Window}}"
 										CommandParameter="{Binding Page}"
 										Height="44"
-										ToolTip.Tip="{Binding Name}">
+										ToolTip.Tip="{Binding ToolTipText}">
 									<Grid ColumnDefinitions="4,40,*">
 										<!-- 選取導引條 -->
 										<Border Grid.Column="0" Classes="sidebar-indicator" Classes.selected="{Binding IsSelected}" Width="3" Height="22"/>

@@ -19,10 +19,10 @@
 			<StackPanel Spacing="16" HorizontalAlignment="Center">
 
 				<!-- Logo Area -->
-				<Border Width="80" Height="80" CornerRadius="40" Background="White" Padding="16" HorizontalAlignment="Center">
-					<Border CornerRadius="24" Background="#667eea">
-						<TextBlock Text="📊" FontSize="32" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-					</Border>
+				<Border Width="80" Height="80" CornerRadius="40" Background="White" HorizontalAlignment="Center"
+						BoxShadow="0 6 20 0 #33000000">
+					<Path Data="{x:Static local:IconManager.ChartBoxIcon}" Width="42" Height="42" Stretch="Uniform"
+						  Fill="#667eea" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 				</Border>
 
 				<!-- Title and Version -->
@@ -47,17 +47,29 @@
 							   FontSize="12" FontWeight="SemiBold" Foreground="White"/>
 				</Border>
 
-				<!-- 檢查更新 -->
-				<Button x:Name="CheckUpdateButton" Content="🔄 檢查更新"
-						HorizontalAlignment="Center" Padding="16,6" CornerRadius="16"
-						Background="#33FFFFFF" Foreground="White" BorderBrush="#66FFFFFF" BorderThickness="1"
-						FontSize="12" Cursor="Hand"/>
-
-				<!-- 改版資訊 -->
-				<Button x:Name="ChangelogButton" Content="📜 改版資訊"
-						HorizontalAlignment="Center" Padding="16,6" CornerRadius="16"
-						Background="#33FFFFFF" Foreground="White" BorderBrush="#66FFFFFF" BorderThickness="1"
-						FontSize="12" Cursor="Hand"/>
+				<!-- 檢查更新 / 改版資訊：同一組操作，並排顯示；圖示用向量 Path，與側邊欄同風格 -->
+				<StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
+					<Button x:Name="CheckUpdateButton"
+							Padding="14,8" CornerRadius="16"
+							Background="#33FFFFFF" Foreground="White" BorderBrush="#66FFFFFF" BorderThickness="1"
+							FontSize="13" Cursor="Hand">
+						<StackPanel Orientation="Horizontal" Spacing="6">
+							<Path Data="{x:Static local:IconManager.UpdateIcon}" Width="16" Height="16" Stretch="Uniform"
+								  Fill="White" VerticalAlignment="Center"/>
+							<TextBlock x:Name="CheckUpdateText" Text="檢查更新" VerticalAlignment="Center"/>
+						</StackPanel>
+					</Button>
+					<Button x:Name="ChangelogButton"
+							Padding="14,8" CornerRadius="16"
+							Background="#33FFFFFF" Foreground="White" BorderBrush="#66FFFFFF" BorderThickness="1"
+							FontSize="13" Cursor="Hand">
+						<StackPanel Orientation="Horizontal" Spacing="6">
+							<Path Data="{x:Static local:IconManager.HistoryIcon}" Width="16" Height="16" Stretch="Uniform"
+								  Fill="White" VerticalAlignment="Center"/>
+							<TextBlock x:Name="ChangelogText" Text="改版資訊" VerticalAlignment="Center"/>
+						</StackPanel>
+					</Button>
+				</StackPanel>
 
 			</StackPanel>
 		</Border>
@@ -81,13 +93,18 @@
 				</Border.BorderBrush>
 
 				<StackPanel Spacing="16">
-					<TextBlock Text="📋 應用程式資訊" FontSize="18" FontWeight="Bold" Foreground="#1E3A8A"/>
+					<StackPanel Orientation="Horizontal" Spacing="8">
+						<Path Data="{x:Static local:IconManager.InfoOutlineIcon}" Width="20" Height="20" Stretch="Uniform"
+							  Fill="#2563EB" VerticalAlignment="Center"/>
+						<TextBlock Text="應用程式資訊" FontSize="18" FontWeight="Bold" Foreground="#1E3A8A" VerticalAlignment="Center"/>
+					</StackPanel>
 
 					<StackPanel Spacing="12">
 						<!-- Copyright Info -->
-						<Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-							<Border Background="#3B82F6" CornerRadius="8" Padding="8" VerticalAlignment="Top">
-								<TextBlock Text="©️" FontSize="14" Foreground="White"/>
+						<Grid ColumnDefinitions="32,*" ColumnSpacing="12">
+							<Border Width="32" Height="32" Background="#262563EB" CornerRadius="8" VerticalAlignment="Top">
+								<Path Data="{x:Static local:IconManager.CopyrightIcon}" Width="18" Height="18" Stretch="Uniform"
+									  Fill="#2563EB" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
 							<StackPanel Grid.Column="1" Spacing="4">
 								<TextBlock Text="版權資訊" FontWeight="SemiBold" FontSize="14" Foreground="#1E3A8A"/>
@@ -97,9 +114,10 @@
 						</Grid>
 
 						<!-- GitHub -->
-						<Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-							<Border Background="#2563EB" CornerRadius="8" Padding="8" VerticalAlignment="Top">
-								<TextBlock Text="🔗" FontSize="14" Foreground="White"/>
+						<Grid ColumnDefinitions="32,*" ColumnSpacing="12">
+							<Border Width="32" Height="32" Background="#262563EB" CornerRadius="8" VerticalAlignment="Top">
+								<Path Data="{x:Static local:IconManager.GitHubIcon}" Width="18" Height="18" Stretch="Uniform"
+									  Fill="#2563EB" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
 							<StackPanel Grid.Column="1" Spacing="4">
 								<TextBlock x:Name="GitHubTitleText" Text="GitHub 專案" FontWeight="SemiBold" FontSize="14" Foreground="#1E3A8A"/>
@@ -109,9 +127,10 @@
 						</Grid>
 
 						<!-- Description -->
-						<Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-							<Border Background="#1D4ED8" CornerRadius="8" Padding="8" VerticalAlignment="Top">
-								<TextBlock Text="📝" FontSize="14" Foreground="White"/>
+						<Grid ColumnDefinitions="32,*" ColumnSpacing="12">
+							<Border Width="32" Height="32" Background="#262563EB" CornerRadius="8" VerticalAlignment="Top">
+								<Path Data="{x:Static local:IconManager.TextBoxOutlineIcon}" Width="18" Height="18" Stretch="Uniform"
+									  Fill="#2563EB" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
 							<StackPanel Grid.Column="1" Spacing="4">
 								<TextBlock Text="應用程式描述" FontWeight="SemiBold" FontSize="14" Foreground="#1E3A8A"/>
@@ -140,13 +159,18 @@
 				</Border.BorderBrush>
 
 				<StackPanel Spacing="16">
-					<TextBlock Text="⚙️ 技術資訊" FontSize="18" FontWeight="Bold" Foreground="#064E3B"/>
+					<StackPanel Orientation="Horizontal" Spacing="8">
+						<Path Data="{x:Static local:IconManager.CogOutlineIcon}" Width="20" Height="20" Stretch="Uniform"
+							  Fill="#059669" VerticalAlignment="Center"/>
+						<TextBlock Text="技術資訊" FontSize="18" FontWeight="Bold" Foreground="#064E3B" VerticalAlignment="Center"/>
+					</StackPanel>
 
 					<StackPanel Spacing="12">
 						<!-- Framework Info -->
-						<Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
-							<Border Background="#10B981" CornerRadius="8" Padding="8" VerticalAlignment="Top">
-								<TextBlock Text="🛠️" FontSize="14" Foreground="White"/>
+						<Grid ColumnDefinitions="32,*" ColumnSpacing="12">
+							<Border Width="32" Height="32" Background="#2E059669" CornerRadius="8" VerticalAlignment="Top">
+								<Path Data="{x:Static local:IconManager.LayersOutlineIcon}" Width="18" Height="18" Stretch="Uniform"
+									  Fill="#059669" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
 							<StackPanel Grid.Column="1" Spacing="6">
 								<TextBlock Text="開發框架" FontWeight="SemiBold" FontSize="14" Foreground="#064E3B"/>
@@ -164,10 +188,11 @@
 						</Grid>
 
 						<!-- Author Info (Clickable Hot Area) -->
-						<Grid x:Name="DeveloperHotArea" ColumnDefinitions="Auto,*" ColumnSpacing="12"
+						<Grid x:Name="DeveloperHotArea" ColumnDefinitions="32,*" ColumnSpacing="12"
 							  Background="Transparent" Cursor="Hand">
-							<Border Background="#047857" CornerRadius="8" Padding="8" VerticalAlignment="Top">
-								<TextBlock Text="👨‍💻" FontSize="14" Foreground="White"/>
+							<Border Width="32" Height="32" Background="#2E059669" CornerRadius="8" VerticalAlignment="Top">
+								<Path Data="{x:Static local:IconManager.AccountOutlineIcon}" Width="18" Height="18" Stretch="Uniform"
+									  Fill="#059669" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 							</Border>
 							<StackPanel Grid.Column="1" Spacing="4">
 								<TextBlock Text="開發者" FontWeight="SemiBold" FontSize="14" Foreground="#064E3B"/>

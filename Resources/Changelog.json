@@ -1,5 +1,36 @@
 [
   {
+    "version": "1.5.5",
+    "date": "2026-11-11",
+    "notes": {
+      "TraditionalChinese": [
+        "關於頁面圖示全面改為現代化向量圖示，圖示欄寬固定、各列文字對齊，「檢查更新」與「改版資訊」按鈕改為並排",
+        "左右區塊之間的分隔線加上三點握把提示可拖拉，並把分隔線寬度縮為 6px",
+        "側邊欄「說明」名稱不再顯示 (F1)，快捷鍵改在滑鼠提示中顯示"
+      ],
+      "SimplifiedChinese": [
+        "关于页面图标全面改为现代化矢量图标，图标栏宽固定、各行文字对齐，「检查更新」与「更新记录」按钮改为并排",
+        "左右区块之间的分隔线加上三点握把提示可拖拉，并把分隔线宽度缩为 6px",
+        "侧边栏「说明」名称不再显示 (F1)，快捷键改在鼠标提示中显示"
+      ],
+      "English": [
+        "Modernized all icons on the About page with vector icons; the icon column has a fixed width so every row lines up, and Check for updates and Release Notes now sit side by side",
+        "The splitter between the left and right panes now shows a three-dot grip to hint that it can be dragged, and is narrowed to 6px",
+        "The sidebar Help item no longer shows (F1) in its name; the shortcut is shown in its tooltip instead"
+      ],
+      "Japanese": [
+        "バージョン情報ページのアイコンをすべてモダンなベクターアイコンに変更。アイコン列の幅を固定して各行の文字をそろえ、「更新を確認」と「更新履歴」ボタンを横並びにしました",
+        "左右の領域の間の区切り線に、ドラッグできることを示す 3 点のつまみを追加し、幅を 6px に縮めました",
+        "サイドバーの「ヘルプ」の名前に (F1) を表示しないようにし、ショートカットはツールチップに表示します"
+      ],
+      "Korean": [
+        "정보 페이지의 아이콘을 모두 현대적인 벡터 아이콘으로 바꾸고, 아이콘 열 너비를 고정해 각 행의 글자를 정렬했으며, 「업데이트 확인」과 「변경 내역」 버튼을 나란히 배치했습니다",
+        "좌우 영역 사이의 구분선에 끌 수 있음을 알려 주는 세 점 손잡이를 추가하고 너비를 6px로 줄였습니다",
+        "사이드바 「도움말」 이름에 더 이상 (F1)을 표시하지 않고, 단축키는 도구 설명에 표시합니다"
+      ]
+    }
+  },
+  {
     "version": "1.5.4",
     "date": "2026-11-11",
     "notes": {

@@ -116,9 +116,10 @@ public partial class AboutView : UserControl
             Dispatcher.UIThread.Post(UpdateLocalizedTexts);
             return;
         }
-        var changelogButton = this.FindControl<Button>("ChangelogButton");
-        if (changelogButton != null)
-            changelogButton.Content = "📜 " + LanguageManager.GetText("ChangelogTitle", "改版資訊");
+        // 按鈕內是「向量圖示 + 文字」，只更新文字，保留圖示
+        var changelogText = this.FindControl<TextBlock>("ChangelogText");
+        if (changelogText != null)
+            changelogText.Text = LanguageManager.GetText("ChangelogTitle", "改版資訊");
         var gitHubTitle = this.FindControl<TextBlock>("GitHubTitleText");
         if (gitHubTitle != null)
             gitHubTitle.Text = LanguageManager.GetText("AboutGitHubTitle", "GitHub 專案");
@@ -144,16 +145,18 @@ public partial class AboutView : UserControl
         if (sender is not Button button) return;
         if (TopLevel.GetTopLevel(this) is not Window owner) return;
 
-        var original = button.Content;
+        // 只換按鈕文字，保留更新圖示
+        var label = this.FindControl<TextBlock>("CheckUpdateText");
+        var original = label?.Text;
         button.IsEnabled = false;
-        button.Content = "檢查中…";
+        if (label != null) label.Text = "檢查中…";
         try
         {
             await MainWindow.CheckForUpdateManuallyAsync(owner);
         }
         finally
         {
-            button.Content = original;
+            if (label != null) label.Text = original;
             button.IsEnabled = true;
         }
     }

@@ -19,8 +19,8 @@ public partial class MainWindow : Window
         new SidebarItem(SidebarPage.Tools, "SidebarTools", "工具", IconManager.DataIcon),
         // 設定：使用 SettingsIcon
         new SidebarItem(SidebarPage.Settings, "SidebarSettings", "設定", IconManager.SettingsIcon),
-        // 說明：使用 BookIcon（F1 也會開啟）
-        new SidebarItem(SidebarPage.Help, "SidebarHelp", "說明 (F1)", IconManager.BookIcon),
+        // 說明：使用 BookIcon（F1 也會開啟）；標籤不放快捷鍵，只在 ToolTip 顯示
+        new SidebarItem(SidebarPage.Help, "SidebarHelp", "說明", IconManager.BookIcon, "SidebarHelpTooltip", "說明 (F1)"),
         // 關於：使用 HelpIcon（已內建）
         new SidebarItem(SidebarPage.About, "SidebarAbout", "關於", IconManager.GetIcon("help")),
     };
