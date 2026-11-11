@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="ExcelPasteTool.HelpView">
+	<!-- 原生 WebView 會蓋在所有 Avalonia 內容之上，所以標題列放在獨立的一列，不與 WebView 重疊 -->
+	<Grid RowDefinitions="Auto,*">
+		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="24,14,24,10">
+			<TextBlock Grid.Column="0" Name="TitleText" Classes="page-title" VerticalAlignment="Center"/>
+			<Button Grid.Column="1" Name="OpenInBrowserButton" Classes="ghost" Cursor="Hand" VerticalAlignment="Center"/>
+		</Grid>
+
+		<!-- 內嵌的 WebView 由程式建立後放進這裡（沒有瀏覽器引擎的電腦不會建立） -->
+		<Border Grid.Row="1" Name="WebViewHost"/>
+
+		<!-- 無法內嵌顯示時的提示 -->
+		<Border Grid.Row="1" Name="FallbackPanel" IsVisible="False" Classes="panel"
+				Margin="24,0,24,24" Padding="24" VerticalAlignment="Top">
+			<TextBlock Name="FallbackText" TextWrapping="Wrap"/>
+		</Border>
+	</Grid>
+</UserControl>

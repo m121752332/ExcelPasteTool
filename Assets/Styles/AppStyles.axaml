@@ -234,6 +234,33 @@
   <Style Selector="Grid.data-row:pointerover">
     <Setter Property="Background" Value="{DynamicResource TableRowHoverBrush}"/>
   </Style>
+  <!-- 資料列的移除按鈕：滑鼠移到該列才顯示 -->
+  <Style Selector="Button.row-remove">
+    <Setter Property="Opacity" Value="0"/>
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="Width" Value="22"/>
+    <Setter Property="Height" Value="22"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+  </Style>
+  <Style Selector="Grid.data-row:pointerover Button.row-remove">
+    <Setter Property="Opacity" Value="1"/>
+  </Style>
+  <Style Selector="Button.row-remove Path">
+    <Setter Property="Fill" Value="{DynamicResource DangerBrush}"/>
+  </Style>
+  <Style Selector="Button.row-remove:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource DangerBrush}"/>
+  </Style>
+  <Style Selector="Button.row-remove:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource DangerHoverBrush}"/>
+  </Style>
+  <Style Selector="Button.row-remove:pointerover Path, Button.row-remove:pressed Path">
+    <Setter Property="Fill" Value="White"/>
+  </Style>
   <Style Selector="TextBlock.row-number">
     <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
     <Setter Property="FontSize" Value="{DynamicResource AppFontSizeSmall}"/>
@@ -275,7 +302,9 @@
     <Setter Property="Background" Value="{DynamicResource SidebarHoverBrush}"/>
   </Style>
   <Style Selector="Button.sidebar-toggle Path">
-    <Setter Property="Stroke" Value="{DynamicResource SidebarTextBrush}"/>
+    <Setter Property="Stroke" Value="{DynamicResource SidebarIconBrush}"/>
+    <!-- 只畫線框：蓋掉全域 Path 的 Fill，否則封閉圖形會被填成一整塊強調色 -->
+    <Setter Property="Fill" Value="Transparent"/>
   </Style>
   <Style Selector="Border.sidebar-item">
     <Setter Property="Background" Value="Transparent"/>

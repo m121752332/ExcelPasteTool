@@ -3,6 +3,8 @@
              xmlns:local="clr-namespace:ExcelPasteTool"
              x:Class="ExcelPasteTool.AboutView">
 
+	<!-- 視窗高度不足時改為捲動，避免卡片內容溢出邊框 -->
+	<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 	<Grid x:Name="RootGrid" Margin="20" RowDefinitions="Auto,*" RowSpacing="20">
 
 		<!-- Hero Header Section -->
@@ -131,7 +133,7 @@
 							<StackPanel Grid.Column="1" Spacing="6">
 								<TextBlock Text="開發框架" FontWeight="SemiBold" FontSize="14" Foreground="#064E3B"/>
 								<TextBlock Text="使用 Avalonia UI 與 .NET 8 開發"
-									   FontSize="14" Foreground="#065F46"/>
+									   FontSize="14" Foreground="#065F46" TextWrapping="Wrap"/>
 								<StackPanel Orientation="Horizontal" Spacing="6">
 									<Border Background="#3B82F6" CornerRadius="4" Padding="6,2">
 										<TextBlock Text="Avalonia" FontSize="10" Foreground="White"/>
@@ -166,4 +168,5 @@
 		<Canvas x:Name="BubbleLayer" Grid.RowSpan="2" IsHitTestVisible="False"/>
 
 	</Grid>
+	</ScrollViewer>
 </UserControl>

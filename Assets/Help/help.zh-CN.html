@@ -1,0 +1,179 @@
+<main>
+  <header>
+    <h1>DataSplitter Pro 使用说明</h1>
+    <p class="lead">把 Excel 的一列数据，一键变成「分隔符号字符串」和「SQL IN 条件」。第一次使用，看完前两节就会了。</p>
+    <ul class="toc">
+      <li><a href="#what">这个工具在做什么</a></li>
+      <li><a href="#quick">三步快速上手</a></li>
+      <li><a href="#screen">认识界面</a></li>
+      <li><a href="#more">更多操作</a></li>
+      <li><a href="#faq">常见问题</a></li>
+      <li><a href="#keys">快捷键与设定</a></li>
+    </ul>
+  </header>
+
+  <h2 id="what">这个工具在做什么</h2>
+  <p>你在 Excel 有一列料号、单号或代码，想拿去 ERP 查询，或写进 SQL 的 <code>WHERE ... IN</code>。自己一个一个加分隔符号和引号很花时间，也容易漏。这个工具帮你一次转好。</p>
+
+  <div class="convert">
+    <div>
+      <div class="box-title">Excel 里的一列</div>
+      <table class="excel">
+        <thead><tr><th>A</th></tr></thead>
+        <tbody>
+          <tr><td>A-001</td></tr>
+          <tr><td>A-002</td></tr>
+          <tr><td>B-105</td></tr>
+          <tr><td>C-330</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="arrow">→</div>
+    <div>
+      <div class="box-title">分隔数据（粘贴到 ERP 或报表的多值查询栏位）</div>
+      <div class="out">A-001|A-002|B-105|C-330</div>
+      <div class="box-title">SQL 条件（接在 WHERE 字段 IN 后面）</div>
+      <div class="out sql">('A-001', 'A-002', 'B-105', 'C-330')</div>
+    </div>
+  </div>
+
+  <h2 id="quick">三步快速上手</h2>
+  <ol class="steps">
+    <li>
+      <h3>在 Excel 复制一列数据</h3>
+      <p>用鼠标选取要转换的单元格（同一列，可以很多行），按 <kbd>Ctrl</kbd> + <kbd>C</kbd> 复制。</p>
+    </li>
+    <li>
+      <h3>回到本程序，点「数据粘贴」</h3>
+      <p>在左侧菜单的「工具」页，点右上方的 <span class="btn btn-primary">数据粘贴</span>。数据会一条一条列在右边的表格，空白行和重复的值会自动去掉。</p>
+    </li>
+    <li>
+      <h3>复制你要的结果</h3>
+      <p>左边会同时产生「PIP 分隔数据」和「SQL 条件」。点各自标题右边的复制按钮 <span class="mock-icon">⧉</span>，再到 ERP 或 SQL 工具按 <kbd>Ctrl</kbd> + <kbd>V</kbd> 粘贴。</p>
+    </li>
+  </ol>
+
+  <div class="card tip">
+    <span class="tip-title">提醒</span>请用「数据粘贴」按钮，不要直接在输入框按 <kbd>Ctrl</kbd> + <kbd>V</kbd>。按钮会把 Excel 的每一行拆成一条；直接粘贴进输入框则会被当成一整段文字。
+  </div>
+
+  <h2 id="screen">认识界面</h2>
+  <p>下图是「工具」页的示意图，数字对应下方的说明。</p>
+
+  <div class="mock" aria-label="工具页示意图">
+    <div class="mock-side"><span class="on"></span><span></span><span></span><span></span></div>
+    <div class="mock-main">
+      <div class="mock-bar">
+        <span class="mock-field"><span class="num">1</span> 分隔符号： <span class="mock-select">竖线 |</span></span>
+        <span class="mock-field">语言： <span class="mock-select">简体中文</span></span>
+        <span class="mock-field">主题： <span class="mock-select">GitHub 暗黑</span></span>
+      </div>
+      <div class="mock-body">
+        <div class="mock-panel">
+          <div class="mock-title"><span class="num">4</span> PIP 分隔数据 <span class="grow"></span><span class="mock-icon">⧉</span></div>
+          <div class="mock-text">A-001|A-002|B-105|C-330</div>
+          <div class="mock-title"><span class="num">5</span> SQL 条件 <span class="grow"></span><span class="mock-icon">⧉</span></div>
+          <div class="mock-text sql">('A-001', 'A-002', 'B-105', 'C-330')</div>
+        </div>
+        <div class="mock-panel">
+          <div class="mock-actions">
+            <span class="num">2</span><span class="btn btn-primary">数据粘贴</span>
+            <span class="badge">共 4 笔</span>
+            <span class="grow"></span>
+            <span class="num">7</span><span class="btn btn-secondary">清空数据</span>
+          </div>
+          <div class="mock-table">
+            <div class="mock-row head"><div>行号</div><div><span class="num">3</span> 数据内容</div><div></div></div>
+            <div class="mock-row"><div>1</div><div>A-001</div><div></div></div>
+            <div class="mock-row even"><div>2</div><div>A-002</div><div class="mock-x">✕</div></div>
+            <div class="mock-row"><div>3</div><div>B-105</div><div></div></div>
+            <div class="mock-row even"><div>4</div><div>C-330</div><div></div></div>
+          </div>
+          <div style="margin-top:6px"><span class="num">6</span> <span class="muted">鼠标移到某一行，右边会出现 ✕</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ul class="legend">
+    <li><span class="num">1</span><div><strong>分隔符号</strong>：选择用什么符号把数据串起来，有竖线 <code>|</code>、分号 <code>;</code>、冒号 <code>:</code>、空格四种。</div></li>
+    <li><span class="num">2</span><div><strong>数据粘贴</strong>：把剪贴板里的数据读进来，旁边会显示总笔数。</div></li>
+    <li><span class="num">3</span><div><strong>数据表</strong>：逐条列出并编号，方便核对笔数和内容。</div></li>
+    <li><span class="num">4</span><div><strong>PIP 分隔数据</strong>：用分隔符号串好的结果。这一格也可以直接打字修改。</div></li>
+    <li><span class="num">5</span><div><strong>SQL 条件</strong>：加好单引号和括号的结果，只能复制，不能修改。</div></li>
+    <li><span class="num">6</span><div><strong>移除单条</strong>：点该行右边的 ✕，就会移除那一条，行号自动重排。</div></li>
+    <li><span class="num">7</span><div><strong>清空数据</strong>：清掉所有数据，分隔符号也会回到竖线。</div></li>
+  </ul>
+  <p class="muted">三个区块会互相同步：改了任何一处，另外两处会立刻跟着更新。</p>
+
+  <h2 id="more">更多操作</h2>
+  <table>
+    <thead><tr><th class="nowrap">想做的事</th><th>怎么做</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap">换一种分隔符号</td><td>在上方工具栏的「分隔符号」菜单选择。已粘贴的数据会立刻用新符号重新串接。</td></tr>
+      <tr><td class="nowrap">拿掉其中几条</td><td>鼠标移到数据表的那一行，点右边的 ✕。</td></tr>
+      <tr><td class="nowrap">手动加数据或修改</td><td>直接在「PIP 分隔数据」框里打字，每一条之间用当前的分隔符号隔开，例如 <code>A-001|A-002</code>。</td></tr>
+      <tr><td class="nowrap">把整列复制回 Excel</td><td>点数据表左上角的「行号」表头，会复制全部数据（一条一行），可以直接粘贴回 Excel。</td></tr>
+      <tr><td class="nowrap">重新开始</td><td>点「清空数据」。</td></tr>
+      <tr><td class="nowrap">调整左右宽度</td><td>用鼠标拖动左右两个面板中间的空隙。</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="faq">常见问题</h2>
+  <details open>
+    <summary>点了「数据粘贴」却没有反应？</summary>
+    <p>剪贴板里没有文字。请先回 Excel 选取单元格并按 <kbd>Ctrl</kbd> + <kbd>C</kbd>，再回来点一次。</p>
+  </details>
+  <details>
+    <summary>我复制了好几列，为什么只出现第一列？</summary>
+    <p>这是设计如此：每一行只取第一列。如果你要的是其他列，请在 Excel 只选那一列再复制。</p>
+  </details>
+  <details>
+    <summary>笔数比 Excel 的行数少？</summary>
+    <p>空白行和重复的值会自动去掉，所以笔数是「不重复的数据」数量。</p>
+  </details>
+  <details>
+    <summary>数据被切掉了一半？</summary>
+    <p>粘贴时，如果一行里面有 Tab、逗号 <code>,</code>、分号 <code>;</code> 或竖线 <code>|</code>，程序会把它当成列分隔，只留下第一段。例如 <code>A-001,红色</code> 会变成 <code>A-001</code>。数据本身含有这些符号时，请改在「PIP 分隔数据」框里手动输入。</p>
+  </details>
+  <details>
+    <summary>数据里有单引号，SQL 会不会坏掉？</summary>
+    <p>不会。单引号会自动变成两个单引号，例如 <code>O'Brien</code> 会输出成 <code>'O''Brien'</code>，这是 SQL 的标准写法。</p>
+  </details>
+  <details>
+    <summary>我在工具栏换了语言或主题，下次打开又变回来？</summary>
+    <p>工具栏上的语言和主题只是临时切换。要永久保存，请到左侧菜单的「设定」页调整。</p>
+  </details>
+  <details>
+    <summary>设定存在哪里？为什么没有保存？</summary>
+    <p>设定存在程序旁边的 <code>config.json</code>。如果程序放在不能写入的文件夹（例如 <code>C:\Program Files</code>），设定就存不了，请把整个文件夹搬到桌面或文档。</p>
+  </details>
+  <details>
+    <summary>怎么更新到新版本？</summary>
+    <p>程序启动时会自动检查。有新版本时会弹出提示，按照界面指示就能在程序内下载并更新。</p>
+  </details>
+
+  <h2 id="keys">快捷键与设定</h2>
+  <table>
+    <thead><tr><th class="nowrap">按键</th><th>功能</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap"><kbd>F1</kbd></td><td>打开这份说明（在任何页面都可以按）。</td></tr>
+      <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>C</kbd></td><td>复制输入框或数据表中选取的文字。</td></tr>
+      <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>V</kbd></td><td>在「PIP 分隔数据」框内粘贴文字。</td></tr>
+      <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>A</kbd></td><td>在输入框内全选。</td></tr>
+    </tbody>
+  </table>
+
+  <h3>「设定」页可以调整的项目</h3>
+  <table>
+    <thead><tr><th class="nowrap">项目</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap">语言</td><td>繁体中文、简体中文、English。</td></tr>
+      <tr><td class="nowrap">主题</td><td>GitHub 暗黑、光线模式、蒂芙尼蓝。</td></tr>
+      <tr><td class="nowrap">字体与字体大小</td><td>觉得字太小可以在这里放大，这份说明的字也会一起变大。</td></tr>
+      <tr><td class="nowrap">说明打开方式</td><td>「内置窗口」是在程序里显示这份说明（默认）；「默认浏览器」是按 <kbd>F1</kbd> 时改用你的浏览器打开，方便放在另一个屏幕对照。</td></tr>
+    </tbody>
+  </table>
+
+  <footer>DataSplitter Pro · 随时按 <kbd>F1</kbd> 可以回到这份说明。</footer>
+</main>

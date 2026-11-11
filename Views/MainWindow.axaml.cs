@@ -19,6 +19,8 @@ public partial class MainWindow : Window
         new SidebarItem(SidebarPage.Tools, "工具", IconManager.DataIcon),
         // 設定：使用 SettingsIcon
         new SidebarItem(SidebarPage.Settings, "設定", IconManager.SettingsIcon),
+        // 說明：使用 BookIcon（F1 也會開啟）
+        new SidebarItem(SidebarPage.Help, "說明 (F1)", IconManager.BookIcon),
         // 關於：使用 HelpIcon（已內建）
         new SidebarItem(SidebarPage.About, "關於", IconManager.GetIcon("help")),
     };
@@ -33,10 +35,25 @@ public partial class MainWindow : Window
         SidebarItemClickCommand = new RelayCommand<SidebarPage>(OnSidebarItemClick);
         // 設定視窗標題為組件名稱
         this.Title = System.Reflection.Assembly.GetEntryAssembly()?.GetName().Name ?? "App";
+        // F1：開啟說明。用 Tunnel 攔截，焦點在輸入框時也有效
+        AddHandler(KeyDownEvent, OnWindowKeyDown, Avalonia.Interactivity.RoutingStrategies.Tunnel);
+    }
+
+    private void OnWindowKeyDown(object? sender, Avalonia.Input.KeyEventArgs e)
+    {
+        if (e.Key == Avalonia.Input.Key.F1 && e.KeyModifiers == Avalonia.Input.KeyModifiers.None)
+        {
+            e.Handled = true;
+            OnSidebarItemClick(SidebarPage.Help);
+        }
     }
 
     private void OnSidebarItemClick(SidebarPage page)
     {
+        // 說明設定為「預設瀏覽器」時不切換頁面，直接開瀏覽器；開啟失敗才退回內建說明頁
+        if (page == SidebarPage.Help && HelpService.ViewerMode == HelpViewerMode.Browser && HelpService.OpenInBrowser())
+            return;
+
         Sidebar.SelectedPage = page;
         foreach (var item in SidebarItems)
             item.OnPropertyChanged(nameof(item.IsSelected));

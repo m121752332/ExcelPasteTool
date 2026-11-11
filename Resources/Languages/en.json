@@ -10,6 +10,7 @@
   "ClearDataButton": "Clear Data",
   "RowNumberHeader": "Row",
   "DataContentHeader": "Data Content",
+  "RemoveRowTooltip": "Remove this row",
   "SeparatorPipe": "Pipe |",
   "SeparatorSemicolon": "Semicolon ;",
   "SeparatorColon": "Colon :",

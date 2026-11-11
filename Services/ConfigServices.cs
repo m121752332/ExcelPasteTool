@@ -10,6 +10,8 @@ public class AppConfig
     public string FontFamily { get; set; } = "";
     /// <summary>基本字體大小（10 ~ 24）。</summary>
     public double FontSize { get; set; } = 14;
+    /// <summary>說明的開啟方式：InApp（內建視窗，預設）或 Browser（預設瀏覽器）。</summary>
+    public string HelpViewer { get; set; } = "InApp";
 }
 
 public static class ConfigServices

@@ -16,14 +16,19 @@
 	  <Product>DataSplitter Pro</Product>
 	  <Copyright>GameStudioPro@2025</Copyright>
 	  <!-- 版本號：推版時 tag 請用相同版本（1.1.0 或 v1.1.0），自動更新會拿它和 GitHub Release 比較 -->
-	  <Version>1.1.0</Version>
-	  <AssemblyVersion>1.1.0.0</AssemblyVersion>
-	  <FileVersion>1.1.0.0</FileVersion>
-	  <InformationalVersion>1.1.0</InformationalVersion>
+	  <Version>1.2.0</Version>
+	  <AssemblyVersion>1.2.0.0</AssemblyVersion>
+	  <FileVersion>1.2.0.0</FileVersion>
+	  <InformationalVersion>1.2.0</InformationalVersion>
 	  <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 
 	  <!-- 使用自動生成 (預設) -->
 	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+  </PropertyGroup>
+
+  <!-- 發行時預先編譯成原生碼（ReadyToRun），啟動時不必再 JIT，可縮短約 0.3 秒；代價是檔案變大 -->
+  <PropertyGroup Condition="'$(RuntimeIdentifier)' != ''">
+    <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
 	
   <ItemGroup>
@@ -31,6 +36,7 @@
 	<PackageReference Include="Avalonia.Desktop" />
 	<PackageReference Include="Avalonia.Controls.DataGrid" />
 	<PackageReference Include="Avalonia.Themes.Fluent" />
+	<PackageReference Include="Avalonia.Controls.WebView" />
 	<PackageReference Include="System.ComponentModel.Annotations" />
   </ItemGroup>
 
@@ -70,6 +76,8 @@
 
   <ItemGroup>
     <AvaloniaResource Include="Assets/Images/*.png" />
+    <!-- 使用說明（F1）：共用樣式 help.css ＋ 各語言一份內容 -->
+    <AvaloniaResource Include="Assets/Help/*" />
   </ItemGroup>
 
 </Project>

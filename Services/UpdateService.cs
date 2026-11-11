@@ -71,14 +71,6 @@ public static class UpdateService
     /// <summary>不在使用者設定裡被更新覆蓋的檔案。</summary>
     private static readonly string[] PreservedFiles = { "config.json" };
 
-    private static readonly Lazy<HttpClient> Http = new(() =>
-    {
-        var client = new HttpClient { Timeout = TimeSpan.FromMinutes(30) };
-        client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("DataSplitter-Updater", CurrentVersion.ToString(3)));
-        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
-        return client;
-    });
-
     /// <summary>暫存資料夾（下載與解壓用）。</summary>
     public static string WorkDirectory => Path.Combine(Path.GetTempPath(), "DataSplitter_update");
 
@@ -97,6 +89,15 @@ public static class UpdateService
     public static Version CurrentVersion { get; } = ResolveCurrentVersion();
 
     public static string CurrentVersionText => CurrentVersion.ToString(3);
+
+    // 必須宣告在 CurrentVersion 之後：靜態欄位依宣告順序初始化
+    private static readonly Lazy<HttpClient> Http = new(() =>
+    {
+        var client = new HttpClient { Timeout = TimeSpan.FromMinutes(30) };
+        client.DefaultRequestHeaders.UserAgent.Add(new ProductInfoHeaderValue("DataSplitter-Updater", CurrentVersionText));
+        client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/vnd.github+json"));
+        return client;
+    });
 
     private static Version ResolveCurrentVersion()
     {

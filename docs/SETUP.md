@@ -15,7 +15,7 @@
 | UI 框架 | [Avalonia UI](https://avaloniaui.net/) 11.3.3（Fluent 主題 + DataGrid） |
 | 目標框架 | .NET 8（`net8.0`） |
 | 架構模式 | MVVM（Views / ViewModels / Models / Services / Helpers） |
-| 版本號 | 定義於 `ExcelPasteTool.csproj`，目前為 `1.1.0` |
+| 版本號 | 定義於 `ExcelPasteTool.csproj`，目前為 `1.2.0` |
 
 ---
 
@@ -223,10 +223,10 @@ avares://DataSplitter/Assets/Fonts#Noto Sans TC
 版本號定義於 `ExcelPasteTool.csproj`：
 
 ```xml
-<Version>1.1.0</Version>
-<AssemblyVersion>1.1.0.0</AssemblyVersion>
-<FileVersion>1.1.0.0</FileVersion>
-<InformationalVersion>1.1.0</InformationalVersion>
+<Version>1.2.0</Version>
+<AssemblyVersion>1.2.0.0</AssemblyVersion>
+<FileVersion>1.2.0.0</FileVersion>
+<InformationalVersion>1.2.0</InformationalVersion>
 <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 ```
 
@@ -279,7 +279,7 @@ dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFil
 
 ### 6.2 發佈設定檔（PublishProfiles）
 
-`README.md` 中提到 `Properties/PublishProfiles/*.pubxml` 的一鍵發佈方式，但 `.gitignore` 排除了 `*.pubxml`，**這些設定檔不在版本庫中**。若要使用，請自行在本機建立，例如 `Properties/PublishProfiles/Windows-x64.pubxml`：
+也可以用 `Properties/PublishProfiles/*.pubxml` 做一鍵發佈，但 `.gitignore` 排除了 `*.pubxml`，**這些設定檔不在版本庫中**。若要使用，請自行在本機建立，例如 `Properties/PublishProfiles/Windows-x64.pubxml`：
 
 ```xml
 <Project>

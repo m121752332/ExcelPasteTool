@@ -11,6 +11,7 @@ public class SidebarPageToContentConverter : IValueConverter
     private static DataToolView? _dataToolViewInstance;
     private static SettingsView? _settingsViewInstance;
     private static AboutView? _aboutViewInstance;
+    private static HelpView? _helpViewInstance;
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -22,6 +23,8 @@ public class SidebarPageToContentConverter : IValueConverter
                     return _dataToolViewInstance ??= new DataToolView();
                 case SidebarPage.Settings:
                     return _settingsViewInstance ??= new SettingsView();
+                case SidebarPage.Help:
+                    return _helpViewInstance ??= new HelpView();
                 case SidebarPage.About:
                     return _aboutViewInstance ??= new AboutView();
                 default:
