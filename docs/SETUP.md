@@ -15,7 +15,7 @@
 | UI 框架 | [Avalonia UI](https://avaloniaui.net/) 11.3.3（Fluent 主題 + DataGrid） |
 | 目標框架 | .NET 10（`net10.0`，LTS） |
 | 架構模式 | MVVM（Views / ViewModels / Models / Services / Helpers） |
-| 版本號 | 定義於 `ExcelPasteTool.csproj`，目前為 `1.5.2` |
+| 版本號 | 定義於 `ExcelPasteTool.csproj`，目前為 `1.5.3` |
 
 ---
 

@@ -31,9 +31,16 @@
 			</Border>
 
 			<!-- 主要內容區域 -->
-			<Grid Grid.Row="1" ColumnDefinitions="2*,12,3*">
+			<!-- 最小寬度必須設在 ColumnDefinition 上：GridSplitter 只會遵守欄位的 MinWidth，
+			     設在 Border 上時欄位仍可被拖到 0，面板溢出後會把拖曳條蓋住 -->
+			<Grid Grid.Row="1">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="2*" MinWidth="280"/>
+					<ColumnDefinition Width="12"/>
+					<ColumnDefinition Width="3*" MinWidth="320"/>
+				</Grid.ColumnDefinitions>
 				<!-- 左側：分隔資料 / SQL 條件 -->
-				<Border Grid.Column="0" Classes="panel" Padding="16" MinWidth="280">
+				<Border Grid.Column="0" Classes="panel" Padding="16">
 					<Grid RowDefinitions="Auto,*,Auto,*">
 						<!-- PIP 分隔資料標題 -->
 						<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
@@ -65,7 +72,7 @@
 				<GridSplitter Grid.Column="1" ResizeDirection="Columns" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
 				<!-- 右側：資料表 -->
-				<Border Grid.Column="2" Classes="panel" Padding="16" MinWidth="320">
+				<Border Grid.Column="2" Classes="panel" Padding="16">
 					<Grid RowDefinitions="Auto,*">
 						<!-- 按鈕列 -->
 						<Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,*,Auto" Margin="0,0,0,12">

@@ -1,5 +1,31 @@
 [
   {
+    "version": "1.5.3",
+    "date": "2026-11-11",
+    "notes": {
+      "TraditionalChinese": [
+        "修正工具主頁面中間的拖曳條拉到最邊邊時被擠壓不見的問題，左右面板現在會停在最小寬度",
+        "更新 Linux 使用的 D-Bus 元件，修正已知的安全性弱點"
+      ],
+      "SimplifiedChinese": [
+        "修正工具主页面中间的拖曳条拉到最边上时被挤压不见的问题，左右面板现在会停在最小宽度",
+        "更新 Linux 使用的 D-Bus 组件，修正已知的安全漏洞"
+      ],
+      "English": [
+        "Fixed the divider in the middle of the main tool page disappearing when dragged all the way to one side; both panels now stop at their minimum width",
+        "Updated the D-Bus component used on Linux to fix a known security vulnerability"
+      ],
+      "Japanese": [
+        "メイン画面中央の区切りバーを端までドラッグすると押しつぶされて消える問題を修正し、左右のパネルが最小幅で止まるようになりました",
+        "Linux で使用する D-Bus コンポーネントを更新し、既知のセキュリティ脆弱性を修正"
+      ],
+      "Korean": [
+        "메인 화면 가운데 구분선을 끝까지 드래그하면 눌려서 사라지던 문제를 수정했습니다. 이제 좌우 패널이 최소 너비에서 멈춥니다",
+        "Linux에서 사용하는 D-Bus 구성 요소를 업데이트하여 알려진 보안 취약점을 수정했습니다"
+      ]
+    }
+  },
+  {
     "version": "1.5.2",
     "date": "2026-11-11",
     "notes": {

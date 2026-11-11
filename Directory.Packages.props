@@ -18,5 +18,9 @@
     <PackageVersion Include="Avalonia.Controls.WebView" Version="11.4.1" />
 
     <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />
+
+    <!-- Avalonia 11.3.3 間接帶入的 Tmds.DBus.Protocol 0.21.2 有高風險弱點（GHSA-xrw6-gwf8-vvr9，只影響 Linux），
+         直接鎖到已修正的 0.21.3。之後升級 Avalonia 若已內含更新版本，可以移除這行與 csproj 裡對應的參考 -->
+    <PackageVersion Include="Tmds.DBus.Protocol" Version="0.21.3" />
   </ItemGroup>
 </Project>
