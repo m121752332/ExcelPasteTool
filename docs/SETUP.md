@@ -143,7 +143,9 @@ dotnet run
 | `FontFamily` | 空字串，或系統已安裝的字型名稱 | `""` | 空字串代表使用內建的 Noto Sans TC |
 | `FontSize` | 10 ～ 24 | `14` | 基本字體大小，超出範圍會被夾到上下限並四捨五入 |
 
-以上四項都可以在 App 的「設定」頁變更，變更後會自動存檔。
+| `TourCompleted` | `true`、`false` | `false` | 是否已看過 App 導覽。`false`（或舊設定檔沒有此欄位）時，啟動後會自動播放一次導覽，看完或略過即寫回 `true`；改回 `false` 可讓下次啟動再播一次 |
+
+前四項都可以在 App 的「設定」頁變更，變更後會自動存檔。導覽可隨時按主視窗右上角的「導覽」按鈕重看（實作在 `Controls/TourOverlay.cs` 與 `Views/MainWindow.Tour.cs`，步驟文字在 `Helpers/LanguageManager.cs` 的 `Tour*` 鍵）。
 
 行為說明（`Services/ConfigServices.cs`）：
 

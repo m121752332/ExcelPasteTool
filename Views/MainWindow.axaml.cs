@@ -37,10 +37,18 @@ public partial class MainWindow : Window
         this.Title = System.Reflection.Assembly.GetEntryAssembly()?.GetName().Name ?? "App";
         // F1：開啟說明。用 Tunnel 攔截，焦點在輸入框時也有效
         AddHandler(KeyDownEvent, OnWindowKeyDown, Avalonia.Interactivity.RoutingStrategies.Tunnel);
+        InitTour();
     }
 
     private void OnWindowKeyDown(object? sender, Avalonia.Input.KeyEventArgs e)
     {
+        // 導覽進行中：方向鍵 / Enter / Esc 操作導覽，其餘按鍵不傳到底下的元件
+        if (Tour.IsActive)
+        {
+            HandleTourKey(e);
+            e.Handled = true;
+            return;
+        }
         if (e.Key == Avalonia.Input.Key.F1 && e.KeyModifiers == Avalonia.Input.KeyModifiers.None)
         {
             e.Handled = true;

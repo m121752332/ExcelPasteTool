@@ -12,6 +12,8 @@ public class AppConfig
     public double FontSize { get; set; } = 14;
     /// <summary>說明的開啟方式：InApp（內建視窗，預設）或 Browser（預設瀏覽器）。</summary>
     public string HelpViewer { get; set; } = "InApp";
+    /// <summary>是否已看過 App 導覽；false（或舊版設定檔沒有此欄位）時，啟動後會自動播放一次。</summary>
+    public bool TourCompleted { get; set; }
 }
 
 public static class ConfigServices
