@@ -15,7 +15,7 @@
 | UI 框架 | [Avalonia UI](https://avaloniaui.net/) 11.3.3（Fluent 主題 + DataGrid） |
 | 目標框架 | .NET 8（`net8.0`） |
 | 架構模式 | MVVM（Views / ViewModels / Models / Services / Helpers） |
-| 版本號 | 定義於 `ExcelPasteTool.csproj`，目前為 `1.2.0` |
+| 版本號 | 定義於 `ExcelPasteTool.csproj`，目前為 `1.3.0` |
 
 ---
 
@@ -225,10 +225,10 @@ avares://DataSplitter/Assets/Fonts#Noto Sans TC
 版本號定義於 `ExcelPasteTool.csproj`：
 
 ```xml
-<Version>1.2.0</Version>
-<AssemblyVersion>1.2.0.0</AssemblyVersion>
-<FileVersion>1.2.0.0</FileVersion>
-<InformationalVersion>1.2.0</InformationalVersion>
+<Version>1.3.0</Version>
+<AssemblyVersion>1.3.0.0</AssemblyVersion>
+<FileVersion>1.3.0.0</FileVersion>
+<InformationalVersion>1.3.0</InformationalVersion>
 <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 ```
 
@@ -320,12 +320,12 @@ dotnet publish -p:PublishProfile=Properties/PublishProfiles/Windows-x64.pubxml
 
 推新版的步驟：
 
-1. 將 `.csproj` 的版本欄位改成新版本（例如 `1.2.0`），合併到 `master`。
+1. 將 `.csproj` 的版本欄位改成新版本（例如 `1.3.0`），合併到 `master`。
 2. 建立 tag 並推送：
    ```bash
    git checkout master && git pull
-   git tag 1.2.0
-   git push origin 1.2.0
+   git tag 1.3.0
+   git push origin 1.3.0
    ```
 3. 等 `Release` workflow 跑完，到 GitHub 的 Releases 頁面確認四個 zip 都已上傳。workflow 會自動產生 Release Notes，可再手動補充說明。
 4. 已安裝舊版的使用者下次啟動程式時，就會收到更新提示（見 5.7）。

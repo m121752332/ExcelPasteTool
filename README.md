@@ -153,12 +153,12 @@ dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFil
 推送版本 tag 後，`release.yml` 會自動打包四個平台的 zip 並建立 GitHub Release：
 
 1. 把 `ExcelPasteTool.csproj` 的 `Version`、`AssemblyVersion`、`FileVersion`、`InformationalVersion` 改成新版本，合併到 `master`。
-2. 建立並推送 tag（`1.2.0` 或 `v1.2.0` 都可以）：
+2. 建立並推送 tag（`1.3.0` 或 `v1.3.0` 都可以）：
 
    ```bash
    git checkout master && git pull
-   git tag 1.2.0
-   git push origin 1.2.0
+   git tag 1.3.0
+   git push origin 1.3.0
    ```
 
 3. 等 workflow 跑完，到 Releases 頁面確認四個 zip 都已上傳。
