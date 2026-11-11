@@ -14,7 +14,7 @@
     <!-- å°æ•´çµ„ä¸€æ¬¡æŒ‡å®šç‰ˆæœ¬ -->
     <PackageVersion Include="@(AvaloniaPackages)" Version="$(AvaloniaVersion)" />
 
-    <!-- »¡©ú­¶¥Îªº­ì¥Í WebView¡]©x¤è¡BMIT¡F11.4.x ¤ä´© Avalonia 11.1 ¥H¤W¡^ -->
+    <!-- èªªæ˜Žé ç”¨çš„åŽŸç”Ÿ WebViewï¼ˆå®˜æ–¹ã€MITï¼›11.4.x æ”¯æ´ Avalonia 11.1 ä»¥ä¸Šï¼‰ -->
     <PackageVersion Include="Avalonia.Controls.WebView" Version="11.4.1" />
 
     <PackageVersion Include="System.ComponentModel.Annotations" Version="5.0.0" />

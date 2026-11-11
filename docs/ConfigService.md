@@ -1,20 +1,20 @@
-# ConfigServices.cs �{���X����
+# ConfigServices.cs 程式碼說明
 
-���ɮץ]�t���ε{���]�w����Ƶ��c�P�s���޿�A�t�dŪ���P�x�s config.json �]�w�ɡC
+此檔案包含應用程式設定的資料結構與存取邏輯，負責讀取與儲存 config.json 設定檔。
 
-## ���O�P����
+## 類別與成員
 
 ### AppConfig
-- `Language`�G�y���]�w�]�w�]�ȡG"TraditionalChinese"�^�C
-- `Theme`�G�D�D�]�w�]�w�]�ȡG"Dark"�^�C
+- `Language`：語言設定（預設值："TraditionalChinese"）。
+- `Theme`：主題設定（預設值："Dark"）。
 
 ### ConfigServices
-- `ConfigPath`�G�]�w�ɸ��|�]config.json�^�C
-- `Config`�G�ثe���]�w��ơ]AppConfig ��ҡ^�C
+- `ConfigPath`：設定檔路徑（config.json）。
+- `Config`：目前的設定資料（AppConfig 實例）。
 
-#### ��k
-- `Load()`�GŪ�� config.json�A�ϧǦC�Ƭ� AppConfig�A�ç�s Config �ݩʡC�Y�ɮפ��s�b�h��Xĵ�i�C
-- `Save()`�G�N Config ����ǦC�Ƭ� JSON �üg�J config.json�C
+#### 方法
+- `Load()`：讀取 config.json，反序列化為 AppConfig，並更新 Config 屬性。若檔案不存在則輸出警告。
+- `Save()`：將 Config 物件序列化為 JSON 並寫入 config.json。
 
-## �γ~
-ConfigServices �Ω󶰤��޲z���ε{�����y���P�D�D���]�w�A�ô���²�檺Ū�g�����A��K�b�{�����s���Χ�s�ϥΪ̰��n�C
+## 用途
+ConfigServices 用於集中管理應用程式的語言與主題等設定，並提供簡單的讀寫介面，方便在程式中存取或更新使用者偏好。

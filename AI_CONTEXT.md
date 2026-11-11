@@ -1,4 +1,4 @@
 <!-- AI_CONTEXT: System Design, Coding Guidelines, API Reference -->
-# �M�׳]�p����
-���M�׬O�Ω��ഫ��Ƥ��j�ϥΪ��u��
-# �M�ץؿ����c
+# 專案設計說明
+本專案是用於轉換資料分隔使用的工具
+# 專案目錄結構
