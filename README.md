@@ -54,7 +54,18 @@
 2. 解壓縮到**可以寫入**的資料夾（例如桌面或文件），不要放在 `C:\Program Files\` 底下，否則設定無法儲存。
 3. 執行：
    - **Windows**：雙擊 `DataSplitter.exe`。第一次執行若出現 SmartScreen 警告，按「其他資訊」→「仍要執行」。
-   - **macOS**：在終端機執行 `chmod +x DataSplitter && ./DataSplitter`。程式沒有簽章，若被 Gatekeeper 擋下，先執行 `xattr -d com.apple.quarantine DataSplitter`。
+   - **macOS**：程式沒有 Apple 開發者簽章與公證，用瀏覽器下載後第一次雙擊會出現「無法打開，因為它來自未識別的開發者」。請先做一次下面任一種方式，之後就能直接雙擊開啟：
+     - **終端機（建議）**：打開「終端機」，輸入 `cd `（後面留一個空格）再把解壓後的資料夾拖進視窗、按 Enter，然後執行：
+
+       ```bash
+       xattr -dr com.apple.quarantine .
+       chmod +x DataSplitter
+       ./DataSplitter
+       ```
+
+     - **系統設定**：先雙擊一次讓它被擋，再到「系統設定 > 隱私權與安全性」，往下找到「已阻擋『DataSplitter』」按「強制打開」（舊版 macOS 為「仍要打開」），輸入密碼確認。
+
+     zip 裡附有 `README_macOS.txt`，內容相同。之後透過程式內的自動更新取得的新版不會再被擋。
    - **Linux**：`chmod +x DataSplitter && ./DataSplitter`。需要 X11 與中文字型，Debian／Ubuntu 可執行：
 
      ```bash
