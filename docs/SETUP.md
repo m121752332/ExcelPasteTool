@@ -15,7 +15,7 @@
 | UI 框架 | [Avalonia UI](https://avaloniaui.net/) 11.3.3（Fluent 主題 + DataGrid） |
 | 目標框架 | .NET 10（`net10.0`，LTS） |
 | 架構模式 | MVVM（Views / ViewModels / Models / Services / Helpers） |
-| 版本號 | 定義於 `ExcelPasteTool.csproj`，目前為 `1.4.1` |
+| 版本號 | 定義於 `ExcelPasteTool.csproj`，目前為 `1.4.2` |
 
 ---
 
@@ -305,7 +305,7 @@ dotnet publish -p:PublishProfile=Properties/PublishProfiles/Windows-x64.pubxml
 
 ### 6.3 各平台後續處理
 
-- **macOS**：`dotnet publish` 產出的是可執行檔，不是 `.app`。
+- **macOS**：`dotnet publish` 產出的是可執行檔，不是 `.app`；直接雙擊會先開「終端機」。release workflow 會在 macOS runner 上把它包成 `DataSplitter.app`（`packaging/macos/` 內有 `Info.plist` 範本、圖示 `DataSplitter.icns` 與相容啟動腳本），並用 `codesign --sign -` 對整個 `.app` 做 ad-hoc 簽章。zip 結構與自動更新的關係見 `docs/AutoUpdate.md`。
   - .NET 10 SDK 即使在 Linux 上交叉發佈，也會自動替 `osx-*` 執行檔加上 **ad-hoc 簽章**（Apple Silicon 必須至少有 ad-hoc 簽章才能執行）。release workflow 會檢查這一點，缺簽章時 Release 會失敗。
   - ad-hoc 簽章**不能**通過 Gatekeeper。用瀏覽器下載的檔案帶有 `com.apple.quarantine` 屬性，第一次開啟會出現「來自未識別的開發者」，使用者需執行 `xattr -dr com.apple.quarantine <資料夾>` 或到「系統設定 > 隱私權與安全性」按「強制打開」（見 README 與 zip 內的 `README_macOS.txt`）。
   - 程式內自動更新是用 HttpClient 下載，不會帶 quarantine 屬性，所以更新後的新版不會被擋。

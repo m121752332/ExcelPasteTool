@@ -20,8 +20,9 @@ public static class ConfigServices
 {
     /// <summary>
     /// 設定檔固定放在執行檔旁邊，避免從不同工作目錄啟動時讀到不同設定。
+    /// macOS 的 .app 例外：放在 ~/Library/Application Support/DataSplitter/（見 AppPaths）。
     /// </summary>
-    public static readonly string ConfigPath = Path.Combine(AppContext.BaseDirectory, "config.json");
+    public static readonly string ConfigPath = AppPaths.ResolveConfigPath();
 
     public static AppConfig Config { get; private set; } = new();
 
