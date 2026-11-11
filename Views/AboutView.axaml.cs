@@ -66,6 +66,20 @@ public partial class AboutView : UserControl
 
         var desc = asm.GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description ?? "Excel Data Splitter Tool";
         _description!.Text = desc;
+
+        // 開發框架：執行時期讀取實際的 .NET 與 Avalonia 版本，升版時不必再手動改字
+        var dotnet = $".NET {Environment.Version.Major}";
+        var avaloniaVer = typeof(Application).Assembly.GetName().Version;
+        var avalonia = avaloniaVer != null ? $"Avalonia {avaloniaVer.ToString(3)}" : "Avalonia";
+        var frameworkText = this.FindControl<TextBlock>("FrameworkText");
+        if (frameworkText != null)
+            frameworkText.Text = $"使用 Avalonia UI 與 {dotnet} 開發（執行環境 .NET {Environment.Version.ToString(3)}）";
+        var dotnetBadge = this.FindControl<TextBlock>("DotNetBadgeText");
+        if (dotnetBadge != null)
+            dotnetBadge.Text = dotnet;
+        var avaloniaBadge = this.FindControl<TextBlock>("AvaloniaBadgeText");
+        if (avaloniaBadge != null)
+            avaloniaBadge.Text = avalonia;
     }
 
     private async void CheckUpdateButton_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

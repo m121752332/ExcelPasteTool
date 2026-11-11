@@ -14,7 +14,7 @@
 	  <AssemblyDescription>一個幫助EXCEL做資料處理的分隔工具</AssemblyDescription>
 	  <AssemblyCompany>GameStudioPro</AssemblyCompany>
 	  <Product>DataSplitter Pro</Product>
-	  <Copyright>GameStudioPro@2025</Copyright>
+	  <Copyright>GameStudio@2026</Copyright>
 	  <!-- 版本號：推版時 tag 請用相同版本（1.1.0 或 v1.1.0），自動更新會拿它和 GitHub Release 比較 -->
 	  <Version>1.4.0</Version>
 	  <AssemblyVersion>1.4.0.0</AssemblyVersion>

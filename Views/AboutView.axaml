@@ -85,7 +85,7 @@
 							</Border>
 							<StackPanel Grid.Column="1" Spacing="4">
 								<TextBlock Text="版權資訊" FontWeight="SemiBold" FontSize="14" Foreground="#1E3A8A"/>
-								<TextBlock x:Name="CopyrightText" Text="© 2025 GameStudioPro"
+								<TextBlock x:Name="CopyrightText" Text="GameStudio@2026"
 										   FontSize="14" Foreground="#1E40AF" TextWrapping="Wrap"/>
 							</StackPanel>
 						</Grid>
@@ -132,14 +132,14 @@
 							</Border>
 							<StackPanel Grid.Column="1" Spacing="6">
 								<TextBlock Text="開發框架" FontWeight="SemiBold" FontSize="14" Foreground="#064E3B"/>
-								<TextBlock Text="使用 Avalonia UI 與 .NET 8 開發"
+								<TextBlock x:Name="FrameworkText" Text="使用 Avalonia UI 與 .NET 開發"
 									   FontSize="14" Foreground="#065F46" TextWrapping="Wrap"/>
 								<StackPanel Orientation="Horizontal" Spacing="6">
 									<Border Background="#3B82F6" CornerRadius="4" Padding="6,2">
-										<TextBlock Text="Avalonia" FontSize="10" Foreground="White"/>
+										<TextBlock x:Name="AvaloniaBadgeText" Text="Avalonia" FontSize="10" Foreground="White"/>
 									</Border>
 									<Border Background="#059669" CornerRadius="4" Padding="6,2">
-										<TextBlock Text=".NET 8" FontSize="10" Foreground="White"/>
+										<TextBlock x:Name="DotNetBadgeText" Text=".NET" FontSize="10" Foreground="White"/>
 									</Border>
 								</StackPanel>
 							</StackPanel>
