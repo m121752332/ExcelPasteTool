@@ -96,7 +96,7 @@
   </div>
 
   <ul class="legend">
-    <li><span class="num">1</span><div><strong>Separator</strong>: the character used to join the values. Choose pipe <code>|</code>, semicolon <code>;</code>, colon <code>:</code> or space.</div></li>
+    <li><span class="num">1</span><div><strong>Separator</strong>: the character used to join the values. Choose pipe <code>|</code>, comma <code>,</code>, semicolon <code>;</code>, colon <code>:</code> or space.</div></li>
     <li><span class="num">2</span><div><strong>Paste Data</strong>: reads the clipboard. The row count is shown next to it.</div></li>
     <li><span class="num">3</span><div><strong>Data table</strong>: every value with a row number, so you can check the count and content.</div></li>
     <li><span class="num">4</span><div><strong>PIP Separated Data</strong>: the values joined by the separator. You can also type and edit here.</div></li>
@@ -134,7 +134,7 @@
   </details>
   <details>
     <summary>Part of my value was cut off.</summary>
-    <p>When pasting, a Tab, comma <code>,</code>, semicolon <code>;</code> or pipe <code>|</code> inside a row is treated as a column separator, and only the first part is kept. For example <code>A-001,red</code> becomes <code>A-001</code>. If your values contain these characters, type them in the "PIP Separated Data" box instead.</p>
+    <p>When pasting, a Tab, comma <code>,</code>, semicolon <code>;</code> or pipe <code>|</code> inside a row is treated as a column separator, and only the first part is kept. For example <code>A-001,red</code> becomes <code>A-001</code>. If your values contain these characters, type them in the "PIP Separated Data" box instead. A value wrapped in double quotes, such as <code>"A-001,red"</code>, is kept whole when the separator is comma.</p>
   </details>
   <details>
     <summary>My values contain single quotes. Will the SQL break?</summary>
@@ -169,7 +169,7 @@
   <table>
     <thead><tr><th class="nowrap">Setting</th><th>Description</th></tr></thead>
     <tbody>
-      <tr><td class="nowrap">Language</td><td>Traditional Chinese, Simplified Chinese, English.</td></tr>
+      <tr><td class="nowrap">Language</td><td>Traditional Chinese, Simplified Chinese, English, Japanese, Korean.</td></tr>
       <tr><td class="nowrap">Theme</td><td>GitHub Dark, Light Mode, Tiffany Blue.</td></tr>
       <tr><td class="nowrap">Font and font size</td><td>Make the text larger here if it is too small. The text in this help grows with it.</td></tr>
       <tr><td class="nowrap">Help Viewer</td><td>"In-app window" shows this help inside the program (the default). "Default browser" opens it in your browser when you press <kbd>F1</kbd>, which is handy on a second screen.</td></tr>

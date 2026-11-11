@@ -105,6 +105,8 @@ public static class HelpService
         {
             AppLanguage.SimplifiedChinese => ("zh-Hans", "zh-CN"),
             AppLanguage.English => ("en", "en"),
+            AppLanguage.Japanese => ("ja", "ja-JP"),
+            AppLanguage.Korean => ("ko", "ko-KR"),
             _ => ("zh-Hant", "zh-TW")
         };
 

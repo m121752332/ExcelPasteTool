@@ -1,0 +1,160 @@
+[
+  {
+    "version": "1.5.0",
+    "date": "2026-11-11",
+    "notes": {
+      "TraditionalChinese": [
+        "分隔符號新增「逗號 ,」，支援 CSV 規則：用雙引號包住的欄位（如 \"A,1\"）內的逗號不會被拆開",
+        "新增日語、韓語介面（含操作導覽與說明）",
+        "新增「改版資訊」視窗，可在「關於」頁查看各版本的更新內容",
+        "「關於」頁新增 GitHub 專案連結"
+      ],
+      "SimplifiedChinese": [
+        "分隔符号新增「逗号 ,」，支持 CSV 规则：用双引号包住的字段（如 \"A,1\"）内的逗号不会被拆开",
+        "新增日语、韩语界面（含操作导览与说明）",
+        "新增「更新记录」窗口，可在「关于」页查看各版本的更新内容",
+        "「关于」页新增 GitHub 项目链接"
+      ],
+      "English": [
+        "New \"Comma ,\" separator with CSV rules: commas inside double-quoted fields (e.g. \"A,1\") are not split",
+        "Added Japanese and Korean interface languages (including the tour and help)",
+        "New Release Notes window, opened from the About page, listing what changed in each version",
+        "The About page now links to the GitHub project"
+      ],
+      "Japanese": [
+        "区切り文字に「カンマ ,」を追加。CSV 規則に対応し、二重引用符で囲んだ項目（例：\"A,1\"）内のカンマは分割されません",
+        "日本語・韓国語の表示言語を追加（操作ツアーとヘルプを含む）",
+        "「更新履歴」ウィンドウを追加。「バージョン情報」ページから各バージョンの変更内容を確認できます",
+        "「バージョン情報」ページに GitHub プロジェクトへのリンクを追加"
+      ],
+      "Korean": [
+        "구분 기호에 「쉼표 ,」를 추가했습니다. CSV 규칙을 지원하여 큰따옴표로 감싼 필드(예: \"A,1\") 안의 쉼표는 나뉘지 않습니다",
+        "일본어·한국어 표시 언어를 추가했습니다 (사용법 둘러보기와 도움말 포함)",
+        "「변경 내역」 창을 추가했습니다. 「정보」 페이지에서 버전별 변경 사항을 확인할 수 있습니다",
+        "「정보」 페이지에 GitHub 프로젝트 링크를 추가했습니다"
+      ]
+    }
+  },
+  {
+    "version": "1.4.2",
+    "date": "2026-11-11",
+    "notes": {
+      "TraditionalChinese": [
+        "Mac 版改為 DataSplitter.app，雙擊後不再開啟終端機"
+      ],
+      "English": [
+        "The macOS build is now packaged as DataSplitter.app and no longer opens a Terminal window when double-clicked"
+      ]
+    }
+  },
+  {
+    "version": "1.4.1",
+    "date": "2026-11-11",
+    "notes": {
+      "TraditionalChinese": [
+        "「關於」頁的開發框架改為自動顯示實際的 .NET 版本",
+        "版權資訊改為 GameStudio@2026",
+        "Mac 版加上首次開啟說明與 ad-hoc 簽章檢查"
+      ],
+      "English": [
+        "The About page now shows the actual .NET version automatically",
+        "Copyright changed to GameStudio@2026",
+        "macOS build: added first-launch instructions and an ad-hoc signature check"
+      ]
+    }
+  },
+  {
+    "version": "1.4.0",
+    "date": "2026-11-11",
+    "notes": {
+      "TraditionalChinese": [
+        "升級到 .NET 10，Release 加入 .NET 10 runtime 檢查",
+        "導覽按鈕只在「工具」頁顯示",
+        "Toast 訊息改為顯示在整個 App 的最上層"
+      ],
+      "English": [
+        "Upgraded to .NET 10; releases now check for the .NET 10 runtime",
+        "The Tour button is shown only on the Tools page",
+        "Toast messages now appear above everything in the app"
+      ]
+    }
+  },
+  {
+    "version": "1.3.0",
+    "date": "2026-11-11",
+    "notes": {
+      "TraditionalChinese": [
+        "新增 App 導覽模式：首次開啟自動播放，之後可從右上角的按鈕重看"
+      ],
+      "English": [
+        "New app tour: plays automatically on first launch and can be replayed from the button in the top-right corner"
+      ]
+    }
+  },
+  {
+    "version": "1.2.0",
+    "date": "2026-11-11",
+    "notes": {
+      "TraditionalChinese": [
+        "新增 F1 使用說明，可在內建視窗或預設瀏覽器開啟",
+        "說明內容配合語言、主題與字體大小"
+      ],
+      "English": [
+        "New F1 help, shown in an in-app window or your default browser",
+        "The help follows the app language, theme and font size"
+      ]
+    }
+  },
+  {
+    "version": "1.1.0",
+    "date": "2026-11-10",
+    "notes": {
+      "TraditionalChinese": [
+        "加入版本檢查與自動更新",
+        "改善工具頁版面；主題改為 GitHub 暗黑，並新增蒂芬妮藍",
+        "可調整字型與字體大小",
+        "將 Big5 編碼的程式檔統一轉為 UTF-8，修正中文字串亂碼",
+        "新增專案配置說明書（docs/SETUP.md）"
+      ],
+      "English": [
+        "Added version check and automatic update",
+        "Improved Tools page layout; theme changed to GitHub Dark, and a Tiffany Blue theme was added",
+        "Font and font size are now adjustable",
+        "Converted Big5-encoded source files to UTF-8, fixing garbled Chinese text",
+        "Added the project setup guide (docs/SETUP.md)"
+      ]
+    }
+  },
+  {
+    "version": "1.0.1",
+    "date": "2025-08-22",
+    "notes": {
+      "TraditionalChinese": [
+        "修正側邊欄文字顏色問題",
+        "增加一個小動畫",
+        "微調設定"
+      ],
+      "English": [
+        "Fixed the sidebar text color",
+        "Added a small animation",
+        "Minor settings tweaks"
+      ]
+    }
+  },
+  {
+    "version": "1.0.0",
+    "date": "2025-08-15",
+    "notes": {
+      "TraditionalChinese": [
+        "首個版本：將 Excel 一欄資料轉成分隔符號字串與 SQL IN 條件",
+        "側邊欄提供工具、設定與「關於」頁面",
+        "支援光線主題、語言切換與訊息提示"
+      ],
+      "English": [
+        "First release: turns an Excel column into a separator-joined string and a SQL IN condition",
+        "Sidebar with Tools, Settings and About pages",
+        "Light theme, language switching and toast messages"
+      ]
+    }
+  }
+]
