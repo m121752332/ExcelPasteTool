@@ -61,6 +61,63 @@ jobs:
             *) echo "::error::發佈檔未內含 .NET 10 runtime（取得：'${ver}'），請確認 --self-contained true 與 net10.0"; exit 1 ;;
           esac
 
+      # Apple Silicon 不接受完全沒簽章的執行檔（會直接被系統終止）。
+      # .NET SDK 會在發佈時自動加上 ad-hoc 簽章；這一步確認簽章確實存在，避免日後 SDK 行為改變時默默發出不能執行的版本。
+      - name: Verify macOS ad-hoc signature
+        if: startsWith(matrix.rid, 'osx-')
+        run: |
+          python3 - out/${{ matrix.rid }}/DataSplitter <<'PY'
+          import struct, sys
+          d = open(sys.argv[1], 'rb').read(64 * 1024)
+          if struct.unpack('<I', d[:4])[0] != 0xfeedfacf:
+              sys.exit('::error::不是 64 位元 Mach-O 執行檔')
+          ncmds = struct.unpack('<I', d[16:20])[0]
+          off = 32
+          for _ in range(ncmds):
+              cmd, size = struct.unpack('<II', d[off:off + 8])
+              if cmd == 0x1d:  # LC_CODE_SIGNATURE
+                  print('OK: 執行檔含有程式碼簽章（LC_CODE_SIGNATURE）')
+                  sys.exit(0)
+              off += size
+          sys.exit('::error::macOS 執行檔沒有程式碼簽章，Apple Silicon 上會無法執行')
+          PY
+
+      # macOS 版附上首次開啟說明（Gatekeeper 會擋未公證的程式）。
+      - name: Add macOS first-run guide
+        if: startsWith(matrix.rid, 'osx-')
+        run: |
+          cat > out/${{ matrix.rid }}/README_macOS.txt <<'TXT'
+          DataSplitter Pro - macOS 首次開啟說明
+          =====================================
+
+          本程式沒有 Apple 開發者簽章與公證，用瀏覽器下載後第一次雙擊會出現：
+          「無法打開『DataSplitter』，因為它來自未識別的開發者」。
+          請先做一次下面任一種方式，之後就能直接雙擊開啟。
+
+          方法一：終端機（建議）
+            1. 打開「終端機」
+            2. 輸入 cd 加一個空格，把這個資料夾拖進終端機視窗，按 Enter
+            3. 依序執行：
+                 xattr -dr com.apple.quarantine .
+                 chmod +x DataSplitter
+                 ./DataSplitter
+
+          方法二：系統設定
+            1. 先雙擊 DataSplitter 一次，讓它被擋下
+            2. 到「系統設定 > 隱私權與安全性」，往下找到「已阻擋『DataSplitter』」
+            3. 按「強制打開」（舊版 macOS 為「仍要打開」），輸入密碼確認
+
+          之後透過程式內的「檢查更新」取得的新版不會再被擋。
+
+          ---------------------------------------------------------------
+          First run on macOS: this app is not notarized by Apple.
+          Open Terminal in this folder and run:
+            xattr -dr com.apple.quarantine .
+            chmod +x DataSplitter
+            ./DataSplitter
+          Or: System Settings > Privacy & Security > "Open Anyway".
+          TXT
+
       - name: Zip
         run: |
           cd out/${{ matrix.rid }}
