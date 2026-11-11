@@ -59,6 +59,10 @@ public partial class UpdateDialog : Window
         _primaryButton = this.FindControl<Button>("PrimaryButton")!;
         _secondaryButton = this.FindControl<Button>("SecondaryButton")!;
 
+        // 對話框為 modal，開啟期間語言不會變，建立時套用一次即可
+        Title = LanguageManager.GetText("UpdateWindowTitle", "軟體更新");
+        this.FindControl<TextBlock>("NotesHeaderText")!.Text = LanguageManager.GetText("UpdateNotesHeader", "更新內容");
+
         Closing += OnClosing;
 
         if (info != null)
@@ -92,12 +96,12 @@ public partial class UpdateDialog : Window
     private void ShowAvailable(UpdateInfo info)
     {
         _iconText.Text = "⬆";
-        _titleText.Text = $"發現新版本 v{info.Version.ToString(3)}";
+        _titleText.Text = string.Format(LanguageManager.GetText("UpdateAvailableTitle", "發現新版本 v{0}"), info.Version.ToString(3));
         var published = info.PublishedAt?.ToLocalTime().ToString("yyyy/MM/dd") ?? string.Empty;
-        _subtitleText.Text = $"目前版本 v{UpdateService.CurrentVersionText}" +
-                             (published.Length > 0 ? $"　·　發佈於 {published}" : string.Empty) +
+        _subtitleText.Text = string.Format(LanguageManager.GetText("UpdateCurrentVersion", "目前版本 v{0}"), UpdateService.CurrentVersionText) +
+                             (published.Length > 0 ? "　·　" + string.Format(LanguageManager.GetText("UpdatePublishedOn", "發佈於 {0}"), published) : string.Empty) +
                              (info.AssetSize > 0 ? $"　·　{FormatSize(info.AssetSize)}" : string.Empty);
-        _notesText.Text = string.IsNullOrWhiteSpace(info.ReleaseNotes) ? "（此版本沒有提供更新說明）" : info.ReleaseNotes.Trim();
+        _notesText.Text = string.IsNullOrWhiteSpace(info.ReleaseNotes) ? LanguageManager.GetText("UpdateNoNotes", "（此版本沒有提供更新說明）") : info.ReleaseNotes.Trim();
         _notesPanel.IsVisible = true;
 
         if (info.CanAutoUpdate)
@@ -109,7 +113,7 @@ public partial class UpdateDialog : Window
             SetState(DialogState.ManualOnly);
             _progressPanel.IsVisible = true;
             _progressBar.IsVisible = false;
-            _statusText.Text = "這個版本沒有提供適用於目前系統的 .zip 更新檔，請到下載頁手動下載。";
+            _statusText.Text = LanguageManager.GetText("UpdateManualOnly", "這個版本沒有提供適用於目前系統的 .zip 更新檔，請到下載頁手動下載。");
         }
     }
 
@@ -123,28 +127,30 @@ public partial class UpdateDialog : Window
         switch (state)
         {
             case DialogState.Available:
-                _primaryButton.Content = "立即更新";
-                _secondaryButton.Content = "稍後再說";
+                _primaryButton.Content = LanguageManager.GetText("UpdateNowButton", "立即更新");
+                _secondaryButton.Content = LanguageManager.GetText("UpdateLaterButton", "稍後再說");
                 break;
             case DialogState.Working:
-                _primaryButton.Content = "更新中…";
+                _primaryButton.Content = LanguageManager.GetText("UpdateUpdatingButton", "更新中…");
                 _primaryButton.IsEnabled = false;
-                _secondaryButton.Content = "取消";
+                _secondaryButton.Content = LanguageManager.GetText("UpdateCancelButton", "取消");
                 break;
             case DialogState.Ready:
-                _primaryButton.Content = "重新啟動";
-                _secondaryButton.Content = "稍後";
+                _primaryButton.Content = LanguageManager.GetText("UpdateRestartButton", "重新啟動");
+                _secondaryButton.Content = LanguageManager.GetText("UpdateRestartLaterButton", "稍後");
                 break;
             case DialogState.ManualOnly:
-                _primaryButton.Content = "前往下載頁";
-                _secondaryButton.Content = "關閉";
+                _primaryButton.Content = LanguageManager.GetText("UpdateOpenDownloadButton", "前往下載頁");
+                _secondaryButton.Content = LanguageManager.GetText("UpdateCloseButton", "關閉");
                 break;
             case DialogState.Error:
-                _primaryButton.Content = _info?.CanAutoUpdate == true ? "重試" : "前往下載頁";
-                _secondaryButton.Content = "關閉";
+                _primaryButton.Content = _info?.CanAutoUpdate == true
+                    ? LanguageManager.GetText("UpdateRetryButton", "重試")
+                    : LanguageManager.GetText("UpdateOpenDownloadButton", "前往下載頁");
+                _secondaryButton.Content = LanguageManager.GetText("UpdateCloseButton", "關閉");
                 break;
             case DialogState.Message:
-                _primaryButton.Content = "確定";
+                _primaryButton.Content = LanguageManager.GetText("UpdateOkButton", "確定");
                 _secondaryButton.IsVisible = false;
                 break;
         }
@@ -209,7 +215,7 @@ public partial class UpdateDialog : Window
         _progressBar.IsIndeterminate = false;
         _progressBar.Value = 0;
         _percentText.Text = string.Empty;
-        _statusText.Text = "正在連線下載伺服器…";
+        _statusText.Text = LanguageManager.GetText("UpdateConnecting", "正在連線下載伺服器…");
 
         _cts = new CancellationTokenSource();
         var ct = _cts.Token;
@@ -222,14 +228,15 @@ public partial class UpdateDialog : Window
                 _progressBar.Value = p.Percent;
                 _percentText.Text = $"{p.Percent:0}%";
                 var speed = p.BytesPerSecond > 0 ? $"　{FormatSize((long)p.BytesPerSecond)}/s" : string.Empty;
-                _statusText.Text = $"下載中 {FormatSize(p.BytesReceived)} / {FormatSize(p.TotalBytes)}{speed}";
+                _statusText.Text = string.Format(LanguageManager.GetText("UpdateDownloading", "下載中 {0} / {1}{2}"),
+                    FormatSize(p.BytesReceived), FormatSize(p.TotalBytes), speed);
             });
             var zipPath = await UpdateService.DownloadAsync(_info, progress, ct);
 
             // 2. 解壓與驗證（在背景執行緒，避免畫面卡住）
             _progressBar.IsIndeterminate = true;
             _percentText.Text = string.Empty;
-            _statusText.Text = "正在解壓縮並驗證更新檔…";
+            _statusText.Text = LanguageManager.GetText("UpdateExtracting", "正在解壓縮並驗證更新檔…");
             _preparedRoot = await Task.Run(() => UpdateService.PrepareUpdate(zipPath), ct);
 
             // 3. 完成，等待重新啟動
@@ -237,8 +244,8 @@ public partial class UpdateDialog : Window
             _progressBar.Value = 100;
             _percentText.Text = "100%";
             _iconText.Text = "✓";
-            _titleText.Text = "更新已準備完成";
-            _statusText.Text = $"v{_info.Version.ToString(3)} 已下載完成，按「重新啟動」即可完成安裝。";
+            _titleText.Text = LanguageManager.GetText("UpdateReadyTitle", "更新已準備完成");
+            _statusText.Text = string.Format(LanguageManager.GetText("UpdateReadyStatus", "v{0} 已下載完成，按「重新啟動」即可完成安裝。"), _info.Version.ToString(3));
             SetState(DialogState.Ready);
         }
         catch (OperationCanceledException)
@@ -251,7 +258,7 @@ public partial class UpdateDialog : Window
         {
             _progressBar.IsIndeterminate = false;
             _iconText.Text = "!";
-            _statusText.Text = $"更新失敗：{ex.Message}";
+            _statusText.Text = string.Format(LanguageManager.GetText("UpdateFailed", "更新失敗：{0}"), ex.Message);
             _percentText.Text = string.Empty;
             SetState(DialogState.Error);
         }
@@ -273,14 +280,14 @@ public partial class UpdateDialog : Window
         catch (Exception ex)
         {
             _iconText.Text = "!";
-            _statusText.Text = $"無法啟動更新程式：{ex.Message}";
+            _statusText.Text = string.Format(LanguageManager.GetText("UpdateLaunchFailed", "無法啟動更新程式：{0}"), ex.Message);
             SetState(DialogState.Error);
             return;
         }
 
         _primaryButton.IsEnabled = false;
         _secondaryButton.IsEnabled = false;
-        _statusText.Text = "正在關閉程式並套用更新…";
+        _statusText.Text = LanguageManager.GetText("UpdateApplying", "正在關閉程式並套用更新…");
 
         Dispatcher.UIThread.Post(() =>
         {

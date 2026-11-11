@@ -25,8 +25,8 @@ public partial class MainWindow
             UpdateService.CleanupWorkDirectory();
             Dispatcher.UIThread.Post(async () =>
             {
-                var dlg = UpdateDialog.ForMessage("🎉", "更新完成",
-                    $"已成功更新至 v{UpdateService.CurrentVersionText}，歡迎使用新版本！");
+                var dlg = UpdateDialog.ForMessage("🎉", LanguageManager.GetText("UpdateDoneTitle", "更新完成"),
+                    string.Format(LanguageManager.GetText("UpdateDoneBody", "已成功更新至 v{0}，歡迎使用新版本！"), UpdateService.CurrentVersionText));
                 await dlg.ShowDialog(this);
                 // 從舊版更新上來、還沒看過導覽的使用者，關掉提示後播放一次
                 if (ShouldAutoStartTour) StartTour();
@@ -39,9 +39,9 @@ public partial class MainWindow
             Dispatcher.UIThread.Post(async () =>
             {
                 var log = Path.Combine(UpdateService.WorkDirectory, "update.log");
-                var dlg = UpdateDialog.ForMessage("!", "更新未完成",
-                    $"套用更新時發生問題，目前仍為 v{UpdateService.CurrentVersionText}。",
-                    File.Exists(log) ? $"詳細記錄：{log}" : null);
+                var dlg = UpdateDialog.ForMessage("!", LanguageManager.GetText("UpdateIncompleteTitle", "更新未完成"),
+                    string.Format(LanguageManager.GetText("UpdateIncompleteBody", "套用更新時發生問題，目前仍為 v{0}。"), UpdateService.CurrentVersionText),
+                    File.Exists(log) ? string.Format(LanguageManager.GetText("UpdateLogPath", "詳細記錄：{0}"), log) : null);
                 await dlg.ShowDialog(this);
             });
             return;
@@ -94,13 +94,13 @@ public partial class MainWindow
             var info = await UpdateService.CheckForUpdateAsync(cts.Token);
             dlg = info != null
                 ? UpdateDialog.ForUpdate(info)
-                : UpdateDialog.ForMessage("✓", "已是最新版本",
-                    $"目前版本 v{UpdateService.CurrentVersionText} 已是最新。");
+                : UpdateDialog.ForMessage("✓", LanguageManager.GetText("UpdateUpToDateTitle", "已是最新版本"),
+                    string.Format(LanguageManager.GetText("UpdateUpToDateBody", "目前版本 v{0} 已是最新。"), UpdateService.CurrentVersionText));
         }
         catch (Exception ex)
         {
-            dlg = UpdateDialog.ForMessage("!", "無法檢查更新",
-                "請確認網路連線後再試一次。", ex.Message);
+            dlg = UpdateDialog.ForMessage("!", LanguageManager.GetText("UpdateCheckFailedTitle", "無法檢查更新"),
+                LanguageManager.GetText("UpdateCheckFailedBody", "請確認網路連線後再試一次。"), ex.Message);
         }
         await dlg.ShowDialog(owner);
     }

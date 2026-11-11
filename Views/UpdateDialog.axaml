@@ -32,7 +32,7 @@
 		<Border Grid.Row="1" x:Name="NotesPanel" CornerRadius="8" Padding="14,12"
 				BorderThickness="1" BorderBrush="#33808080" Background="#11808080">
 			<StackPanel Spacing="6">
-				<TextBlock Text="更新內容" FontWeight="SemiBold" FontSize="13"/>
+				<TextBlock x:Name="NotesHeaderText" Text="更新內容" FontWeight="SemiBold" FontSize="13"/>
 				<ScrollViewer MaxHeight="220" HorizontalScrollBarVisibility="Disabled">
 					<SelectableTextBlock x:Name="NotesText" TextWrapping="Wrap" FontSize="13" LineHeight="20"/>
 				</ScrollViewer>
