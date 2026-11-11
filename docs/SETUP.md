@@ -13,9 +13,9 @@
 | 執行檔名稱（AssemblyName） | `DataSplitter`（Windows 為 `DataSplitter.exe`） |
 | 類型 | 跨平台桌面應用程式（Windows / macOS / Linux） |
 | UI 框架 | [Avalonia UI](https://avaloniaui.net/) 11.3.3（Fluent 主題 + DataGrid） |
-| 目標框架 | .NET 8（`net8.0`） |
+| 目標框架 | .NET 10（`net10.0`，LTS） |
 | 架構模式 | MVVM（Views / ViewModels / Models / Services / Helpers） |
-| 版本號 | 定義於 `ExcelPasteTool.csproj`，目前為 `1.3.0` |
+| 版本號 | 定義於 `ExcelPasteTool.csproj`，目前為 `1.4.0` |
 
 ---
 
@@ -25,12 +25,12 @@
 
 | 工具 | 版本 | 說明 |
 | --- | --- | --- |
-| .NET SDK | **8.0.413**（由 `global.json` 鎖定） | 見下方「SDK 版本說明」 |
+| .NET SDK | **10.0.100 以上**（由 `global.json` 指定） | 見下方「SDK 版本說明」 |
 | Git | 任意近期版本 | 取得原始碼 |
 
 ### 2.2 建議 IDE（擇一）
 
-- **Visual Studio 2022**（17.14 以上，方案檔 `ExcelPasteTool.sln` 由此版本建立），並安裝「.NET 桌面開發」工作負載與 [Avalonia for Visual Studio](https://marketplace.visualstudio.com/items?itemName=AvaloniaTeam.AvaloniaVS) 擴充套件（提供 AXAML 預覽）。
+- **Visual Studio 2026**（18.0 以上；Visual Studio 2022 不支援 .NET 10），並安裝「.NET 桌面開發」工作負載與 [Avalonia for Visual Studio](https://marketplace.visualstudio.com/items?itemName=AvaloniaTeam.AvaloniaVS) 擴充套件（提供 AXAML 預覽）。
 - **JetBrains Rider**，內建 Avalonia 支援（建議另裝 AvaloniaRider 外掛）。
 - **VS Code**，安裝 C# Dev Kit 與 Avalonia for VS Code 擴充套件。
 
@@ -39,16 +39,16 @@
 `global.json` 指定：
 
 ```json
-{ "sdk": { "version": "8.0.413" } }
+{ "sdk": { "version": "10.0.100", "rollForward": "latestFeature" } }
 ```
 
-未指定 `rollForward`，因此預設行為為 `latestPatch`：只要本機裝有 **8.0.4xx** 系列中 ≥ 413 的 SDK 即可建置。若出現
+`rollForward: latestFeature` 表示本機只要裝有 **10.0 系列**中 ≥ 10.0.100 的任一 SDK（10.0.1xx、10.0.2xx…）即可建置；CI（`actions/setup-dotnet`）也會依此安裝最新的 10.0 SDK。若出現
 
 ```
-A compatible .NET SDK was not found. Requested SDK version: 8.0.413
+A compatible .NET SDK was not found. Requested SDK version: 10.0.100
 ```
 
-請至 <https://dotnet.microsoft.com/download/dotnet/8.0> 下載安裝 8.0.4xx SDK，或用下列指令確認本機已安裝的版本：
+請至 <https://dotnet.microsoft.com/download/dotnet/10.0> 下載安裝 .NET 10 SDK，或用下列指令確認本機已安裝的版本：
 
 ```bash
 dotnet --list-sdks
@@ -82,7 +82,7 @@ dotnet build
 dotnet build -c Release
 ```
 
-建置輸出位於 `bin/<Configuration>/net8.0/`。
+建置輸出位於 `bin/<Configuration>/net10.0/`。
 
 ### 3.1 NuGet 套件版本管理（Central Package Management）
 
@@ -109,7 +109,7 @@ dotnet run
 
 或在 IDE 中將 `ExcelPasteTool` 設為啟動專案後按 F5。
 
-> **注意**：設定檔 `config.json` 固定讀寫「執行檔所在目錄」（`AppContext.BaseDirectory`）。開發時用 `dotnet run` 或 IDE 偵錯，讀寫的是 `bin/<Configuration>/net8.0/config.json`，**不是**專案根目錄那份（見第 5.1 節）。
+> **注意**：設定檔 `config.json` 固定讀寫「執行檔所在目錄」（`AppContext.BaseDirectory`）。開發時用 `dotnet run` 或 IDE 偵錯，讀寫的是 `bin/<Configuration>/net10.0/config.json`，**不是**專案根目錄那份（見第 5.1 節）。
 
 ### 4.1 啟動流程
 
@@ -277,7 +277,7 @@ dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFil
 | --- | --- |
 | `-p:IncludeNativeLibrariesForSelfExtract=true` | 把 Avalonia 的原生函式庫（如 Skia）一起包進單一檔案，輸出目錄只剩一個執行檔 |
 | `-p:EnableCompressionInSingleFile=true` | 壓縮單一檔案，縮小體積，啟動稍慢 |
-| `--self-contained false` | 不含執行階段，體積小，但使用者需自行安裝 .NET 8 Runtime（Avalonia 不需要僅供 WPF/WinForms 使用的 Desktop Runtime） |
+| `--self-contained false` | 不含執行階段，體積小，但使用者需自行安裝 .NET 10 Runtime（Avalonia 不需要僅供 WPF/WinForms 使用的 Desktop Runtime） |
 
 ### 6.2 發佈設定檔（PublishProfiles）
 
@@ -317,6 +317,8 @@ dotnet publish -p:PublishProfile=Properties/PublishProfiles/Windows-x64.pubxml
 | --- | --- | --- |
 | `build.yml` | 開 PR、推送到 `master` | `dotnet build -c Release` 確認可編譯 |
 | `release.yml` | 推送版本 tag（`1.2.3` 或 `v1.2.3`） | 四個平台各自 `dotnet publish`（自含、單一檔案、內含原生函式庫），附上 `config.json`，打包成 `DataSplitter_<平台>_<架構>.zip`，並建立 GitHub Release 上傳 |
+
+**.NET runtime 檢查**：Release 的 zip 是自包含（self-contained）單一檔案，已內含 .NET 10 runtime，使用者電腦**不需要**另外安裝 .NET。`release.yml` 每個平台發佈後會執行「Verify bundled .NET 10 runtime」步驟，讀取 `DataSplitter.runtimeconfig.json` 確認內含 `Microsoft.NETCore.App 10.x`；若有人誤改成 `--self-contained false` 或目標框架不是 `net10.0`，Release 會直接失敗，不會發出需要使用者自行裝 runtime 的版本。因為 runtime 跟著執行檔一起更新，舊版（.NET 8 打包的 1.3.0 以前）透過自動更新換成 1.4.0 也不需要任何額外安裝。
 
 推新版的步驟：
 
@@ -359,13 +361,13 @@ dotnet publish -p:PublishProfile=Properties/PublishProfiles/Windows-x64.pubxml
 ## 8. 常見問題
 
 **Q1. 建置出現 `A compatible .NET SDK was not found`。**
-本機沒有 8.0.4xx 系列 SDK，請依 2.3 安裝。
+本機沒有 .NET 10 SDK（10.0.100 以上），請依 2.3 安裝。
 
 **Q2. 出現 NU1008「Projects that use central package version management should not define the version on the PackageReference items」。**
 `.csproj` 的 `PackageReference` 不可帶 `Version`，請把版本移到 `Directory.Packages.props`（見 3.1）。
 
 **Q3. 修改設定後重開程式，設定沒有保留。**
-`config.json` 存在執行檔旁邊。請確認該目錄可寫入；開發時要看的是 `bin/<Configuration>/net8.0/config.json`，不是專案根目錄那份。
+`config.json` 存在執行檔旁邊。請確認該目錄可寫入；開發時要看的是 `bin/<Configuration>/net10.0/config.json`，不是專案根目錄那份。
 
 **Q4. 改了 `AssemblyName` 之後程式啟動就沒有樣式或崩潰。**
 `App.axaml` 內的 `avares://DataSplitter/...` 需一併修改（見 5.5）。
