@@ -175,7 +175,19 @@ public static class LanguageManager
             ["ChangelogTitle"] = "改版資訊",
             ["ChangelogLatestBadge"] = "最新",
             ["ChangelogCloseButton"] = "關閉",
-            ["AboutGitHubTitle"] = "GitHub 專案"
+            ["AboutGitHubTitle"] = "GitHub 專案",
+            ["SidebarTools"] = "工具",
+            ["SidebarSettings"] = "設定",
+            ["SidebarHelp"] = "說明 (F1)",
+            ["SidebarAbout"] = "關於",
+            ["CopyTopBoxTooltip"] = "複製分隔資料",
+            ["CopySqlTooltip"] = "複製SQL條件",
+            ["CopyTableTooltip"] = "複製全部資料",
+            ["LanguageTempToast"] = "語言已臨時切換（未保存）",
+            ["ThemeTempToast"] = "主題已臨時切換（未保存）",
+            ["ClearedToast"] = "畫面已清理回初始狀態",
+            ["CopySuccessToast"] = "已複製到剪貼簿！",
+            ["CopyFailedToast"] = "複製失敗，請重試"
         };
     }
 
@@ -259,7 +271,19 @@ public static class LanguageManager
             ["ChangelogTitle"] = "更新记录",
             ["ChangelogLatestBadge"] = "最新",
             ["ChangelogCloseButton"] = "关闭",
-            ["AboutGitHubTitle"] = "GitHub 项目"
+            ["AboutGitHubTitle"] = "GitHub 项目",
+            ["SidebarTools"] = "工具",
+            ["SidebarSettings"] = "设定",
+            ["SidebarHelp"] = "说明 (F1)",
+            ["SidebarAbout"] = "关于",
+            ["CopyTopBoxTooltip"] = "复制分隔数据",
+            ["CopySqlTooltip"] = "复制SQL条件",
+            ["CopyTableTooltip"] = "复制全部数据",
+            ["LanguageTempToast"] = "语言已临时切换（未保存）",
+            ["ThemeTempToast"] = "主题已临时切换（未保存）",
+            ["ClearedToast"] = "画面已清理回初始状态",
+            ["CopySuccessToast"] = "已复制到剪贴板！",
+            ["CopyFailedToast"] = "复制失败，请重试"
         };
     }
 
@@ -343,7 +367,19 @@ public static class LanguageManager
             ["ChangelogTitle"] = "Release Notes",
             ["ChangelogLatestBadge"] = "Latest",
             ["ChangelogCloseButton"] = "Close",
-            ["AboutGitHubTitle"] = "GitHub Project"
+            ["AboutGitHubTitle"] = "GitHub Project",
+            ["SidebarTools"] = "Tools",
+            ["SidebarSettings"] = "Settings",
+            ["SidebarHelp"] = "Help (F1)",
+            ["SidebarAbout"] = "About",
+            ["CopyTopBoxTooltip"] = "Copy delimited data",
+            ["CopySqlTooltip"] = "Copy SQL condition",
+            ["CopyTableTooltip"] = "Copy all data",
+            ["LanguageTempToast"] = "Language switched temporarily (not saved)",
+            ["ThemeTempToast"] = "Theme switched temporarily (not saved)",
+            ["ClearedToast"] = "Cleared and reset to the initial state",
+            ["CopySuccessToast"] = "Copied to clipboard!",
+            ["CopyFailedToast"] = "Copy failed, please try again"
         };
     }
 
@@ -427,7 +463,19 @@ public static class LanguageManager
             ["ChangelogTitle"] = "更新履歴",
             ["ChangelogLatestBadge"] = "最新",
             ["ChangelogCloseButton"] = "閉じる",
-            ["AboutGitHubTitle"] = "GitHub プロジェクト"
+            ["AboutGitHubTitle"] = "GitHub プロジェクト",
+            ["SidebarTools"] = "ツール",
+            ["SidebarSettings"] = "設定",
+            ["SidebarHelp"] = "ヘルプ (F1)",
+            ["SidebarAbout"] = "バージョン情報",
+            ["CopyTopBoxTooltip"] = "区切りデータをコピー",
+            ["CopySqlTooltip"] = "SQL 条件をコピー",
+            ["CopyTableTooltip"] = "すべてのデータをコピー",
+            ["LanguageTempToast"] = "言語を一時的に切り替えました（未保存）",
+            ["ThemeTempToast"] = "テーマを一時的に切り替えました（未保存）",
+            ["ClearedToast"] = "画面を初期状態に戻しました",
+            ["CopySuccessToast"] = "クリップボードにコピーしました！",
+            ["CopyFailedToast"] = "コピーに失敗しました。もう一度お試しください"
         };
     }
 
@@ -511,7 +559,19 @@ public static class LanguageManager
             ["ChangelogTitle"] = "변경 내역",
             ["ChangelogLatestBadge"] = "최신",
             ["ChangelogCloseButton"] = "닫기",
-            ["AboutGitHubTitle"] = "GitHub 프로젝트"
+            ["AboutGitHubTitle"] = "GitHub 프로젝트",
+            ["SidebarTools"] = "도구",
+            ["SidebarSettings"] = "설정",
+            ["SidebarHelp"] = "도움말 (F1)",
+            ["SidebarAbout"] = "정보",
+            ["CopyTopBoxTooltip"] = "구분 데이터 복사",
+            ["CopySqlTooltip"] = "SQL 조건 복사",
+            ["CopyTableTooltip"] = "모든 데이터 복사",
+            ["LanguageTempToast"] = "언어가 임시로 전환되었습니다(저장 안 됨)",
+            ["ThemeTempToast"] = "테마가 임시로 전환되었습니다(저장 안 됨)",
+            ["ClearedToast"] = "화면이 초기 상태로 초기화되었습니다",
+            ["CopySuccessToast"] = "클립보드에 복사되었습니다!",
+            ["CopyFailedToast"] = "복사에 실패했습니다. 다시 시도하세요"
         };
     }
 }
