@@ -72,6 +72,17 @@
                         <Button Name="ResetFontButton" Classes="ghost" Content="{Binding FontResetText.Text}" Margin="0,6,0,0"/>
                     </StackPanel>
                 </Border>
+
+                <!-- 說明開啟方式 -->
+                <Border Classes="setting-card">
+                    <StackPanel Spacing="6">
+                        <TextBlock Text="{Binding HelpViewerTitleText.Text}" Classes="section-title"/>
+                        <TextBlock Text="{Binding HelpViewerDescText.Text}" Classes="muted" Margin="0,0,0,6" TextWrapping="Wrap"/>
+                        <ComboBox Width="320"
+                                  ItemsSource="{Binding HelpViewers, Mode=OneWay}"
+                                  SelectedItem="{Binding SelectedHelpViewer, Mode=TwoWay}"/>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </ScrollViewer>
     </Grid>

@@ -134,9 +134,17 @@
 														<TextBlock Text="{Binding RowNumber}" Classes="row-number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 													</Border>
 													<Border Grid.Column="1" Classes="grid-cell" BorderThickness="0,0,0,1">
-														<SelectableTextBlock Text="{Binding Value}" Classes="row-data" Margin="10,5" VerticalAlignment="Center"
-																			 Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap"
-																			 SelectionBrush="{DynamicResource SelectionBrush}"/>
+														<Grid ColumnDefinitions="*,Auto">
+															<SelectableTextBlock Grid.Column="0" Text="{Binding Value}" Classes="row-data" Margin="10,5" VerticalAlignment="Center"
+																				 Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap"
+																				 SelectionBrush="{DynamicResource SelectionBrush}"/>
+															<!-- 移除此筆：平常透明，滑鼠移到該列才顯示（用透明度而非 IsVisible，避免列寬跳動） -->
+															<Button Grid.Column="1" Classes="row-remove" Margin="0,0,8,0" VerticalAlignment="Center"
+																	Focusable="False" Cursor="Hand"
+																	Click="RemoveRow_Click" PointerEntered="RemoveRowButton_PointerEntered">
+																<Path Data="{x:Static local:IconManager.ClearIcon}" Width="10" Height="10" Stretch="Uniform"/>
+															</Button>
+														</Grid>
 													</Border>
 												</Grid>
 											</DataTemplate>

@@ -249,6 +249,27 @@ public partial class DataToolView : UserControl
         EnqueueToast("畫面已清理回初始狀態");
     }
 
+    /// <summary>移除單筆資料：重排後面的行號，並同步分隔資料與 SQL 條件。捲動位置保留，方便連續刪除。</summary>
+    private void RemoveRow_Click(object? sender, RoutedEventArgs e)
+    {
+        if ((sender as Control)?.DataContext is not DataItem item) return;
+        var index = DataItems.IndexOf(item);
+        if (index < 0) return;
+
+        DataItems.RemoveAt(index);
+        if (index < Items.Count) Items.RemoveAt(index);
+        for (int i = index; i < DataItems.Count; i++)
+            DataItems[i].RowNumber = i + 1;
+        UpdateTopAndBottom();
+    }
+
+    // 提示文字在滑入時才設定，語言切換後不必重建資料列
+    private void RemoveRowButton_PointerEntered(object? sender, Avalonia.Input.PointerEventArgs e)
+    {
+        if (sender is Control control)
+            ToolTip.SetTip(control, LanguageManager.GetText("RemoveRowTooltip", "移除此筆"));
+    }
+
     private void TopBoxChanged(object? sender, TextChangedEventArgs e)
     {
         if (_suppressEvents) return;

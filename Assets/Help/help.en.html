@@ -1,0 +1,179 @@
+<main>
+  <header>
+    <h1>DataSplitter Pro Help</h1>
+    <p class="lead">Turn one Excel column into a separator-joined string and a SQL IN condition with one click. If this is your first time, the first two sections are all you need.</p>
+    <ul class="toc">
+      <li><a href="#what">What this tool does</a></li>
+      <li><a href="#quick">Quick start in 3 steps</a></li>
+      <li><a href="#screen">The screen</a></li>
+      <li><a href="#more">More actions</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#keys">Shortcuts and settings</a></li>
+    </ul>
+  </header>
+
+  <h2 id="what">What this tool does</h2>
+  <p>You have a column of item numbers, order numbers or codes in Excel, and you want to use them in an ERP query or in a SQL <code>WHERE ... IN</code>. Adding separators and quotes by hand is slow and easy to get wrong. This tool converts the whole column at once.</p>
+
+  <div class="convert">
+    <div>
+      <div class="box-title">One column in Excel</div>
+      <table class="excel">
+        <thead><tr><th>A</th></tr></thead>
+        <tbody>
+          <tr><td>A-001</td></tr>
+          <tr><td>A-002</td></tr>
+          <tr><td>B-105</td></tr>
+          <tr><td>C-330</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="arrow">→</div>
+    <div>
+      <div class="box-title">Separated data (for multi-value query fields in an ERP or report)</div>
+      <div class="out">A-001|A-002|B-105|C-330</div>
+      <div class="box-title">SQL condition (goes after WHERE column IN)</div>
+      <div class="out sql">('A-001', 'A-002', 'B-105', 'C-330')</div>
+    </div>
+  </div>
+
+  <h2 id="quick">Quick start in 3 steps</h2>
+  <ol class="steps">
+    <li>
+      <h3>Copy one column in Excel</h3>
+      <p>Select the cells you want to convert (one column, as many rows as you like) and press <kbd>Ctrl</kbd> + <kbd>C</kbd>.</p>
+    </li>
+    <li>
+      <h3>Come back here and click "Paste Data"</h3>
+      <p>On the Tools page, click <span class="btn btn-primary">Paste Data</span> at the top right. Each value appears as a row in the table on the right. Blank lines and duplicate values are removed automatically.</p>
+    </li>
+    <li>
+      <h3>Copy the result you need</h3>
+      <p>"PIP Separated Data" and "SQL Condition" are filled in on the left at the same time. Click the copy button <span class="mock-icon">⧉</span> next to either title, then press <kbd>Ctrl</kbd> + <kbd>V</kbd> in your ERP or SQL tool.</p>
+    </li>
+  </ol>
+
+  <div class="card tip">
+    <span class="tip-title">Note</span>Use the "Paste Data" button instead of pressing <kbd>Ctrl</kbd> + <kbd>V</kbd> in the text box. The button splits each Excel row into its own value. Pasting into the text box treats everything as one piece of text.
+  </div>
+
+  <h2 id="screen">The screen</h2>
+  <p>This is a sketch of the Tools page. The numbers match the list below.</p>
+
+  <div class="mock" aria-label="Sketch of the Tools page">
+    <div class="mock-side"><span class="on"></span><span></span><span></span><span></span></div>
+    <div class="mock-main">
+      <div class="mock-bar">
+        <span class="mock-field"><span class="num">1</span> Separator: <span class="mock-select">Pipe |</span></span>
+        <span class="mock-field">Language: <span class="mock-select">English</span></span>
+        <span class="mock-field">Theme: <span class="mock-select">GitHub Dark</span></span>
+      </div>
+      <div class="mock-body">
+        <div class="mock-panel">
+          <div class="mock-title"><span class="num">4</span> PIP Separated Data <span class="grow"></span><span class="mock-icon">⧉</span></div>
+          <div class="mock-text">A-001|A-002|B-105|C-330</div>
+          <div class="mock-title"><span class="num">5</span> SQL Condition <span class="grow"></span><span class="mock-icon">⧉</span></div>
+          <div class="mock-text sql">('A-001', 'A-002', 'B-105', 'C-330')</div>
+        </div>
+        <div class="mock-panel">
+          <div class="mock-actions">
+            <span class="num">2</span><span class="btn btn-primary">Paste Data</span>
+            <span class="badge">4 rows</span>
+            <span class="grow"></span>
+            <span class="num">7</span><span class="btn btn-secondary">Clear Data</span>
+          </div>
+          <div class="mock-table">
+            <div class="mock-row head"><div>Row</div><div><span class="num">3</span> Data Content</div><div></div></div>
+            <div class="mock-row"><div>1</div><div>A-001</div><div></div></div>
+            <div class="mock-row even"><div>2</div><div>A-002</div><div class="mock-x">✕</div></div>
+            <div class="mock-row"><div>3</div><div>B-105</div><div></div></div>
+            <div class="mock-row even"><div>4</div><div>C-330</div><div></div></div>
+          </div>
+          <div style="margin-top:6px"><span class="num">6</span> <span class="muted">Hover a row and a ✕ appears on the right</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ul class="legend">
+    <li><span class="num">1</span><div><strong>Separator</strong>: the character used to join the values. Choose pipe <code>|</code>, semicolon <code>;</code>, colon <code>:</code> or space.</div></li>
+    <li><span class="num">2</span><div><strong>Paste Data</strong>: reads the clipboard. The row count is shown next to it.</div></li>
+    <li><span class="num">3</span><div><strong>Data table</strong>: every value with a row number, so you can check the count and content.</div></li>
+    <li><span class="num">4</span><div><strong>PIP Separated Data</strong>: the values joined by the separator. You can also type and edit here.</div></li>
+    <li><span class="num">5</span><div><strong>SQL Condition</strong>: the values with quotes and brackets added. Copy only, not editable.</div></li>
+    <li><span class="num">6</span><div><strong>Remove one row</strong>: click the ✕ on the right of a row. The row numbers are renumbered.</div></li>
+    <li><span class="num">7</span><div><strong>Clear Data</strong>: removes everything and sets the separator back to pipe.</div></li>
+  </ul>
+  <p class="muted">The three areas stay in sync: change one and the other two update immediately.</p>
+
+  <h2 id="more">More actions</h2>
+  <table>
+    <thead><tr><th class="nowrap">You want to</th><th>How</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap">Use another separator</td><td>Pick it from the "Separator" list in the top toolbar. Data already pasted is rejoined with the new one right away.</td></tr>
+      <tr><td class="nowrap">Drop a few values</td><td>Hover the row in the data table and click the ✕ on the right.</td></tr>
+      <tr><td class="nowrap">Add or edit by hand</td><td>Type in the "PIP Separated Data" box, with the current separator between values, for example <code>A-001|A-002</code>.</td></tr>
+      <tr><td class="nowrap">Copy the column back to Excel</td><td>Click the "Row" header at the top left of the table. All values are copied, one per line, ready to paste into Excel.</td></tr>
+      <tr><td class="nowrap">Start over</td><td>Click "Clear Data".</td></tr>
+      <tr><td class="nowrap">Resize the panels</td><td>Drag the gap between the left and right panels.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="faq">FAQ</h2>
+  <details open>
+    <summary>I clicked "Paste Data" and nothing happened.</summary>
+    <p>The clipboard has no text. Go back to Excel, select the cells, press <kbd>Ctrl</kbd> + <kbd>C</kbd>, then click the button again.</p>
+  </details>
+  <details>
+    <summary>I copied several columns. Why do I only get the first one?</summary>
+    <p>That is by design: only the first column of each row is used. If you need a different column, select only that column in Excel and copy it.</p>
+  </details>
+  <details>
+    <summary>Why is the row count lower than in Excel?</summary>
+    <p>Blank rows and duplicate values are removed, so the count is the number of unique values.</p>
+  </details>
+  <details>
+    <summary>Part of my value was cut off.</summary>
+    <p>When pasting, a Tab, comma <code>,</code>, semicolon <code>;</code> or pipe <code>|</code> inside a row is treated as a column separator, and only the first part is kept. For example <code>A-001,red</code> becomes <code>A-001</code>. If your values contain these characters, type them in the "PIP Separated Data" box instead.</p>
+  </details>
+  <details>
+    <summary>My values contain single quotes. Will the SQL break?</summary>
+    <p>No. A single quote is doubled automatically, so <code>O'Brien</code> is written as <code>'O''Brien'</code>, which is the standard SQL way.</p>
+  </details>
+  <details>
+    <summary>I changed the language or theme in the toolbar, but it was back to the old one next time.</summary>
+    <p>The toolbar only switches them for the current session. To keep the change, set it on the Settings page in the left menu.</p>
+  </details>
+  <details>
+    <summary>Where are settings stored, and why were mine not saved?</summary>
+    <p>Settings are stored in <code>config.json</code> next to the program. If the program is in a folder it cannot write to (for example <code>C:\Program Files</code>), settings cannot be saved. Move the whole folder to your Desktop or Documents.</p>
+  </details>
+  <details>
+    <summary>How do I update to a new version?</summary>
+    <p>The program checks at startup. When a new version is available it shows a prompt, and you can download and install the update from inside the program.</p>
+  </details>
+
+  <h2 id="keys">Shortcuts and settings</h2>
+  <table>
+    <thead><tr><th class="nowrap">Key</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap"><kbd>F1</kbd></td><td>Opens this help from any page.</td></tr>
+      <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>C</kbd></td><td>Copies the selected text in a text box or in the data table.</td></tr>
+      <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>V</kbd></td><td>Pastes text into the "PIP Separated Data" box.</td></tr>
+      <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>A</kbd></td><td>Selects everything in a text box.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>What you can change on the Settings page</h3>
+  <table>
+    <thead><tr><th class="nowrap">Setting</th><th>Description</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap">Language</td><td>Traditional Chinese, Simplified Chinese, English.</td></tr>
+      <tr><td class="nowrap">Theme</td><td>GitHub Dark, Light Mode, Tiffany Blue.</td></tr>
+      <tr><td class="nowrap">Font and font size</td><td>Make the text larger here if it is too small. The text in this help grows with it.</td></tr>
+      <tr><td class="nowrap">Help Viewer</td><td>"In-app window" shows this help inside the program (the default). "Default browser" opens it in your browser when you press <kbd>F1</kbd>, which is handy on a second screen.</td></tr>
+    </tbody>
+  </table>
+
+  <footer>DataSplitter Pro · Press <kbd>F1</kbd> at any time to come back to this help.</footer>
+</main>

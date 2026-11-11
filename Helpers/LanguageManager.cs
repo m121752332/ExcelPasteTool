@@ -101,6 +101,7 @@ public static class LanguageManager
             ["ClearDataButton"] = "清空資料",
             ["RowNumberHeader"] = "行號",
             ["DataContentHeader"] = "資料內容",
+            ["RemoveRowTooltip"] = "移除此筆",
             ["SeparatorPipe"] = "豎線 |",
             ["SeparatorSemicolon"] = "分號 ;",
             ["SeparatorColon"] = "冒號 :",
@@ -122,7 +123,15 @@ public static class LanguageManager
             ["TopBoxWatermark"] = "也可以直接在這裡輸入以分隔符號串接的資料",
             ["LanguageChangedToast"] = "已將語言設定變更完成",
             ["ThemeChangedToast"] = "已將主題設定變更完成",
-            ["LanguageDesc"] = "變更 App 的語言設定"
+            ["LanguageDesc"] = "變更 App 的語言設定",
+            ["HelpTitle"] = "說明",
+            ["HelpOpenInBrowser"] = "用瀏覽器開啟",
+            ["HelpUnavailableText"] = "這台電腦沒有可用的內嵌瀏覽器元件，已改用預設瀏覽器開啟說明。\n之後也可以按右上角的「用瀏覽器開啟」。",
+            ["HelpViewerTitle"] = "說明開啟方式",
+            ["HelpViewerDesc"] = "按 F1 或點選「說明」時，要在 App 內顯示還是用預設瀏覽器開啟",
+            ["HelpViewerInApp"] = "內建視窗",
+            ["HelpViewerBrowser"] = "預設瀏覽器",
+            ["HelpViewerChangedToast"] = "說明開啟方式已儲存"
         };
     }
 
@@ -142,6 +151,7 @@ public static class LanguageManager
             ["ClearDataButton"] = "清空数据",
             ["RowNumberHeader"] = "行号",
             ["DataContentHeader"] = "数据内容",
+            ["RemoveRowTooltip"] = "移除此条",
             ["SeparatorPipe"] = "竖线 |",
             ["SeparatorSemicolon"] = "分号 ;",
             ["SeparatorColon"] = "冒号 :",
@@ -163,7 +173,15 @@ public static class LanguageManager
             ["TopBoxWatermark"] = "也可以直接在这里输入以分隔符号串接的数据",
             ["LanguageChangedToast"] = "已将语言设定变更完成",
             ["ThemeChangedToast"] = "已将主题设定变更完成",
-            ["LanguageDesc"] = "变更 App 的语言设定"
+            ["LanguageDesc"] = "变更 App 的语言设定",
+            ["HelpTitle"] = "说明",
+            ["HelpOpenInBrowser"] = "用浏览器打开",
+            ["HelpUnavailableText"] = "这台电脑没有可用的内嵌浏览器组件，已改用默认浏览器打开说明。\n之后也可以点右上角的「用浏览器打开」。",
+            ["HelpViewerTitle"] = "说明打开方式",
+            ["HelpViewerDesc"] = "按 F1 或点击「说明」时，要在 App 内显示还是用默认浏览器打开",
+            ["HelpViewerInApp"] = "内置窗口",
+            ["HelpViewerBrowser"] = "默认浏览器",
+            ["HelpViewerChangedToast"] = "说明打开方式已保存"
         };
     }
 
@@ -183,6 +201,7 @@ public static class LanguageManager
             ["ClearDataButton"] = "Clear Data",
             ["RowNumberHeader"] = "Row",
             ["DataContentHeader"] = "Data Content",
+            ["RemoveRowTooltip"] = "Remove this row",
             ["SeparatorPipe"] = "Pipe |",
             ["SeparatorSemicolon"] = "Semicolon ;",
             ["SeparatorColon"] = "Colon :",
@@ -204,7 +223,15 @@ public static class LanguageManager
             ["TopBoxWatermark"] = "Or type values joined by the separator here",
             ["LanguageChangedToast"] = "Language settings changed successfully",
             ["ThemeChangedToast"] = "Theme settings changed successfully",
-            ["LanguageDesc"] = "Change the app's language settings"
+            ["LanguageDesc"] = "Change the app's language settings",
+            ["HelpTitle"] = "Help",
+            ["HelpOpenInBrowser"] = "Open in browser",
+            ["HelpUnavailableText"] = "No embedded browser component is available on this computer, so the help was opened in your default browser.\nYou can also click \"Open in browser\" at the top right.",
+            ["HelpViewerTitle"] = "Help Viewer",
+            ["HelpViewerDesc"] = "Where to show the help when you press F1 or click Help: inside the app or in your default browser",
+            ["HelpViewerInApp"] = "In-app window",
+            ["HelpViewerBrowser"] = "Default browser",
+            ["HelpViewerChangedToast"] = "Help viewer setting saved"
         };
     }
 }

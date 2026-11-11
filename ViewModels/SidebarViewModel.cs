@@ -7,6 +7,7 @@ public enum SidebarPage
 {
     Tools,
     Settings,
+    Help,
     About
 }
 

@@ -22,6 +22,8 @@ public class SettingsViewModel : INotifyPropertyChanged
     public LocalizedText FontSizeDescText { get; } = new("FontSizeDesc", "調整整個 App 的文字大小");
     public LocalizedText FontPreviewText { get; } = new("FontPreviewText", "預覽：TIPTOP 料號 A-001 | 資料分隔 1234567890");
     public LocalizedText FontResetText { get; } = new("FontResetButton", "還原預設");
+    public LocalizedText HelpViewerTitleText { get; } = new("HelpViewerTitle", "說明開啟方式");
+    public LocalizedText HelpViewerDescText { get; } = new("HelpViewerDesc", "按 F1 或點選「說明」時，要在 App 內顯示還是用預設瀏覽器開啟");
 
     public double MinFontSize => FontManager.MinFontSize;
     public double MaxFontSize => FontManager.MaxFontSize;
@@ -29,6 +31,7 @@ public class SettingsViewModel : INotifyPropertyChanged
     public ObservableCollection<string> Languages { get; } = new();
     public ObservableCollection<string> Themes { get; } = new();
     public ObservableCollection<string> FontFamilies { get; } = new();
+    public ObservableCollection<string> HelpViewers { get; } = new();
 
     public Action<string>? EnqueueToast { get; set; }
 
@@ -98,6 +101,34 @@ public class SettingsViewModel : INotifyPropertyChanged
                 OnPropertyChanged();
             }
         }
+    }
+
+    private string _selectedHelpViewer = "";
+
+    /// <summary>說明的開啟方式（內建視窗 / 預設瀏覽器），變更後立即存檔。</summary>
+    public string SelectedHelpViewer
+    {
+        get => _selectedHelpViewer;
+        set
+        {
+            if (_selectedHelpViewer == value || string.IsNullOrEmpty(value) || _isUpdating) return;
+            _selectedHelpViewer = value;
+            var selected = HelpService.GetAllViewerModes().FirstOrDefault(m => m.Name == value);
+            if (selected != default)
+            {
+                HelpService.ViewerMode = selected.Mode;
+                EnqueueToast?.Invoke(LanguageManager.GetText("HelpViewerChangedToast", "說明開啟方式已儲存"));
+            }
+            OnPropertyChanged();
+        }
+    }
+
+    private void RefreshHelpViewers()
+    {
+        HelpViewers.Clear();
+        foreach (var (_, name) in HelpService.GetAllViewerModes())
+            HelpViewers.Add(name);
+        _selectedHelpViewer = HelpService.GetViewerModeName(HelpService.ViewerMode);
     }
 
     private string _selectedFontFamily = "";
@@ -217,6 +248,8 @@ public class SettingsViewModel : INotifyPropertyChanged
         _selectedLanguage = "";
         _selectedTheme = "";
         _selectedFontFamily = "";
+        _selectedHelpViewer = "";
+        OnPropertyChanged(nameof(SelectedHelpViewer));
         OnPropertyChanged(nameof(SelectedLanguage));
         OnPropertyChanged(nameof(SelectedTheme));
         OnPropertyChanged(nameof(SelectedFontFamily));
@@ -267,6 +300,7 @@ public class SettingsViewModel : INotifyPropertyChanged
         Debug.WriteLine($"Final selected theme: '{_selectedTheme}'");
         
         RefreshFontFamilies();
+        RefreshHelpViewers();
 
         _isUpdating = false;
         
@@ -277,6 +311,8 @@ public class SettingsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(FontSize));
         OnPropertyChanged(nameof(FontSizeDisplay));
         
+        OnPropertyChanged(nameof(SelectedHelpViewer));
+
         // 更新本地化文字
         OnPropertyChanged(nameof(TitleText));
         OnPropertyChanged(nameof(LanguageTitleText));

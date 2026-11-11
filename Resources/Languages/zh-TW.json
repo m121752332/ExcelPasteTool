@@ -10,6 +10,7 @@
   "ClearDataButton": "清空資料",
   "RowNumberHeader": "行號",
   "DataContentHeader": "資料內容",
+  "RemoveRowTooltip": "移除此筆",
   "SeparatorPipe": "豎線 |",
   "SeparatorSemicolon": "分號 ;",
   "SeparatorColon": "冒號 :",
