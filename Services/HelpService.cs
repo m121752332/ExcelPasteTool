@@ -178,11 +178,17 @@ public static class HelpService
         foreach (var (cssVar, resourceKey, fallback) in ThemeColors)
         {
             var value = fallback;
-            if (app != null && app.TryGetResource(resourceKey, app.ActualThemeVariant, out var resource)
-                && resource is ISolidColorBrush brush)
+            if (app != null && app.TryGetResource(resourceKey, app.ActualThemeVariant, out var resource))
             {
-                var c = brush.Color;
-                value = $"#{c.R:X2}{c.G:X2}{c.B:X2}";
+                // 漸層配色（例如彩虹幻境）：說明頁的 CSS 變數只能放單色，取中間的色標代表
+                Color? c = resource switch
+                {
+                    ISolidColorBrush solid => solid.Color,
+                    IGradientBrush { GradientStops.Count: > 0 } gradient => gradient.GradientStops[gradient.GradientStops.Count / 2].Color,
+                    _ => null
+                };
+                if (c is { } color)
+                    value = $"#{color.R:X2}{color.G:X2}{color.B:X2}";
             }
             sb.Append("  ").Append(cssVar).Append(": ").Append(value).Append(";\n");
         }

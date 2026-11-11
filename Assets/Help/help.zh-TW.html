@@ -162,17 +162,58 @@
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>C</kbd></td><td>複製輸入框或資料表中選取的文字。</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>V</kbd></td><td>在「PIP 分隔資料」框內貼上文字。</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>A</kbd></td><td>在輸入框內全選。</td></tr>
+      <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>Q</kbd></td><td>開啟或收合左側選單（側邊欄）。</td></tr>
+      <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>P</kbd></td><td>把剪貼簿內容貼到「工具」頁右側的資料表，等同按「資料貼上」；在其他頁面按也會自動切回「工具」頁。</td></tr>
+      <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>F4</kbd></td><td>強制關閉程式（導覽進行中或有對話框時也會直接結束）。</td></tr>
     </tbody>
   </table>
+
+  <h3 id="shortcut-map">快捷鍵對照圖</h3>
+  <p>下圖是開啟「精簡標題列」時的畫面，數字對應下方的快捷鍵。把滑鼠停在按鈕上，提示中也會顯示快捷鍵。</p>
+  <div class="mock mock-keys" aria-label="快捷鍵對照圖">
+    <div class="mock-titlebar">
+      <span class="mock-tb side" title="開關側邊欄 (Alt+Q)">◫ <span class="num">1</span></span>
+      <span class="grow"></span>
+      <span class="mock-tip">關閉 (Alt+F4)</span>
+      <span class="mock-tb">—</span><span class="mock-tb">☐</span><span class="mock-tb close">✕ <span class="num">3</span></span>
+    </div>
+    <div class="mock-side"><span class="on"></span><span></span><span></span><span></span></div>
+    <div class="mock-main">
+      <div class="mock-body">
+        <div class="mock-panel">
+          <div class="mock-text"></div>
+          <div class="mock-text sql"></div>
+        </div>
+        <div class="mock-panel">
+          <div class="mock-actions">
+            <span class="num">2</span><span class="btn btn-primary">資料貼上</span>
+            <span class="badge">共 4 筆</span>
+          </div>
+          <div class="mock-tip-row"><span class="mock-tip">貼上剪貼簿資料 (Alt+P)</span></div>
+          <div class="mock-table">
+            <div class="mock-row"><div>1</div><div>A-001</div><div></div></div>
+            <div class="mock-row even"><div>2</div><div>A-002</div><div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul class="legend">
+    <li><span class="num">1</span><div><kbd>Alt</kbd> + <kbd>Q</kbd> <strong>側邊欄開關</strong>：開啟或收合左側選單。</div></li>
+    <li><span class="num">2</span><div><kbd>Alt</kbd> + <kbd>P</kbd> <strong>資料貼上</strong>：從 Excel 複製後直接按，資料會進到右側資料表。</div></li>
+    <li><span class="num">3</span><div><kbd>Alt</kbd> + <kbd>F4</kbd> <strong>關閉</strong>：強制關閉程式。</div></li>
+  </ul>
+  <p class="muted">沒有開啟「精簡標題列」時，視窗用系統原本的標題列，三個快捷鍵一樣可以使用。</p>
 
   <h3>「設定」頁可以調整的項目</h3>
   <table>
     <thead><tr><th class="nowrap">項目</th><th>說明</th></tr></thead>
     <tbody>
       <tr><td class="nowrap">語言</td><td>繁體中文、簡體中文、English、日本語、한국어。</td></tr>
-      <tr><td class="nowrap">主題</td><td>GitHub 暗黑、光線模式、蒂芬妮藍。</td></tr>
+      <tr><td class="nowrap">主題</td><td>GitHub 暗黑、光線模式、蒂芬妮藍、彩虹幻境。</td></tr>
       <tr><td class="nowrap">字型與字體大小</td><td>覺得字太小可以在這裡放大，這份說明的字也會一起變大。</td></tr>
       <tr><td class="nowrap">說明開啟方式</td><td>「內建視窗」是在程式裡顯示這份說明（預設）；「預設瀏覽器」是按 <kbd>F1</kbd> 時改用你的瀏覽器開啟，方便放在另一個螢幕對照。</td></tr>
+      <tr><td class="nowrap">精簡標題列</td><td>開啟後隱藏系統標題列，改用精簡的標題列，只留側邊欄開關與最小化、最大化、關閉按鈕（類似 Claude 桌面版）。空白處可以拖曳視窗，雙擊可放大或還原。</td></tr>
     </tbody>
   </table>
 

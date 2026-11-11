@@ -162,17 +162,58 @@
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>C</kbd></td><td>复制输入框或数据表中选取的文字。</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>V</kbd></td><td>在「PIP 分隔数据」框内粘贴文字。</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>A</kbd></td><td>在输入框内全选。</td></tr>
+      <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>Q</kbd></td><td>展开或收起左侧菜单（侧边栏）。</td></tr>
+      <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>P</kbd></td><td>把剪贴板内容粘贴到「工具」页右侧的数据表，等同按「数据粘贴」；在其他页面按也会自动切回「工具」页。</td></tr>
+      <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>F4</kbd></td><td>强制关闭程序（导览进行中或有对话框时也会直接结束）。</td></tr>
     </tbody>
   </table>
+
+  <h3 id="shortcut-map">快捷键对照图</h3>
+  <p>下图是开启「精简标题栏」时的画面，数字对应下方的快捷键。把鼠标停在按钮上，提示中也会显示快捷键。</p>
+  <div class="mock mock-keys" aria-label="快捷键对照图">
+    <div class="mock-titlebar">
+      <span class="mock-tb side" title="开关侧边栏 (Alt+Q)">◫ <span class="num">1</span></span>
+      <span class="grow"></span>
+      <span class="mock-tip">关闭 (Alt+F4)</span>
+      <span class="mock-tb">—</span><span class="mock-tb">☐</span><span class="mock-tb close">✕ <span class="num">3</span></span>
+    </div>
+    <div class="mock-side"><span class="on"></span><span></span><span></span><span></span></div>
+    <div class="mock-main">
+      <div class="mock-body">
+        <div class="mock-panel">
+          <div class="mock-text"></div>
+          <div class="mock-text sql"></div>
+        </div>
+        <div class="mock-panel">
+          <div class="mock-actions">
+            <span class="num">2</span><span class="btn btn-primary">数据粘贴</span>
+            <span class="badge">共 4 笔</span>
+          </div>
+          <div class="mock-tip-row"><span class="mock-tip">粘贴剪贴板数据 (Alt+P)</span></div>
+          <div class="mock-table">
+            <div class="mock-row"><div>1</div><div>A-001</div><div></div></div>
+            <div class="mock-row even"><div>2</div><div>A-002</div><div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul class="legend">
+    <li><span class="num">1</span><div><kbd>Alt</kbd> + <kbd>Q</kbd> <strong>侧边栏开关</strong>：展开或收起左侧菜单。</div></li>
+    <li><span class="num">2</span><div><kbd>Alt</kbd> + <kbd>P</kbd> <strong>数据粘贴</strong>：从 Excel 复制后直接按，数据会进到右侧数据表。</div></li>
+    <li><span class="num">3</span><div><kbd>Alt</kbd> + <kbd>F4</kbd> <strong>关闭</strong>：强制关闭程序。</div></li>
+  </ul>
+  <p class="muted">没有开启「精简标题栏」时，窗口使用系统原本的标题栏，三个快捷键一样可以使用。</p>
 
   <h3>「设定」页可以调整的项目</h3>
   <table>
     <thead><tr><th class="nowrap">项目</th><th>说明</th></tr></thead>
     <tbody>
       <tr><td class="nowrap">语言</td><td>繁体中文、简体中文、English、日本語、한국어。</td></tr>
-      <tr><td class="nowrap">主题</td><td>GitHub 暗黑、光线模式、蒂芙尼蓝。</td></tr>
+      <tr><td class="nowrap">主题</td><td>GitHub 暗黑、光线模式、蒂芙尼蓝、彩虹幻境。</td></tr>
       <tr><td class="nowrap">字体与字体大小</td><td>觉得字太小可以在这里放大，这份说明的字也会一起变大。</td></tr>
       <tr><td class="nowrap">说明打开方式</td><td>「内置窗口」是在程序里显示这份说明（默认）；「默认浏览器」是按 <kbd>F1</kbd> 时改用你的浏览器打开，方便放在另一个屏幕对照。</td></tr>
+      <tr><td class="nowrap">精简标题栏</td><td>开启后隐藏系统标题栏，改用精简的标题栏，只留侧边栏开关与最小化、最大化、关闭按钮（类似 Claude 桌面版）。空白处可以拖动窗口，双击可放大或还原。</td></tr>
     </tbody>
   </table>
 

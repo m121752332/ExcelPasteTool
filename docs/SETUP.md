@@ -15,7 +15,7 @@
 | UI 框架 | [Avalonia UI](https://avaloniaui.net/) 11.3.3（Fluent 主題 + DataGrid） |
 | 目標框架 | .NET 10（`net10.0`，LTS） |
 | 架構模式 | MVVM（Views / ViewModels / Models / Services / Helpers） |
-| 版本號 | 定義於 `ExcelPasteTool.csproj`，目前為 `1.5.3` |
+| 版本號 | 定義於 `ExcelPasteTool.csproj`，目前為 `1.5.4` |
 
 ---
 
@@ -139,11 +139,14 @@ dotnet run
 | 欄位 | 可用值 | 預設值 | 說明 |
 | --- | --- | --- | --- |
 | `Language` | `TraditionalChinese`、`SimplifiedChinese`、`English` | `TraditionalChinese` | 對應 `AppLanguage`（`Helpers/LanguageManager.cs`） |
-| `Theme` | `Dark`、`Light`、`Tiffany` | `Dark` | 對應 `AppTheme`（`Helpers/ThemeManager.cs`）。`Dark` 現在是 GitHub Dark 配色，名稱保留以相容舊設定 |
+| `Theme` | `Dark`、`Light`、`Tiffany`、`Rainbow` | `Dark` | 對應 `AppTheme`（`Helpers/ThemeManager.cs`）。`Dark` 現在是 GitHub Dark 配色，名稱保留以相容舊設定 |
 | `FontFamily` | 空字串，或系統已安裝的字型名稱 | `""` | 空字串代表使用內建的 Noto Sans TC |
 | `FontSize` | 10 ～ 24 | `14` | 基本字體大小，超出範圍會被夾到上下限並四捨五入 |
 
 | `TourCompleted` | `true`、`false` | `false` | 是否已看過 App 導覽。`false`（或舊設定檔沒有此欄位）時，啟動後會自動播放一次導覽，看完或略過即寫回 `true`；改回 `false` 可讓下次啟動再播一次 |
+| `CompactTitleBar` | `true`、`false` | `false` | 是否使用精簡標題列（隱藏系統標題列，只留側邊欄開關與最小化 / 最大化 / 關閉），可在「設定」頁切換，實作在 `Views/MainWindow.TitleBar.cs` |
+
+快捷鍵（`Views/MainWindow.TitleBar.cs`，只在對應按鈕的 ToolTip 中提示，說明頁 `#shortcut-map` 有圖文對照）：`Alt+F4` 強制關閉、`Alt+Q` 開關側邊欄、`Alt+P` 把剪貼簿貼到「工具」頁右側資料表。
 
 前四項都可以在 App 的「設定」頁變更，變更後會自動存檔。導覽可隨時在「工具」頁按右上角的「導覽」按鈕重看（其他頁面不顯示此按鈕）；Toast 通知統一放在主視窗最上層（`MainWindow.axaml` 的 `ToastPanel`）（實作在 `Controls/TourOverlay.cs` 與 `Views/MainWindow.Tour.cs`，步驟文字在 `Helpers/LanguageManager.cs` 的 `Tour*` 鍵）。
 
@@ -164,12 +167,13 @@ dotnet run
 | `Assets/Themes/GitHubDarkPalette.axaml` | GitHub Dark 配色（`AppTheme.Dark`） |
 | `Assets/Themes/LightPalette.axaml` | 光線模式配色（`AppTheme.Light`） |
 | `Assets/Themes/TiffanyPalette.axaml` | 蒂芬妮藍配色（`AppTheme.Tiffany`） |
+| `Assets/Themes/RainbowPalette.axaml` | 彩虹幻境配色（`AppTheme.Rainbow`，實驗性；Token 可以是漸層筆刷，不限單色） |
 | `Assets/Styles/AppStyles.axaml` | 所有主題共用的版面樣式 |
 
 - 配色檔是 `ResourceDictionary`，**只放顏色 Token**（例如 `WindowBackgroundBrush`、`AccentBrush`、`TableEvenRowBrush`），不放樣式。
 - `AppStyles.axaml` 以 `DynamicResource` 參照這些 Token，因此切換主題時只要換掉配色檔，畫面就會自動更新。
 - `ThemeManager.ApplyTheme()` 會：
-  1. 設定 Fluent 的 `RequestedThemeVariant`（`Dark` 用暗色底版，`Light`、`Tiffany` 用亮色底版），讓下拉選單、捲軸、Slider 等內建控件同步。
+  1. 設定 Fluent 的 `RequestedThemeVariant`（`Dark`、`Rainbow` 用暗色底版，`Light`、`Tiffany` 用亮色底版），讓下拉選單、捲軸、Slider 等內建控件同步。
   2. 從 `Application.Resources.MergedDictionaries` 移除 `Assets/Themes/` 下的舊配色，再加入新主題的配色檔。
 - `App.axaml` 中預設載入 `GitHubDarkPalette.axaml`，啟動後才依 `config.json` 替換。
 

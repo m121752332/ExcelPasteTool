@@ -35,13 +35,17 @@ public partial class MainWindow : Window
         SidebarItemClickCommand = new RelayCommand<SidebarPage>(OnSidebarItemClick);
         // 設定視窗標題為組件名稱
         this.Title = System.Reflection.Assembly.GetEntryAssembly()?.GetName().Name ?? "App";
-        // F1：開啟說明。用 Tunnel 攔截，焦點在輸入框時也有效
+        // F1：開啟說明；Alt 快捷鍵。用 Tunnel 攔截，焦點在輸入框時也有效
         AddHandler(KeyDownEvent, OnWindowKeyDown, Avalonia.Interactivity.RoutingStrategies.Tunnel);
         InitTour();
+        InitTitleBar();
     }
 
     private void OnWindowKeyDown(object? sender, Avalonia.Input.KeyEventArgs e)
     {
+        // Alt+F4 / Alt+Q / Alt+P（見 MainWindow.TitleBar.cs）
+        if (HandleAltShortcut(e)) return;
+
         // 導覽進行中：方向鍵 / Enter / Esc 操作導覽，其餘按鍵不傳到底下的元件
         if (Tour.IsActive)
         {

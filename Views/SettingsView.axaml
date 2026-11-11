@@ -71,6 +71,20 @@
                                   SelectedItem="{Binding SelectedHelpViewer, Mode=TwoWay}"/>
                     </StackPanel>
                 </Border>
+
+                <!-- 精簡標題列 -->
+                <Border Classes="setting-card">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,16,0">
+                            <TextBlock Text="{Binding TitleBarTitleText.Text}" Classes="section-title"/>
+                            <TextBlock Text="{Binding TitleBarDescText.Text}" Classes="muted" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <ToggleSwitch Grid.Column="1" VerticalAlignment="Center"
+                                      IsChecked="{Binding CompactTitleBar, Mode=TwoWay}"
+                                      OnContent="{Binding ToggleOnText.Text}"
+                                      OffContent="{Binding ToggleOffText.Text}"/>
+                    </Grid>
+                </Border>
             </StackPanel>
         </ScrollViewer>
     </Grid>

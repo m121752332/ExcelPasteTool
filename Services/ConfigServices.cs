@@ -14,6 +14,8 @@ public class AppConfig
     public string HelpViewer { get; set; } = "InApp";
     /// <summary>是否已看過 App 導覽；false（或舊版設定檔沒有此欄位）時，啟動後會自動播放一次。</summary>
     public bool TourCompleted { get; set; }
+    /// <summary>是否使用精簡標題列（隱藏系統標題列，只留側邊欄開關與最小化 / 最大化 / 關閉）。</summary>
+    public bool CompactTitleBar { get; set; }
 }
 
 public static class ConfigServices

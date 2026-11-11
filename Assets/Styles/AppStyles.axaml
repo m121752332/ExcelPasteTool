@@ -410,4 +410,38 @@
     <Setter Property="Background" Value="{DynamicResource ControlBorderBrush}"/>
     <Setter Property="CornerRadius" Value="2"/>
   </Style>
+
+  <!-- ===== 精簡標題列（設定頁「精簡標題列」） ===== -->
+  <Style Selector="Grid.compact-titlebar">
+    <Setter Property="Background" Value="{DynamicResource SidebarBackgroundBrush}"/>
+  </Style>
+  <Style Selector="Button.titlebar-sidebar">
+    <Setter Property="CornerRadius" Value="0"/>
+    <Setter Property="Padding" Value="0"/>
+  </Style>
+  <Style Selector="Button.titlebar-button">
+    <Setter Property="Width" Value="46"/>
+    <Setter Property="Height" Value="36"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="CornerRadius" Value="0"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+  </Style>
+  <Style Selector="Button.titlebar-button Path">
+    <!-- 只畫線條：蓋掉全域 Path 的 Fill -->
+    <Setter Property="Fill" Value="Transparent"/>
+    <Setter Property="Stroke" Value="{DynamicResource TextPrimaryBrush}"/>
+    <Setter Property="StrokeThickness" Value="1"/>
+  </Style>
+  <Style Selector="Button.titlebar-button:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource ControlHoverBrush}"/>
+  </Style>
+  <Style Selector="Button.titlebar-close:pointerover /template/ ContentPresenter, Button.titlebar-close:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="#E81123"/>
+  </Style>
+  <Style Selector="Button.titlebar-close:pointerover Path, Button.titlebar-close:pressed Path">
+    <Setter Property="Stroke" Value="White"/>
+  </Style>
 </Styles>

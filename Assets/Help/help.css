@@ -161,3 +161,22 @@ footer { margin-top: 44px; padding-top: 14px; border-top: 1px solid var(--border
   body { background: #fff; color: #000; }
   .toc { display: none; }
 }
+
+/* 快捷鍵對照圖：精簡標題列（橫跨示意圖整個寬度）與提示泡泡 */
+.mock-titlebar {
+  grid-column: 1 / -1; display: flex; align-items: center; height: 34px;
+  background: var(--sidebar); border-bottom: 1px solid var(--border);
+}
+.mock-titlebar .grow { flex: 1; }
+.mock-tb {
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+  min-width: 44px; height: 100%; padding: 0 6px; color: var(--text);
+}
+.mock-tb.side { min-width: 46px; font-size: 1.15em; color: var(--muted); }
+.mock-tb.close { background: #E81123; color: #FFFFFF; }
+.mock-tip {
+  display: inline-block; padding: 1px 8px; margin-right: 6px; border-radius: 4px; white-space: nowrap;
+  background: var(--panel); border: 1px solid var(--control-border); color: var(--text); font-size: 0.9em;
+}
+.mock-tip-row { margin: -4px 0 8px 2.2em; }
+.legend kbd { margin-right: 2px; }

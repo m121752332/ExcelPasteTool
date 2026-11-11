@@ -162,17 +162,58 @@
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>C</kbd></td><td>Copies the selected text in a text box or in the data table.</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>V</kbd></td><td>Pastes text into the "PIP Separated Data" box.</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>A</kbd></td><td>Selects everything in a text box.</td></tr>
+      <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>Q</kbd></td><td>Shows or hides the menu on the left (sidebar).</td></tr>
+      <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>P</kbd></td><td>Pastes the clipboard into the data table on the right of the Tools page, same as clicking Paste Data. On another page it switches back to Tools first.</td></tr>
+      <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>F4</kbd></td><td>Force-closes the app, even during the tour or while a dialog is open.</td></tr>
     </tbody>
   </table>
+
+  <h3 id="shortcut-map">Shortcut map</h3>
+  <p>This is the window with the compact title bar turned on. The numbers match the shortcuts below. Hover over a button and its tooltip also shows the shortcut.</p>
+  <div class="mock mock-keys" aria-label="Shortcut map">
+    <div class="mock-titlebar">
+      <span class="mock-tb side" title="Toggle sidebar (Alt+Q)">◫ <span class="num">1</span></span>
+      <span class="grow"></span>
+      <span class="mock-tip">Close (Alt+F4)</span>
+      <span class="mock-tb">—</span><span class="mock-tb">☐</span><span class="mock-tb close">✕ <span class="num">3</span></span>
+    </div>
+    <div class="mock-side"><span class="on"></span><span></span><span></span><span></span></div>
+    <div class="mock-main">
+      <div class="mock-body">
+        <div class="mock-panel">
+          <div class="mock-text"></div>
+          <div class="mock-text sql"></div>
+        </div>
+        <div class="mock-panel">
+          <div class="mock-actions">
+            <span class="num">2</span><span class="btn btn-primary">Paste Data</span>
+            <span class="badge">4 rows</span>
+          </div>
+          <div class="mock-tip-row"><span class="mock-tip">Paste clipboard data (Alt+P)</span></div>
+          <div class="mock-table">
+            <div class="mock-row"><div>1</div><div>A-001</div><div></div></div>
+            <div class="mock-row even"><div>2</div><div>A-002</div><div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul class="legend">
+    <li><span class="num">1</span><div><kbd>Alt</kbd> + <kbd>Q</kbd> <strong>Sidebar toggle</strong>: Shows or hides the left menu.</div></li>
+    <li><span class="num">2</span><div><kbd>Alt</kbd> + <kbd>P</kbd> <strong>Paste Data</strong>: Press it right after copying from Excel; the data goes into the table on the right.</div></li>
+    <li><span class="num">3</span><div><kbd>Alt</kbd> + <kbd>F4</kbd> <strong>Close</strong>: Force-closes the app.</div></li>
+  </ul>
+  <p class="muted">With the compact title bar off, the window keeps the normal system title bar and all three shortcuts still work.</p>
 
   <h3>What you can change on the Settings page</h3>
   <table>
     <thead><tr><th class="nowrap">Setting</th><th>Description</th></tr></thead>
     <tbody>
       <tr><td class="nowrap">Language</td><td>Traditional Chinese, Simplified Chinese, English, Japanese, Korean.</td></tr>
-      <tr><td class="nowrap">Theme</td><td>GitHub Dark, Light Mode, Tiffany Blue.</td></tr>
+      <tr><td class="nowrap">Theme</td><td>GitHub Dark, Light Mode, Tiffany Blue, Rainbow Wonderland.</td></tr>
       <tr><td class="nowrap">Font and font size</td><td>Make the text larger here if it is too small. The text in this help grows with it.</td></tr>
       <tr><td class="nowrap">Help Viewer</td><td>"In-app window" shows this help inside the program (the default). "Default browser" opens it in your browser when you press <kbd>F1</kbd>, which is handy on a second screen.</td></tr>
+      <tr><td class="nowrap">Compact title bar</td><td>Hides the system title bar and uses a compact one with only the sidebar toggle and the minimize, maximize and close buttons (similar to the Claude desktop app). Drag the empty area to move the window; double-click it to maximize or restore.</td></tr>
     </tbody>
   </table>
 

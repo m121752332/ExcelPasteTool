@@ -162,17 +162,58 @@
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>C</kbd></td><td>テキストボックスまたはデータ表で選択した内容をコピーします。</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>V</kbd></td><td>「PIP 区切りデータ」欄にテキストを貼り付けます。</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>A</kbd></td><td>テキストボックス内をすべて選択します。</td></tr>
+      <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>Q</kbd></td><td>左側のメニュー（サイドバー）を開閉します。</td></tr>
+      <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>P</kbd></td><td>クリップボードの内容を「ツール」ページ右側のデータ表に貼り付けます（「データ貼り付け」と同じ）。ほかのページで押すと「ツール」ページに切り替わります。</td></tr>
+      <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>F4</kbd></td><td>アプリを強制的に閉じます（ガイド中やダイアログ表示中でも終了します）。</td></tr>
     </tbody>
   </table>
+
+  <h3 id="shortcut-map">ショートカット対応図</h3>
+  <p>下の図はコンパクトなタイトルバーをオンにした画面で、番号が下のショートカットに対応しています。ボタンにマウスを合わせると、ヒントにもショートカットが表示されます。</p>
+  <div class="mock mock-keys" aria-label="ショートカット対応図">
+    <div class="mock-titlebar">
+      <span class="mock-tb side" title="サイドバーの開閉 (Alt+Q)">◫ <span class="num">1</span></span>
+      <span class="grow"></span>
+      <span class="mock-tip">閉じる (Alt+F4)</span>
+      <span class="mock-tb">—</span><span class="mock-tb">☐</span><span class="mock-tb close">✕ <span class="num">3</span></span>
+    </div>
+    <div class="mock-side"><span class="on"></span><span></span><span></span><span></span></div>
+    <div class="mock-main">
+      <div class="mock-body">
+        <div class="mock-panel">
+          <div class="mock-text"></div>
+          <div class="mock-text sql"></div>
+        </div>
+        <div class="mock-panel">
+          <div class="mock-actions">
+            <span class="num">2</span><span class="btn btn-primary">データ貼り付け</span>
+            <span class="badge">4 件</span>
+          </div>
+          <div class="mock-tip-row"><span class="mock-tip">クリップボードのデータを貼り付け (Alt+P)</span></div>
+          <div class="mock-table">
+            <div class="mock-row"><div>1</div><div>A-001</div><div></div></div>
+            <div class="mock-row even"><div>2</div><div>A-002</div><div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul class="legend">
+    <li><span class="num">1</span><div><kbd>Alt</kbd> + <kbd>Q</kbd> <strong>サイドバーの開閉</strong>: 左側のメニューを開閉します。</div></li>
+    <li><span class="num">2</span><div><kbd>Alt</kbd> + <kbd>P</kbd> <strong>データ貼り付け</strong>: Excel でコピーした直後に押すと、右側のデータ表に入ります。</div></li>
+    <li><span class="num">3</span><div><kbd>Alt</kbd> + <kbd>F4</kbd> <strong>閉じる</strong>: アプリを強制的に閉じます。</div></li>
+  </ul>
+  <p class="muted">コンパクトなタイトルバーがオフのときは通常のタイトルバーのままで、3 つのショートカットも同じように使えます。</p>
 
   <h3>設定ページで変更できる項目</h3>
   <table>
     <thead><tr><th class="nowrap">項目</th><th>説明</th></tr></thead>
     <tbody>
       <tr><td class="nowrap">言語</td><td>繁体字中国語、簡体字中国語、English、日本語、한국어。</td></tr>
-      <tr><td class="nowrap">テーマ</td><td>GitHub ダーク、ライトモード、ティファニーブルー。</td></tr>
+      <tr><td class="nowrap">テーマ</td><td>GitHub ダーク、ライトモード、ティファニーブルー、虹の幻境。</td></tr>
       <tr><td class="nowrap">フォントと文字サイズ</td><td>文字が小さいときはここで大きくします。このヘルプの文字も一緒に大きくなります。</td></tr>
       <tr><td class="nowrap">ヘルプの表示方法</td><td>「アプリ内ウィンドウ」はこのヘルプをプログラム内に表示します（既定）。「既定のブラウザー」は <kbd>F1</kbd> を押すとブラウザーで開くので、サブディスプレイで見るときに便利です。</td></tr>
+      <tr><td class="nowrap">コンパクトなタイトルバー</td><td>システムのタイトルバーを隠し、サイドバーの開閉と最小化・最大化・閉じるボタンだけのタイトルバーにします（Claude デスクトップ版に近い見た目）。空いている部分をドラッグするとウィンドウを移動でき、ダブルクリックで最大化／元に戻します。</td></tr>
     </tbody>
   </table>
 

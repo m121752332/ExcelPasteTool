@@ -1,5 +1,41 @@
 [
   {
+    "version": "1.5.4",
+    "date": "2026-11-11",
+    "notes": {
+      "TraditionalChinese": [
+        "設定頁新增「精簡標題列」開關：開啟後隱藏系統標題列，只保留側邊欄開關與最小化、最大化、關閉按鈕",
+        "新增快捷鍵：Alt+Q 開關側邊欄、Alt+P 把剪貼簿資料貼到工具頁右側資料表、Alt+F4 強制關閉，按鈕提示中會顯示對應快捷鍵",
+        "說明文件新增快捷鍵圖文對照",
+        "新增實驗性主題「彩虹幻境」"
+      ],
+      "SimplifiedChinese": [
+        "设定页新增「精简标题栏」开关：开启后隐藏系统标题栏，只保留侧边栏开关与最小化、最大化、关闭按钮",
+        "新增快捷键：Alt+Q 开关侧边栏、Alt+P 把剪贴板数据粘贴到工具页右侧数据表、Alt+F4 强制关闭，按钮提示中会显示对应快捷键",
+        "说明文件新增快捷键图文对照",
+        "新增实验性主题「彩虹幻境」"
+      ],
+      "English": [
+        "Added a Compact title bar switch to Settings: it hides the system title bar and keeps only the sidebar toggle and the minimize, maximize and close buttons",
+        "Added shortcuts: Alt+Q toggles the sidebar, Alt+P pastes the clipboard into the data table on the Tools page, Alt+F4 force-closes the app; button tooltips show the matching shortcut",
+        "Added an illustrated shortcut map to the help",
+        "Added the experimental Rainbow Wonderland theme"
+      ],
+      "Japanese": [
+        "設定ページに「コンパクトなタイトルバー」スイッチを追加。オンにするとシステムのタイトルバーを隠し、サイドバーの開閉と最小化・最大化・閉じるボタンだけを残します",
+        "ショートカットを追加：Alt+Q でサイドバーの開閉、Alt+P でクリップボードをツールページ右側のデータ表に貼り付け、Alt+F4 で強制終了。ボタンのヒントに対応するショートカットを表示します",
+        "ヘルプに図解付きのショートカット対応図を追加",
+        "実験的なテーマ「虹の幻境」を追加"
+      ],
+      "Korean": [
+        "설정 페이지에 「간결한 제목 표시줄」 스위치를 추가했습니다. 켜면 시스템 제목 표시줄을 숨기고 사이드바 토글과 최소화·최대화·닫기 버튼만 남깁니다",
+        "단축키 추가: Alt+Q 사이드바 열기/닫기, Alt+P 클립보드를 도구 페이지 오른쪽 데이터 표에 붙여넣기, Alt+F4 강제 종료. 버튼 도움말에 해당 단축키가 표시됩니다",
+        "도움말에 그림으로 보는 단축키 안내도를 추가했습니다",
+        "실험적인 테마 「무지개 환상경」을 추가했습니다"
+      ]
+    }
+  },
+  {
     "version": "1.5.3",
     "date": "2026-11-11",
     "notes": {

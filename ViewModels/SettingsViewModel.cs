@@ -24,6 +24,10 @@ public class SettingsViewModel : INotifyPropertyChanged
     public LocalizedText FontResetText { get; } = new("FontResetButton", "還原預設");
     public LocalizedText HelpViewerTitleText { get; } = new("HelpViewerTitle", "說明開啟方式");
     public LocalizedText HelpViewerDescText { get; } = new("HelpViewerDesc", "按 F1 或點選「說明」時，要在 App 內顯示還是用預設瀏覽器開啟");
+    public LocalizedText TitleBarTitleText { get; } = new("TitleBarTitle", "精簡標題列");
+    public LocalizedText TitleBarDescText { get; } = new("TitleBarDesc", "隱藏系統標題列，改用精簡的標題列，只保留側邊欄開關與最小化、最大化、關閉按鈕");
+    public LocalizedText ToggleOnText { get; } = new("ToggleOn", "開啟");
+    public LocalizedText ToggleOffText { get; } = new("ToggleOff", "關閉");
 
     public double MinFontSize => FontManager.MinFontSize;
     public double MaxFontSize => FontManager.MaxFontSize;
@@ -100,6 +104,24 @@ public class SettingsViewModel : INotifyPropertyChanged
                 
                 OnPropertyChanged();
             }
+        }
+    }
+
+    /// <summary>精簡標題列開關變更時通知主視窗切換（參數：是否為精簡標題列）。</summary>
+    public event Action<bool>? CompactTitleBarChanged;
+
+    /// <summary>是否使用精簡標題列，變更後立即套用並存檔。</summary>
+    public bool CompactTitleBar
+    {
+        get => ConfigServices.Config.CompactTitleBar;
+        set
+        {
+            if (ConfigServices.Config.CompactTitleBar == value) return;
+            ConfigServices.Config.CompactTitleBar = value;
+            ConfigServices.Save();
+            CompactTitleBarChanged?.Invoke(value);
+            EnqueueToast?.Invoke(LanguageManager.GetText("TitleBarChangedToast", "標題列設定已儲存"));
+            OnPropertyChanged();
         }
     }
 

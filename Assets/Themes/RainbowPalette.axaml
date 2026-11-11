@@ -1,0 +1,104 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!-- 彩虹幻境配色（實驗性、純屬好玩）：深色寶石彩虹漸層當底，半透明面板疊出層次，文字用亮白 / 金黃保持醒目 -->
+  <!-- 只放顏色 Token，版面樣式統一寫在 Assets/Styles/AppStyles.axaml -->
+  <!-- 第一層：視窗底色，斜向的深色彩虹（每一段都夠暗，白字對比 8:1 以上） -->
+  <LinearGradientBrush x:Key="WindowBackgroundBrush" StartPoint="0%,0%" EndPoint="100%,100%">
+    <GradientStop Offset="0" Color="#3B0A45"/>
+    <GradientStop Offset="0.2" Color="#2A0F5C"/>
+    <GradientStop Offset="0.4" Color="#0F2A6B"/>
+    <GradientStop Offset="0.6" Color="#0B4A5A"/>
+    <GradientStop Offset="0.8" Color="#1F5130"/>
+    <GradientStop Offset="1" Color="#5A3A0C"/>
+  </LinearGradientBrush>
+  <!-- 第二層：半透明面板，讓底下的彩虹透上來 -->
+  <SolidColorBrush x:Key="PanelBackgroundBrush" Color="#99120826"/>
+  <!-- 面板外框：一圈亮彩虹 -->
+  <LinearGradientBrush x:Key="PanelBorderBrush" StartPoint="0%,0%" EndPoint="100%,100%">
+    <GradientStop Offset="0" Color="#FF5E7E"/>
+    <GradientStop Offset="0.2" Color="#FFB347"/>
+    <GradientStop Offset="0.4" Color="#FFF275"/>
+    <GradientStop Offset="0.6" Color="#6BF178"/>
+    <GradientStop Offset="0.8" Color="#35C9FF"/>
+    <GradientStop Offset="1" Color="#B48CFF"/>
+  </LinearGradientBrush>
+  <!-- 第三層：輸入區再壓暗一階，確保長時間閱讀的文字好讀 -->
+  <SolidColorBrush x:Key="InputBackgroundBrush" Color="#B30B0618"/>
+  <SolidColorBrush x:Key="InputBorderBrush" Color="#7A6BC0"/>
+  <LinearGradientBrush x:Key="InputFocusBorderBrush" StartPoint="0%,0%" EndPoint="100%,100%">
+    <GradientStop Offset="0" Color="#FF6AC1"/>
+    <GradientStop Offset="0.5" Color="#FFE066"/>
+    <GradientStop Offset="1" Color="#35C9FF"/>
+  </LinearGradientBrush>
+  <SolidColorBrush x:Key="TextPrimaryBrush" Color="#FFFFFF"/>
+  <SolidColorBrush x:Key="TextSecondaryBrush" Color="#D6CCFF"/>
+  <SolidColorBrush x:Key="TextOnAccentBrush" Color="#1B0B33"/>
+  <!-- 主要按鈕：亮色糖果漸層配深色字 -->
+  <LinearGradientBrush x:Key="AccentBrush" StartPoint="0%,0%" EndPoint="100%,0%">
+    <GradientStop Offset="0" Color="#FFD166"/>
+    <GradientStop Offset="0.5" Color="#FF8FB1"/>
+    <GradientStop Offset="1" Color="#9D8CFF"/>
+  </LinearGradientBrush>
+  <LinearGradientBrush x:Key="AccentHoverBrush" StartPoint="0%,0%" EndPoint="100%,0%">
+    <GradientStop Offset="0" Color="#FFE08A"/>
+    <GradientStop Offset="0.5" Color="#FFA9C4"/>
+    <GradientStop Offset="1" Color="#B7A9FF"/>
+  </LinearGradientBrush>
+  <LinearGradientBrush x:Key="AccentPressedBrush" StartPoint="0%,0%" EndPoint="100%,0%">
+    <GradientStop Offset="0" Color="#F5B83D"/>
+    <GradientStop Offset="0.5" Color="#F56F9A"/>
+    <GradientStop Offset="1" Color="#8370F0"/>
+  </LinearGradientBrush>
+  <SolidColorBrush x:Key="AccentTextBrush" Color="#FFE066"/>
+  <SolidColorBrush x:Key="SqlOutputBrush" Color="#7CFFCB"/>
+  <SolidColorBrush x:Key="DangerBrush" Color="#FF6B81"/>
+  <SolidColorBrush x:Key="DangerHoverBrush" Color="#E0435C"/>
+  <SolidColorBrush x:Key="ControlBackgroundBrush" Color="#80201040"/>
+  <SolidColorBrush x:Key="ControlHoverBrush" Color="#99402070"/>
+  <SolidColorBrush x:Key="ControlBorderBrush" Color="#7A6BC0"/>
+  <!-- 表頭：橫向的半透明彩虹 -->
+  <LinearGradientBrush x:Key="TableHeaderBackgroundBrush" StartPoint="0%,0%" EndPoint="100%,0%">
+    <GradientStop Offset="0" Color="#59FF5E7E"/>
+    <GradientStop Offset="0.2" Color="#59FFB347"/>
+    <GradientStop Offset="0.4" Color="#59E6D94A"/>
+    <GradientStop Offset="0.6" Color="#596BF178"/>
+    <GradientStop Offset="0.8" Color="#5935C9FF"/>
+    <GradientStop Offset="1" Color="#59B48CFF"/>
+  </LinearGradientBrush>
+  <SolidColorBrush x:Key="TableOddRowBrush" Color="#66100820"/>
+  <SolidColorBrush x:Key="TableEvenRowBrush" Color="#66241446"/>
+  <SolidColorBrush x:Key="TableRowHoverBrush" Color="#73B48CFF"/>
+  <SolidColorBrush x:Key="TableGridLineBrush" Color="#40FFFFFF"/>
+  <!-- 側邊欄：由上到下的飽和彩虹（每一段白字對比 4.5:1 以上） -->
+  <LinearGradientBrush x:Key="SidebarBackgroundBrush" StartPoint="0%,0%" EndPoint="0%,100%">
+    <GradientStop Offset="0" Color="#C2185B"/>
+    <GradientStop Offset="0.2" Color="#7B1FA2"/>
+    <GradientStop Offset="0.4" Color="#303F9F"/>
+    <GradientStop Offset="0.6" Color="#0277BD"/>
+    <GradientStop Offset="0.8" Color="#00796B"/>
+    <GradientStop Offset="1" Color="#2E7D32"/>
+  </LinearGradientBrush>
+  <SolidColorBrush x:Key="SidebarSelectedBrush" Color="#40FFFFFF"/>
+  <SolidColorBrush x:Key="SidebarHoverBrush" Color="#26FFFFFF"/>
+  <SolidColorBrush x:Key="SidebarTextBrush" Color="#FFFFFF"/>
+  <SolidColorBrush x:Key="SidebarIndicatorBrush" Color="#FFE066"/>
+  <SolidColorBrush x:Key="SidebarIconBrush" Color="#FFFFFF"/>
+  <SolidColorBrush x:Key="SelectionBrush" Color="#FF6AC1"/>
+  <SolidColorBrush x:Key="SelectionTextBrush" Color="#1B0B33"/>
+  <SolidColorBrush x:Key="SplitterBrush" Color="#B48CFF"/>
+  <SolidColorBrush x:Key="CopyButtonBackgroundBrush" Color="#33FFFFFF"/>
+  <SolidColorBrush x:Key="CopyButtonHoverBrush" Color="#55FFFFFF"/>
+  <SolidColorBrush x:Key="CopyButtonForegroundBrush" Color="#7CF3FF"/>
+  <SolidColorBrush x:Key="EmptyStateBrush" Color="#B8A9E6"/>
+  <SolidColorBrush x:Key="PasteIconBrush" Color="#1B0B33"/>
+  <!-- 下拉選單彈出清單（彈出視窗後面沒有彩虹底，必須用不透明色） -->
+  <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#1A0F3D"/>
+  <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#7A6BC0"/>
+  <SolidColorBrush x:Key="ComboBoxItemBackgroundPointerOver" Color="#3A2470"/>
+  <!-- 覆寫 Fluent 內建控制項（Slider、ComboBox 焦點等）的強調色 -->
+  <Color x:Key="SystemAccentColor">#FF6AC1</Color>
+  <Color x:Key="SystemAccentColorDark1">#FF6AC1</Color>
+  <Color x:Key="SystemAccentColorDark2">#FF6AC1</Color>
+  <Color x:Key="SystemAccentColorLight1">#FF6AC1</Color>
+  <Color x:Key="SystemAccentColorLight2">#FF6AC1</Color>
+</ResourceDictionary>

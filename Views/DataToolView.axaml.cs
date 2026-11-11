@@ -91,6 +91,7 @@ public partial class DataToolView : UserControl
         ToolTip.SetTip(CopyTopBoxButton, LanguageManager.GetText("CopyTopBoxTooltip", "複製分隔資料"));
         ToolTip.SetTip(CopyBottomBoxButton, LanguageManager.GetText("CopySqlTooltip", "複製SQL條件"));
         ToolTip.SetTip(CopyTableButton, LanguageManager.GetText("CopyTableTooltip", "複製全部資料"));
+        ToolTip.SetTip(PasteDataButton, LanguageManager.GetText("PasteDataTooltip", "貼上剪貼簿資料 (Alt+P)"));
 
         _suppressEvents = true;
         try
@@ -204,8 +205,11 @@ public partial class DataToolView : UserControl
     }
 
     private async void PasteData_Click(object? sender, RoutedEventArgs e)
+        => await PasteFromClipboardAsync(TopLevel.GetTopLevel(this)?.Clipboard);
+
+    /// <summary>把剪貼簿內容貼到右側資料表（「資料貼上」按鈕與主視窗的 Alt+P 共用）。</summary>
+    public async Task PasteFromClipboardAsync(Avalonia.Input.Platform.IClipboard? clipboard)
     {
-        var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
         if (clipboard == null) return;
         var text = await clipboard.GetTextAsync();
         if (string.IsNullOrWhiteSpace(text)) return;

@@ -14,7 +14,9 @@ public enum AppTheme
 {
     Light,
     Dark,
-    Tiffany
+    Tiffany,
+    /// <summary>彩虹幻境（實驗性、純屬好玩的漸層主題）。</summary>
+    Rainbow
 }
 
 /// <summary>
@@ -48,6 +50,7 @@ public static class ThemeManager
     {
         AppTheme.Light => "LightPalette.axaml",
         AppTheme.Tiffany => "TiffanyPalette.axaml",
+        AppTheme.Rainbow => "RainbowPalette.axaml",
         _ => "GitHubDarkPalette.axaml"
     };
 
@@ -55,6 +58,7 @@ public static class ThemeManager
     private static ThemeVariant GetVariant(AppTheme theme) => theme switch
     {
         AppTheme.Dark => ThemeVariant.Dark,
+        AppTheme.Rainbow => ThemeVariant.Dark,
         _ => ThemeVariant.Light
     };
 
@@ -95,13 +99,14 @@ public static class ThemeManager
     {
         AppTheme.Light => LanguageManager.GetText("ThemeLight", "光線模式"),
         AppTheme.Tiffany => LanguageManager.GetText("ThemeTiffany", "蒂芬妮藍"),
+        AppTheme.Rainbow => LanguageManager.GetText("ThemeRainbow", "彩虹幻境"),
         _ => LanguageManager.GetText("ThemeDark", "GitHub 暗黑")
     };
 
     /// <summary>下拉選單顯示順序。</summary>
     public static List<(AppTheme Theme, string Name)> GetAllThemes()
     {
-        return new[] { AppTheme.Dark, AppTheme.Light, AppTheme.Tiffany }
+        return new[] { AppTheme.Dark, AppTheme.Light, AppTheme.Tiffany, AppTheme.Rainbow }
             .Select(t => (t, GetThemeName(t)))
             .ToList();
     }
