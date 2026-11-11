@@ -16,10 +16,10 @@
 	  <Product>DataSplitter Pro</Product>
 	  <Copyright>GameStudio@2026</Copyright>
 	  <!-- 版本號：推版時 tag 請用相同版本（1.1.0 或 v1.1.0），自動更新會拿它和 GitHub Release 比較 -->
-	  <Version>1.4.0</Version>
-	  <AssemblyVersion>1.4.0.0</AssemblyVersion>
-	  <FileVersion>1.4.0.0</FileVersion>
-	  <InformationalVersion>1.4.0</InformationalVersion>
+	  <Version>1.4.1</Version>
+	  <AssemblyVersion>1.4.1.0</AssemblyVersion>
+	  <FileVersion>1.4.1.0</FileVersion>
+	  <InformationalVersion>1.4.1</InformationalVersion>
 	  <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 
 	  <!-- 使用自動生成 (預設) -->
