@@ -1,0 +1,180 @@
+<main>
+  <header>
+    <h1>DataSplitter Pro ヘルプ</h1>
+    <p class="lead">Excel の 1 列を、ワンクリックで「区切り文字でつないだ文字列」と「SQL の IN 条件」に変換します。初めての方は最初の 2 つの章だけで使い始められます。</p>
+    <ul class="toc">
+      <li><a href="#what">このツールでできること</a></li>
+      <li><a href="#quick">3 ステップで始める</a></li>
+      <li><a href="#screen">画面の見かた</a></li>
+      <li><a href="#more">その他の操作</a></li>
+      <li><a href="#faq">よくある質問</a></li>
+      <li><a href="#keys">ショートカットと設定</a></li>
+    </ul>
+  </header>
+
+  <h2 id="what">このツールでできること</h2>
+  <p>Excel に品番・伝票番号・コードなどの列があり、それを ERP の検索や SQL の <code>WHERE ... IN</code> に使いたいとします。区切り文字や引用符を 1 つずつ手で付けるのは時間がかかり、間違いのもとです。このツールなら列全体を一度に変換できます。</p>
+
+  <div class="convert">
+    <div>
+      <div class="box-title">Excel の 1 列</div>
+      <table class="excel">
+        <thead><tr><th>A</th></tr></thead>
+        <tbody>
+          <tr><td>A-001</td></tr>
+          <tr><td>A-002</td></tr>
+          <tr><td>B-105</td></tr>
+          <tr><td>C-330</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="arrow">→</div>
+    <div>
+      <div class="box-title">区切りデータ（ERP やレポートの複数値検索欄に貼り付け）</div>
+      <div class="out">A-001|A-002|B-105|C-330</div>
+      <div class="box-title">SQL 条件（WHERE 列名 IN の後ろに貼り付け）</div>
+      <div class="out sql">('A-001', 'A-002', 'B-105', 'C-330')</div>
+    </div>
+  </div>
+
+  <h2 id="quick">3 ステップで始める</h2>
+  <ol class="steps">
+    <li>
+      <h3>Excel で 1 列をコピー</h3>
+      <p>変換したいセル（1 列、行数は自由）を選択して <kbd>Ctrl</kbd> + <kbd>C</kbd> を押します。</p>
+    </li>
+    <li>
+      <h3>ここに戻って「データ貼り付け」をクリック</h3>
+      <p>ツールページで、右上の <span class="btn btn-primary">データ貼り付け</span> を押します。各データが右側の表に 1 行ずつ表示されます。空行と重複した値は自動的に除かれます。</p>
+    </li>
+    <li>
+      <h3>必要な結果をコピー</h3>
+      <p>左側に「PIP 区切りデータ」と「SQL 条件」が同時に作成されます。それぞれのタイトルの右にあるコピーボタン <span class="mock-icon">⧉</span> を押し、ERP や SQL ツールで <kbd>Ctrl</kbd> + <kbd>V</kbd> を押して貼り付けます。</p>
+    </li>
+  </ol>
+
+  <div class="card tip">
+    <span class="tip-title">ご注意</span>テキストボックスで <kbd>Ctrl</kbd> + <kbd>V</kbd> を押すのではなく、「データ貼り付け」ボタンを使ってください。ボタンは Excel の各行を 1 件ずつに分けます。テキストボックスに貼り付けると全体が 1 つの文字列として扱われます。
+  </div>
+
+  <h2 id="screen">画面の見かた</h2>
+  <p>ツールページの概略図です。番号は下の説明に対応しています。</p>
+
+  <div class="mock" aria-label="ツールページの概略図">
+    <div class="mock-side"><span class="on"></span><span></span><span></span><span></span></div>
+    <div class="mock-main">
+      <div class="mock-bar">
+        <span class="mock-field"><span class="num">1</span> 区切り文字： <span class="mock-select">縦線 |</span></span>
+        <span class="mock-field">言語: <span class="mock-select">日本語</span></span>
+        <span class="mock-field">テーマ: <span class="mock-select">GitHub ダーク</span></span>
+      </div>
+      <div class="mock-body">
+        <div class="mock-panel">
+          <div class="mock-title"><span class="num">4</span> PIP 区切りデータ <span class="grow"></span><span class="mock-icon">⧉</span></div>
+          <div class="mock-text">A-001|A-002|B-105|C-330</div>
+          <div class="mock-title"><span class="num">5</span> SQL 条件 <span class="grow"></span><span class="mock-icon">⧉</span></div>
+          <div class="mock-text sql">('A-001', 'A-002', 'B-105', 'C-330')</div>
+        </div>
+        <div class="mock-panel">
+          <div class="mock-actions">
+            <span class="num">2</span><span class="btn btn-primary">データ貼り付け</span>
+            <span class="badge">全 4 件</span>
+            <span class="grow"></span>
+            <span class="num">7</span><span class="btn btn-secondary">データをクリア</span>
+          </div>
+          <div class="mock-table">
+            <div class="mock-row head"><div>行番号</div><div><span class="num">3</span> データ内容</div><div></div></div>
+            <div class="mock-row"><div>1</div><div>A-001</div><div></div></div>
+            <div class="mock-row even"><div>2</div><div>A-002</div><div class="mock-x">✕</div></div>
+            <div class="mock-row"><div>3</div><div>B-105</div><div></div></div>
+            <div class="mock-row even"><div>4</div><div>C-330</div><div></div></div>
+          </div>
+          <div style="margin-top:6px"><span class="num">6</span> <span class="muted">行にマウスを乗せると右側に ✕ が表示されます</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ul class="legend">
+    <li><span class="num">1</span><div><strong>区切り文字</strong>：データをつなぐ記号を選びます。縦線 <code>|</code>、カンマ <code>,</code>、セミコロン <code>;</code>、コロン <code>:</code>、スペースの 5 種類です。</div></li>
+    <li><span class="num">2</span><div><strong>データ貼り付け</strong>：クリップボードの内容を読み込みます。横に件数が表示されます。</div></li>
+    <li><span class="num">3</span><div><strong>データ表</strong>：行番号付きで全データを表示するので、件数と内容を確認できます。</div></li>
+    <li><span class="num">4</span><div><strong>PIP 区切りデータ</strong>：区切り文字でつないだ結果です。ここに直接入力して編集することもできます。</div></li>
+    <li><span class="num">5</span><div><strong>SQL 条件</strong>：引用符と括弧を付けた結果です。コピー専用で、編集はできません。</div></li>
+    <li><span class="num">6</span><div><strong>1 件だけ削除</strong>：行の右側の ✕ をクリックします。行番号は振り直されます。</div></li>
+    <li><span class="num">7</span><div><strong>データをクリア</strong>：すべてのデータを消し、区切り文字も縦線に戻します。</div></li>
+  </ul>
+  <p class="muted">3 つの領域は常に連動しています。どれかを変更すると、残り 2 つもすぐに更新されます。</p>
+
+  <h2 id="more">その他の操作</h2>
+  <table>
+    <thead><tr><th class="nowrap">やりたいこと</th><th>方法</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap">別の区切り文字を使う</td><td>上部ツールバーの「区切り文字」リストから選びます。貼り付け済みのデータは新しい記号ですぐにつなぎ直されます。</td></tr>
+      <tr><td class="nowrap">一部の値を除く</td><td>データ表の行にマウスを乗せ、右側の ✕ をクリックします。</td></tr>
+      <tr><td class="nowrap">手動で追加・編集する</td><td>「PIP 区切りデータ」欄に直接入力します。値の間は現在の区切り文字で区切ります（例：<code>A-001|A-002</code>）。</td></tr>
+      <tr><td class="nowrap">列を Excel に戻す</td><td>表の左上にある「行番号」見出しをクリックします。全データが 1 行に 1 件ずつコピーされ、そのまま Excel に貼り付けられます。</td></tr>
+      <tr><td class="nowrap">最初からやり直す</td><td>「データをクリア」をクリックします。</td></tr>
+      <tr><td class="nowrap">パネルの幅を変える</td><td>左右のパネルの間をドラッグします。</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="faq">よくある質問</h2>
+  <details open>
+    <summary>「データ貼り付け」を押しても何も起きません。</summary>
+    <p>クリップボードにテキストがありません。Excel に戻ってセルを選択し、<kbd>Ctrl</kbd> + <kbd>C</kbd> を押してから、もう一度ボタンを押してください。</p>
+  </details>
+  <details>
+    <summary>複数列をコピーしたのに、なぜ先頭の列だけになるのですか？</summary>
+    <p>仕様です。各行の先頭の列だけを使います。別の列が必要な場合は、Excel でその列だけを選択してコピーしてください。</p>
+  </details>
+  <details>
+    <summary>Excel より件数が少ないのはなぜですか？</summary>
+    <p>空行と重複した値が除かれるため、件数は重複を除いた値の数になります。</p>
+  </details>
+  <details>
+    <summary>値の一部が切れてしまいました。</summary>
+    <p>貼り付け時、行の中に Tab、カンマ <code>,</code>、セミコロン <code>;</code>、縦線 <code>|</code> があると列の区切りとみなされ、最初の部分だけが残ります。たとえば <code>A-001,red</code> は <code>A-001</code> になります。値自体にこれらの記号が含まれる場合は、「PIP 区切りデータ」欄に直接入力してください。区切り文字がカンマのときは、<code>"A-001,red"</code> のように二重引用符で囲んだ値は分割されずそのまま扱われます。</p>
+  </details>
+  <details>
+    <summary>値に単一引用符が含まれていても SQL は壊れませんか？</summary>
+    <p>大丈夫です。単一引用符は自動的に 2 つになり、<code>O'Brien</code> は <code>'O''Brien'</code> と書かれます。これは SQL の標準的な書き方です。</p>
+  </details>
+  <details>
+    <summary>ツールバーで言語やテーマを変えたのに、次回は元に戻っていました。</summary>
+    <p>ツールバーでの切り替えは現在のセッションだけに有効です。保存したい場合は、左メニューの「設定」ページで変更してください。</p>
+  </details>
+  <details>
+    <summary>設定の保存先はどこですか？保存されないのはなぜですか？</summary>
+    <p>設定はプログラムと同じ場所の <code>config.json</code> に保存されます。プログラムが書き込めないフォルダー（例：<code>C:\Program Files</code>）にある場合は設定を保存できません。フォルダーごとデスクトップやドキュメントに移動してください。</p>
+  </details>
+  <details>
+    <summary>新しいバージョンに更新するには？</summary>
+    <p>プログラムは起動時にバージョンを確認します。新しいバージョンがあるとお知らせが表示され、プログラム内からダウンロードして更新できます。</p>
+  </details>
+
+  <h2 id="keys">ショートカットと設定</h2>
+  <table>
+    <thead><tr><th class="nowrap">キー</th><th>動作</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap"><kbd>F1</kbd></td><td>どのページからでもこのヘルプを開きます。</td></tr>
+      <tr><td class="nowrap">ツアー（ツール右上）</td><td>操作ツアーをもう一度見ます。初回起動時にも一度自動で再生されます。<kbd>←</kbd> <kbd>→</kbd> でステップを移動、<kbd>Esc</kbd> でスキップします。</td></tr>
+      <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>C</kbd></td><td>テキストボックスまたはデータ表で選択した内容をコピーします。</td></tr>
+      <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>V</kbd></td><td>「PIP 区切りデータ」欄にテキストを貼り付けます。</td></tr>
+      <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>A</kbd></td><td>テキストボックス内をすべて選択します。</td></tr>
+    </tbody>
+  </table>
+
+  <h3>設定ページで変更できる項目</h3>
+  <table>
+    <thead><tr><th class="nowrap">項目</th><th>説明</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap">言語</td><td>繁体字中国語、簡体字中国語、English、日本語、한국어。</td></tr>
+      <tr><td class="nowrap">テーマ</td><td>GitHub ダーク、ライトモード、ティファニーブルー。</td></tr>
+      <tr><td class="nowrap">フォントと文字サイズ</td><td>文字が小さいときはここで大きくします。このヘルプの文字も一緒に大きくなります。</td></tr>
+      <tr><td class="nowrap">ヘルプの表示方法</td><td>「アプリ内ウィンドウ」はこのヘルプをプログラム内に表示します（既定）。「既定のブラウザー」は <kbd>F1</kbd> を押すとブラウザーで開くので、サブディスプレイで見るときに便利です。</td></tr>
+    </tbody>
+  </table>
+
+  <footer>DataSplitter Pro · <kbd>F1</kbd> キーでいつでもこのヘルプに戻れます。</footer>
+</main>

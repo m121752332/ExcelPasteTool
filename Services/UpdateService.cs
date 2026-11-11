@@ -69,6 +69,9 @@ public static class UpdateService
     private static readonly string LatestReleaseApi =
         $"https://api.github.com/repos/{RepoOwner}/{RepoName}/releases/latest";
 
+    /// <summary>GitHub 專案首頁（git remote origin）。</summary>
+    public static string RepoPageUrl => $"https://github.com/{RepoOwner}/{RepoName}";
+
     public static string ReleasesPageUrl => $"https://github.com/{RepoOwner}/{RepoName}/releases";
 
     /// <summary>不在使用者設定裡被更新覆蓋的檔案。</summary>

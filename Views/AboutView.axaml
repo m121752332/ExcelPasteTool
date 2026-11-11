@@ -53,6 +53,12 @@
 						Background="#33FFFFFF" Foreground="White" BorderBrush="#66FFFFFF" BorderThickness="1"
 						FontSize="12" Cursor="Hand"/>
 
+				<!-- 改版資訊 -->
+				<Button x:Name="ChangelogButton" Content="📜 改版資訊"
+						HorizontalAlignment="Center" Padding="16,6" CornerRadius="16"
+						Background="#33FFFFFF" Foreground="White" BorderBrush="#66FFFFFF" BorderThickness="1"
+						FontSize="12" Cursor="Hand"/>
+
 			</StackPanel>
 		</Border>
 
@@ -87,6 +93,18 @@
 								<TextBlock Text="版權資訊" FontWeight="SemiBold" FontSize="14" Foreground="#1E3A8A"/>
 								<TextBlock x:Name="CopyrightText" Text="GameStudio@2026"
 										   FontSize="14" Foreground="#1E40AF" TextWrapping="Wrap"/>
+							</StackPanel>
+						</Grid>
+
+						<!-- GitHub -->
+						<Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+							<Border Background="#2563EB" CornerRadius="8" Padding="8" VerticalAlignment="Top">
+								<TextBlock Text="🔗" FontSize="14" Foreground="White"/>
+							</Border>
+							<StackPanel Grid.Column="1" Spacing="4">
+								<TextBlock x:Name="GitHubTitleText" Text="GitHub 專案" FontWeight="SemiBold" FontSize="14" Foreground="#1E3A8A"/>
+								<HyperlinkButton x:Name="GitHubLink" Padding="0" FontSize="14" Foreground="#1D4ED8"
+												 HorizontalAlignment="Left" Cursor="Hand"/>
 							</StackPanel>
 						</Grid>
 

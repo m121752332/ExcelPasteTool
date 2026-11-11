@@ -19,6 +19,7 @@ public partial class DataToolView : UserControl
     private readonly List<SeparatorOption> _separatorOptions = new()
     {
         new('|', "SeparatorPipe", "豎線 |"),
+        new(',', "SeparatorComma", "逗號 ,"),
         new(';', "SeparatorSemicolon", "分號 ;"),
         new(':', "SeparatorColon", "冒號 :"),
         new(' ', "SeparatorSpace", "空白")
@@ -210,25 +211,10 @@ public partial class DataToolView : UserControl
         var processedData = lines
             .Select(l => l.Trim())
             .Where(l => l.Length > 0)
-            .Select(GetFirstColumn)
+            .Select(SeparatorHelper.GetFirstColumn)
             .Where(v => v.Length > 0);
         SetItems(processedData);
         UpdateTopAndBottom();
-    }
-
-    private static string GetFirstColumn(string line)
-    {
-        var separators = new char[] { '\t', ',', ';', '|' };
-        foreach (var sep in separators)
-        {
-            if (line.Contains(sep))
-            {
-                var parts = line.Split(new char[] { sep }, System.StringSplitOptions.RemoveEmptyEntries);
-                if (parts.Length > 0)
-                    return parts[0].Trim();
-            }
-        }
-        return line.Trim();
     }
 
     private void ClearData_Click(object? sender, RoutedEventArgs e)
@@ -274,14 +260,14 @@ public partial class DataToolView : UserControl
     {
         if (_suppressEvents) return;
         var text = TopBox.Text ?? string.Empty;
-        SetItems(text.Split(_separator).Select(x => x.Trim()).Where(x => x.Length > 0));
+        SetItems(SeparatorHelper.Split(text, _separator).Select(x => x.Trim()).Where(x => x.Length > 0));
         UpdateBottom();
     }
 
     private void UpdateTopAndBottom()
     {
         _suppressEvents = true;
-        try { TopBox.Text = string.Join(_separator, Items); }
+        try { TopBox.Text = SeparatorHelper.Join(Items, _separator); }
         finally { _suppressEvents = false; }
         UpdateBottom();
     }

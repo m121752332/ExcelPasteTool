@@ -8,7 +8,9 @@ public enum AppLanguage
 {
     TraditionalChinese,  // 繁體中文
     SimplifiedChinese,   // 簡體中文
-    English              // 英文
+    English,             // 英文
+    Japanese,            // 日文
+    Korean               // 韓文
 }
 
 public static class LanguageManager
@@ -44,6 +46,8 @@ public static class LanguageManager
             AppLanguage.TraditionalChinese => GetTraditionalChineseTexts(),
             AppLanguage.SimplifiedChinese => GetSimplifiedChineseTexts(),
             AppLanguage.English => GetEnglishTexts(),
+            AppLanguage.Japanese => GetJapaneseTexts(),
+            AppLanguage.Korean => GetKoreanTexts(),
             _ => GetTraditionalChineseTexts()
         };
     }
@@ -60,6 +64,8 @@ public static class LanguageManager
             AppLanguage.TraditionalChinese => "繁體中文",
             AppLanguage.SimplifiedChinese => "简体中文",
             AppLanguage.English => "English",
+            AppLanguage.Japanese => "日本語",
+            AppLanguage.Korean => "한국어",
             _ => "繁體中文"
         };
     }
@@ -71,6 +77,8 @@ public static class LanguageManager
             AppLanguage.TraditionalChinese => "Microsoft JhengHei",  // 微軟正黑體
             AppLanguage.SimplifiedChinese => "Source Han Sans SC",  // 思源黑體 SC
             AppLanguage.English => "Segoe UI",                      // Segoe UI
+            AppLanguage.Japanese => "Yu Gothic UI",                 // 游ゴシック UI
+            AppLanguage.Korean => "Malgun Gothic",                  // 맑은 고딕
             _ => "Microsoft JhengHei"
         };
     }
@@ -81,7 +89,9 @@ public static class LanguageManager
         {
             (AppLanguage.TraditionalChinese, GetLanguageName(AppLanguage.TraditionalChinese)),
             (AppLanguage.SimplifiedChinese, GetLanguageName(AppLanguage.SimplifiedChinese)),
-            (AppLanguage.English, GetLanguageName(AppLanguage.English))
+            (AppLanguage.English, GetLanguageName(AppLanguage.English)),
+            (AppLanguage.Japanese, GetLanguageName(AppLanguage.Japanese)),
+            (AppLanguage.Korean, GetLanguageName(AppLanguage.Korean))
         };
     }
 
@@ -103,6 +113,7 @@ public static class LanguageManager
             ["DataContentHeader"] = "資料內容",
             ["RemoveRowTooltip"] = "移除此筆",
             ["SeparatorPipe"] = "豎線 |",
+            ["SeparatorComma"] = "逗號 ,",
             ["SeparatorSemicolon"] = "分號 ;",
             ["SeparatorColon"] = "冒號 :",
             ["SeparatorSpace"] = "空白",
@@ -148,7 +159,7 @@ public static class LanguageManager
             ["TourTableTitle"] = "資料清單",
             ["TourTableBody"] = "貼上的資料會列在這裡。滑鼠移到某一列，右側會出現 ✕ 可移除該筆；點表頭的「行號」可複製全部資料。",
             ["TourSeparatorTitle"] = "② 選擇分隔符號",
-            ["TourSeparatorBody"] = "決定資料要用哪個符號串接：豎線 |、分號 ;、冒號 : 或空白，切換後結果立即更新。",
+            ["TourSeparatorBody"] = "決定資料要用哪個符號串接：豎線 |、逗號 ,、分號 ;、冒號 : 或空白，切換後結果立即更新。",
             ["TourTopBoxTitle"] = "③ 分隔資料",
             ["TourTopBoxBody"] = "資料會自動串成一行，例如 A001|A002|A003。也可以直接在這裡輸入或修改，右邊的清單會跟著更新。",
             ["TourSqlTitle"] = "④ SQL 條件",
@@ -160,7 +171,11 @@ public static class LanguageManager
             ["TourAppearanceTitle"] = "語言與主題",
             ["TourAppearanceBody"] = "這裡可以臨時切換介面語言與配色主題；要永久保存，或調整字型、字體大小，請到「設定」頁。",
             ["TourReplayTitle"] = "隨時重看導覽",
-            ["TourReplayBody"] = "之後想再看一次，回到「工具」頁按右上角的「導覽」按鈕即可；按 F1 可以開啟完整的使用說明。祝使用愉快！"
+            ["TourReplayBody"] = "之後想再看一次，回到「工具」頁按右上角的「導覽」按鈕即可；按 F1 可以開啟完整的使用說明。祝使用愉快！",
+            ["ChangelogTitle"] = "改版資訊",
+            ["ChangelogLatestBadge"] = "最新",
+            ["ChangelogCloseButton"] = "關閉",
+            ["AboutGitHubTitle"] = "GitHub 專案"
         };
     }
 
@@ -182,6 +197,7 @@ public static class LanguageManager
             ["DataContentHeader"] = "数据内容",
             ["RemoveRowTooltip"] = "移除此条",
             ["SeparatorPipe"] = "竖线 |",
+            ["SeparatorComma"] = "逗号 ,",
             ["SeparatorSemicolon"] = "分号 ;",
             ["SeparatorColon"] = "冒号 :",
             ["SeparatorSpace"] = "空格",
@@ -227,7 +243,7 @@ public static class LanguageManager
             ["TourTableTitle"] = "数据清单",
             ["TourTableBody"] = "粘贴的数据会列在这里。鼠标移到某一行，右侧会出现 ✕ 可移除该条；点表头的「行号」可复制全部数据。",
             ["TourSeparatorTitle"] = "② 选择分隔符号",
-            ["TourSeparatorBody"] = "决定数据要用哪个符号串接：竖线 |、分号 ;、冒号 : 或空格，切换后结果立即更新。",
+            ["TourSeparatorBody"] = "决定数据要用哪个符号串接：竖线 |、逗号 ,、分号 ;、冒号 : 或空格，切换后结果立即更新。",
             ["TourTopBoxTitle"] = "③ 分隔数据",
             ["TourTopBoxBody"] = "数据会自动串成一行，例如 A001|A002|A003。也可以直接在这里输入或修改，右边的清单会跟着更新。",
             ["TourSqlTitle"] = "④ SQL 条件",
@@ -239,7 +255,11 @@ public static class LanguageManager
             ["TourAppearanceTitle"] = "语言与主题",
             ["TourAppearanceBody"] = "这里可以临时切换界面语言与配色主题；要永久保存，或调整字体、字体大小，请到「设定」页。",
             ["TourReplayTitle"] = "随时重看导览",
-            ["TourReplayBody"] = "之后想再看一次，回到「工具」页按右上角的「导览」按钮即可；按 F1 可以打开完整的使用说明。祝使用愉快！"
+            ["TourReplayBody"] = "之后想再看一次，回到「工具」页按右上角的「导览」按钮即可；按 F1 可以打开完整的使用说明。祝使用愉快！",
+            ["ChangelogTitle"] = "更新记录",
+            ["ChangelogLatestBadge"] = "最新",
+            ["ChangelogCloseButton"] = "关闭",
+            ["AboutGitHubTitle"] = "GitHub 项目"
         };
     }
 
@@ -261,6 +281,7 @@ public static class LanguageManager
             ["DataContentHeader"] = "Data Content",
             ["RemoveRowTooltip"] = "Remove this row",
             ["SeparatorPipe"] = "Pipe |",
+            ["SeparatorComma"] = "Comma ,",
             ["SeparatorSemicolon"] = "Semicolon ;",
             ["SeparatorColon"] = "Colon :",
             ["SeparatorSpace"] = "Space",
@@ -306,7 +327,7 @@ public static class LanguageManager
             ["TourTableTitle"] = "Data list",
             ["TourTableBody"] = "Pasted rows appear here. Hover a row and click ✕ to remove it, or click the row number header to copy everything.",
             ["TourSeparatorTitle"] = "② Pick a separator",
-            ["TourSeparatorBody"] = "Choose how values are joined: pipe |, semicolon ;, colon : or space. The result updates right away.",
+            ["TourSeparatorBody"] = "Choose how values are joined: pipe |, comma ,, semicolon ;, colon : or space. The result updates right away.",
             ["TourTopBoxTitle"] = "③ Separated data",
             ["TourTopBoxBody"] = "Values are joined into one line, for example A001|A002|A003. You can also type or edit here and the list follows.",
             ["TourSqlTitle"] = "④ SQL condition",
@@ -318,7 +339,179 @@ public static class LanguageManager
             ["TourAppearanceTitle"] = "Language and theme",
             ["TourAppearanceBody"] = "Switch language and theme temporarily here. To keep the change, or to adjust fonts, go to Settings.",
             ["TourReplayTitle"] = "Replay any time",
-            ["TourReplayBody"] = "Click the Tour button in the top-right corner of the Tools page to watch this again. Press F1 for the full help. Enjoy!"
+            ["TourReplayBody"] = "Click the Tour button in the top-right corner of the Tools page to watch this again. Press F1 for the full help. Enjoy!",
+            ["ChangelogTitle"] = "Release Notes",
+            ["ChangelogLatestBadge"] = "Latest",
+            ["ChangelogCloseButton"] = "Close",
+            ["AboutGitHubTitle"] = "GitHub Project"
+        };
+    }
+
+    private static Dictionary<string, string> GetJapaneseTexts()
+    {
+        return new Dictionary<string, string>
+        {
+            ["AppTitle"] = "データ区切り処理ツール",
+            ["SettingsTitle"] = "設定",
+            ["SeparatorLabel"] = "区切り文字：",
+            ["ThemeLabel"] = "テーマ:",
+            ["LanguageLabel"] = "言語:",
+            ["PipDataTitle"] = "PIP 区切りデータ",
+            ["SqlConditionTitle"] = "SQL 条件",
+            ["DataListTitle"] = "データ一覧",
+            ["PasteDataButton"] = "データ貼り付け",
+            ["ClearDataButton"] = "データをクリア",
+            ["RowNumberHeader"] = "行番号",
+            ["DataContentHeader"] = "データ内容",
+            ["RemoveRowTooltip"] = "この行を削除",
+            ["SeparatorPipe"] = "縦線 |",
+            ["SeparatorComma"] = "カンマ ,",
+            ["SeparatorSemicolon"] = "セミコロン ;",
+            ["SeparatorColon"] = "コロン :",
+            ["SeparatorSpace"] = "スペース",
+            ["ThemeDark"] = "GitHub ダーク",
+            ["ThemeLight"] = "ライトモード",
+            ["ThemeTiffany"] = "ティファニーブルー",
+            ["ThemeDesc"] = "アプリの配色テーマを選択します",
+            ["FontTitle"] = "フォント",
+            ["FontDesc"] = "画面とデータ領域で使うフォントを選択します",
+            ["FontDefault"] = "Noto Sans TC（内蔵）",
+            ["FontSizeTitle"] = "文字サイズ",
+            ["FontSizeDesc"] = "アプリ全体の文字サイズを調整します",
+            ["FontPreviewText"] = "プレビュー：TIPTOP 品番 A-001 | データ区切り 1234567890",
+            ["FontResetButton"] = "初期値に戻す",
+            ["FontChangedToast"] = "フォント設定を保存しました",
+            ["RowCountFormat"] = "全 {0} 件",
+            ["EmptyStateText"] = "データがありません\nExcel で 1 列をコピーしてから「データ貼り付け」を押してください",
+            ["TopBoxWatermark"] = "区切り文字でつないだデータをここに直接入力することもできます",
+            ["LanguageChangedToast"] = "言語設定を変更しました",
+            ["ThemeChangedToast"] = "テーマ設定を変更しました",
+            ["LanguageDesc"] = "アプリの言語設定を変更します",
+            ["HelpTitle"] = "ヘルプ",
+            ["HelpOpenInBrowser"] = "ブラウザーで開く",
+            ["HelpUnavailableText"] = "このコンピューターには埋め込みブラウザーコンポーネントがないため、既定のブラウザーでヘルプを開きました。\n右上の「ブラウザーで開く」からも開けます。",
+            ["HelpViewerTitle"] = "ヘルプの表示方法",
+            ["HelpViewerDesc"] = "F1 キーまたは「ヘルプ」を押したときに、アプリ内で表示するか既定のブラウザーで開くかを選びます",
+            ["HelpViewerInApp"] = "アプリ内ウィンドウ",
+            ["HelpViewerBrowser"] = "既定のブラウザー",
+            ["HelpViewerChangedToast"] = "ヘルプの表示方法を保存しました",
+            ["TourButton"] = "ツアー",
+            ["TourButtonTooltip"] = "操作ツアーをもう一度見る",
+            ["TourStepFormat"] = "ステップ {0} / {1}",
+            ["TourSkip"] = "ツアーをスキップ",
+            ["TourPrev"] = "戻る",
+            ["TourNext"] = "次へ",
+            ["TourDone"] = "完了",
+            ["TourWelcomeTitle"] = "DataSplitter Pro へようこそ 👋",
+            ["TourWelcomeBody"] = "このツールは、Excel からコピーした 1 列のデータを、区切り文字でつないだ文字列と SQL 条件に変換します。\n30 秒で主な操作をご案内します。Esc キーでいつでもスキップできます。",
+            ["TourSidebarTitle"] = "メニュー",
+            ["TourSidebarBody"] = "左側で「ツール」「設定」「ヘルプ」「バージョン情報」を切り替えます。最上部のボタンでメニューを展開／折りたたみできます。",
+            ["TourPasteTitle"] = "① Excel のデータを貼り付け",
+            ["TourPasteBody"] = "Excel で 1 列を選択してコピー（Ctrl+C）し、「データ貼り付け」を押します。各セルが 1 件になり、重複は自動的に除かれます。複数列をコピーした場合は先頭の列だけが使われます。",
+            ["TourTableTitle"] = "データ一覧",
+            ["TourTableBody"] = "貼り付けたデータがここに並びます。行にマウスを乗せると右側に ✕ が表示され、その行を削除できます。見出しの「行番号」をクリックすると全データをコピーします。",
+            ["TourSeparatorTitle"] = "② 区切り文字を選ぶ",
+            ["TourSeparatorBody"] = "データをつなぐ記号を選びます：縦線 |、カンマ ,、セミコロン ;、コロン :、またはスペース。切り替えるとすぐに結果が更新されます。",
+            ["TourTopBoxTitle"] = "③ 区切りデータ",
+            ["TourTopBoxBody"] = "データは自動的に 1 行につながります（例：A001|A002|A003）。ここに直接入力・編集することもでき、右側の一覧も連動して更新されます。",
+            ["TourSqlTitle"] = "④ SQL 条件",
+            ["TourSqlBody"] = "SQL の IN 条件（例：('A001', 'A002')）も同時に作成されます。単一引用符は自動でエスケープされるので、そのままクエリに貼り付けられます。",
+            ["TourCopyTitle"] = "ワンクリックでコピー",
+            ["TourCopyBody"] = "各タイトルの右にあるコピーボタンで、区切りデータまたは SQL 条件をクリップボードにコピーできます。",
+            ["TourClearTitle"] = "データをクリア",
+            ["TourClearBody"] = "次のデータを処理するときは、ここを押して画面をクリアし、区切り文字を初期状態に戻します。",
+            ["TourAppearanceTitle"] = "言語とテーマ",
+            ["TourAppearanceBody"] = "ここで表示言語と配色テーマを一時的に切り替えられます。設定を保存したい場合やフォント・文字サイズを変えたい場合は「設定」ページへどうぞ。",
+            ["TourReplayTitle"] = "いつでもやり直せます",
+            ["TourReplayBody"] = "もう一度見たいときは、「ツール」ページ右上の「ツアー」ボタンを押してください。F1 キーで詳しいヘルプを開けます。どうぞお楽しみください！",
+            ["ChangelogTitle"] = "更新履歴",
+            ["ChangelogLatestBadge"] = "最新",
+            ["ChangelogCloseButton"] = "閉じる",
+            ["AboutGitHubTitle"] = "GitHub プロジェクト"
+        };
+    }
+
+    private static Dictionary<string, string> GetKoreanTexts()
+    {
+        return new Dictionary<string, string>
+        {
+            ["AppTitle"] = "데이터 구분 처리기",
+            ["SettingsTitle"] = "설정",
+            ["SeparatorLabel"] = "구분 기호：",
+            ["ThemeLabel"] = "테마:",
+            ["LanguageLabel"] = "언어:",
+            ["PipDataTitle"] = "PIP 구분 데이터",
+            ["SqlConditionTitle"] = "SQL 조건",
+            ["DataListTitle"] = "데이터 목록",
+            ["PasteDataButton"] = "데이터 붙여넣기",
+            ["ClearDataButton"] = "데이터 지우기",
+            ["RowNumberHeader"] = "행 번호",
+            ["DataContentHeader"] = "데이터 내용",
+            ["RemoveRowTooltip"] = "이 행 삭제",
+            ["SeparatorPipe"] = "세로선 |",
+            ["SeparatorComma"] = "쉼표 ,",
+            ["SeparatorSemicolon"] = "세미콜론 ;",
+            ["SeparatorColon"] = "콜론 :",
+            ["SeparatorSpace"] = "공백",
+            ["ThemeDark"] = "GitHub 다크",
+            ["ThemeLight"] = "라이트 모드",
+            ["ThemeTiffany"] = "티파니 블루",
+            ["ThemeDesc"] = "앱의 색상 테마를 선택합니다",
+            ["FontTitle"] = "글꼴",
+            ["FontDesc"] = "화면과 데이터 영역에 사용할 글꼴을 선택합니다",
+            ["FontDefault"] = "Noto Sans TC (내장)",
+            ["FontSizeTitle"] = "글자 크기",
+            ["FontSizeDesc"] = "앱 전체의 글자 크기를 조정합니다",
+            ["FontPreviewText"] = "미리보기: TIPTOP 품번 A-001 | 데이터 구분 1234567890",
+            ["FontResetButton"] = "기본값으로 복원",
+            ["FontChangedToast"] = "글꼴 설정이 저장되었습니다",
+            ["RowCountFormat"] = "총 {0}건",
+            ["EmptyStateText"] = "데이터가 없습니다\nExcel에서 한 열을 복사한 후 「데이터 붙여넣기」를 누르세요",
+            ["TopBoxWatermark"] = "구분 기호로 연결한 데이터를 여기에 직접 입력할 수도 있습니다",
+            ["LanguageChangedToast"] = "언어 설정이 변경되었습니다",
+            ["ThemeChangedToast"] = "테마 설정이 변경되었습니다",
+            ["LanguageDesc"] = "앱의 언어 설정을 변경합니다",
+            ["HelpTitle"] = "도움말",
+            ["HelpOpenInBrowser"] = "브라우저로 열기",
+            ["HelpUnavailableText"] = "이 컴퓨터에는 사용할 수 있는 내장 브라우저 구성 요소가 없어 기본 브라우저로 도움말을 열었습니다.\n나중에 오른쪽 위의 「브라우저로 열기」를 눌러도 됩니다.",
+            ["HelpViewerTitle"] = "도움말 열기 방식",
+            ["HelpViewerDesc"] = "F1 키를 누르거나 「도움말」을 클릭할 때 앱 안에서 보여줄지 기본 브라우저로 열지 선택합니다",
+            ["HelpViewerInApp"] = "내장 창",
+            ["HelpViewerBrowser"] = "기본 브라우저",
+            ["HelpViewerChangedToast"] = "도움말 열기 방식이 저장되었습니다",
+            ["TourButton"] = "둘러보기",
+            ["TourButtonTooltip"] = "사용법 둘러보기 다시 보기",
+            ["TourStepFormat"] = "{0} / {1} 단계",
+            ["TourSkip"] = "둘러보기 건너뛰기",
+            ["TourPrev"] = "이전",
+            ["TourNext"] = "다음",
+            ["TourDone"] = "완료",
+            ["TourWelcomeTitle"] = "DataSplitter Pro에 오신 것을 환영합니다 👋",
+            ["TourWelcomeBody"] = "이 도구는 Excel에서 복사한 한 열의 데이터를 구분 기호로 연결한 문자열과 SQL 조건으로 변환해 줍니다.\n30초 동안 주요 사용법을 안내해 드립니다. Esc 키로 언제든지 건너뛸 수 있습니다.",
+            ["TourSidebarTitle"] = "메뉴",
+            ["TourSidebarBody"] = "왼쪽에서 「도구」「설정」「도움말」「정보」 페이지를 전환합니다. 맨 위 버튼으로 메뉴를 펼치거나 접을 수 있습니다.",
+            ["TourPasteTitle"] = "① Excel 데이터 붙여넣기",
+            ["TourPasteBody"] = "Excel에서 한 열을 선택해 복사(Ctrl+C)한 다음 「데이터 붙여넣기」를 누르세요. 각 셀이 한 건이 되며 중복된 값은 자동으로 제외됩니다. 여러 열을 복사했다면 첫 번째 열만 사용합니다.",
+            ["TourTableTitle"] = "데이터 목록",
+            ["TourTableBody"] = "붙여넣은 데이터가 여기에 표시됩니다. 행 위에 마우스를 올리면 오른쪽에 ✕가 나타나 해당 건을 삭제할 수 있고, 머리글의 「행 번호」를 클릭하면 전체 데이터를 복사합니다.",
+            ["TourSeparatorTitle"] = "② 구분 기호 선택",
+            ["TourSeparatorBody"] = "데이터를 연결할 기호를 고릅니다: 세로선 |, 쉼표 ,, 세미콜론 ;, 콜론 : 또는 공백. 바꾸면 결과가 즉시 갱신됩니다.",
+            ["TourTopBoxTitle"] = "③ 구분 데이터",
+            ["TourTopBoxBody"] = "데이터가 자동으로 한 줄로 연결됩니다. 예: A001|A002|A003. 여기에 직접 입력하거나 수정할 수도 있으며, 오른쪽 목록도 함께 갱신됩니다.",
+            ["TourSqlTitle"] = "④ SQL 조건",
+            ["TourSqlBody"] = "SQL의 IN 조건도 함께 만들어집니다. 예: ('A001', 'A002'). 작은따옴표는 자동으로 이스케이프되므로 쿼리에 바로 붙여넣을 수 있습니다.",
+            ["TourCopyTitle"] = "한 번에 복사",
+            ["TourCopyBody"] = "각 제목 오른쪽의 복사 버튼을 누르면 구분 데이터나 SQL 조건을 클립보드로 복사합니다.",
+            ["TourClearTitle"] = "데이터 지우기",
+            ["TourClearBody"] = "다음 데이터를 처리하려면 여기를 눌러 화면을 비우고 구분 기호를 처음 상태로 되돌립니다.",
+            ["TourAppearanceTitle"] = "언어 및 테마",
+            ["TourAppearanceBody"] = "여기에서 표시 언어와 색상 테마를 임시로 바꿀 수 있습니다. 설정을 유지하거나 글꼴·글자 크기를 바꾸려면 「설정」 페이지로 이동하세요.",
+            ["TourReplayTitle"] = "언제든 다시 보기",
+            ["TourReplayBody"] = "다시 보고 싶다면 「도구」 페이지 오른쪽 위의 「둘러보기」 버튼을 누르세요. F1 키를 누르면 전체 도움말이 열립니다. 즐겁게 사용하세요!",
+            ["ChangelogTitle"] = "변경 내역",
+            ["ChangelogLatestBadge"] = "최신",
+            ["ChangelogCloseButton"] = "닫기",
+            ["AboutGitHubTitle"] = "GitHub 프로젝트"
         };
     }
 }

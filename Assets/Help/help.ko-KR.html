@@ -1,0 +1,180 @@
+<main>
+  <header>
+    <h1>DataSplitter Pro 도움말</h1>
+    <p class="lead">Excel의 한 열을 클릭 한 번으로 「구분 기호로 연결한 문자열」과 「SQL IN 조건」으로 바꿔 줍니다. 처음 사용한다면 앞의 두 장만 읽어도 충분합니다.</p>
+    <ul class="toc">
+      <li><a href="#what">이 도구로 할 수 있는 일</a></li>
+      <li><a href="#quick">3단계로 시작하기</a></li>
+      <li><a href="#screen">화면 구성</a></li>
+      <li><a href="#more">더 알아보기</a></li>
+      <li><a href="#faq">자주 묻는 질문</a></li>
+      <li><a href="#keys">단축키와 설정</a></li>
+    </ul>
+  </header>
+
+  <h2 id="what">이 도구로 할 수 있는 일</h2>
+  <p>Excel에 품번, 전표 번호, 코드 등이 한 열로 있고, 이를 ERP 조회나 SQL의 <code>WHERE ... IN</code>에 쓰고 싶다고 합시다. 구분 기호와 따옴표를 하나씩 직접 붙이면 시간이 걸리고 실수하기 쉽습니다. 이 도구는 열 전체를 한 번에 변환해 줍니다.</p>
+
+  <div class="convert">
+    <div>
+      <div class="box-title">Excel의 한 열</div>
+      <table class="excel">
+        <thead><tr><th>A</th></tr></thead>
+        <tbody>
+          <tr><td>A-001</td></tr>
+          <tr><td>A-002</td></tr>
+          <tr><td>B-105</td></tr>
+          <tr><td>C-330</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="arrow">→</div>
+    <div>
+      <div class="box-title">구분 데이터 (ERP나 보고서의 다중 값 조회 칸에 붙여넣기)</div>
+      <div class="out">A-001|A-002|B-105|C-330</div>
+      <div class="box-title">SQL 조건 (WHERE 열 이름 IN 뒤에 붙여넣기)</div>
+      <div class="out sql">('A-001', 'A-002', 'B-105', 'C-330')</div>
+    </div>
+  </div>
+
+  <h2 id="quick">3단계로 시작하기</h2>
+  <ol class="steps">
+    <li>
+      <h3>Excel에서 한 열 복사</h3>
+      <p>변환할 셀(한 열, 행 수는 자유)을 선택하고 <kbd>Ctrl</kbd> + <kbd>C</kbd>를 누릅니다.</p>
+    </li>
+    <li>
+      <h3>이곳으로 돌아와 「데이터 붙여넣기」 클릭</h3>
+      <p>도구 페이지에서 오른쪽 위의 <span class="btn btn-primary">데이터 붙여넣기</span>를 누릅니다. 각 값이 오른쪽 표에 한 행씩 나타납니다. 빈 줄과 중복된 값은 자동으로 제외됩니다.</p>
+    </li>
+    <li>
+      <h3>필요한 결과 복사</h3>
+      <p>왼쪽에 「PIP 구분 데이터」와 「SQL 조건」이 동시에 만들어집니다. 각 제목 오른쪽의 복사 버튼 <span class="mock-icon">⧉</span>을 누른 뒤, ERP나 SQL 도구에서 <kbd>Ctrl</kbd> + <kbd>V</kbd>로 붙여넣으세요.</p>
+    </li>
+  </ol>
+
+  <div class="card tip">
+    <span class="tip-title">참고</span>텍스트 상자에서 <kbd>Ctrl</kbd> + <kbd>V</kbd>를 누르지 말고 「데이터 붙여넣기」 버튼을 사용하세요. 버튼은 Excel의 각 행을 한 건씩 나눠 줍니다. 텍스트 상자에 붙여넣으면 전체가 하나의 문자열로 처리됩니다.
+  </div>
+
+  <h2 id="screen">화면 구성</h2>
+  <p>도구 페이지의 개략도입니다. 번호는 아래 설명과 대응합니다.</p>
+
+  <div class="mock" aria-label="도구 페이지 개략도">
+    <div class="mock-side"><span class="on"></span><span></span><span></span><span></span></div>
+    <div class="mock-main">
+      <div class="mock-bar">
+        <span class="mock-field"><span class="num">1</span> 구분 기호： <span class="mock-select">세로선 |</span></span>
+        <span class="mock-field">언어: <span class="mock-select">한국어</span></span>
+        <span class="mock-field">테마: <span class="mock-select">GitHub 다크</span></span>
+      </div>
+      <div class="mock-body">
+        <div class="mock-panel">
+          <div class="mock-title"><span class="num">4</span> PIP 구분 데이터 <span class="grow"></span><span class="mock-icon">⧉</span></div>
+          <div class="mock-text">A-001|A-002|B-105|C-330</div>
+          <div class="mock-title"><span class="num">5</span> SQL 조건 <span class="grow"></span><span class="mock-icon">⧉</span></div>
+          <div class="mock-text sql">('A-001', 'A-002', 'B-105', 'C-330')</div>
+        </div>
+        <div class="mock-panel">
+          <div class="mock-actions">
+            <span class="num">2</span><span class="btn btn-primary">데이터 붙여넣기</span>
+            <span class="badge">총 4건</span>
+            <span class="grow"></span>
+            <span class="num">7</span><span class="btn btn-secondary">데이터 지우기</span>
+          </div>
+          <div class="mock-table">
+            <div class="mock-row head"><div>행 번호</div><div><span class="num">3</span> 데이터 내용</div><div></div></div>
+            <div class="mock-row"><div>1</div><div>A-001</div><div></div></div>
+            <div class="mock-row even"><div>2</div><div>A-002</div><div class="mock-x">✕</div></div>
+            <div class="mock-row"><div>3</div><div>B-105</div><div></div></div>
+            <div class="mock-row even"><div>4</div><div>C-330</div><div></div></div>
+          </div>
+          <div style="margin-top:6px"><span class="num">6</span> <span class="muted">행 위에 마우스를 올리면 오른쪽에 ✕가 나타납니다</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ul class="legend">
+    <li><span class="num">1</span><div><strong>구분 기호</strong>: 값을 연결할 기호를 고릅니다. 세로선 <code>|</code>, 쉼표 <code>,</code>, 세미콜론 <code>;</code>, 콜론 <code>:</code>, 공백의 다섯 가지입니다.</div></li>
+    <li><span class="num">2</span><div><strong>데이터 붙여넣기</strong>: 클립보드의 내용을 읽어 옵니다. 옆에 건수가 표시됩니다.</div></li>
+    <li><span class="num">3</span><div><strong>데이터 표</strong>: 행 번호와 함께 모든 값을 보여 주므로 건수와 내용을 확인할 수 있습니다.</div></li>
+    <li><span class="num">4</span><div><strong>PIP 구분 데이터</strong>: 구분 기호로 연결한 결과입니다. 이 칸에 직접 입력해 수정할 수도 있습니다.</div></li>
+    <li><span class="num">5</span><div><strong>SQL 조건</strong>: 따옴표와 괄호를 붙인 결과입니다. 복사 전용이며 편집할 수 없습니다.</div></li>
+    <li><span class="num">6</span><div><strong>한 건만 삭제</strong>: 행 오른쪽의 ✕를 클릭합니다. 행 번호는 다시 매겨집니다.</div></li>
+    <li><span class="num">7</span><div><strong>데이터 지우기</strong>: 모든 데이터를 지우고 구분 기호도 세로선으로 되돌립니다.</div></li>
+  </ul>
+  <p class="muted">세 영역은 항상 동기화됩니다. 하나를 바꾸면 나머지 둘도 즉시 갱신됩니다.</p>
+
+  <h2 id="more">더 알아보기</h2>
+  <table>
+    <thead><tr><th class="nowrap">하고 싶은 일</th><th>방법</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap">다른 구분 기호 사용</td><td>위쪽 도구 모음의 「구분 기호」 목록에서 선택합니다. 이미 붙여넣은 데이터는 새 기호로 즉시 다시 연결됩니다.</td></tr>
+      <tr><td class="nowrap">일부 값 제외</td><td>데이터 표의 행 위에 마우스를 올리고 오른쪽의 ✕를 클릭합니다.</td></tr>
+      <tr><td class="nowrap">직접 추가·수정</td><td>「PIP 구분 데이터」 칸에 직접 입력합니다. 값 사이는 현재 구분 기호로 구분하세요. 예: <code>A-001|A-002</code></td></tr>
+      <tr><td class="nowrap">열을 Excel로 다시 복사</td><td>표 왼쪽 위의 「행 번호」 머리글을 클릭합니다. 모든 값이 한 줄에 하나씩 복사되어 Excel에 그대로 붙여넣을 수 있습니다.</td></tr>
+      <tr><td class="nowrap">처음부터 다시 시작</td><td>「데이터 지우기」를 클릭합니다.</td></tr>
+      <tr><td class="nowrap">패널 너비 조절</td><td>왼쪽과 오른쪽 패널 사이의 경계를 드래그합니다.</td></tr>
+    </tbody>
+  </table>
+
+  <h2 id="faq">자주 묻는 질문</h2>
+  <details open>
+    <summary>「데이터 붙여넣기」를 눌렀는데 아무 일도 일어나지 않습니다.</summary>
+    <p>클립보드에 텍스트가 없습니다. Excel로 돌아가 셀을 선택하고 <kbd>Ctrl</kbd> + <kbd>C</kbd>를 누른 다음 버튼을 다시 클릭하세요.</p>
+  </details>
+  <details>
+    <summary>여러 열을 복사했는데 왜 첫 번째 열만 나오나요?</summary>
+    <p>의도된 동작입니다. 각 행의 첫 번째 열만 사용합니다. 다른 열이 필요하면 Excel에서 그 열만 선택해 복사하세요.</p>
+  </details>
+  <details>
+    <summary>Excel보다 건수가 적은 이유는 무엇인가요?</summary>
+    <p>빈 행과 중복된 값이 제외되므로, 건수는 중복을 제거한 값의 개수입니다.</p>
+  </details>
+  <details>
+    <summary>값의 일부가 잘렸습니다.</summary>
+    <p>붙여넣을 때 한 행 안에 Tab, 쉼표 <code>,</code>, 세미콜론 <code>;</code>, 세로선 <code>|</code>이 있으면 열 구분으로 간주해 첫 번째 부분만 남깁니다. 예를 들어 <code>A-001,red</code>는 <code>A-001</code>이 됩니다. 값 자체에 이런 기호가 들어 있다면 「PIP 구분 데이터」 칸에 직접 입력하세요. 구분 기호가 쉼표일 때는 <code>"A-001,red"</code>처럼 큰따옴표로 감싼 값은 나뉘지 않고 그대로 유지됩니다.</p>
+  </details>
+  <details>
+    <summary>값에 작은따옴표가 있으면 SQL이 깨지나요?</summary>
+    <p>아니요. 작은따옴표는 자동으로 두 개가 되어 <code>O'Brien</code>은 <code>'O''Brien'</code>으로 작성됩니다. SQL의 표준 방식입니다.</p>
+  </details>
+  <details>
+    <summary>도구 모음에서 언어나 테마를 바꿨는데 다음에 열면 원래대로 돌아가 있습니다.</summary>
+    <p>도구 모음의 변경은 현재 세션에만 적용됩니다. 유지하려면 왼쪽 메뉴의 「설정」 페이지에서 변경하세요.</p>
+  </details>
+  <details>
+    <summary>설정은 어디에 저장되나요? 저장되지 않는 이유는 무엇인가요?</summary>
+    <p>설정은 프로그램 옆의 <code>config.json</code>에 저장됩니다. 프로그램이 쓰기 권한이 없는 폴더(예: <code>C:\Program Files</code>)에 있으면 설정을 저장할 수 없습니다. 폴더 전체를 바탕 화면이나 문서 폴더로 옮기세요.</p>
+  </details>
+  <details>
+    <summary>새 버전으로 업데이트하려면 어떻게 하나요?</summary>
+    <p>프로그램은 시작할 때 새 버전을 확인합니다. 새 버전이 있으면 안내가 표시되며, 프로그램 안에서 바로 다운로드하여 업데이트할 수 있습니다.</p>
+  </details>
+
+  <h2 id="keys">단축키와 설정</h2>
+  <table>
+    <thead><tr><th class="nowrap">키</th><th>동작</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap"><kbd>F1</kbd></td><td>어느 페이지에서든 이 도움말을 엽니다.</td></tr>
+      <tr><td class="nowrap">둘러보기 (도구 페이지 오른쪽 위)</td><td>사용법 둘러보기를 다시 봅니다. 처음 실행할 때도 한 번 자동으로 재생됩니다. <kbd>←</kbd> <kbd>→</kbd>로 단계를 이동하고 <kbd>Esc</kbd>로 건너뜁니다.</td></tr>
+      <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>C</kbd></td><td>텍스트 상자나 데이터 표에서 선택한 내용을 복사합니다.</td></tr>
+      <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>V</kbd></td><td>「PIP 구분 데이터」 칸에 텍스트를 붙여넣습니다.</td></tr>
+      <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>A</kbd></td><td>텍스트 상자 안의 내용을 모두 선택합니다.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>설정 페이지에서 바꿀 수 있는 항목</h3>
+  <table>
+    <thead><tr><th class="nowrap">항목</th><th>설명</th></tr></thead>
+    <tbody>
+      <tr><td class="nowrap">언어</td><td>중국어 번체, 중국어 간체, English, 日本語, 한국어.</td></tr>
+      <tr><td class="nowrap">테마</td><td>GitHub 다크, 라이트 모드, 티파니 블루.</td></tr>
+      <tr><td class="nowrap">글꼴과 글자 크기</td><td>글자가 작으면 여기에서 키우세요. 이 도움말의 글자도 함께 커집니다.</td></tr>
+      <tr><td class="nowrap">도움말 열기 방식</td><td>「내장 창」은 이 도움말을 프로그램 안에 표시합니다(기본값). 「기본 브라우저」는 <kbd>F1</kbd>을 누르면 브라우저로 열어 주므로 보조 모니터에서 볼 때 편리합니다.</td></tr>
+    </tbody>
+  </table>
+
+  <footer>DataSplitter Pro · 언제든 <kbd>F1</kbd> 키를 눌러 이 도움말로 돌아올 수 있습니다.</footer>
+</main>

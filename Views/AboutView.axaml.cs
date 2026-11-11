@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Avalonia.Styling;
 using Avalonia.Threading;
+using System.Diagnostics;
 using System.Threading;
 
 namespace ExcelPasteTool;
@@ -52,6 +53,17 @@ public partial class AboutView : UserControl
         if (checkUpdateButton != null)
             checkUpdateButton.Click += CheckUpdateButton_OnClick;
 
+        var changelogButton = this.FindControl<Button>("ChangelogButton");
+        if (changelogButton != null)
+            changelogButton.Click += ChangelogButton_OnClick;
+
+        var gitHubLink = this.FindControl<HyperlinkButton>("GitHubLink");
+        if (gitHubLink != null)
+        {
+            gitHubLink.Content = UpdateService.RepoPageUrl;
+            gitHubLink.Click += GitHubLink_OnClick;
+        }
+
         var asm = Assembly.GetEntryAssembly() ?? Assembly.GetExecutingAssembly();
         var name = asm.GetName();
         _appTitleText!.Text = name.Name ?? "DataSplitter Pro";
@@ -80,6 +92,51 @@ public partial class AboutView : UserControl
         var avaloniaBadge = this.FindControl<TextBlock>("AvaloniaBadgeText");
         if (avaloniaBadge != null)
             avaloniaBadge.Text = avalonia;
+    }
+
+    // 新增的文字走語言檔；其餘既有文字維持原狀
+    protected override void OnAttachedToVisualTree(Avalonia.VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        LanguageManager.LanguageChanged -= UpdateLocalizedTexts;
+        LanguageManager.LanguageChanged += UpdateLocalizedTexts;
+        UpdateLocalizedTexts();
+    }
+
+    protected override void OnDetachedFromVisualTree(Avalonia.VisualTreeAttachmentEventArgs e)
+    {
+        LanguageManager.LanguageChanged -= UpdateLocalizedTexts;
+        base.OnDetachedFromVisualTree(e);
+    }
+
+    private void UpdateLocalizedTexts()
+    {
+        if (!Dispatcher.UIThread.CheckAccess())
+        {
+            Dispatcher.UIThread.Post(UpdateLocalizedTexts);
+            return;
+        }
+        var changelogButton = this.FindControl<Button>("ChangelogButton");
+        if (changelogButton != null)
+            changelogButton.Content = "📜 " + LanguageManager.GetText("ChangelogTitle", "改版資訊");
+        var gitHubTitle = this.FindControl<TextBlock>("GitHubTitleText");
+        if (gitHubTitle != null)
+            gitHubTitle.Text = LanguageManager.GetText("AboutGitHubTitle", "GitHub 專案");
+    }
+
+    private async void ChangelogButton_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (TopLevel.GetTopLevel(this) is not Window owner) return;
+        await new ChangelogWindow().ShowDialog(owner);
+    }
+
+    private void GitHubLink_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        try
+        {
+            Process.Start(new ProcessStartInfo(UpdateService.RepoPageUrl) { UseShellExecute = true });
+        }
+        catch { }
     }
 
     private async void CheckUpdateButton_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
