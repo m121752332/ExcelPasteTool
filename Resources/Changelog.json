@@ -1,5 +1,31 @@
 [
   {
+    "version": "1.5.2",
+    "date": "2026-11-11",
+    "notes": {
+      "TraditionalChinese": [
+        "修正「改版資訊」視窗的版本號、日期與更新內容沒有顯示的問題",
+        "軟體更新對話框（發現新版本、下載進度、已是最新版本等）改為跟隨目前語言顯示"
+      ],
+      "SimplifiedChinese": [
+        "修正「更新记录」窗口的版本号、日期与更新内容没有显示的问题",
+        "软件更新对话框（发现新版本、下载进度、已是最新版本等）改为跟随当前语言显示"
+      ],
+      "English": [
+        "Fixed the Release Notes window not showing version numbers, dates and notes",
+        "The software update dialog (new version, download progress, up to date, etc.) now follows the current language"
+      ],
+      "Japanese": [
+        "「更新履歴」ウィンドウにバージョン番号・日付・変更内容が表示されない問題を修正",
+        "ソフトウェア更新ダイアログ（新しいバージョン、ダウンロード進行状況、最新バージョンなど）が現在の言語で表示されるようになりました"
+      ],
+      "Korean": [
+        "「변경 내역」 창에 버전 번호, 날짜, 변경 내용이 표시되지 않던 문제를 수정했습니다",
+        "소프트웨어 업데이트 대화 상자(새 버전, 다운로드 진행률, 최신 버전 등)가 현재 언어로 표시됩니다"
+      ]
+    }
+  },
+  {
     "version": "1.5.1",
     "date": "2026-11-11",
     "notes": {

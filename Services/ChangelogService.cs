@@ -26,7 +26,9 @@ public static class ChangelogService
         try
         {
             using var stream = AssetLoader.Open(new Uri($"avares://{Global.AssemblyName}/Resources/Changelog.json"));
-            _cache = JsonSerializer.Deserialize<List<ChangelogEntry>>(stream) ?? new();
+            // Changelog.json 的欄位是小寫（version / date / notes），需不分大小寫對應到屬性
+            _cache = JsonSerializer.Deserialize<List<ChangelogEntry>>(stream,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? new();
         }
         catch
         {
