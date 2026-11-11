@@ -16,13 +16,13 @@ public partial class MainWindow : Window
     public ObservableCollection<SidebarItem> SidebarItems { get; } = new()
     {
         // 工具：使用 DataIcon
-        new SidebarItem(SidebarPage.Tools, "工具", IconManager.DataIcon),
+        new SidebarItem(SidebarPage.Tools, "SidebarTools", "工具", IconManager.DataIcon),
         // 設定：使用 SettingsIcon
-        new SidebarItem(SidebarPage.Settings, "設定", IconManager.SettingsIcon),
+        new SidebarItem(SidebarPage.Settings, "SidebarSettings", "設定", IconManager.SettingsIcon),
         // 說明：使用 BookIcon（F1 也會開啟）
-        new SidebarItem(SidebarPage.Help, "說明 (F1)", IconManager.BookIcon),
+        new SidebarItem(SidebarPage.Help, "SidebarHelp", "說明 (F1)", IconManager.BookIcon),
         // 關於：使用 HelpIcon（已內建）
-        new SidebarItem(SidebarPage.About, "關於", IconManager.GetIcon("help")),
+        new SidebarItem(SidebarPage.About, "SidebarAbout", "關於", IconManager.GetIcon("help")),
     };
     public ICommand SidebarItemClickCommand { get; }
 

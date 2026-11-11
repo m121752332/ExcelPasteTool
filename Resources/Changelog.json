@@ -1,5 +1,31 @@
 [
   {
+    "version": "1.5.1",
+    "date": "2026-11-11",
+    "notes": {
+      "TraditionalChinese": [
+        "修正切換語言時，左側選單（工具、設定、說明、關於）沒有跟著翻譯的問題",
+        "工具頁的複製按鈕提示與操作訊息（如「已複製到剪貼簿」）改為跟隨目前語言顯示"
+      ],
+      "SimplifiedChinese": [
+        "修正切换语言时，左侧菜单（工具、设定、说明、关于）没有跟着翻译的问题",
+        "工具页的复制按钮提示与操作消息（如「已复制到剪贴板」）改为跟随当前语言显示"
+      ],
+      "English": [
+        "Fixed the left menu (Tools, Settings, Help, About) not being translated when switching languages",
+        "Copy button tooltips and messages on the Tools page (e.g. \"Copied to clipboard\") now follow the current language"
+      ],
+      "Japanese": [
+        "言語を切り替えても左側メニュー（ツール、設定、ヘルプ、バージョン情報）が翻訳されない問題を修正",
+        "ツールページのコピーボタンのヒントと操作メッセージ（「クリップボードにコピーしました」など）が現在の言語で表示されるようになりました"
+      ],
+      "Korean": [
+        "언어를 전환해도 왼쪽 메뉴(도구, 설정, 도움말, 정보)가 번역되지 않던 문제를 수정했습니다",
+        "도구 페이지의 복사 버튼 툴팁과 안내 메시지(예: 「클립보드에 복사되었습니다」)가 현재 언어로 표시됩니다"
+      ]
+    }
+  },
+  {
     "version": "1.5.0",
     "date": "2026-11-11",
     "notes": {

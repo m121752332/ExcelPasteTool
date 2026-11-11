@@ -88,6 +88,9 @@ public partial class DataToolView : UserControl
         DataContentHeader.Text = LanguageManager.GetText("DataContentHeader", "資料內容");
         EmptyStateText.Text = LanguageManager.GetText("EmptyStateText", "尚無資料\n從 Excel 複製一欄後，按「資料貼上」");
         TopBox.Watermark = LanguageManager.GetText("TopBoxWatermark", "也可以直接在這裡輸入以分隔符號串接的資料");
+        ToolTip.SetTip(CopyTopBoxButton, LanguageManager.GetText("CopyTopBoxTooltip", "複製分隔資料"));
+        ToolTip.SetTip(CopyBottomBoxButton, LanguageManager.GetText("CopySqlTooltip", "複製SQL條件"));
+        ToolTip.SetTip(CopyTableButton, LanguageManager.GetText("CopyTableTooltip", "複製全部資料"));
 
         _suppressEvents = true;
         try
@@ -144,7 +147,7 @@ public partial class DataToolView : UserControl
         {
             // 工具頁面的語言切換是臨時的，不保存到配置檔案（要保存請到設定頁）
             LanguageController.SetLanguage(selectedLanguage, false);
-            _toastHelper.EnqueueToast("語言已臨時切換（未保存）");
+            _toastHelper.EnqueueToast(LanguageManager.GetText("LanguageTempToast", "語言已臨時切換（未保存）"));
         }
     }
 
@@ -158,7 +161,7 @@ public partial class DataToolView : UserControl
         {
             // 工具頁面的主題切換是臨時的，不保存到配置檔案（要保存請到設定頁）
             ThemeManager.CurrentTheme = selectedTheme;
-            _toastHelper.EnqueueToast("主題已臨時切換（未保存）");
+            _toastHelper.EnqueueToast(LanguageManager.GetText("ThemeTempToast", "主題已臨時切換（未保存）"));
         }
     }
 
@@ -232,7 +235,7 @@ public partial class DataToolView : UserControl
         {
             _suppressEvents = false;
         }
-        EnqueueToast("畫面已清理回初始狀態");
+        EnqueueToast(LanguageManager.GetText("ClearedToast", "畫面已清理回初始狀態"));
     }
 
     /// <summary>移除單筆資料：重排後面的行號，並同步分隔資料與 SQL 條件。捲動位置保留，方便連續刪除。</summary>
@@ -292,7 +295,9 @@ public partial class DataToolView : UserControl
         await Task.Delay(50);
         await clipboard.SetTextAsync(text);
         var check = await clipboard.GetTextAsync();
-        EnqueueToast(check == text ? "已複製到剪貼簿！" : "複製失敗，請重試");
+        EnqueueToast(check == text
+            ? LanguageManager.GetText("CopySuccessToast", "已複製到剪貼簿！")
+            : LanguageManager.GetText("CopyFailedToast", "複製失敗，請重試"));
     }
 
     private async void CopyTopBoxButton_Click(object? sender, RoutedEventArgs e) => await CopyTextAsync(TopBox.Text);
