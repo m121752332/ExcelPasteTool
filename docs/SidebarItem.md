@@ -1,20 +1,20 @@
-# SidebarItem.cs µ{¦¡½X»¡©ú
+# SidebarItem.cs ç¨‹å¼ç¢¼èªªæ˜
 
-¦¹ÀÉ®×©w¸q¤F SidebarItem Ãş§O¡A¥D­n¥Î©ó°¼ÃäÄæ¡]Sidebar¡^¨C­Ó¿ï³æ¶µ¥Øªº¸ê®Æµ²ºc¡A¨Ã¤ä´© MVVM ªºÄİ©Ê³qª¾¡C
+æ­¤æª”æ¡ˆå®šç¾©äº† SidebarItem é¡åˆ¥ï¼Œä¸»è¦ç”¨æ–¼å´é‚Šæ¬„ï¼ˆSidebarï¼‰æ¯å€‹é¸å–®é …ç›®çš„è³‡æ–™çµæ§‹ï¼Œä¸¦æ”¯æ´ MVVM çš„å±¬æ€§é€šçŸ¥ã€‚
 
-## Äİ©Ê
-- `Page`¡G¦¹¿ï³æ¶µ¥Ø©Ò¥Nªíªº­¶­±¡]SidebarPage ¦CÁ|¡^¡C
-- `Name`¡GÅã¥Ü¦WºÙ¡C
-- `Icon`¡G¹Ï¥Ü¡]³q±`¬O SVG ©Î¦r¦ê¡^¡C
-- `SidebarViewModelInstance`¡G«ü¦V SidebarViewModel ¹ê¨Ò¡A¥i¥Î©ó§PÂ_¿ï¨úª¬ºA¡C
-- `IsSelected`¡G§PÂ_¦¹¶µ¥Ø¬O§_³Q¿ï¨ú¡]SelectedPage ¬O§_µ¥©ó¦¹ Page¡^¡C
+## å±¬æ€§
+- `Page`ï¼šæ­¤é¸å–®é …ç›®æ‰€ä»£è¡¨çš„é é¢ï¼ˆSidebarPage åˆ—èˆ‰ï¼‰ã€‚
+- `Name`ï¼šé¡¯ç¤ºåç¨±ã€‚
+- `Icon`ï¼šåœ–ç¤ºï¼ˆé€šå¸¸æ˜¯ SVG æˆ–å­—ä¸²ï¼‰ã€‚
+- `SidebarViewModelInstance`ï¼šæŒ‡å‘ SidebarViewModel å¯¦ä¾‹ï¼Œå¯ç”¨æ–¼åˆ¤æ–·é¸å–ç‹€æ…‹ã€‚
+- `IsSelected`ï¼šåˆ¤æ–·æ­¤é …ç›®æ˜¯å¦è¢«é¸å–ï¼ˆSelectedPage æ˜¯å¦ç­‰æ–¼æ­¤ Pageï¼‰ã€‚
 
-## «Øºc¤l
-- ªì©l¤Æ Page¡BName¡BIcon¡C
+## å»ºæ§‹å­
+- åˆå§‹åŒ– Pageã€Nameã€Iconã€‚
 
-## INotifyPropertyChanged ¹ê§@
-- `PropertyChanged` ¨Æ¥ó¡G¥Î©ó³qª¾ UI Äİ©ÊÅÜ§ó¡C
-- `OnPropertyChanged` ¤èªk¡GÄ²µo PropertyChanged ¨Æ¥ó¡A¤ä´©¦Û°Ê¨ú±oÄİ©Ê¦WºÙ¡C
+## INotifyPropertyChanged å¯¦ä½œ
+- `PropertyChanged` äº‹ä»¶ï¼šç”¨æ–¼é€šçŸ¥ UI å±¬æ€§è®Šæ›´ã€‚
+- `OnPropertyChanged` æ–¹æ³•ï¼šè§¸ç™¼ PropertyChanged äº‹ä»¶ï¼Œæ”¯æ´è‡ªå‹•å–å¾—å±¬æ€§åç¨±ã€‚
 
-## ¥Î³~
-SidebarItem ¥D­n¥Î©ó°¼ÃäÄæªº¸ê®Æ¸j©w¡A¤ä´© UI °ÊºA§ó·s¡]¦p¿ï¨úª¬ºA¤Á´«¡^¡A¨Ã¥i·f°t ViewModel ¨Ï¥Î¡C
+## ç”¨é€”
+SidebarItem ä¸»è¦ç”¨æ–¼å´é‚Šæ¬„çš„è³‡æ–™ç¶å®šï¼Œæ”¯æ´ UI å‹•æ…‹æ›´æ–°ï¼ˆå¦‚é¸å–ç‹€æ…‹åˆ‡æ›ï¼‰ï¼Œä¸¦å¯æ­é… ViewModel ä½¿ç”¨ã€‚
