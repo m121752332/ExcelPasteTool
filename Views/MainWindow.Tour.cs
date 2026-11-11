@@ -20,6 +20,7 @@ public partial class MainWindow
         Tour.StepChanging += _ => EnsureToolsPage();
         Tour.Closed += OnTourClosed;
         UpdateTourButtonText();
+        UpdateTourButtonVisibility();
         LanguageManager.LanguageChanged += () => Avalonia.Threading.Dispatcher.UIThread.Post(UpdateTourButtonText);
     }
 
@@ -29,6 +30,13 @@ public partial class MainWindow
             text.Text = LanguageManager.GetText("TourButton", "導覽");
         if (this.FindControl<Button>("TourButton") is { } button)
             ToolTip.SetTip(button, LanguageManager.GetText("TourButtonTooltip", "重看操作導覽"));
+    }
+
+    /// <summary>導覽只介紹「工具」頁，所以按鈕也只在「工具」頁顯示。</summary>
+    private void UpdateTourButtonVisibility()
+    {
+        if (this.FindControl<Button>("TourButton") is { } button)
+            button.IsVisible = Sidebar.SelectedPage == SidebarPage.Tools;
     }
 
     /// <summary>首次啟動時是否需要自動播放導覽。</summary>

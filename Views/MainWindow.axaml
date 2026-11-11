@@ -59,7 +59,7 @@
 		</Border>
 		<ContentControl Grid.Column="1" x:Name="MainContent" Content="{Binding Sidebar.SelectedPage, Converter={StaticResource SidebarPageToContentConverter}}" />
 
-		<!-- 右上角「導覽」按鈕：可隨時重看操作導覽（各頁右上角已預留空間，不會與頁面內容重疊） -->
+		<!-- 右上角「導覽」按鈕：只在「工具」頁顯示（由 MainWindow.Tour.cs 控制），可隨時重看操作導覽 -->
 		<Button Grid.Column="1" Name="TourButton" Classes="tour-button"
 				HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,23,26,0"
 				Cursor="Hand" Click="TourButton_Click">
@@ -72,5 +72,19 @@
 
 	<!-- App 導覽圖層（第一次開啟自動播放） -->
 	<local:TourOverlay Name="TourLayer"/>
+
+	<!-- Toast 通知：全 App 共用一個，放在最上層（高於導覽按鈕與導覽遮罩），不攔截滑鼠 -->
+	<Border Name="ToastPanel"
+			Background="#E6222222"
+			CornerRadius="8"
+			Padding="18,10"
+			HorizontalAlignment="Right"
+			VerticalAlignment="Top"
+			Margin="0,30,30,0"
+			IsVisible="False"
+			IsHitTestVisible="False"
+			ZIndex="20000">
+		<TextBlock Name="ToastText" Foreground="#FFA726" FontWeight="Bold"/>
+	</Border>
 	</Panel>
 </Window>
