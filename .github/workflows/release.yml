@@ -49,6 +49,18 @@ jobs:
           cp config.json out/${{ matrix.rid }}/
           rm -f out/${{ matrix.rid }}/*.pdb
 
+      # 確認發佈檔是「自包含」且內含 .NET 10 runtime，使用者免安裝 .NET。
+      # 若有人誤改成 --self-contained false 或目標框架不是 net10.0，這一步會讓 Release 失敗。
+      - name: Verify bundled .NET 10 runtime
+        run: |
+          cfg=bin/Release/net10.0/${{ matrix.rid }}/DataSplitter.runtimeconfig.json
+          cat "$cfg"
+          ver=$(jq -r '.runtimeOptions.includedFrameworks[]? | select(.name=="Microsoft.NETCore.App") | .version' "$cfg")
+          case "$ver" in
+            10.*) echo "OK: 內含 Microsoft.NETCore.App $ver" ;;
+            *) echo "::error::發佈檔未內含 .NET 10 runtime（取得：'${ver}'），請確認 --self-contained true 與 net10.0"; exit 1 ;;
+          esac
+
       - name: Zip
         run: |
           cd out/${{ matrix.rid }}

@@ -11,7 +11,7 @@
 | 資料表 | 逐筆列出並編號 | 檢查筆數、移除不要的項目 |
 
 - 專案名稱是 `ExcelPasteTool`，產品名稱是 **DataSplitter Pro**，執行檔叫 `DataSplitter`。
-- 支援 Windows、macOS、Linux，以 [.NET 8](https://dotnet.microsoft.com/) 和 [Avalonia UI](https://avaloniaui.net/) 11 開發。
+- 支援 Windows、macOS、Linux，以 [.NET 10](https://dotnet.microsoft.com/) 和 [Avalonia UI](https://avaloniaui.net/) 11 開發。
 
 ## 目錄
 
@@ -88,14 +88,14 @@
 
 | 工具 | 版本 | 說明 |
 | --- | --- | --- |
-| [.NET SDK](https://dotnet.microsoft.com/download/dotnet/8.0) | 8.0.4xx（8.0.413 以上） | 由 `global.json` 鎖定 |
+| [.NET SDK](https://dotnet.microsoft.com/download/dotnet/10.0) | 10.0.100 以上的 10.0 系列 | 由 `global.json` 指定 |
 | Git | 近期版本 | 取得原始碼 |
 
 用 `dotnet --list-sdks` 可以確認本機已安裝的版本。
 
 ### IDE（擇一）
 
-- **Visual Studio 2022**（17.14 以上）：安裝「.NET 桌面開發」工作負載和 [Avalonia for Visual Studio](https://marketplace.visualstudio.com/items?itemName=AvaloniaTeam.AvaloniaVS) 擴充套件。
+- **Visual Studio 2026**（18.0 以上，Visual Studio 2022 不支援 .NET 10）：安裝「.NET 桌面開發」工作負載和 [Avalonia for Visual Studio](https://marketplace.visualstudio.com/items?itemName=AvaloniaTeam.AvaloniaVS) 擴充套件。
 - **JetBrains Rider**：內建 Avalonia 支援。
 - **VS Code**：安裝 C# Dev Kit 和 Avalonia for VS Code。
 
@@ -122,9 +122,9 @@ dotnet build -c Release
 dotnet run
 ```
 
-- 建置輸出在 `bin/<Configuration>/net8.0/`。
+- 建置輸出在 `bin/<Configuration>/net10.0/`。
 - 在 IDE 中將 `ExcelPasteTool` 設為啟動專案後按 F5 也可以。
-- 開發時讀寫的設定檔是 `bin/<Configuration>/net8.0/config.json`，不是專案根目錄那份；根目錄的 `config.json` 只是打包時用的預設範本。
+- 開發時讀寫的設定檔是 `bin/<Configuration>/net10.0/config.json`，不是專案根目錄那份；根目錄的 `config.json` 只是打包時用的預設範本。
 
 ## 打包發佈
 
@@ -194,7 +194,7 @@ ExcelPasteTool/
 ├── App.axaml(.cs)              # 應用程式初始化（載入設定、主題、字型）
 ├── ExcelPasteTool.csproj       # 專案檔（版本號在這裡）
 ├── Directory.Packages.props    # NuGet 套件版本集中管理
-├── global.json                 # 鎖定 .NET SDK 版本
+├── global.json                 # 指定 .NET SDK 版本
 ├── config.json                 # 預設設定範本（打包時附上）
 │
 ├── Views/                      # 畫面
