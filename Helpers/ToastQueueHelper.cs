@@ -5,8 +5,9 @@ namespace ExcelPasteTool.Helpers
 {
     public class ToastQueueHelper
     {
-        private readonly Queue<string> _toastQueue = new Queue<string>();
-        private bool _isShowingToast = false;
+        // Toast 面板在主視窗最上層、全 App 共用一個，所以佇列也共用，避免不同頁面的訊息互相覆蓋
+        private static readonly Queue<string> _toastQueue = new Queue<string>();
+        private static bool _isShowingToast = false;
         private const int MaxQueue = 5;
         private readonly UserControl _owner;
         private readonly string _panelName;
@@ -35,8 +36,11 @@ namespace ExcelPasteTool.Helpers
         private async Task ProcessToastQueue()
         {
             _isShowingToast = true;
-            var toastPanel = _owner.FindControl<Border>(_panelName);
-            var toastText = _owner.FindControl<TextBlock>(_textName);
+            // Toast 放在主視窗（最上層），不在各頁面內，才不會被導覽按鈕或導覽遮罩蓋住
+            var window = TopLevel.GetTopLevel(_owner) as Window
+                ?? (Avalonia.Application.Current?.ApplicationLifetime as Avalonia.Controls.ApplicationLifetimes.IClassicDesktopStyleApplicationLifetime)?.MainWindow;
+            var toastPanel = window?.FindControl<Border>(_panelName);
+            var toastText = window?.FindControl<TextBlock>(_textName);
             if (toastPanel == null || toastText == null)
             {
                 _isShowingToast = false;

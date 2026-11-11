@@ -160,7 +160,7 @@ public static class LanguageManager
             ["TourAppearanceTitle"] = "語言與主題",
             ["TourAppearanceBody"] = "這裡可以臨時切換介面語言與配色主題；要永久保存，或調整字型、字體大小，請到「設定」頁。",
             ["TourReplayTitle"] = "隨時重看導覽",
-            ["TourReplayBody"] = "之後想再看一次，按右上角的「導覽」按鈕即可；按 F1 可以開啟完整的使用說明。祝使用愉快！"
+            ["TourReplayBody"] = "之後想再看一次，回到「工具」頁按右上角的「導覽」按鈕即可；按 F1 可以開啟完整的使用說明。祝使用愉快！"
         };
     }
 
@@ -239,7 +239,7 @@ public static class LanguageManager
             ["TourAppearanceTitle"] = "语言与主题",
             ["TourAppearanceBody"] = "这里可以临时切换界面语言与配色主题；要永久保存，或调整字体、字体大小，请到「设定」页。",
             ["TourReplayTitle"] = "随时重看导览",
-            ["TourReplayBody"] = "之后想再看一次，按右上角的「导览」按钮即可；按 F1 可以打开完整的使用说明。祝使用愉快！"
+            ["TourReplayBody"] = "之后想再看一次，回到「工具」页按右上角的「导览」按钮即可；按 F1 可以打开完整的使用说明。祝使用愉快！"
         };
     }
 
@@ -318,7 +318,7 @@ public static class LanguageManager
             ["TourAppearanceTitle"] = "Language and theme",
             ["TourAppearanceBody"] = "Switch language and theme temporarily here. To keep the change, or to adjust fonts, go to Settings.",
             ["TourReplayTitle"] = "Replay any time",
-            ["TourReplayBody"] = "Click the Tour button in the top-right corner to watch this again. Press F1 for the full help. Enjoy!"
+            ["TourReplayBody"] = "Click the Tour button in the top-right corner of the Tools page to watch this again. Press F1 for the full help. Enjoy!"
         };
     }
 }

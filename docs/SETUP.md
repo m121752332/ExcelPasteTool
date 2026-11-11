@@ -145,7 +145,7 @@ dotnet run
 
 | `TourCompleted` | `true`、`false` | `false` | 是否已看過 App 導覽。`false`（或舊設定檔沒有此欄位）時，啟動後會自動播放一次導覽，看完或略過即寫回 `true`；改回 `false` 可讓下次啟動再播一次 |
 
-前四項都可以在 App 的「設定」頁變更，變更後會自動存檔。導覽可隨時按主視窗右上角的「導覽」按鈕重看（實作在 `Controls/TourOverlay.cs` 與 `Views/MainWindow.Tour.cs`，步驟文字在 `Helpers/LanguageManager.cs` 的 `Tour*` 鍵）。
+前四項都可以在 App 的「設定」頁變更，變更後會自動存檔。導覽可隨時在「工具」頁按右上角的「導覽」按鈕重看（其他頁面不顯示此按鈕）；Toast 通知統一放在主視窗最上層（`MainWindow.axaml` 的 `ToastPanel`）（實作在 `Controls/TourOverlay.cs` 與 `Views/MainWindow.Tour.cs`，步驟文字在 `Helpers/LanguageManager.cs` 的 `Tour*` 鍵）。
 
 行為說明（`Services/ConfigServices.cs`）：
 

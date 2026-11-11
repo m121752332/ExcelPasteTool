@@ -63,6 +63,7 @@ public partial class MainWindow : Window
             return;
 
         Sidebar.SelectedPage = page;
+        UpdateTourButtonVisibility();
         foreach (var item in SidebarItems)
             item.OnPropertyChanged(nameof(item.IsSelected));
     }
