@@ -349,4 +349,65 @@
     <Setter Property="CornerRadius" Value="6"/>
     <Setter Property="Padding" Value="14,10"/>
   </Style>
+
+  <!-- ===== App 導覽 ===== -->
+  <!-- 右上角「導覽」按鈕 -->
+  <Style Selector="Button.tour-button">
+    <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="16"/>
+    <Setter Property="Padding" Value="12,5"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+  </Style>
+  <Style Selector="Button.tour-button:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource ControlHoverBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource InputFocusBorderBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
+  </Style>
+  <!-- 目前步驟的外框 -->
+  <Style Selector="Border.tour-ring">
+    <Setter Property="BorderBrush" Value="{DynamicResource InputFocusBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="2"/>
+    <Setter Property="CornerRadius" Value="8"/>
+  </Style>
+  <!-- 說明卡片 -->
+  <Style Selector="Border.tour-card">
+    <Setter Property="Background" Value="{DynamicResource PanelBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource PanelBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="10"/>
+    <Setter Property="Padding" Value="20,16"/>
+    <Setter Property="BoxShadow" Value="0 8 28 0 #66000000"/>
+  </Style>
+  <Style Selector="TextBlock.tour-step">
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+    <Setter Property="FontSize" Value="{DynamicResource AppFontSizeSmall}"/>
+  </Style>
+  <Style Selector="TextBlock.tour-title">
+    <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
+    <Setter Property="FontSize" Value="{DynamicResource AppFontSizeLarge}"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+  </Style>
+  <Style Selector="TextBlock.tour-body">
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    <Setter Property="LineHeight" Value="22"/>
+  </Style>
+  <Style Selector="Button.tour-link">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="2,5"/>
+    <Setter Property="FontSize" Value="{DynamicResource AppFontSizeSmall}"/>
+  </Style>
+  <Style Selector="Button.tour-link:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+  <Style Selector="ProgressBar.tour-progress">
+    <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
+    <Setter Property="Background" Value="{DynamicResource ControlBorderBrush}"/>
+    <Setter Property="CornerRadius" Value="2"/>
+  </Style>
 </Styles>

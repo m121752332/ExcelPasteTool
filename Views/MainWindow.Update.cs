@@ -28,6 +28,8 @@ public partial class MainWindow
                 var dlg = UpdateDialog.ForMessage("🎉", "更新完成",
                     $"已成功更新至 v{UpdateService.CurrentVersionText}，歡迎使用新版本！");
                 await dlg.ShowDialog(this);
+                // 從舊版更新上來、還沒看過導覽的使用者，關掉提示後播放一次
+                if (ShouldAutoStartTour) StartTour();
             });
             return;
         }
@@ -42,6 +44,14 @@ public partial class MainWindow
                     File.Exists(log) ? $"詳細記錄：{log}" : null);
                 await dlg.ShowDialog(this);
             });
+            return;
+        }
+
+        if (ShouldAutoStartTour)
+        {
+            // 第一次開啟：先播放導覽，看完（或略過）後再檢查更新，避免更新視窗蓋住導覽
+            _afterTour = () => _ = CheckForUpdateOnStartupAsync();
+            Dispatcher.UIThread.Post(StartTour, DispatcherPriority.Background);
             return;
         }
 

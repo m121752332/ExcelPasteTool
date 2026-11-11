@@ -3,7 +3,7 @@
              x:Class="ExcelPasteTool.HelpView">
 	<!-- 原生 WebView 會蓋在所有 Avalonia 內容之上，所以標題列放在獨立的一列，不與 WebView 重疊 -->
 	<Grid RowDefinitions="Auto,*">
-		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="24,14,24,10">
+		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="24,14,124,10">
 			<TextBlock Grid.Column="0" Name="TitleText" Classes="page-title" VerticalAlignment="Center"/>
 			<Button Grid.Column="1" Name="OpenInBrowserButton" Classes="ghost" Cursor="Hand" VerticalAlignment="Center"/>
 		</Grid>
