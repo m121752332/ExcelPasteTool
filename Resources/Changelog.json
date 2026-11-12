@@ -1,5 +1,31 @@
 [
   {
+    "version": "1.6.0",
+    "date": "2026-11-12",
+    "notes": {
+      "TraditionalChinese": [
+        "新增「重複項」按鈕（在「清空資料」左邊）：貼上後可查看哪些資料因重複被移除，以及每個值出現幾次、被移除幾筆",
+        "操作導覽可按空白鍵前往下一步，並新增「整欄複製」步驟，說明點表頭「行號」可複製全部資料"
+      ],
+      "SimplifiedChinese": [
+        "新增「重复项」按钮（在「清空数据」左边）：粘贴后可查看哪些数据因重复被移除，以及每个值出现几次、被移除几笔",
+        "操作导览可按空格键前往下一步，并新增「整列复制」步骤，说明点表头「行号」可复制全部数据"
+      ],
+      "English": [
+        "Added a Duplicates button (left of Clear Data): after pasting, see which values were removed as duplicates, how many times each one appeared and how many were removed",
+        "The tour now advances with the Space key, and has a new step explaining that clicking the Row header copies the whole column"
+      ],
+      "Japanese": [
+        "「重複」ボタンを追加（「データをクリア」の左）：貼り付け後、重複として除かれた値と、それぞれの出現回数・除外数を確認できます",
+        "操作ガイドをスペースキーで次へ進められるようになり、見出しの「行番号」で全データをコピーできることを説明するステップを追加しました"
+      ],
+      "Korean": [
+        "「중복」 버튼을 추가했습니다(「데이터 지우기」 왼쪽): 붙여넣은 뒤 중복으로 제외된 값과 각 값의 출현 횟수, 제외된 건수를 확인할 수 있습니다",
+        "사용 안내에서 스페이스 키로 다음 단계로 이동할 수 있으며, 머리글의 「행 번호」로 전체 데이터를 복사하는 방법을 설명하는 단계를 추가했습니다"
+      ]
+    }
+  },
+  {
     "version": "1.5.5",
     "date": "2026-11-11",
     "notes": {

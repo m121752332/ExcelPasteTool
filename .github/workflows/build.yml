@@ -15,3 +15,5 @@ jobs:
           global-json-file: global.json
       - name: Build
         run: dotnet build ExcelPasteTool.csproj -c Release
+      - name: Test
+        run: dotnet test tests/ExcelPasteTool.Tests/ExcelPasteTool.Tests.csproj -c Release

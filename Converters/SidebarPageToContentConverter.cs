@@ -13,6 +13,15 @@ public class SidebarPageToContentConverter : IValueConverter
     private static AboutView? _aboutViewInstance;
     private static HelpView? _helpViewInstance;
 
+    /// <summary>清掉快取的頁面（UI 自動測試每次開新主視窗前呼叫，避免同一個頁面被掛到兩個視窗）。</summary>
+    internal static void ResetCache()
+    {
+        _dataToolViewInstance = null;
+        _settingsViewInstance = null;
+        _aboutViewInstance = null;
+        _helpViewInstance = null;
+    }
+
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is SidebarPage page)

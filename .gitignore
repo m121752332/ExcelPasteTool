@@ -363,3 +363,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# Superpowers 腦力激盪草圖
+.superpowers/

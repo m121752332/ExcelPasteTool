@@ -171,9 +171,14 @@ public sealed class TourOverlay : Panel
         _bodyText.Text = LanguageManager.GetText(step.BodyKey, step.BodyDefault);
         _skipButton.Content = LanguageManager.GetText("TourSkip", "略過導覽");
         _prevButton.Content = LanguageManager.GetText("TourPrev", "上一步");
-        _nextButton.Content = _index == _steps.Count - 1
+        var isLast = _index == _steps.Count - 1;
+        _nextButton.Content = isLast
             ? LanguageManager.GetText("TourDone", "完成")
             : LanguageManager.GetText("TourNext", "下一步");
+        // 快捷鍵只在提示中顯示（與其他按鈕一致）
+        ToolTip.SetTip(_nextButton, isLast
+            ? LanguageManager.GetText("TourDoneTooltip", "完成 (Space)")
+            : LanguageManager.GetText("TourNextTooltip", "下一步 (Space)"));
         _prevButton.IsVisible = _index > 0;
         _skipButton.IsVisible = _index < _steps.Count - 1;
 

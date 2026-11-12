@@ -75,7 +75,7 @@
 				<Border Grid.Column="2" Classes="panel" Padding="16">
 					<Grid RowDefinitions="Auto,*">
 						<!-- 按鈕列 -->
-						<Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,*,Auto" Margin="0,0,0,12">
+						<Grid Grid.Row="0" ColumnDefinitions="Auto,Auto,*,Auto,Auto" Margin="0,0,0,12">
 							<Button Grid.Column="0" Name="PasteDataButton" Classes="primary" Cursor="Hand">
 								<StackPanel Orientation="Horizontal" Spacing="6">
 									<Path Data="{x:Static local:IconManager.PasteIcon}" Width="15" Height="15" Stretch="Uniform" VerticalAlignment="Center"/>
@@ -85,7 +85,14 @@
 							<Border Grid.Column="1" Classes="badge" Margin="12,0,0,0">
 								<TextBlock Name="RowCountText"/>
 							</Border>
-							<Button Grid.Column="3" Name="ClearDataButton" Classes="secondary" Cursor="Hand">
+							<!-- 重複項：最近一次貼上時被濾掉的重複值，沒有重複時停用 -->
+							<Button Grid.Column="3" Name="DuplicatesButton" Classes="secondary" Cursor="Hand" Margin="0,0,8,0" IsEnabled="False">
+								<StackPanel Orientation="Horizontal" Spacing="6">
+									<Path Data="{x:Static local:IconManager.ListIcon}" Width="15" Height="15" Stretch="Uniform" VerticalAlignment="Center"/>
+									<TextBlock Name="DuplicatesButtonText" VerticalAlignment="Center"/>
+								</StackPanel>
+							</Button>
+							<Button Grid.Column="4" Name="ClearDataButton" Classes="secondary" Cursor="Hand">
 								<StackPanel Orientation="Horizontal" Spacing="6">
 									<Path Data="{x:Static local:IconManager.ClearIcon}" Width="15" Height="15" Stretch="Uniform" VerticalAlignment="Center"/>
 									<TextBlock Name="ClearButtonText" VerticalAlignment="Center"/>

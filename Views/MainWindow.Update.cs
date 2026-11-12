@@ -11,11 +11,14 @@ public partial class MainWindow
 {
     private static bool _startupUpdateChecked;
 
+    /// <summary>UI 自動測試設為 true：開啟視窗時不檢查更新、不自動播放導覽，畫面才穩定可比對。</summary>
+    internal static bool SkipStartupChecks { get; set; }
+
     protected override void OnOpened(EventArgs e)
     {
         base.OnOpened(e);
 
-        if (_startupUpdateChecked) return;
+        if (_startupUpdateChecked || SkipStartupChecks) return;
         _startupUpdateChecked = true;
 
         var args = Environment.GetCommandLineArgs();
