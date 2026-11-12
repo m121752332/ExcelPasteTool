@@ -1,5 +1,4 @@
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
+using SkiaSharp;
 
 namespace ExcelPasteTool.UITests.Infrastructure;
 
@@ -37,14 +36,16 @@ public sealed record VisualCompareResult
     public string? Message { get; init; }
 }
 
-/// <summary>用 ImageSharp 逐像素比對兩張 PNG，並輸出差異圖（不同處標紅，其餘淡化成灰階）。</summary>
+/// <summary>用 SkiaSharp（Avalonia.Skia 本來就會帶進來）逐像素比對兩張 PNG，並輸出差異圖（不同處標紅，其餘淡化成灰階）。</summary>
 public static class ImageComparer
 {
     public static VisualCompareResult Compare(string name, string baselinePath, string actualPath, string diffPath,
         VisualCompareOptions options)
     {
-        using var expected = Image.Load<Rgba32>(baselinePath);
-        using var actual = Image.Load<Rgba32>(actualPath);
+        using var expected = SKBitmap.Decode(baselinePath)
+            ?? throw new InvalidOperationException($"無法讀取基準圖：{baselinePath}");
+        using var actual = SKBitmap.Decode(actualPath)
+            ?? throw new InvalidOperationException($"無法讀取擷取圖：{actualPath}");
 
         if (expected.Width != actual.Width || expected.Height != actual.Height)
         {
@@ -67,29 +68,29 @@ public static class ImageComparer
         int width = actual.Width, height = actual.Height;
         long diffPixels = 0;
         int maxDelta = 0;
-        using var diff = new Image<Rgba32>(width, height);
+        using var diff = new SKBitmap(width, height, SKColorType.Rgba8888, SKAlphaType.Opaque);
 
         for (int y = 0; y < height; y++)
         {
             for (int x = 0; x < width; x++)
             {
-                var e = expected[x, y];
-                var a = actual[x, y];
+                var e = expected.GetPixel(x, y);
+                var a = actual.GetPixel(x, y);
                 int delta = Math.Max(
-                    Math.Max(Math.Abs(e.R - a.R), Math.Abs(e.G - a.G)),
-                    Math.Max(Math.Abs(e.B - a.B), Math.Abs(e.A - a.A)));
+                    Math.Max(Math.Abs(e.Red - a.Red), Math.Abs(e.Green - a.Green)),
+                    Math.Max(Math.Abs(e.Blue - a.Blue), Math.Abs(e.Alpha - a.Alpha)));
                 if (delta > maxDelta) maxDelta = delta;
 
                 if (delta > options.ChannelTolerance)
                 {
                     diffPixels++;
-                    diff[x, y] = new Rgba32(255, 0, 64, 255);
+                    diff.SetPixel(x, y, new SKColor(255, 0, 64, 255));
                 }
                 else
                 {
                     // 相同的地方淡化成灰階，讓紅色差異一眼就看得到
-                    var gray = (byte)(200 + (a.R * 0.299 + a.G * 0.587 + a.B * 0.114) / 255 * 55);
-                    diff[x, y] = new Rgba32(gray, gray, gray, 255);
+                    var gray = (byte)(200 + (a.Red * 0.299 + a.Green * 0.587 + a.Blue * 0.114) / 255 * 55);
+                    diff.SetPixel(x, y, new SKColor(gray, gray, gray, 255));
                 }
             }
         }
@@ -97,7 +98,12 @@ public static class ImageComparer
         double ratio = (double)diffPixels / ((long)width * height);
         bool passed = ratio <= options.MaxDiffRatio;
         if (!passed)
-            diff.SaveAsPng(diffPath);
+        {
+            using var image = SKImage.FromBitmap(diff);
+            using var data = image.Encode(SKEncodedImageFormat.Png, 100);
+            using var stream = File.Create(diffPath);
+            data.SaveTo(stream);
+        }
 
         return new VisualCompareResult
         {
