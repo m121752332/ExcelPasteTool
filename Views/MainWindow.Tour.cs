@@ -64,7 +64,7 @@ public partial class MainWindow
         next?.Invoke();
     }
 
-    /// <summary>導覽期間的鍵盤操作：Esc 略過、← 上一步、→ / Enter 下一步。回傳 true 代表已處理。</summary>
+    /// <summary>導覽期間的鍵盤操作：Esc 略過、← 上一步、→ / Enter / 空白鍵 下一步（最後一步等同「完成」）。回傳 true 代表已處理。</summary>
     private bool HandleTourKey(KeyEventArgs e)
     {
         if (!Tour.IsActive) return false;
@@ -73,7 +73,8 @@ public partial class MainWindow
             case Key.Escape: Tour.Close(false); break;
             case Key.Left: Tour.Previous(); break;
             case Key.Right:
-            case Key.Enter: Tour.Next(); break;
+            case Key.Enter:
+            case Key.Space: Tour.Next(); break;
             case Key.Tab: break; // 不讓焦點跳到遮罩底下的元件
             default: return false;
         }
@@ -96,7 +97,7 @@ public partial class MainWindow
         {
             TitleKey = "TourWelcomeTitle", TitleDefault = "歡迎使用 DataSplitter Pro 👋",
             BodyKey = "TourWelcomeBody",
-            BodyDefault = "這個工具能把從 Excel 複製的一欄資料，轉成以分隔符號串接的字串與 SQL 條件。\n接下來花 30 秒帶你看一遍主要操作，可隨時按 Esc 略過。",
+            BodyDefault = "這個工具能把從 Excel 複製的一欄資料，轉成以分隔符號串接的字串與 SQL 條件。\n接下來花 30 秒帶你看一遍主要操作，按空白鍵前往下一步，可隨時按 Esc 略過。",
         },
         new TourStep
         {
@@ -116,8 +117,15 @@ public partial class MainWindow
         {
             TitleKey = "TourTableTitle", TitleDefault = "資料清單",
             BodyKey = "TourTableBody",
-            BodyDefault = "貼上的資料會列在這裡。滑鼠移到某一列，右側會出現 ✕ 可移除該筆；點表頭的「行號」可複製全部資料。",
+            BodyDefault = "貼上的資料會列在這裡。滑鼠移到某一列，右側會出現 ✕ 可移除該筆。",
             Targets = () => new[] { ToolsControl("TableContainer") },
+        },
+        new TourStep
+        {
+            TitleKey = "TourCopyColumnTitle", TitleDefault = "整欄複製",
+            BodyKey = "TourCopyColumnBody",
+            BodyDefault = "點表頭的「行號」，會把清單裡所有資料一次複製到剪貼簿，每筆一行（不含行號）。到 Excel 點一個儲存格按 Ctrl+V，資料就會由上往下填入同一欄；也可以貼到記事本等其他地方。",
+            Targets = () => new[] { ToolsControl("CopyTableButton") },
         },
         new TourStep
         {

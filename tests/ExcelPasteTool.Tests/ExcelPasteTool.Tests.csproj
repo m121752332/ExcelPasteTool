@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 版本號集中在根目錄的 Directory.Packages.props -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\ExcelPasteTool.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 直接檢查倉庫裡的原始檔（改版資訊與版本號），不透過 Avalonia 資源載入 -->
+    <None Include="..\..\Resources\Changelog.json" Link="RepoFiles\Changelog.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\ExcelPasteTool.csproj" Link="RepoFiles\ExcelPasteTool.csproj" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

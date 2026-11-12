@@ -27,6 +27,10 @@ public partial class DataToolView : UserControl
 
     private readonly ToastQueueHelper _toastHelper;
 
+    // 最近一次「資料貼上」的重複值記錄（給「重複項」視窗用）；清除資料時歸零
+    private List<DuplicateEntry> _duplicates = new();
+    private int _pastedCount;
+
     // 重新填充下拉選單 / 程式改寫 TopBox 時，避免觸發使用者操作事件
     private bool _suppressEvents;
     private bool _initialized;
@@ -52,6 +56,7 @@ public partial class DataToolView : UserControl
             TopBox.TextChanged += TopBoxChanged;
             PasteDataButton.Click += PasteData_Click;
             ClearDataButton.Click += ClearData_Click;
+            DuplicatesButton.Click += DuplicatesButton_Click;
             CopyTopBoxButton.Click += CopyTopBoxButton_Click;
             CopyBottomBoxButton.Click += CopyBottomBoxButton_Click;
         }
@@ -91,6 +96,7 @@ public partial class DataToolView : UserControl
         ToolTip.SetTip(CopyTopBoxButton, LanguageManager.GetText("CopyTopBoxTooltip", "複製分隔資料"));
         ToolTip.SetTip(CopyBottomBoxButton, LanguageManager.GetText("CopySqlTooltip", "複製SQL條件"));
         ToolTip.SetTip(CopyTableButton, LanguageManager.GetText("CopyTableTooltip", "複製全部資料"));
+        ToolTip.SetTip(DuplicatesButton, LanguageManager.GetText("DuplicatesTooltip", "查看貼上時被移除的重複資料"));
         ToolTip.SetTip(PasteDataButton, LanguageManager.GetText("PasteDataTooltip", "貼上剪貼簿資料 (Alt+P)"));
 
         _suppressEvents = true;
@@ -189,6 +195,27 @@ public partial class DataToolView : UserControl
         var count = DataItems.Count;
         RowCountText.Text = string.Format(LanguageManager.GetText("RowCountFormat", "共 {0} 筆"), count);
         EmptyStateText.IsVisible = count == 0;
+        UpdateDuplicatesButton();
+    }
+
+    /// <summary>「重複項」按鈕顯示有重複的值的個數；沒有重複時停用。</summary>
+    private void UpdateDuplicatesButton()
+    {
+        DuplicatesButtonText.Text = string.Format(LanguageManager.GetText("DuplicatesButton", "重複項 {0}"), _duplicates.Count);
+        DuplicatesButton.IsEnabled = _duplicates.Count > 0;
+    }
+
+    private void SetDuplicates(IReadOnlyCollection<string> pastedValues)
+    {
+        _pastedCount = pastedValues.Count;
+        _duplicates = PasteDataHelper.FindDuplicates(pastedValues);
+        UpdateDuplicatesButton();
+    }
+
+    private async void DuplicatesButton_Click(object? sender, RoutedEventArgs e)
+    {
+        if (_duplicates.Count == 0 || this.GetVisualRoot() is not Window owner) return;
+        await new DuplicatesWindow(_duplicates, _pastedCount).ShowDialog(owner);
     }
 
     private void SetItems(IEnumerable<string> values)
@@ -214,18 +241,15 @@ public partial class DataToolView : UserControl
         var text = await clipboard.GetTextAsync();
         if (string.IsNullOrWhiteSpace(text)) return;
 
-        var lines = text.Split(new[] { '\r', '\n' }, System.StringSplitOptions.RemoveEmptyEntries);
-        var processedData = lines
-            .Select(l => l.Trim())
-            .Where(l => l.Length > 0)
-            .Select(SeparatorHelper.GetFirstColumn)
-            .Where(v => v.Length > 0);
+        var processedData = PasteDataHelper.ParsePastedText(text);
+        SetDuplicates(processedData);
         SetItems(processedData);
         UpdateTopAndBottom();
     }
 
     private void ClearData_Click(object? sender, RoutedEventArgs e)
     {
+        SetDuplicates(System.Array.Empty<string>());
         SetItems(Enumerable.Empty<string>());
         _suppressEvents = true;
         try
@@ -281,9 +305,7 @@ public partial class DataToolView : UserControl
 
     private void UpdateBottom()
     {
-        BottomBox.Text = Items.Count == 0
-            ? string.Empty
-            : $"({string.Join(", ", Items.Select(x => $"'{x.Replace("'", "''")}'"))})";
+        BottomBox.Text = PasteDataHelper.BuildSqlCondition(Items);
     }
 
     // ===== 複製 =====

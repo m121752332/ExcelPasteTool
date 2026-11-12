@@ -16,10 +16,10 @@
 	  <Product>DataSplitter Pro</Product>
 	  <Copyright>GameStudio@2026</Copyright>
 	  <!-- 版本號：推版時 tag 請用相同版本（1.1.0 或 v1.1.0），自動更新會拿它和 GitHub Release 比較 -->
-	  <Version>1.5.5</Version>
-	  <AssemblyVersion>1.5.5.0</AssemblyVersion>
-	  <FileVersion>1.5.5.0</FileVersion>
-	  <InformationalVersion>1.5.5</InformationalVersion>
+	  <Version>1.6.0</Version>
+	  <AssemblyVersion>1.6.0.0</AssemblyVersion>
+	  <FileVersion>1.6.0.0</FileVersion>
+	  <InformationalVersion>1.6.0</InformationalVersion>
 	  <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
 
 	  <!-- 使用自動生成 (預設) -->
@@ -31,6 +31,16 @@
     <PublishReadyToRun>true</PublishReadyToRun>
   </PropertyGroup>
 	
+  <!-- 測試專案放在 tests/ 底下（本專案資料夾內），要排除在主程式的編譯與資源之外；並讓測試讀得到 internal 成員 -->
+  <ItemGroup>
+    <Compile Remove="tests\**" />
+    <EmbeddedResource Remove="tests\**" />
+    <None Remove="tests\**" />
+    <AvaloniaXaml Remove="tests\**" />
+    <InternalsVisibleTo Include="ExcelPasteTool.Tests" />
+    <InternalsVisibleTo Include="ExcelPasteTool.UITests" />
+  </ItemGroup>
+
   <ItemGroup>
 	<PackageReference Include="Avalonia" />
 	<PackageReference Include="Avalonia.Desktop" />

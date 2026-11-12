@@ -1,0 +1,37 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="ExcelPasteTool.DuplicatesWindow"
+        Title="重複項"
+        Width="480" Height="480" MinWidth="360" MinHeight="280"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner">
+
+	<Grid RowDefinitions="Auto,*,Auto,Auto" Margin="20" RowSpacing="12">
+		<TextBlock x:Name="HeaderText" Grid.Row="0" FontSize="20" FontWeight="Bold"/>
+
+		<!-- 表頭固定，只有資料列捲動；欄寬與資料列一致 -->
+		<Border Grid.Row="1" Classes="table-container">
+			<Grid RowDefinitions="Auto,*">
+				<Grid Grid.Row="0" ColumnDefinitions="*,96,96" Classes="data-table-header" MinHeight="36">
+					<Border Grid.Column="0" Classes="grid-cell" BorderThickness="0,0,1,1">
+						<TextBlock x:Name="ValueHeader" Classes="data-table-header" Margin="10,0" VerticalAlignment="Center"/>
+					</Border>
+					<Border Grid.Column="1" Classes="grid-cell" BorderThickness="0,0,1,1">
+						<TextBlock x:Name="CountHeader" Classes="data-table-header" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Border>
+					<Border Grid.Column="2" Classes="grid-cell" BorderThickness="0,0,0,1">
+						<TextBlock x:Name="RemovedHeader" Classes="data-table-header" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+					</Border>
+				</Grid>
+				<ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+					<StackPanel x:Name="RowList"/>
+				</ScrollViewer>
+			</Grid>
+		</Border>
+
+		<TextBlock x:Name="SummaryText" Grid.Row="2" TextWrapping="Wrap"/>
+
+		<Button x:Name="CloseButton" Grid.Row="3" MinWidth="96" HorizontalAlignment="Right"
+				HorizontalContentAlignment="Center" Click="CloseButton_Click"/>
+	</Grid>
+</Window>
