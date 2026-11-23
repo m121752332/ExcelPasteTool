@@ -41,7 +41,24 @@ public partial class DataToolView : UserControl
         DataContext = this;
         _toastHelper = new ToastQueueHelper(this);
         DataItems.CollectionChanged += OnDataItemsChanged;
+        RightPanel.SizeChanged += (_, e) => ApplyToolbarLayout(e.NewSize.Width);
         Loaded += OnLoaded;
+    }
+
+    /// <summary>右欄寬度低於這個值時，「重複項」「清空資料」改成只顯示圖示。</summary>
+    public const double CompactToolbarThreshold = 420;
+
+    /// <summary>目前工具列是否為精簡模式（只顯示圖示）。</summary>
+    public bool IsToolbarCompact { get; private set; }
+
+    private void ApplyToolbarLayout(double rightPanelWidth)
+    {
+        IsToolbarCompact = rightPanelWidth < CompactToolbarThreshold;
+        DuplicatesButtonText.IsVisible = !IsToolbarCompact;
+        ClearButtonText.IsVisible = !IsToolbarCompact;
+        DuplicatesButton.Classes.Set("icon-only", IsToolbarCompact);
+        ClearDataButton.Classes.Set("icon-only", IsToolbarCompact);
+        UpdateDuplicatesButton();
     }
 
     private void OnLoaded(object? sender, RoutedEventArgs e)
@@ -96,7 +113,7 @@ public partial class DataToolView : UserControl
         ToolTip.SetTip(CopyTopBoxButton, LanguageManager.GetText("CopyTopBoxTooltip", "複製分隔資料"));
         ToolTip.SetTip(CopyBottomBoxButton, LanguageManager.GetText("CopySqlTooltip", "複製SQL條件"));
         ToolTip.SetTip(CopyTableButton, LanguageManager.GetText("CopyTableTooltip", "複製全部資料"));
-        ToolTip.SetTip(DuplicatesButton, LanguageManager.GetText("DuplicatesTooltip", "查看貼上時被移除的重複資料"));
+        ToolTip.SetTip(ClearDataButton, ClearButtonText.Text);
         ToolTip.SetTip(PasteDataButton, LanguageManager.GetText("PasteDataTooltip", "貼上剪貼簿資料 (Alt+P)"));
 
         _suppressEvents = true;
@@ -198,11 +215,17 @@ public partial class DataToolView : UserControl
         UpdateDuplicatesButton();
     }
 
-    /// <summary>「重複項」按鈕顯示有重複的值的個數；沒有重複時停用。</summary>
+    /// <summary>「重複項」按鈕顯示有重複的值的個數；沒有重複時停用。精簡模式時個數改顯示在角標。</summary>
     private void UpdateDuplicatesButton()
     {
-        DuplicatesButtonText.Text = string.Format(LanguageManager.GetText("DuplicatesButton", "重複項 {0}"), _duplicates.Count);
-        DuplicatesButton.IsEnabled = _duplicates.Count > 0;
+        var count = _duplicates.Count;
+        DuplicatesButtonText.Text = string.Format(LanguageManager.GetText("DuplicatesButton", "重複項 {0}"), count);
+        DuplicatesButton.IsEnabled = count > 0;
+        DuplicatesCountText.Text = count > 99 ? "99+" : count.ToString();
+        DuplicatesCountBadge.IsVisible = IsToolbarCompact && count > 0;
+        // 精簡模式看不到文字，提示第一行補上按鈕文字（含個數）
+        ToolTip.SetTip(DuplicatesButton, DuplicatesButtonText.Text + "\n"
+            + LanguageManager.GetText("DuplicatesTooltip", "查看貼上時被移除的重複資料"));
     }
 
     private void SetDuplicates(IReadOnlyCollection<string> pastedValues)
