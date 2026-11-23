@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ExcelPasteTool.csproj" />
+    <ProjectReference Include="..\..\src\ExcelPasteTool\ExcelPasteTool.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,9 +2,13 @@
 # 專案設計說明
 本專案是用於轉換資料分隔使用的工具
 # 專案目錄結構
+- `src/ExcelPasteTool/`：主程式（Avalonia，組件名稱 DataSplitter）；文件中 `Views/`、`Helpers/`、`Assets/` 等路徑都相對於這裡。
+- `tests/ExcelPasteTool.Tests/`：單元測試；`tests/ExcelPasteTool.UITests/`：Headless 畫面測試；`tests/run-ui-tests.ps1`：UI 測試一鍵執行。
+- `packaging/`：`publish.sh`（四平台打包）、`config.json`（預設設定範本）、`macos/`。
+- 完整說明：`docs/project_structure.md`。
 
 # UI 修改後的驗證（AI Agent 必做）
-改了任何畫面（axaml、Assets/Themes 配色、Assets/Styles、Views/Controls 程式）之後：
+改了任何畫面（`src/ExcelPasteTool/` 底下的 axaml、Assets/Themes 配色、Assets/Styles、Views/Controls 程式）之後：
 
 1. 執行 `pwsh tests/run-ui-tests.ps1`（建置 → Avalonia Headless 無畫面測試 → 擷取 PNG → 視覺比對）。
 2. 讀 `TestResults/ui/summary.json`：結束代碼 0 = 通過、1 = 測試或視覺比對失敗、2 = 建置失敗（`build.errors` 有檔案與行號）。

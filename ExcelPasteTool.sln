@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36401.2
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelPasteTool", "ExcelPasteTool.csproj", "{9E682EE2-8B99-3788-595E-DA8BC3FFFE6D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelPasteTool", "src\ExcelPasteTool\ExcelPasteTool.csproj", "{9E682EE2-8B99-3788-595E-DA8BC3FFFE6D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0AB3BF05-4346-4AA6-1389-037BE0695223}"
 EndProject

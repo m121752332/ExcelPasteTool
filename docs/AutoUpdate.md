@@ -14,7 +14,7 @@
 
 | 項目 | 規則 |
 | --- | --- |
-| 版本號 | `ExcelPasteTool.csproj` 的 `<Version>`，例如 `1.1.0` |
+| 版本號 | `src/ExcelPasteTool/ExcelPasteTool.csproj` 的 `<Version>`，例如 `1.1.0` |
 | tag | `1.1.0` 或 `v1.1.0`（兩種都能被辨識） |
 | Release | 必須是正式版，Draft / Pre-release 不會被偵測 |
 | 附件 | `.zip`，檔名含平台與架構：`DataSplitter_win_x64.zip`、`DataSplitter_linux_x64.zip`、`DataSplitter_osx_x64.zip`、`DataSplitter_osx_arm64.zip` |

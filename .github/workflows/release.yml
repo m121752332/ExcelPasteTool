@@ -12,6 +12,7 @@ on:
     paths:
       - '.github/workflows/release.yml'
       - 'packaging/**'
+      - 'src/ExcelPasteTool/Properties/PublishProfiles/**'
   workflow_dispatch:
 
 permissions:
@@ -34,6 +35,12 @@ jobs:
       - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
+      # 快取 NuGet 套件（含自包含發佈要的 runtime pack 與 ReadyToRun 編譯器），套件版本沒變就不重新下載
+      - uses: actions/cache@v5
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('Directory.Packages.props', 'global.json', '**/*.csproj') }}
+          restore-keys: nuget-${{ runner.os }}-
 
       - name: Resolve version from tag
         id: ver
@@ -43,7 +50,7 @@ jobs:
             v="${tag#v}"
           else
             # 非 tag 觸發（PR 試打包、手動執行）：用 csproj 的版本
-            v=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' ExcelPasteTool.csproj | head -1)
+            v=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' src/ExcelPasteTool/ExcelPasteTool.csproj | head -1)
           fi
           echo "version=$v" >> "$GITHUB_OUTPUT"
 
