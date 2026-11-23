@@ -35,12 +35,6 @@ jobs:
       - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
-      # 快取 NuGet 套件（含自包含發佈要的 runtime pack 與 ReadyToRun 編譯器），套件版本沒變就不重新下載
-      - uses: actions/cache@v5
-        with:
-          path: ~/.nuget/packages
-          key: nuget-${{ runner.os }}-${{ hashFiles('Directory.Packages.props', 'global.json', '**/*.csproj') }}
-          restore-keys: nuget-${{ runner.os }}-
 
       - name: Resolve version from tag
         id: ver
