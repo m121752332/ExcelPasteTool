@@ -19,30 +19,33 @@ out="out/$rid"
 
 # 變數一律寫成 ${name}：macOS 內建的 bash 3.2 會把緊接在後的全形字元當成變數名稱的一部分
 echo "::group::Publish ${rid}（ReadyToRun=${r2r}）"
+profile="src/ExcelPasteTool/Properties/PublishProfiles/${rid}.pubxml"
+if [ ! -f "$profile" ]; then
+  echo "::error::找不到發佈設定 ${profile}"; exit 1
+fi
 extra=""
-# 正式發佈不額外傳參數，ReadyToRun 照 csproj 的設定開啟；只有試打包才關掉
+# 發佈參數（自包含、單一檔案、ReadyToRun…）都在 pubxml，和 Visual Studio「發佈」共用；
+# 正式發佈不額外傳參數，只有試打包才關掉 ReadyToRun
 if [ "$r2r" != "true" ]; then
   extra="-p:PublishReadyToRun=false"
 fi
-dotnet publish ExcelPasteTool.csproj -c Release -r "$rid" \
-  --self-contained true \
-  -p:PublishSingleFile=true \
-  -p:IncludeNativeLibrariesForSelfExtract=true \
+dotnet publish src/ExcelPasteTool/ExcelPasteTool.csproj -c Release \
+  -p:PublishProfile="$rid" \
   -p:Version=$v -p:AssemblyVersion=$v.0 -p:FileVersion=$v.0 -p:InformationalVersion=$v \
   $extra \
   -o "$out"
-cp config.json "$out/"
+cp packaging/config.json "$out/"
 rm -f "$out"/*.pdb
 echo "::endgroup::"
 
 # 確認發佈檔是「自包含」且內含 .NET 11 runtime，使用者免安裝 .NET。
-# 若有人誤改成 --self-contained false 或目標框架不是 net11.0，這一步會讓 Release 失敗。
-cfg="bin/Release/net11.0/$rid/DataSplitter.runtimeconfig.json"
+# 若有人誤把 pubxml 改成 SelfContained=false 或目標框架不是 net11.0，這一步會讓 Release 失敗。
+cfg="src/ExcelPasteTool/bin/Release/net11.0/$rid/DataSplitter.runtimeconfig.json"
 cat "$cfg"
 ver=$(jq -r '.runtimeOptions.includedFrameworks[]? | select(.name=="Microsoft.NETCore.App") | .version' "$cfg")
 case "$ver" in
   11.*) echo "OK: 內含 Microsoft.NETCore.App $ver" ;;
-  *) echo "::error::發佈檔未內含 .NET 11 runtime（取得：'${ver}'），請確認 --self-contained true 與 net11.0"; exit 1 ;;
+  *) echo "::error::發佈檔未內含 .NET 11 runtime（取得：'${ver}'），請確認 ${profile} 的 SelfContained=true 與 net11.0"; exit 1 ;;
 esac
 
 if [[ "$rid" == osx-* ]]; then

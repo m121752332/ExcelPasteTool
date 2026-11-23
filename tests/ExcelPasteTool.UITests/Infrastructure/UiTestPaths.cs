@@ -46,10 +46,10 @@ public static class UiTestPaths
         var dir = new DirectoryInfo(AppContext.BaseDirectory);
         while (dir != null)
         {
-            if (File.Exists(Path.Combine(dir.FullName, "ExcelPasteTool.csproj")))
+            if (File.Exists(Path.Combine(dir.FullName, "ExcelPasteTool.sln")))
                 return dir.FullName;
             dir = dir.Parent;
         }
-        throw new InvalidOperationException("找不到專案根目錄（含 ExcelPasteTool.csproj 的資料夾）。");
+        throw new InvalidOperationException("找不到倉庫根目錄（含 ExcelPasteTool.sln 的資料夾）。");
     }
 }

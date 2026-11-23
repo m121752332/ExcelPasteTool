@@ -12,6 +12,7 @@ on:
     paths:
       - '.github/workflows/release.yml'
       - 'packaging/**'
+      - 'src/ExcelPasteTool/Properties/PublishProfiles/**'
   workflow_dispatch:
 
 permissions:
@@ -43,7 +44,7 @@ jobs:
             v="${tag#v}"
           else
             # 非 tag 觸發（PR 試打包、手動執行）：用 csproj 的版本
-            v=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' ExcelPasteTool.csproj | head -1)
+            v=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' src/ExcelPasteTool/ExcelPasteTool.csproj | head -1)
           fi
           echo "version=$v" >> "$GITHUB_OUTPUT"
 

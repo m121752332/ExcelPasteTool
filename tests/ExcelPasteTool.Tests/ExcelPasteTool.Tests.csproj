@@ -16,13 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ExcelPasteTool.csproj" />
+    <ProjectReference Include="..\..\src\ExcelPasteTool\ExcelPasteTool.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- 直接檢查倉庫裡的原始檔（改版資訊與版本號），不透過 Avalonia 資源載入 -->
-    <None Include="..\..\Resources\Changelog.json" Link="RepoFiles\Changelog.json" CopyToOutputDirectory="PreserveNewest" />
-    <None Include="..\..\ExcelPasteTool.csproj" Link="RepoFiles\ExcelPasteTool.csproj" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\src\ExcelPasteTool\Resources\Changelog.json" Link="RepoFiles\Changelog.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\src\ExcelPasteTool\ExcelPasteTool.csproj" Link="RepoFiles\ExcelPasteTool.csproj" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
   <ItemGroup>

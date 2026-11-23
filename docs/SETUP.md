@@ -15,7 +15,7 @@
 | UI 框架 | [Avalonia UI](https://avaloniaui.net/) 11.3.3（Fluent 主題 + DataGrid） |
 | 目標框架 | .NET 11（`net11.0`，STS 標準支援版本） |
 | 架構模式 | MVVM（Views / ViewModels / Models / Services / Helpers） |
-| 版本號 | 定義於 `ExcelPasteTool.csproj`，目前為 `1.6.1` |
+| 版本號 | 定義於 `src/ExcelPasteTool/ExcelPasteTool.csproj`，目前為 `1.6.1` |
 
 ---
 
@@ -104,12 +104,12 @@ dotnet build -c Release
 ## 4. 執行
 
 ```bash
-dotnet run
+dotnet run --project src/ExcelPasteTool
 ```
 
-或在 IDE 中將 `ExcelPasteTool` 設為啟動專案後按 F5。
+或在 IDE 中開啟 `ExcelPasteTool.sln`，將 `ExcelPasteTool` 設為啟動專案後按 F5。
 
-> **注意**：設定檔 `config.json` 固定讀寫「執行檔所在目錄」（`AppContext.BaseDirectory`）。開發時用 `dotnet run` 或 IDE 偵錯，讀寫的是 `bin/<Configuration>/net11.0/config.json`，**不是**專案根目錄那份（見第 5.1 節）。
+> **注意**：設定檔 `config.json` 固定讀寫「執行檔所在目錄」（`AppContext.BaseDirectory`）。開發時用 `dotnet run` 或 IDE 偵錯，讀寫的是 `src/ExcelPasteTool/bin/<Configuration>/net11.0/config.json`，**不是** `packaging/config.json` 那份範本（見第 5.1 節）。
 
 ### 4.1 啟動流程
 
@@ -155,7 +155,7 @@ dotnet run
 - 路徑為 `Path.Combine(AppContext.BaseDirectory, "config.json")`，**固定在執行檔旁邊**，不受啟動時工作目錄影響。
 - 檔案不存在時：使用預設值，並在主控台輸出警告；使用者在設定頁做任何變更後會自動建立檔案。
 - 檔案格式錯誤或值無法解析時：靜默忽略，使用預設值。
-- 專案根目錄的 `config.json` 只是預設範本：建置時**不會**自動複製到輸出目錄，但 `release.yml` 打包時會把它複製進每個平台的 zip。
+- `packaging/config.json` 只是預設範本：建置時**不會**自動複製到輸出目錄，但 `packaging/publish.sh`（由 `release.yml` 呼叫）打包時會把它複製進每個平台的 zip。
 - 執行檔所在目錄必須可寫入，否則設定無法儲存（例如安裝在 `C:\Program Files\` 下時）。
 
 ### 5.2 主題
@@ -190,7 +190,7 @@ dotnet run
 ### 5.3 字型與字體大小
 
 - 內建字型為 **Noto Sans TC**：`Assets/Fonts/NotoSansTC-Regular.ttf` 與 `NotoSansTC-Bold.ttf` 已在 `.csproj` 設為 `AvaloniaResource`，打包進程式，各平台顯示一致，不依賴系統字型。
-- `Assets/Fonts/` 內其他粗細（Thin、Light、Medium、SemiBold、ExtraBold、Black）**沒有打包**。如需使用，請在 `.csproj` 加入對應的 `AvaloniaResource`，但會增加執行檔大小。
+- 倉庫只保留一般與粗體兩種字重。如需其他粗細（Thin、Light、Medium 等），請從 Noto Sans TC 官方下載放進 `Assets/Fonts/`，並在 `.csproj` 加入對應的 `AvaloniaResource`，但會增加執行檔大小。
 - 使用者可在設定頁從系統字型清單（`FontManager.GetSystemFontFamilies()`）選擇其他字型，或調整字體大小（10 ～ 24）。
 - 套用方式（`Helpers/FontManager.cs` 的 `Apply()`）是改寫 `Application.Resources` 中的資源：
 
@@ -226,7 +226,7 @@ avares://DataSplitter/Assets/Fonts#Noto Sans TC
 
 ### 5.6 版本資訊
 
-版本號定義於 `ExcelPasteTool.csproj`：
+版本號定義於 `src/ExcelPasteTool/ExcelPasteTool.csproj`：
 
 ```xml
 <Version>1.3.0</Version>
@@ -238,7 +238,7 @@ avares://DataSplitter/Assets/Fonts#Noto Sans TC
 
 - 程式內的「目前版本」由 `Services/UpdateService.cs` 的 `CurrentVersion` 取得，來源是 `InformationalVersion`（取不到時退回 `AssemblyVersion`）。「關於」頁面與自動更新都使用這個值。
 - `IncludeSourceRevisionInInformationalVersion=false` 是為了避免 SDK 在版本後面附加 `+commit` 雜湊，影響版本比對，請勿移除。
-- 本機手動發佈時，請四個欄位一起更新；透過 GitHub Actions 推 tag 發佈時，workflow 會依 tag 覆寫版本（見 6.4），但仍建議把 csproj 同步改成新版本號。
+- 本機手動發佈時，請四個欄位一起更新；透過 GitHub Actions 推 tag 發佈時，workflow 會依 tag 覆寫版本（見 6.3），但仍建議把 csproj 同步改成新版本號。
 
 ### 5.7 自動更新
 
@@ -255,59 +255,33 @@ avares://DataSplitter/Assets/Fonts#Noto Sans TC
 
 ## 6. 發佈
 
-### 6.1 單一執行檔（自含 .NET 執行階段）
+### 6.1 發佈設定檔（PublishProfiles，唯一一份）
 
-使用者電腦不需安裝 .NET：
+四個平台的發佈參數集中在 `src/ExcelPasteTool/Properties/PublishProfiles/`，檔名就是 RID：`win-x64.pubxml`、`linux-x64.pubxml`、`osx-x64.pubxml`、`osx-arm64.pubxml`。這些檔案進版控（`.gitignore` 對這個資料夾開了例外），Visual Studio「發佈」、命令列和 `packaging/publish.sh`（GitHub Actions）都讀同一份，產出一致。
 
-```bash
-# Windows x64
-dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o artifacts/win-x64
+| 設定 | 值 | 原因 |
+| --- | --- | --- |
+| `SelfContained` | `true` | 內含 .NET 11 runtime，使用者免安裝 .NET（`publish.sh` 會檢查） |
+| `PublishSingleFile` + `IncludeNativeLibrariesForSelfExtract` | `true` | 輸出只剩一個執行檔（Skia 等原生函式庫也包進去） |
+| `PublishReadyToRun` | `true` | 預先編譯成原生碼，啟動約快 0.3 秒；PR 試打包用 `-p:PublishReadyToRun=false` 關掉以省時間 |
+| `PublishTrimmed` | `false` | Avalonia XAML、資料繫結與 JSON 設定都依賴反射，不裁剪 |
+| `DebugType` | `none` | 發佈檔不需要 `.pdb` |
+| `PublishDir` | 倉庫根目錄的 `artifacts/<rid>/` | 已列入 `.gitignore`；`publish.sh` 會用 `-o` 改輸出到 `out/<rid>/` |
 
-# macOS x64（Intel）
-dotnet publish -c Release -r osx-x64 --self-contained true -p:PublishSingleFile=true -o artifacts/osx-x64
-
-# macOS ARM64（M1/M2/M3）
-dotnet publish -c Release -r osx-arm64 --self-contained true -p:PublishSingleFile=true -o artifacts/osx-arm64
-
-# Linux x64
-dotnet publish -c Release -r linux-x64 --self-contained true -p:PublishSingleFile=true -o artifacts/linux-x64
-```
-
-輸出目錄 `artifacts/` 已列入 `.gitignore`，不會被提交。
-
-可選參數：
-
-| 參數 | 效果 |
-| --- | --- |
-| `-p:IncludeNativeLibrariesForSelfExtract=true` | 把 Avalonia 的原生函式庫（如 Skia）一起包進單一檔案，輸出目錄只剩一個執行檔 |
-| `-p:EnableCompressionInSingleFile=true` | 壓縮單一檔案，縮小體積，啟動稍慢 |
-| `--self-contained false` | 不含執行階段，體積小，但使用者需自行安裝 .NET 11 Runtime（Avalonia 不需要僅供 WPF/WinForms 使用的 Desktop Runtime） |
-
-### 6.2 發佈設定檔（PublishProfiles）
-
-也可以用 `Properties/PublishProfiles/*.pubxml` 做一鍵發佈，但 `.gitignore` 排除了 `*.pubxml`，**這些設定檔不在版本庫中**。若要使用，請自行在本機建立，例如 `Properties/PublishProfiles/Windows-x64.pubxml`：
-
-```xml
-<Project>
-  <PropertyGroup>
-    <Configuration>Release</Configuration>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-    <SelfContained>true</SelfContained>
-    <PublishSingleFile>true</PublishSingleFile>
-    <PublishDir>artifacts\win-x64\</PublishDir>
-  </PropertyGroup>
-</Project>
-```
-
-然後執行：
+使用方式：
 
 ```bash
-dotnet publish -p:PublishProfile=Properties/PublishProfiles/Windows-x64.pubxml
+# Visual Studio：在專案按右鍵「發佈」，選擇對應的設定檔
+# 命令列（在倉庫根目錄）
+dotnet publish src/ExcelPasteTool -c Release -p:PublishProfile=win-x64
+
+# 打包成和 Release 相同的 zip（需要 jq、zip；macOS 版要在 Mac 上跑，會做 .app 封裝與 ad-hoc 簽章）
+bash packaging/publish.sh win-x64 1.6.1
 ```
 
-若希望團隊共用，可在 `.gitignore` 中加入 `!Properties/PublishProfiles/*.pubxml` 例外規則後提交。
+要改發佈參數（例如開壓縮 `EnableCompressionInSingleFile`），四個 pubxml 都要一起改，不要在 `publish.sh` 或 workflow 另外加參數，否則 Visual Studio 和 CI 的結果會不一致。
 
-### 6.3 各平台後續處理
+### 6.2 各平台後續處理
 
 - **macOS**：`dotnet publish` 產出的是可執行檔，不是 `.app`；直接雙擊會先開「終端機」。release workflow 會在 macOS runner 上把它包成 `DataSplitter.app`（`packaging/macos/` 內有 `Info.plist` 範本、圖示 `DataSplitter.icns` 與相容啟動腳本），並用 `codesign --sign -` 對整個 `.app` 做 ad-hoc 簽章。zip 結構與自動更新的關係見 `docs/AutoUpdate.md`。
   - .NET SDK（10 以後）即使在 Linux 上交叉發佈，也會自動替 `osx-*` 執行檔加上 **ad-hoc 簽章**（Apple Silicon 必須至少有 ad-hoc 簽章才能執行）。release workflow 會檢查這一點，缺簽章時 Release 會失敗。
@@ -318,22 +292,22 @@ dotnet publish -p:PublishProfile=Properties/PublishProfiles/Windows-x64.pubxml
 - **Linux**：發佈後需給予執行權限：`chmod +x artifacts/linux-x64/DataSplitter`。
 - **Windows**：未簽章的執行檔第一次執行可能出現 SmartScreen 警告，屬正常現象。
 
-### 6.4 GitHub Actions 與 Release 流程
+### 6.3 GitHub Actions 與 Release 流程
 
 專案有兩個 workflow（`.github/workflows/`）：
 
 | 檔案 | 觸發時機 | 動作 |
 | --- | --- | --- |
-| `build.yml` | 開 PR、推送到 `master` | `dotnet build -c Release` 確認可編譯 |
-| `release.yml` | 推送版本 tag（`1.2.3` 或 `v1.2.3`） | 四個平台各自 `dotnet publish`（自含、單一檔案、內含原生函式庫），附上 `config.json`，打包成 `DataSplitter_<平台>_<架構>.zip`，並建立 GitHub Release 上傳 |
+| `build.yml` | 開 PR、推送到 `master` | 建置 `src/ExcelPasteTool` 的 Release 組態並跑 `tests/ExcelPasteTool.Tests` 單元測試 |
+| `release.yml` | 推送版本 tag（`1.2.3` 或 `v1.2.3`） | 四個平台各自執行 `packaging/publish.sh`（自含、單一檔案、內含原生函式庫），附上 `packaging/config.json`，打包成 `DataSplitter_<平台>_<架構>.zip`，並建立 GitHub Release 上傳 |
 
-**.NET runtime 檢查**：Release 的 zip 是自包含（self-contained）單一檔案，已內含 .NET 11 runtime，使用者電腦**不需要**另外安裝 .NET。`release.yml` 每個平台發佈後會執行「Verify bundled .NET 11 runtime」步驟，讀取 `DataSplitter.runtimeconfig.json` 確認內含 `Microsoft.NETCore.App 11.x`；若有人誤改成 `--self-contained false` 或目標框架不是 `net11.0`，Release 會直接失敗，不會發出需要使用者自行裝 runtime 的版本。因為 runtime 跟著執行檔一起更新，舊版（.NET 8 打包的 1.3.0 以前）透過自動更新換成 1.4.0、.NET 10 打包的 1.4.0～1.6.0 換成 1.6.1 以後，也都不需要任何額外安裝。
+**.NET runtime 檢查**：Release 的 zip 是自包含（self-contained）單一檔案，已內含 .NET 11 runtime，使用者電腦**不需要**另外安裝 .NET。`release.yml` 每個平台發佈後會執行「Verify bundled .NET 11 runtime」步驟，讀取 `DataSplitter.runtimeconfig.json` 確認內含 `Microsoft.NETCore.App 11.x`；若有人誤把 pubxml 改成 `SelfContained=false` 或目標框架不是 `net11.0`，Release 會直接失敗，不會發出需要使用者自行裝 runtime 的版本。因為 runtime 跟著執行檔一起更新，舊版（.NET 8 打包的 1.3.0 以前）透過自動更新換成 1.4.0、.NET 10 打包的 1.4.0～1.6.0 換成 1.6.1 以後，也都不需要任何額外安裝。
 
 **為什麼不開 trimming（PublishTrimmed）**：Avalonia 的 XAML 載入、資料繫結與 `System.Text.Json` 設定檔讀寫都依賴反射，裁剪後容易在執行時才缺型別，所以維持不裁剪；Release 已開啟 ReadyToRun（`PublishReadyToRun`）縮短啟動時間。
 
 推新版的步驟：
 
-1. 將 `.csproj` 的版本欄位改成新版本（例如 `1.3.0`），合併到 `master`。
+1. 將 `src/ExcelPasteTool/ExcelPasteTool.csproj` 的版本欄位改成新版本（例如 `1.3.0`），合併到 `master`。
 2. 建立 tag 並推送：
    ```bash
    git checkout master && git pull
@@ -349,6 +323,8 @@ dotnet publish -p:PublishProfile=Properties/PublishProfiles/Windows-x64.pubxml
 
 ## 7. 目錄結構速覽
 
+原始碼都在 `src/ExcelPasteTool/` 底下，下表與本文件提到的原始碼路徑都相對於這個資料夾；倉庫根目錄只放方案檔與共用設定。完整樹狀圖見 [專案結構說明](project_structure.md)。
+
 | 目錄 / 檔案 | 用途 |
 | --- | --- |
 | `Program.cs`、`App.axaml(.cs)` | 程式進入點與應用程式初始化 |
@@ -362,8 +338,10 @@ dotnet publish -p:PublishProfile=Properties/PublishProfiles/Windows-x64.pubxml
 | `Assets/Styles/` | 共用樣式 `AppStyles.axaml` |
 | `Assets/` 其他 | 字型、圖片、圖示 |
 | `Resources/Languages/` | 語系 JSON（目前未被程式讀取，見 5.4） |
-| `docs/` | 補充文件 |
-| `.github/workflows/` | CI 建置與 Release 自動發佈（見 6.4） |
+| `tests/`（倉庫根目錄） | 單元測試、UI 畫面測試、`run-ui-tests.ps1` |
+| `packaging/`（倉庫根目錄） | `publish.sh`、預設設定範本 `config.json`、macOS `.app` 素材 |
+| `docs/`（倉庫根目錄） | 補充文件 |
+| `.github/workflows/`（倉庫根目錄） | CI 建置與 Release 自動發佈（見 6.3） |
 
 詳細結構請見 [README.md](../README.md)。
 

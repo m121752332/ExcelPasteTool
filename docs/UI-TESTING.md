@@ -142,10 +142,10 @@ public class MyTests
 
 | 位置 | 調整 | 原因 |
 |---|---|---|
-| `Helpers/Global.cs` | `AssemblyName` 改用 `typeof(Global).Assembly` | 測試時 EntryAssembly 是 testhost，`avares://testhost/...` 會找不到主題資源（正式執行結果不變，仍是 DataSplitter） |
-| `Converters/SidebarPageToContentConverter.cs` | 新增 `internal ResetCache()` | 頁面是靜態快取，每個測試開新視窗前要清掉，避免同一頁面掛到兩個視窗 |
-| `Views/MainWindow.Update.cs` | 新增 `internal SkipStartupChecks` | 測試時不檢查 GitHub 更新、不自動播導覽，畫面才穩定 |
-| `ExcelPasteTool.csproj` | `InternalsVisibleTo ExcelPasteTool.UITests` | 讓測試用上面兩個 internal 成員 |
+| `src/ExcelPasteTool/Helpers/Global.cs` | `AssemblyName` 改用 `typeof(Global).Assembly` | 測試時 EntryAssembly 是 testhost，`avares://testhost/...` 會找不到主題資源（正式執行結果不變，仍是 DataSplitter） |
+| `src/ExcelPasteTool/Converters/SidebarPageToContentConverter.cs` | 新增 `internal ResetCache()` | 頁面是靜態快取，每個測試開新視窗前要清掉，避免同一頁面掛到兩個視窗 |
+| `src/ExcelPasteTool/Views/MainWindow.Update.cs` | 新增 `internal SkipStartupChecks` | 測試時不檢查 GitHub 更新、不自動播導覽，畫面才穩定 |
+| `src/ExcelPasteTool/ExcelPasteTool.csproj` | `InternalsVisibleTo ExcelPasteTool.UITests` | 讓測試用上面兩個 internal 成員 |
 
 ## 注意事項
 

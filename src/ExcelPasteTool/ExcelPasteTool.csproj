@@ -26,17 +26,11 @@
 	  <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
 
-  <!-- 發行時預先編譯成原生碼（ReadyToRun），啟動時不必再 JIT，可縮短約 0.3 秒；代價是檔案變大 -->
-  <PropertyGroup Condition="'$(RuntimeIdentifier)' != ''">
-    <PublishReadyToRun>true</PublishReadyToRun>
-  </PropertyGroup>
+  <!-- 發佈參數（自包含、單一檔案、ReadyToRun 等）集中在 Properties/PublishProfiles/<rid>.pubxml，
+       Visual Studio「發佈」與 packaging/publish.sh 共用同一份 -->
 	
-  <!-- 測試專案放在 tests/ 底下（本專案資料夾內），要排除在主程式的編譯與資源之外；並讓測試讀得到 internal 成員 -->
+  <!-- 讓測試專案（倉庫根目錄的 tests/）讀得到 internal 成員 -->
   <ItemGroup>
-    <Compile Remove="tests\**" />
-    <EmbeddedResource Remove="tests\**" />
-    <None Remove="tests\**" />
-    <AvaloniaXaml Remove="tests\**" />
     <InternalsVisibleTo Include="ExcelPasteTool.Tests" />
     <InternalsVisibleTo Include="ExcelPasteTool.UITests" />
   </ItemGroup>
@@ -58,7 +52,7 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <!-- 內建字型（預設字型），其餘字重檔案未打包以控制執行檔大小 -->
+    <!-- 內建字型（預設字型）：只放一般與粗體兩種字重，控制執行檔大小 -->
     <AvaloniaResource Include="Assets\Fonts\NotoSansTC-Regular.ttf" />
     <AvaloniaResource Include="Assets\Fonts\NotoSansTC-Bold.ttf" />
   </ItemGroup>
@@ -80,11 +74,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="artifacts\linux-x64\" />
-    <Folder Include="Controls\" />
   </ItemGroup>
 
   <ItemGroup>
