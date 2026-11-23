@@ -6,7 +6,7 @@
     一鍵執行與結構化報告：tests/run-ui-tests.ps1（說明見 docs/UI-TESTING.md）
   -->
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net11.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <IsPackable>false</IsPackable>

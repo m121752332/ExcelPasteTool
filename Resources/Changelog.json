@@ -1,5 +1,26 @@
 [
   {
+    "version": "1.6.1",
+    "date": "2026-11-23",
+    "notes": {
+      "TraditionalChinese": [
+        "升級到 .NET 11，發佈檔仍內含執行環境，使用者不需要安裝 .NET"
+      ],
+      "SimplifiedChinese": [
+        "升级到 .NET 11，发布档仍内含运行环境，用户不需要安装 .NET"
+      ],
+      "English": [
+        "Upgraded to .NET 11; the download still bundles the runtime, so no .NET installation is needed"
+      ],
+      "Japanese": [
+        ".NET 11 にアップグレードしました。配布ファイルにはランタイムが含まれているため、.NET のインストールは不要です"
+      ],
+      "Korean": [
+        ".NET 11로 업그레이드했습니다. 배포 파일에 런타임이 포함되어 있어 .NET을 설치할 필요가 없습니다"
+      ]
+    }
+  },
+  {
     "version": "1.6.0",
     "date": "2026-11-12",
     "notes": {
