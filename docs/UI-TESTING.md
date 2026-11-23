@@ -6,7 +6,7 @@
 
 | 項目 | 採用 |
 |---|---|
-| Runtime | .NET 10（`global.json`） |
+| Runtime | .NET 11（`global.json`） |
 | UI Framework | Avalonia 11.3.x |
 | 測試框架 | xUnit 2.9 |
 | 無畫面測試 | `Avalonia.Headless.XUnit`（`[AvaloniaFact]` / `[AvaloniaTheory]`） |
