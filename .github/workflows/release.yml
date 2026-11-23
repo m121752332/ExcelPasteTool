@@ -30,13 +30,13 @@ jobs:
       matrix:
         include: ${{ fromJSON(github.event_name == 'pull_request' && '[{"id":"win","os":"ubuntu-latest","rids":"win-x64"}]' || '[{"id":"win","os":"ubuntu-latest","rids":"win-x64"},{"id":"linux","os":"ubuntu-latest","rids":"linux-x64"},{"id":"osx","os":"macos-latest","rids":"osx-arm64 osx-x64"}]') }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
 
       # NuGet 套件快取（含各平台 runtime pack），套件版本或 SDK 有變動時 key 會跟著換
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ~/.nuget/packages
           key: nuget-publish-${{ matrix.id }}-${{ hashFiles('Directory.Packages.props', '**/*.csproj', 'global.json') }}
@@ -62,22 +62,26 @@ jobs:
             bash packaging/publish.sh "$rid" "${{ steps.ver.outputs.version }}" "$r2r"
           done
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: zips-${{ matrix.id }}
           path: DataSplitter_*.zip
           if-no-files-found: error
 
+  # 非 tag 觸發時也會跑到下載 zip 這一步，先確認 download-artifact 能把各 job 的 zip 收齊；
+  # 只有推 tag 才真的建立 GitHub Release。
   release:
     needs: publish
-    if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           path: dist
           merge-multiple: true
-      - uses: softprops/action-gh-release@v2
+      - name: List zips
+        run: ls -l dist/*.zip
+      - uses: softprops/action-gh-release@v3
+        if: github.ref_type == 'tag'
         with:
           tag_name: ${{ github.ref_name }}
           name: ${{ github.ref_name }}
