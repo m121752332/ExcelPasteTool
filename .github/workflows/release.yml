@@ -22,7 +22,7 @@ jobs:
     name: publish (${{ matrix.id }})
     # macOS 版在 macOS runner 上打包，才能用 codesign 對整個 .app 做 ad-hoc 簽章。
     # 兩個 macOS 架構放在同一個 job 依序打包：GitHub 的 macOS 機器常要排隊、一次只排到一台，
-    # 分成兩個 job 時第二個要等第一個跑完才開始，合併後只排隊一次、套件也只還原一次。
+    # 分成兩個 job 時第二個要等第一個跑完才開始，合併後只排隊一次。
     # PR 試打包只跑 win-x64 並關掉 ReadyToRun，只確認打包流程沒壞；
     # 推 tag 正式發佈與手動執行（workflow_dispatch）則完整打包四個平台，產物與以往相同。
     runs-on: ${{ matrix.os }}
@@ -34,13 +34,6 @@ jobs:
       - uses: actions/setup-dotnet@v6
         with:
           global-json-file: global.json
-
-      # NuGet 套件快取（含各平台 runtime pack），套件版本或 SDK 有變動時 key 會跟著換
-      - uses: actions/cache@v6
-        with:
-          path: ~/.nuget/packages
-          key: nuget-publish-${{ matrix.id }}-${{ hashFiles('Directory.Packages.props', '**/*.csproj', 'global.json') }}
-          restore-keys: nuget-publish-${{ matrix.id }}-
 
       - name: Resolve version from tag
         id: ver
