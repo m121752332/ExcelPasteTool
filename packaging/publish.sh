@@ -17,18 +17,19 @@ root="$(pwd)"
 asset="DataSplitter_${rid//-/_}"
 out="out/$rid"
 
-echo "::group::Publish $rid（ReadyToRun=$r2r）"
-extra=()
+# 變數一律寫成 ${name}：macOS 內建的 bash 3.2 會把緊接在後的全形字元當成變數名稱的一部分
+echo "::group::Publish ${rid}（ReadyToRun=${r2r}）"
+extra=""
 # 正式發佈不額外傳參數，ReadyToRun 照 csproj 的設定開啟；只有試打包才關掉
 if [ "$r2r" != "true" ]; then
-  extra+=(-p:PublishReadyToRun=false)
+  extra="-p:PublishReadyToRun=false"
 fi
 dotnet publish ExcelPasteTool.csproj -c Release -r "$rid" \
   --self-contained true \
   -p:PublishSingleFile=true \
   -p:IncludeNativeLibrariesForSelfExtract=true \
   -p:Version=$v -p:AssemblyVersion=$v.0 -p:FileVersion=$v.0 -p:InformationalVersion=$v \
-  "${extra[@]}" \
+  $extra \
   -o "$out"
 cp config.json "$out/"
 rm -f "$out"/*.pdb
