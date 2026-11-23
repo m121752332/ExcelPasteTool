@@ -2,7 +2,7 @@
 
   <!--
     UI 自動測試（Avalonia Headless）：不開實體視窗，用 Skia 真實繪製畫面，
-    擷取 PNG 後以 ImageSharp 和 Baselines/ 底下的基準圖比對。
+    擷取 PNG 後以 SkiaSharp 和 Baselines/ 底下的基準圖比對。
     一鍵執行與結構化報告：tests/run-ui-tests.ps1（說明見 docs/UI-TESTING.md）
   -->
   <PropertyGroup>
@@ -21,7 +21,6 @@
     <PackageReference Include="xunit.runner.visualstudio" />
     <PackageReference Include="Avalonia.Headless.XUnit" />
     <PackageReference Include="Avalonia.Skia" />
-    <PackageReference Include="SixLabors.ImageSharp" />
   </ItemGroup>
 
   <ItemGroup>

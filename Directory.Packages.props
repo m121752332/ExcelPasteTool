@@ -29,9 +29,5 @@
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.12.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
-
-    <!-- UI 自動測試（tests/ExcelPasteTool.UITests）：Headless 無畫面測試 + Skia 繪製 + ImageSharp 視覺比對。
-         ImageSharp 停在 3.1.x（Six Labors Split License：開源或年營收未達 100 萬美元免費；4.x 授權條款另行確認後再升） -->
-    <PackageVersion Include="SixLabors.ImageSharp" Version="3.1.12" />
   </ItemGroup>
 </Project>

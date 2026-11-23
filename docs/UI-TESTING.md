@@ -11,7 +11,7 @@
 | 測試框架 | xUnit 2.9 |
 | 無畫面測試 | `Avalonia.Headless.XUnit`（`[AvaloniaFact]` / `[AvaloniaTheory]`） |
 | 畫面擷取 | `Avalonia.Skia` 真實繪製 + `CaptureRenderedFrame()` |
-| 視覺回歸 | `SixLabors.ImageSharp` 3.1 逐像素比對 |
+| 視覺回歸 | `SkiaSharp`（Avalonia.Skia 帶入）逐像素比對 |
 | 報告 | TRX + `summary.json` |
 | Agent 整合 | `tests/run-ui-tests.ps1`（結束代碼 + JSON） |
 
@@ -105,7 +105,7 @@ tests/
    ├─ Infrastructure/
    │  ├─ MainWindowHost.cs              開主視窗、重設主題/語言/字型、找控制項、模擬輸入
    │  ├─ VisualAssert.cs                擷取 PNG、比對基準、寫 JSON
-   │  ├─ ImageComparer.cs               ImageSharp 逐像素比對 + 差異圖
+   │  ├─ ImageComparer.cs               SkiaSharp 逐像素比對 + 差異圖
    │  └─ UiTestPaths.cs                 基準圖與產出物路徑
    ├─ Tests/
    │  ├─ MainWindowSmokeTests.cs        主視窗、側邊欄收合、切頁
@@ -152,5 +152,5 @@ public class MyTests
 - **基準圖以 Windows 產生**。字型用內建 Noto Sans TC 並由 Skia 繪製，同一台機器重跑差異為 0；換到 Linux / macOS 可能有反鋸齒差異，若要在 CI（ubuntu）跑視覺比對，建議用 `windows-latest` runner，或另外產生該平台的基準圖。目前 `.github/workflows/build.yml` 尚未加入 UI 測試。
 - 改了 `Assets/` 內的檔案卻用「還原舊檔」的方式（例如 Copy-Item 備份檔）時，檔案時間可能比建置輸出舊，MSBuild 會判定不必重建；遇到結果怪怪的，先 `dotnet build` 加 `--no-incremental` 或更新檔案時間。
 - 靜態狀態（主題、語言、字型）會跨測試保留，所以整個 UI 測試組件關閉了平行執行；每個測試請透過 `MainWindowHost.Open(...)` 指定需要的狀態。
-- ImageSharp 停在 3.1.x（Six Labors Split License：開源專案或年營收未達 100 萬美元免費）。
+- 不使用 ImageSharp：3.1.x 有已知弱點，3.2.0 起 Release 建置需要授權金鑰，所以視覺比對改用 Avalonia.Skia 本來就會帶入的 SkiaSharp，不需要額外套件或授權。
 - 說明頁（`HelpView`）用原生 WebView，Headless 下不支援，目前不在測試範圍。
