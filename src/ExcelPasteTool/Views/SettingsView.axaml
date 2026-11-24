@@ -1,7 +1,8 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ExcelPasteTool"
-             x:Class="ExcelPasteTool.SettingsView">
+             x:Class="ExcelPasteTool.SettingsView"
+             x:DataType="local:SettingsViewModel">
     <!--
       三層式設定（仿 Win11）：
         第 1 層：主側邊欄的「設定」

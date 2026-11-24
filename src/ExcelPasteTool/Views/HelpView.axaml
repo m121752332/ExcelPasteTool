@@ -5,7 +5,13 @@
 	<Grid RowDefinitions="Auto,*">
 		<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="24,14,24,10">
 			<TextBlock Grid.Column="0" Name="TitleText" Classes="page-title" VerticalAlignment="Center"/>
-			<Button Grid.Column="1" Name="OpenInBrowserButton" Classes="ghost" Cursor="Hand" VerticalAlignment="Center"/>
+			<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+				<!-- 上一頁：只在 GitHub 專案頁、且已經點進其他頁面時顯示 -->
+				<Button Name="BackButton" Classes="ghost" Cursor="Hand" IsVisible="False">
+					<Path Data="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" Width="14" Height="14" Stretch="Uniform"/>
+				</Button>
+				<Button Name="OpenInBrowserButton" Classes="ghost" Cursor="Hand"/>
+			</StackPanel>
 		</Grid>
 
 		<!-- 內嵌的 WebView 由程式建立後放進這裡（沒有瀏覽器引擎的電腦不會建立） -->

@@ -7,7 +7,7 @@
 | 項目 | 採用 |
 |---|---|
 | Runtime | .NET 11（`global.json`） |
-| UI Framework | Avalonia 11.3.x |
+| UI Framework | Avalonia 12.1.x（Avalonia.Headless.XUnit 建立在 xUnit v3 上） |
 | 測試框架 | xUnit 2.9 |
 | 無畫面測試 | `Avalonia.Headless.XUnit`（`[AvaloniaFact]` / `[AvaloniaTheory]`） |
 | 畫面擷取 | `Avalonia.Skia` 真實繪製 + `CaptureRenderedFrame()` |

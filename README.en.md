@@ -13,7 +13,7 @@ Copy a column of part numbers, order numbers or codes from Excel, click **Paste 
 | Data table | One numbered row per value | Check the count, remove unwanted items |
 
 - The repository is `ExcelPasteTool`, the product is **DataSplitter Pro**, and the executable is `DataSplitter`.
-- Runs on Windows, macOS and Linux. Built with [.NET 11](https://dotnet.microsoft.com/) and [Avalonia UI](https://avaloniaui.net/) 11.
+- Runs on Windows, macOS and Linux. Built with [.NET 11](https://dotnet.microsoft.com/) and [Avalonia UI](https://avaloniaui.net/) 12.
 - The download bundles the .NET runtime, so **you do not need to install .NET**.
 
 ## Contents
@@ -179,7 +179,7 @@ The publish settings for the four platforms (self-contained .NET 11, single file
 | --- | --- | --- |
 | Visual Studio | Right-click the project → **Publish**, pick `win-x64`, `linux-x64`, `osx-x64` or `osx-arm64` | `artifacts/<rid>/` |
 | Command line | `dotnet publish src/ExcelPasteTool -c Release -p:PublishProfile=win-x64` | `artifacts/<rid>/` |
-| Zip package | `bash packaging/publish.sh win-x64 1.6.2` (needs `jq` and `zip`; run the macOS builds on a Mac) | `DataSplitter_win_x64.zip` in the repository root |
+| Zip package | `bash packaging/publish.sh win-x64 1.7.0` (needs `jq` and `zip`; run the macOS builds on a Mac) | `DataSplitter_win_x64.zip` in the repository root |
 
 `artifacts/` is in `.gitignore`. When you hand a manual build to someone, add `packaging/config.json` to the output folder; `publish.sh` does this for you.
 

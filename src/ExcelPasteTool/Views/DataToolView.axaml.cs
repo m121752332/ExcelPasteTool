@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
 using System.Collections.ObjectModel;
@@ -109,7 +110,7 @@ public partial class DataToolView : UserControl
         RowNumberHeader.Text = LanguageManager.GetText("RowNumberHeader", "行號");
         DataContentHeader.Text = LanguageManager.GetText("DataContentHeader", "資料內容");
         EmptyStateText.Text = LanguageManager.GetText("EmptyStateText", "尚無資料\n從 Excel 複製一欄後，按「資料貼上」");
-        TopBox.Watermark = LanguageManager.GetText("TopBoxWatermark", "也可以直接在這裡輸入以分隔符號串接的資料");
+        TopBox.PlaceholderText = LanguageManager.GetText("TopBoxWatermark", "也可以直接在這裡輸入以分隔符號串接的資料");
         ToolTip.SetTip(CopyTopBoxButton, LanguageManager.GetText("CopyTopBoxTooltip", "複製分隔資料"));
         ToolTip.SetTip(CopyBottomBoxButton, LanguageManager.GetText("CopySqlTooltip", "複製SQL條件"));
         ToolTip.SetTip(CopyTableButton, LanguageManager.GetText("CopyTableTooltip", "複製全部資料"));
@@ -237,7 +238,7 @@ public partial class DataToolView : UserControl
 
     private async void DuplicatesButton_Click(object? sender, RoutedEventArgs e)
     {
-        if (_duplicates.Count == 0 || this.GetVisualRoot() is not Window owner) return;
+        if (_duplicates.Count == 0 || TopLevel.GetTopLevel(this) is not Window owner) return;
         await new DuplicatesWindow(_duplicates, _pastedCount).ShowDialog(owner);
     }
 
@@ -261,7 +262,7 @@ public partial class DataToolView : UserControl
     public async Task PasteFromClipboardAsync(Avalonia.Input.Platform.IClipboard? clipboard)
     {
         if (clipboard == null) return;
-        var text = await clipboard.GetTextAsync();
+        var text = await clipboard.TryGetTextAsync();
         if (string.IsNullOrWhiteSpace(text)) return;
 
         var processedData = PasteDataHelper.ParsePastedText(text);
@@ -340,10 +341,10 @@ public partial class DataToolView : UserControl
         if (string.IsNullOrEmpty(text)) return;
         var clipboard = TopLevel.GetTopLevel(this)?.Clipboard;
         if (clipboard == null) return;
-        (this.GetVisualRoot() as Window)?.Activate();
+        (TopLevel.GetTopLevel(this) as Window)?.Activate();
         await Task.Delay(50);
         await clipboard.SetTextAsync(text);
-        var check = await clipboard.GetTextAsync();
+        var check = await clipboard.TryGetTextAsync();
         EnqueueToast(check == text
             ? LanguageManager.GetText("CopySuccessToast", "已複製到剪貼簿！")
             : LanguageManager.GetText("CopyFailedToast", "複製失敗，請重試"));
