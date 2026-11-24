@@ -206,4 +206,61 @@ public class DataToolInteractionTests
         Assert.Equal(4, item.RowNumber);
         VisualAssert.MatchesBaseline(host.Window, "tools-add-row-dark");
     }
+    [AvaloniaFact]
+    public void AddRowButton_PressedRepeatedly_KeepsSinglePendingRow_AndDoesNotCountIt()
+    {
+        using var host = MainWindowHost.Open();
+        var view = (DataToolView)host.Find<ContentControl>("MainContent").Content!;
+        host.TypeInto(host.Find<TextBox>("TopBox"), "A01|B01|C01");
+        var button = host.Find<Button>("AddRowButton");
+
+        // 連按多次（包含新的一列還沒進入編輯前就再按）
+        for (int i = 0; i < 4; i++)
+        {
+            button.RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(Button.ClickEvent));
+            if (i % 2 == 1) MainWindowHost.Pump();
+        }
+        MainWindowHost.Pump();
+        MainWindowHost.Pump();
+
+        Assert.Equal(4, view.DataItems.Count);
+        var pending = Assert.Single(view.DataItems, x => x.IsNew);
+        Assert.Same(pending, view.DataItems[^1]);
+        Assert.True(pending.IsEditing);
+        Assert.Equal("共 3 筆", host.Find<TextBlock>("RowCountText").Text);
+
+        // 輸入後才算一筆
+        view.CommitEdit(pending, "D01");
+        MainWindowHost.Pump();
+        Assert.Equal("共 4 筆", host.Find<TextBlock>("RowCountText").Text);
+        Assert.Equal("A01|B01|C01|D01", host.Find<TextBox>("TopBox").Text);
+    }
+
+    [AvaloniaFact]
+    public void Insert_PressedRepeatedly_MovesSinglePendingRow()
+    {
+        using var host = MainWindowHost.Open();
+        var view = (DataToolView)host.Find<ContentControl>("MainContent").Content!;
+        host.TypeInto(host.Find<TextBox>("TopBox"), "A01|B01|C01");
+
+        view.SelectRow(view.DataItems[0]);
+        var first = view.InsertBelowSelected()!;
+        var again = view.InsertBelowSelected()!; // 選取的是暫存列本身：沿用
+        MainWindowHost.Pump();
+        MainWindowHost.Pump();
+        Assert.Same(first, again);
+        Assert.Equal(4, view.DataItems.Count);
+
+        // 換到別列再按 Insert：暫存列移過去，不會多一列
+        view.SelectRow(view.DataItems[3]);
+        var moved = view.InsertBelowSelected()!;
+        MainWindowHost.Pump();
+        MainWindowHost.Pump();
+        Assert.Equal(4, view.DataItems.Count);
+        Assert.Single(view.DataItems, x => x.IsNew);
+        Assert.Same(moved, view.DataItems[^1]);
+        Assert.Equal(new[] { 1, 2, 3, 4 }, view.DataItems.Select(x => x.RowNumber));
+        Assert.Equal("A01|B01|C01", host.Find<TextBox>("TopBox").Text);
+        Assert.Equal("共 3 筆", host.Find<TextBlock>("RowCountText").Text);
+    }
 }

@@ -369,9 +369,10 @@ public partial class DataToolView : UserControl
     /// <summary>更新筆數徽章與「無資料」提示。</summary>
     private void UpdateTableState()
     {
-        var count = DataItems.Count;
+        // 空白暫存列（正在新增、還沒輸入）不算筆數
+        var count = DataItems.Count(x => !x.IsNew);
         RowCountText.Text = string.Format(LanguageManager.GetText("RowCountFormat", "共 {0} 筆"), count);
-        EmptyStateText.IsVisible = count == 0;
+        EmptyStateText.IsVisible = DataItems.Count == 0;
         UpdateDuplicatesButton();
     }
 
@@ -556,6 +557,7 @@ public partial class DataToolView : UserControl
             return;
         }
         item.IsNew = false;
+        UpdateTableState(); // IsNew 不會觸發集合變更，筆數要自己更新
         item.Value = value;
         if (index < Items.Count) Items[index] = value;
         UpdateTopAndBottom();
@@ -624,34 +626,74 @@ public partial class DataToolView : UserControl
         return AddNewRow(selected == null ? DataItems.Count : DataItems.IndexOf(selected) + 1);
     }
 
-    /// <summary>在指定位置加一筆空白暫存列並進入編輯；確認時空白或重複就自動拿掉。</summary>
+    /// <summary>
+    /// 在指定位置加一筆空白暫存列並進入編輯；確認時空白或重複就自動拿掉。
+    /// 同一時間只會有一列空白暫存列：已經有一列時，同一個位置（例如連按「新增一筆」）直接聚焦那一列，
+    /// 換到別的位置（例如在別列按 Insert）就把它移過去，不會越加越多。
+    /// </summary>
     public DataItem? AddNewRow(int index)
     {
-        // 正在編輯的那一筆先確認，避免同時有兩筆暫存列
+        // 正在編輯、已經輸入內容的那一筆先確認；還空白的暫存列留著，下面直接沿用
         foreach (var editing in DataItems.Where(x => x.IsEditing).ToList())
-            CommitEdit(editing, _activeEditor?.Text ?? editing.Value);
+        {
+            var text = ReferenceEquals(_activeEditor?.DataContext, editing) ? _activeEditor!.Text : editing.Value;
+            if (editing.IsNew && string.IsNullOrWhiteSpace(text)) continue;
+            CommitEdit(editing, text);
+        }
 
         index = System.Math.Clamp(index, 0, DataItems.Count);
+        var pending = DataItems.Where(x => x.IsNew).ToList();
+        if (pending.Count > 0)
+        {
+            var keep = pending[0];
+            // 多出來的空白暫存列（舊版留下或還沒進入編輯的）一律拿掉
+            foreach (var extra in pending.Skip(1))
+            {
+                var extraIndex = DataItems.IndexOf(extra);
+                if (extraIndex < index) index--;
+                RemoveRowAt(extraIndex);
+            }
+            var keepIndex = DataItems.IndexOf(keep);
+            // 插在暫存列的前面或後面都是同一個位置：直接用它
+            if (index == keepIndex || index == keepIndex + 1)
+            {
+                SelectRow(keep);
+                FocusNewRow(keep);
+                return keep;
+            }
+            keep.IsEditing = false;
+            if (ReferenceEquals(_activeEditor?.DataContext, keep)) { _activeEditor = null; _activeEditorFocused = false; }
+            if (keepIndex < index) index--;
+            RemoveRowAt(keepIndex);
+        }
+
         var item = new DataItem(index + 1, string.Empty) { IsNew = true };
         DataItems.Insert(index, item);
         Items.Insert(index, string.Empty);
         for (int i = index + 1; i < DataItems.Count; i++)
             DataItems[i].RowNumber = i + 1;
         SelectRow(item);
+        FocusNewRow(item);
+        return item;
+    }
 
-        // 等新的一列畫出來，再找到它的輸入框開始編輯
+    // 等新的一列畫出來，再找到它的輸入框開始編輯（已經在編輯就只把焦點移回去）
+    private void FocusNewRow(DataItem item)
+    {
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             if (!DataItems.Contains(item)) return;
             DataRows.ScrollIntoView(DataItems.IndexOf(item));
             Avalonia.Threading.Dispatcher.UIThread.Post(() =>
             {
+                if (!DataItems.Contains(item)) return;
                 var editor = DataRows.GetVisualDescendants().OfType<TextBox>()
                     .FirstOrDefault(t => t.Classes.Contains("cell-editor") && ReferenceEquals(t.DataContext, item));
-                if (editor != null) BeginEdit(item, editor);
+                if (editor == null) return;
+                if (item.IsEditing && ReferenceEquals(editor, _activeEditor)) editor.Focus();
+                else BeginEdit(item, editor);
             }, Avalonia.Threading.DispatcherPriority.Background);
         }, Avalonia.Threading.DispatcherPriority.Background);
-        return item;
     }
 
     private void RemoveRowAt(int index)
