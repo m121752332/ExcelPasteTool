@@ -184,6 +184,32 @@
     <Setter Property="Foreground" Value="White"/>
   </Style>
 
+  <!-- 中性按鈕（例如「重複項」）：不具破壞性的次要操作用中性色，紅色只留給「清空資料」這類破壞性操作 -->
+  <Style Selector="Button.neutral">
+    <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="Padding" Value="12,6"/>
+  </Style>
+  <Style Selector="Button.neutral.icon-only">
+    <Setter Property="Padding" Value="9,6"/>
+  </Style>
+  <Style Selector="Button.neutral:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource ControlHoverBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource InputFocusBorderBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+  <Style Selector="Button.neutral:disabled /template/ ContentPresenter">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}"/>
+  </Style>
+  <Style Selector="Button.neutral:disabled">
+    <Setter Property="Opacity" Value="0.55"/>
+  </Style>
+
   <Style Selector="Button.ghost">
     <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
     <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
@@ -591,5 +617,82 @@
   </Style>
   <Style Selector="Button.titlebar-close:pointerover Path, Button.titlebar-close:pressed Path">
     <Setter Property="Stroke" Value="White"/>
+  </Style>
+
+  <!-- ===== Toast 通知（參照 UniGetUI，卡片由 Helpers/ToastQueueHelper.cs 建立） ===== -->
+  <Style Selector="Border.toast">
+    <Setter Property="Background" Value="{DynamicResource ToastBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource ToastBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="ClipToBounds" Value="True"/>
+    <Setter Property="BoxShadow" Value="0 6 18 0 #40000000"/>
+    <Setter Property="Cursor" Value="Arrow"/>
+  </Style>
+  <Style Selector="Border.toast TextBlock.toast-text">
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+  </Style>
+  <Style Selector="Border.toast Border.toast-strip">
+    <Setter Property="Background" Value="{DynamicResource AccentTextBrush}"/>
+  </Style>
+  <Style Selector="Border.toast Path.toast-icon">
+    <Setter Property="Fill" Value="{DynamicResource AccentTextBrush}"/>
+  </Style>
+  <Style Selector="Border.toast.success Border.toast-strip">
+    <Setter Property="Background" Value="{DynamicResource SuccessBrush}"/>
+  </Style>
+  <Style Selector="Border.toast.success Path.toast-icon">
+    <Setter Property="Fill" Value="{DynamicResource SuccessBrush}"/>
+  </Style>
+  <Style Selector="Border.toast.warning Border.toast-strip">
+    <Setter Property="Background" Value="{DynamicResource WarningBrush}"/>
+  </Style>
+  <Style Selector="Border.toast.warning Path.toast-icon">
+    <Setter Property="Fill" Value="{DynamicResource WarningBrush}"/>
+  </Style>
+  <Style Selector="Border.toast.error Border.toast-strip">
+    <Setter Property="Background" Value="{DynamicResource DangerBrush}"/>
+  </Style>
+  <Style Selector="Border.toast.error Path.toast-icon">
+    <Setter Property="Fill" Value="{DynamicResource DangerBrush}"/>
+  </Style>
+  <Style Selector="Button.toast-close">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="Width" Value="24"/>
+    <Setter Property="Height" Value="24"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+  </Style>
+  <Style Selector="Button.toast-close Path">
+    <Setter Property="Fill" Value="{DynamicResource TextSecondaryBrush}"/>
+  </Style>
+  <Style Selector="Button.toast-close:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource ControlHoverBrush}"/>
+  </Style>
+
+  <!-- ===== SQL 格式選項 ===== -->
+  <Style Selector="Border.sql-options">
+    <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="Padding" Value="10,8"/>
+  </Style>
+  <Style Selector="TextBlock.sql-warning">
+    <Setter Property="Foreground" Value="{DynamicResource WarningBrush}"/>
+    <Setter Property="FontSize" Value="{DynamicResource AppFontSizeSmall}"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+  </Style>
+  <Style Selector="Button.copy-button.active">
+    <Setter Property="Background" Value="{DynamicResource CopyButtonHoverBrush}"/>
+  </Style>
+  <Style Selector="Button.copy-button.active Path">
+    <Setter Property="Fill" Value="{DynamicResource AccentTextBrush}"/>
   </Style>
 </Styles>

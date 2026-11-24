@@ -37,6 +37,8 @@ public class SettingsViewModel : INotifyPropertyChanged
     public LocalizedText TitleBarDescText { get; } = new("TitleBarDesc", "隱藏系統標題列，改用精簡的標題列，只保留側邊欄開關與最小化、最大化、關閉按鈕");
     public LocalizedText SqlPanelTitleText { get; } = new("SqlPanelSettingTitle", "顯示 SQL 條件區塊");
     public LocalizedText SqlPanelDescText { get; } = new("SqlPanelSettingDesc", "開啟 App 時，工具頁是否顯示「SQL 條件」區塊；隱藏後可按標題旁的眼睛按鈕再打開");
+    public LocalizedText ToastPositionTitleText { get; } = new("ToastPositionTitle", "通知位置");
+    public LocalizedText ToastPositionDescText { get; } = new("ToastPositionDesc", "複製、儲存設定等應用程式內通知要從畫面的哪個角落出現");
     public LocalizedText ToggleOnText { get; } = new("ToggleOn", "開啟");
     public LocalizedText ToggleOffText { get; } = new("ToggleOff", "關閉");
 
@@ -114,6 +116,7 @@ public class SettingsViewModel : INotifyPropertyChanged
     public string GeneralSummary => string.Join(" · ",
         _selectedLanguage,
         _selectedHelpViewer,
+        _selectedToastPosition,
         $"{TitleBarTitleText.Text} {(CompactTitleBar ? ToggleOnText.Text : ToggleOffText.Text)}",
         $"{SqlPanelTitleText.Text} {(ShowSqlPanel ? ToggleOnText.Text : ToggleOffText.Text)}");
 
@@ -159,6 +162,7 @@ public class SettingsViewModel : INotifyPropertyChanged
     public ObservableCollection<string> Themes { get; } = new();
     public ObservableCollection<string> FontFamilies { get; } = new();
     public ObservableCollection<string> HelpViewers { get; } = new();
+    public ObservableCollection<string> ToastPositions { get; } = new();
 
     public Action<string>? EnqueueToast { get; set; }
 
@@ -287,6 +291,39 @@ public class SettingsViewModel : INotifyPropertyChanged
             OnPropertyChanged();
             NotifySummaries();
         }
+    }
+
+    private string _selectedToastPosition = "";
+
+    public event Action<ToastPosition>? ToastPositionChanged;
+
+    /// <summary>應用程式內通知的位置（右下 / 右上 / 左下），變更後立即存檔並移動通知；確認訊息會直接出現在新位置。</summary>
+    public string SelectedToastPosition
+    {
+        get => _selectedToastPosition;
+        set
+        {
+            if (_selectedToastPosition == value || string.IsNullOrEmpty(value) || _isUpdating) return;
+            _selectedToastPosition = value;
+            var position = ToastQueueHelper.AllPositions.FirstOrDefault(p => ToastQueueHelper.GetPositionName(p) == value);
+            if (ToastQueueHelper.GetPositionName(position) == value)
+            {
+                ConfigServices.Config.ToastPosition = position.ToString();
+                ConfigServices.Save();
+                ToastPositionChanged?.Invoke(position);
+                EnqueueToast?.Invoke(LanguageManager.GetText("ToastPositionChangedToast", "通知位置已儲存"));
+            }
+            OnPropertyChanged();
+            NotifySummaries();
+        }
+    }
+
+    private void RefreshToastPositions()
+    {
+        ToastPositions.Clear();
+        foreach (var position in ToastQueueHelper.AllPositions)
+            ToastPositions.Add(ToastQueueHelper.GetPositionName(position));
+        _selectedToastPosition = ToastQueueHelper.GetPositionName(ToastQueueHelper.CurrentPosition);
     }
 
     private void RefreshHelpViewers()
@@ -418,7 +455,9 @@ public class SettingsViewModel : INotifyPropertyChanged
         _selectedTheme = "";
         _selectedFontFamily = "";
         _selectedHelpViewer = "";
+        _selectedToastPosition = "";
         OnPropertyChanged(nameof(SelectedHelpViewer));
+        OnPropertyChanged(nameof(SelectedToastPosition));
         OnPropertyChanged(nameof(SelectedLanguage));
         OnPropertyChanged(nameof(SelectedTheme));
         OnPropertyChanged(nameof(SelectedFontFamily));
@@ -470,6 +509,7 @@ public class SettingsViewModel : INotifyPropertyChanged
         
         RefreshFontFamilies();
         RefreshHelpViewers();
+        RefreshToastPositions();
 
         _isUpdating = false;
         
@@ -481,6 +521,7 @@ public class SettingsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(FontSizeDisplay));
         
         OnPropertyChanged(nameof(SelectedHelpViewer));
+        OnPropertyChanged(nameof(SelectedToastPosition));
 
         // 更新本地化文字
         OnPropertyChanged(nameof(TitleText));

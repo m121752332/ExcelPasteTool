@@ -111,6 +111,18 @@
                                   SelectedItem="{Binding SelectedHelpViewer, Mode=TwoWay}"/>
                     </Grid>
                 </Border>
+                <Border Classes="setting-row">
+                    <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.BellIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                            <TextBlock Text="{Binding ToastPositionTitleText.Text}" Classes="setting-title"/>
+                            <TextBlock Text="{Binding ToastPositionDescText.Text}" Classes="setting-desc"/>
+                        </StackPanel>
+                        <ComboBox Name="ToastPositionComboBox" Grid.Column="2" Width="240"
+                                  ItemsSource="{Binding ToastPositions, Mode=OneWay}"
+                                  SelectedItem="{Binding SelectedToastPosition, Mode=TwoWay}"/>
+                    </Grid>
+                </Border>
             </StackPanel>
 
             <!-- ===== 第 3 層：使用者介面偏好設置 ===== -->

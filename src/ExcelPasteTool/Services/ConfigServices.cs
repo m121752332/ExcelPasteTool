@@ -18,6 +18,16 @@ public class AppConfig
     public bool CompactTitleBar { get; set; }
     /// <summary>工具頁的「SQL 條件」區塊是否預設顯示（預設顯示；舊版設定檔沒有此欄位時也是顯示）。</summary>
     public bool ShowSqlPanel { get; set; } = true;
+    /// <summary>應用程式內通知出現的位置：BottomRight（預設）、TopRight、BottomLeft。</summary>
+    public string ToastPosition { get; set; } = "BottomRight";
+    /// <summary>SQL 條件的欄位名稱（例如 ima01）；空白時只輸出括號內容。</summary>
+    public string SqlColumnName { get; set; } = "";
+    /// <summary>SQL 條件：全部都是數字時不加單引號。</summary>
+    public bool SqlUnquoteNumbers { get; set; }
+    /// <summary>SQL 條件：括號內每行幾個值，0 代表不換行。</summary>
+    public int SqlItemsPerLine { get; set; }
+    /// <summary>工具頁左側「分隔資料」與「SQL 條件」的高度比例（分隔資料所佔比例，0.2 ~ 0.8；0 代表預設各半）。</summary>
+    public double LeftPanelSplitRatio { get; set; }
 }
 
 public static class ConfigServices

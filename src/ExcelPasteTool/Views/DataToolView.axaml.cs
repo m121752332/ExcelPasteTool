@@ -48,6 +48,98 @@ public partial class DataToolView : UserControl
         // 設定頁切換「顯示 SQL 條件區塊」時立即套用（單例，不會重複訂閱；工具頁本身也有快取只建一次）
         SettingsViewModel.Instance.ShowSqlPanelChanged += visible => IsSqlPanelVisible = visible;
         IsSqlPanelVisible = ConfigServices.Config.ShowSqlPanel;
+        ApplySavedSplitRatio();
+        LeftPanelSplitter.DragCompleted += (_, _) => SaveSplitRatio();
+        InitSqlOptions();
+    }
+
+    // ===== 左側上下分隔條 =====
+
+    /// <summary>分隔資料所佔比例的上下限（兩邊都留得下最小高度）。</summary>
+    private const double MinSplitRatio = 0.2, MaxSplitRatio = 0.8;
+
+    // SQL 區塊隱藏前的列高，重新顯示時還原（使用者拖過分隔條時才不會被重設成各半）
+    private GridLength _sqlRowHeight = new(1, GridUnitType.Star);
+
+    private void ApplySavedSplitRatio()
+    {
+        var ratio = ConfigServices.Config.LeftPanelSplitRatio;
+        if (ratio <= 0) return; // 0 = 預設各半
+        ratio = System.Math.Clamp(ratio, MinSplitRatio, MaxSplitRatio);
+        LeftPanelGrid.RowDefinitions[1].Height = new GridLength(ratio, GridUnitType.Star);
+        _sqlRowHeight = new GridLength(1 - ratio, GridUnitType.Star);
+        if (_isSqlPanelVisible) LeftPanelGrid.RowDefinitions[3].Height = _sqlRowHeight;
+    }
+
+    private void SaveSplitRatio()
+    {
+        double top = TopBox.Bounds.Height, bottom = SqlSection.Bounds.Height;
+        if (top <= 0 || bottom <= 0) return;
+        var ratio = System.Math.Clamp(top / (top + bottom), MinSplitRatio, MaxSplitRatio);
+        // 拖完一律轉回比例（Star），視窗縮放時上下仍按比例分配
+        LeftPanelGrid.RowDefinitions[1].Height = new GridLength(ratio, GridUnitType.Star);
+        _sqlRowHeight = new GridLength(1 - ratio, GridUnitType.Star);
+        LeftPanelGrid.RowDefinitions[3].Height = _sqlRowHeight;
+        ConfigServices.Config.LeftPanelSplitRatio = System.Math.Round(ratio, 3);
+        ConfigServices.Save();
+    }
+
+    // ===== SQL 格式選項 =====
+
+    private SqlFormatOptions _sqlOptions = SqlFormatOptions.Default;
+
+    private void InitSqlOptions()
+    {
+        _sqlOptions = SqlFormatOptions.FromConfig(ConfigServices.Config);
+        _suppressEvents = true;
+        try
+        {
+            SqlColumnBox.Text = _sqlOptions.ColumnName;
+            SqlItemsPerLineBox.Value = _sqlOptions.ItemsPerLine;
+            SqlUnquoteNumbersBox.IsChecked = _sqlOptions.UnquoteNumbers;
+        }
+        finally { _suppressEvents = false; }
+
+        SqlOptionsButton.Click += (_, _) => SetSqlOptionsOpen(!SqlOptionsPanel.IsVisible);
+        SqlColumnBox.TextChanged += (_, _) => OnSqlOptionsChanged();
+        SqlItemsPerLineBox.ValueChanged += (_, _) => OnSqlOptionsChanged();
+        SqlUnquoteNumbersBox.IsCheckedChanged += (_, _) => OnSqlOptionsChanged();
+    }
+
+    private void SetSqlOptionsOpen(bool open)
+    {
+        SqlOptionsPanel.IsVisible = open && _isSqlPanelVisible;
+        SqlOptionsButton.Classes.Set("active", SqlOptionsPanel.IsVisible);
+    }
+
+    private void OnSqlOptionsChanged()
+    {
+        if (_suppressEvents) return;
+        var config = ConfigServices.Config;
+        config.SqlColumnName = (SqlColumnBox.Text ?? string.Empty).Trim();
+        config.SqlItemsPerLine = (int)System.Math.Clamp(SqlItemsPerLineBox.Value ?? 0, 0, SqlFormatOptions.MaxItemsPerLine);
+        config.SqlUnquoteNumbers = SqlUnquoteNumbersBox.IsChecked == true;
+        _sqlOptions = SqlFormatOptions.FromConfig(config);
+        ConfigServices.Save();
+        UpdateBottom();
+    }
+
+    /// <summary>SQL 條件下方的提醒：超過 1000 筆已拆組、拆組時沒填欄位名稱、勾了「數值不加引號」但資料不全是數字。</summary>
+    private void UpdateSqlWarning()
+    {
+        var lines = new List<string>();
+        if (Items.Count > PasteDataHelper.OracleInListLimit)
+        {
+            lines.Add(string.Format(LanguageManager.GetText("SqlSplitWarning",
+                "共 {0} 筆，超過 Oracle 單一 IN 上限 1000 筆，已拆成 {1} 組以 OR 串接"),
+                Items.Count, (Items.Count + PasteDataHelper.OracleInListLimit - 1) / PasteDataHelper.OracleInListLimit));
+            if (_sqlOptions.ColumnName.Length == 0)
+                lines.Add(LanguageManager.GetText("SqlColumnMissingWarning", "尚未填欄位名稱，暫用 col，請在格式選項填入或貼上後自行替換"));
+        }
+        if (_sqlOptions.UnquoteNumbers && Items.Count > 0 && !PasteDataHelper.AllPlainNumbers(Items))
+            lines.Add(LanguageManager.GetText("SqlNotAllNumbersWarning", "資料不全是數字（或有前導零），已全部加上引號"));
+        SqlWarningText.Text = string.Join("\n", lines);
+        SqlWarningText.IsVisible = lines.Count > 0 && _isSqlPanelVisible;
     }
 
     private bool _isSqlPanelVisible = true;
@@ -61,9 +153,18 @@ public partial class DataToolView : UserControl
         get => _isSqlPanelVisible;
         set
         {
+            if (_isSqlPanelVisible && !value && LeftPanelGrid.RowDefinitions[3].Height.IsStar)
+                _sqlRowHeight = LeftPanelGrid.RowDefinitions[3].Height;
             _isSqlPanelVisible = value;
             BottomBox.IsVisible = value;
-            LeftPanelGrid.RowDefinitions[3].Height = value ? new GridLength(1, GridUnitType.Star) : GridLength.Auto;
+            LeftPanelSplitter.IsVisible = value;
+            var sqlRow = LeftPanelGrid.RowDefinitions[3];
+            sqlRow.Height = value ? _sqlRowHeight : GridLength.Auto;
+            sqlRow.MinHeight = value ? 140 : 0;
+            LeftPanelGrid.RowDefinitions[2].Height = new GridLength(value ? 14 : 8);
+            SetSqlOptionsOpen(value && SqlOptionsPanel.IsVisible);
+            if (!value) SqlWarningText.IsVisible = false;
+            else UpdateSqlWarning();
             ToggleSqlPanelIcon.Data = Avalonia.Media.StreamGeometry.Parse(value ? IconManager.EyeOffIcon : IconManager.EyeIcon);
             UpdateSqlPanelTooltip();
         }
@@ -142,6 +243,14 @@ public partial class DataToolView : UserControl
         ToolTip.SetTip(CopyTopBoxButton, LanguageManager.GetText("CopyTopBoxTooltip", "複製分隔資料"));
         ToolTip.SetTip(CopyBottomBoxButton, LanguageManager.GetText("CopySqlTooltip", "複製SQL條件"));
         UpdateSqlPanelTooltip();
+        ToolTip.SetTip(SqlOptionsButton, LanguageManager.GetText("SqlOptionsTooltip", "SQL 格式選項"));
+        SqlColumnLabel.Text = LanguageManager.GetText("SqlColumnLabel", "欄位名稱:");
+        SqlColumnBox.PlaceholderText = LanguageManager.GetText("SqlColumnWatermark", "例如 ima01");
+        SqlItemsPerLineLabel.Text = LanguageManager.GetText("SqlItemsPerLineLabel", "每行筆數:");
+        SqlUnquoteNumbersBox.Content = LanguageManager.GetText("SqlUnquoteNumbers", "數值不加引號");
+        SqlOptionsHint.Text = LanguageManager.GetText("SqlOptionsHint",
+            "每行筆數 0 代表不換行；超過 1000 筆會自動拆成多組 IN 以 OR 串接（Oracle 上限）");
+        if (_isSqlPanelVisible) UpdateSqlWarning();
         ToolTip.SetTip(CopyTableButton, LanguageManager.GetText("CopyTableTooltip", "複製全部資料"));
         ToolTip.SetTip(ClearDataButton, ClearButtonText.Text);
         ToolTip.SetTip(PasteDataButton, LanguageManager.GetText("PasteDataTooltip", "貼上剪貼簿資料 (Alt+P)"));
@@ -201,7 +310,7 @@ public partial class DataToolView : UserControl
         {
             // 工具頁面的語言切換是臨時的，不保存到配置檔案（要保存請到設定頁）
             LanguageController.SetLanguage(selectedLanguage, false);
-            _toastHelper.EnqueueToast(LanguageManager.GetText("LanguageTempToast", "語言已臨時切換（未保存）"));
+            _toastHelper.EnqueueToast(LanguageManager.GetText("LanguageTempToast", "語言已臨時切換（未保存）"), ToastSeverity.Warning);
         }
     }
 
@@ -215,7 +324,7 @@ public partial class DataToolView : UserControl
         {
             // 工具頁面的主題切換是臨時的，不保存到配置檔案（要保存請到設定頁）
             ThemeManager.CurrentTheme = selectedTheme;
-            _toastHelper.EnqueueToast(LanguageManager.GetText("ThemeTempToast", "主題已臨時切換（未保存）"));
+            _toastHelper.EnqueueToast(LanguageManager.GetText("ThemeTempToast", "主題已臨時切換（未保存）"), ToastSeverity.Warning);
         }
     }
 
@@ -309,6 +418,7 @@ public partial class DataToolView : UserControl
         {
             TopBox.Text = "";
             BottomBox.Text = "";
+            SqlWarningText.IsVisible = false;
             _separator = _defaultSeparator;
             SeparatorComboBox.SelectedIndex = 0;
         }
@@ -316,7 +426,7 @@ public partial class DataToolView : UserControl
         {
             _suppressEvents = false;
         }
-        EnqueueToast(LanguageManager.GetText("ClearedToast", "畫面已清理回初始狀態"));
+        EnqueueToast(LanguageManager.GetText("ClearedToast", "畫面已清理回初始狀態"), ToastSeverity.Info);
     }
 
     /// <summary>移除單筆資料：重排後面的行號，並同步分隔資料與 SQL 條件。捲動位置保留，方便連續刪除。</summary>
@@ -358,12 +468,13 @@ public partial class DataToolView : UserControl
 
     private void UpdateBottom()
     {
-        BottomBox.Text = PasteDataHelper.BuildSqlCondition(Items);
+        BottomBox.Text = PasteDataHelper.BuildSqlCondition(Items, _sqlOptions);
+        UpdateSqlWarning();
     }
 
     // ===== 複製 =====
 
-    private void EnqueueToast(string message) => _toastHelper.EnqueueToast(message);
+    private void EnqueueToast(string message, ToastSeverity severity = ToastSeverity.Success) => _toastHelper.EnqueueToast(message, severity);
 
     private async Task CopyTextAsync(string? text)
     {
@@ -374,9 +485,10 @@ public partial class DataToolView : UserControl
         await Task.Delay(50);
         await clipboard.SetTextAsync(text);
         var check = await clipboard.TryGetTextAsync();
-        EnqueueToast(check == text
-            ? LanguageManager.GetText("CopySuccessToast", "已複製到剪貼簿！")
-            : LanguageManager.GetText("CopyFailedToast", "複製失敗，請重試"));
+        if (check == text)
+            EnqueueToast(LanguageManager.GetText("CopySuccessToast", "已複製到剪貼簿！"));
+        else
+            EnqueueToast(LanguageManager.GetText("CopyFailedToast", "複製失敗，請重試"), ToastSeverity.Error);
     }
 
     private async void CopyTopBoxButton_Click(object? sender, RoutedEventArgs e) => await CopyTextAsync(TopBox.Text);

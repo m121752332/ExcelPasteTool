@@ -114,9 +114,11 @@
       <tr><td class="nowrap">Drop a few values</td><td>Hover the row in the data table and click the ✕ on the right.</td></tr>
       <tr><td class="nowrap">Add or edit by hand</td><td>Type in the "PIP Separated Data" box, with the current separator between values, for example <code>A-001|A-002</code>.</td></tr>
       <tr><td class="nowrap">Hide the SQL condition</td><td>Click the eye button 👁 next to the "SQL Condition" title to collapse it; the separated data box above fills the space. Click again to show it. To keep it hidden every time the app starts, turn off "Show SQL condition panel" in Settings › General.</td></tr>
+      <tr><td class="nowrap">Add a column name or change the SQL format</td><td>Click the format options button ☰ next to the "SQL Condition" title. You can enter a column name (for example <code>ima01</code>, giving <code>ima01 IN (...)</code>), tick "Don't quote numbers" (applies only when every value is a plain number; part numbers with leading zeros such as <code>001</code> stay quoted), and set "Items per line" (wrap every N values inside the parentheses; 0 means no wrapping, handy for 4GL or SQL*Plus). The options are remembered next time.</td></tr>
       <tr><td class="nowrap">Copy the column back to Excel</td><td>Click the "Row" header at the top left of the table. All values are copied, one per line, ready to paste into Excel.</td></tr>
       <tr><td class="nowrap">Start over</td><td>Click "Clear Data".</td></tr>
       <tr><td class="nowrap">Resize the panels</td><td>Drag the gap between the left and right panels.</td></tr>
+      <tr><td class="nowrap">Resize top and bottom</td><td>Drag the bar with three dots between "PIP Separated Data" and "SQL Condition". The position is remembered.</td></tr>
     </tbody>
   </table>
 
@@ -140,6 +142,10 @@
   <details>
     <summary>My values contain single quotes. Will the SQL break?</summary>
     <p>No. A single quote is doubled automatically, so <code>O'Brien</code> is written as <code>'O''Brien'</code>, which is the standard SQL way.</p>
+  </details>
+  <details>
+    <summary>More than 1000 values and Oracle reports ORA-01795?</summary>
+    <p>An Oracle IN list holds at most 1000 values. Above 1000, the tool splits the list into groups of 1000 joined by <code>OR</code>, for example <code>(ima01 IN (...) OR ima01 IN (...))</code>, wrapped in parentheses so it stays correct after other <code>AND</code> conditions. Without a column name it uses <code>col</code> as a placeholder and shows a yellow note under the SQL condition; enter the column in the format options or replace it after pasting.</p>
   </details>
   <details>
     <summary>I changed the language or theme in the toolbar, but it was back to the old one next time.</summary>
@@ -215,6 +221,7 @@
       <tr><td class="nowrap">Compact title bar</td><td>Hides the system title bar and uses a compact one with only the sidebar toggle and the minimize, maximize and close buttons (similar to the Claude desktop app). Drag the empty area to move the window; double-click it to maximize or restore.</td></tr>
       <tr><td class="nowrap">Language</td><td>Traditional Chinese, Simplified Chinese, English, Japanese, Korean.</td></tr>
       <tr><td class="nowrap">Help Viewer</td><td>"In-app window" shows this help inside the program (the default). "Default browser" opens it in your browser when you press <kbd>F1</kbd>, which is handy on a second screen. The "GitHub" button below Help in the sidebar loads the project page from GitHub (internet required) and follows the same setting.</td></tr>
+      <tr><td class="nowrap">Notification position</td><td>Where in-app notifications such as "Copied" or "Settings saved" appear: bottom right (default), top right or bottom left. Up to 3 notifications stack at once; hovering one pauses it, and ✕ closes it right away.</td></tr>
       <tr><th colspan="2">Interface preferences</th></tr>
       <tr><td class="nowrap">Theme</td><td>GitHub Dark, Light Mode, Tiffany Blue, Rainbow Wonderland.</td></tr>
       <tr><td class="nowrap">Font and font size</td><td>Make the text larger here if it is too small. The text in this help grows with it. Click the Font size row to expand the slider, preview and Reset button.</td></tr>

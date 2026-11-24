@@ -92,24 +92,22 @@
 				<TextBlock Name="TourButtonText" VerticalAlignment="Center"/>
 			</StackPanel>
 		</Button>
+
+		<!-- Toast 通知（參照 UniGetUI）：全 App 共用，放在內容區（側邊欄右邊、標題列下方）的最上層。
+		     位置依設定 › 一般設置 › 通知位置（右下 / 右上 / 左下），由 ToastQueueHelper.ApplyPosition 對齊；
+		     卡片由 Helpers/ToastQueueHelper.cs 動態加入，面板只依內容撐開，空白處不攔截滑鼠 -->
+		<StackPanel Grid.Column="1" Name="ToastHost"
+					Width="360"
+					Spacing="8"
+					HorizontalAlignment="Right"
+					VerticalAlignment="Bottom"
+					Margin="20"
+					ZIndex="20000"/>
 	</Grid>
 	</Grid>
 
 	<!-- App 導覽圖層（第一次開啟自動播放） -->
 	<local:TourOverlay Name="TourLayer"/>
 
-	<!-- Toast 通知：全 App 共用一個，放在最上層（高於導覽按鈕與導覽遮罩），不攔截滑鼠 -->
-	<Border Name="ToastPanel"
-			Background="#E6222222"
-			CornerRadius="8"
-			Padding="18,10"
-			HorizontalAlignment="Right"
-			VerticalAlignment="Top"
-			Margin="0,30,30,0"
-			IsVisible="False"
-			IsHitTestVisible="False"
-			ZIndex="20000">
-		<TextBlock Name="ToastText" Foreground="#FFA726" FontWeight="Bold"/>
-	</Border>
 	</Panel>
 </Window>

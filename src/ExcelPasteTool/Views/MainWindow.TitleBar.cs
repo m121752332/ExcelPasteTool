@@ -25,6 +25,13 @@ public partial class MainWindow
     private void InitTitleBar()
     {
         ApplyTitleBarMode(ConfigServices.Config.CompactTitleBar);
+        // 通知位置：啟動時套用設定，設定頁變更時立即移動
+        if (this.FindControl<StackPanel>(ExcelPasteTool.Helpers.ToastQueueHelper.HostName) is { } toastHost)
+        {
+            ExcelPasteTool.Helpers.ToastQueueHelper.ApplyPosition(toastHost, ExcelPasteTool.Helpers.ToastQueueHelper.CurrentPosition);
+            SettingsViewModel.Instance.ToastPositionChanged += position =>
+                ExcelPasteTool.Helpers.ToastQueueHelper.ApplyPosition(toastHost, position);
+        }
         SettingsViewModel.Instance.CompactTitleBarChanged += compact =>
             Avalonia.Threading.Dispatcher.UIThread.Post(() => ApplyTitleBarMode(compact));
         LanguageManager.LanguageChanged += () => Avalonia.Threading.Dispatcher.UIThread.Post(UpdateTitleBarTexts);
@@ -50,9 +57,6 @@ public partial class MainWindow
         // 側邊欄開關移到標題列，側邊欄頂端的那顆就收起來
         if (this.FindControl<Button>("SidebarToggleButton") is { } toggle)
             toggle.IsVisible = !compact;
-        // Toast 往下移，避免蓋到右上角的視窗按鈕
-        if (this.FindControl<Border>("ToastPanel") is { } toast)
-            toast.Margin = new Thickness(0, compact ? 66 : 30, 30, 0);
         UpdateWindowStateVisuals();
     }
 

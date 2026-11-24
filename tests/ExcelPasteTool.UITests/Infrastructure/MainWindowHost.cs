@@ -39,6 +39,11 @@ public sealed class MainWindowHost : IDisposable
         ConfigServices.Config.TourCompleted = true;
         ConfigServices.Config.CompactTitleBar = false;
         ConfigServices.Config.ShowSqlPanel = true;
+        ConfigServices.Config.SqlColumnName = "";
+        ConfigServices.Config.SqlUnquoteNumbers = false;
+        ConfigServices.Config.SqlItemsPerLine = 0;
+        ConfigServices.Config.LeftPanelSplitRatio = 0;
+        ConfigServices.Config.ToastPosition = "BottomRight";
         SidebarPageToContentConverter.ResetCache();
 
         LanguageManager.CurrentLanguage = language;

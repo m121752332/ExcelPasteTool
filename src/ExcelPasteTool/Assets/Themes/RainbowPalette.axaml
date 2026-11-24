@@ -53,6 +53,11 @@
   <SolidColorBrush x:Key="SqlOutputBrush" Color="#7CFFCB"/>
   <SolidColorBrush x:Key="DangerBrush" Color="#FF6B81"/>
   <SolidColorBrush x:Key="DangerHoverBrush" Color="#E0435C"/>
+  <SolidColorBrush x:Key="SuccessBrush" Color="#7CFFCB"/>
+  <SolidColorBrush x:Key="WarningBrush" Color="#FFD166"/>
+  <!-- Toast 通知卡片 -->
+  <SolidColorBrush x:Key="ToastBackgroundBrush" Color="#F0201040"/>
+  <SolidColorBrush x:Key="ToastBorderBrush" Color="#7A6BC0"/>
   <SolidColorBrush x:Key="ControlBackgroundBrush" Color="#80201040"/>
   <SolidColorBrush x:Key="ControlHoverBrush" Color="#99402070"/>
   <SolidColorBrush x:Key="ControlBorderBrush" Color="#7A6BC0"/>

@@ -114,9 +114,11 @@
       <tr><td class="nowrap">拿掉其中幾筆</td><td>滑鼠移到資料表的那一列，按右邊的 ✕。</td></tr>
       <tr><td class="nowrap">手動加資料或修改</td><td>直接在「PIP 分隔資料」框裡打字，每一筆之間用目前的分隔符號隔開，例如 <code>A-001|A-002</code>。</td></tr>
       <tr><td class="nowrap">不需要 SQL 條件</td><td>按「SQL 條件」標題右邊的眼睛按鈕 👁 就會收起來，上方的分隔資料框會撐滿；再按一次打開。想每次開 App 都先收起來，到「設定 › 一般設置」關掉「顯示 SQL 條件區塊」。</td></tr>
+      <tr><td class="nowrap">SQL 加上欄位名稱或改格式</td><td>按「SQL 條件」標題右邊的格式選項按鈕 ☰，可以填「欄位名稱」（例如 <code>ima01</code>，會輸出 <code>ima01 IN (...)</code>）、勾選「數值不加引號」（全部都是數字才生效，有前導零的料號如 <code>001</code> 仍會加引號），以及設定「每行筆數」（括號內每 N 筆換一行，0 代表不換行，方便貼進 4GL 或 SQL*Plus）。設定會記住，下次開啟沿用。</td></tr>
       <tr><td class="nowrap">把整欄複製回 Excel</td><td>按資料表左上角的「行號」表頭，會複製全部資料（一筆一行），可以直接貼回 Excel。</td></tr>
       <tr><td class="nowrap">重新開始</td><td>按「清空資料」。</td></tr>
       <tr><td class="nowrap">調整左右寬度</td><td>用滑鼠拖曳左右兩個面板中間的空隙。</td></tr>
+      <tr><td class="nowrap">調整上下高度</td><td>拖曳「PIP 分隔資料」與「SQL 條件」中間的分隔條（有三個小點），位置會記住。</td></tr>
     </tbody>
   </table>
 
@@ -140,6 +142,10 @@
   <details>
     <summary>資料裡有單引號，SQL 會不會壞掉？</summary>
     <p>不會。單引號會自動變成兩個單引號，例如 <code>O'Brien</code> 會輸出成 <code>'O''Brien'</code>，這是 SQL 的標準寫法。</p>
+  </details>
+  <details>
+    <summary>超過 1000 筆，Oracle 出現 ORA-01795？</summary>
+    <p>Oracle 的單一 IN 清單最多 1000 個值。超過 1000 筆時，程式會自動每 1000 筆拆成一組，用 <code>OR</code> 串起來，例如 <code>(ima01 IN (...) OR ima01 IN (...))</code>，外面再包一層括號，接在其他 <code>AND</code> 條件後面也不會出錯。沒有填欄位名稱時暫用 <code>col</code>，SQL 條件下方會有黃色提醒，請到格式選項填入或貼上後自行替換。</p>
   </details>
   <details>
     <summary>我在工具列換了語言或主題，下次開啟又變回來？</summary>
@@ -215,6 +221,7 @@
       <tr><td class="nowrap">精簡標題列</td><td>開啟後隱藏系統標題列，改用精簡的標題列，只留側邊欄開關與最小化、最大化、關閉按鈕（類似 Claude 桌面版）。空白處可以拖曳視窗，雙擊可放大或還原。</td></tr>
       <tr><td class="nowrap">語言</td><td>繁體中文、簡體中文、English、日本語、한국어。</td></tr>
       <tr><td class="nowrap">說明開啟方式</td><td>「內建視窗」是在程式裡顯示這份說明（預設）；「預設瀏覽器」是按 <kbd>F1</kbd> 時改用你的瀏覽器開啟，方便放在另一個螢幕對照。側邊欄「說明」下方的「GitHub」按鈕會載入 GitHub 上的專案頁（需要網路），也依照這個設定開啟。</td></tr>
+      <tr><td class="nowrap">通知位置</td><td>複製成功、設定已儲存等應用程式內通知要從哪裡出現：從右下出現（預設）、從右上出現、從左下出現。通知會由下往上堆疊，最多同時 3 則，滑鼠停在通知上會暫停自動關閉，按 ✕ 可立即關閉。</td></tr>
       <tr><th colspan="2">使用者介面偏好設置</th></tr>
       <tr><td class="nowrap">主題</td><td>GitHub 暗黑、光線模式、蒂芬妮藍、彩虹幻境。</td></tr>
       <tr><td class="nowrap">字型與字體大小</td><td>覺得字太小可以在這裡放大，這份說明的字也會一起變大。字體大小那一列點一下會展開滑桿、預覽與「還原預設」。</td></tr>

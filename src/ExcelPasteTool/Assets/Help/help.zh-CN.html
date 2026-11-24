@@ -114,9 +114,11 @@
       <tr><td class="nowrap">拿掉其中几条</td><td>鼠标移到数据表的那一行，点右边的 ✕。</td></tr>
       <tr><td class="nowrap">手动加数据或修改</td><td>直接在「PIP 分隔数据」框里打字，每一条之间用当前的分隔符号隔开，例如 <code>A-001|A-002</code>。</td></tr>
       <tr><td class="nowrap">不需要 SQL 条件</td><td>点「SQL 条件」标题右边的眼睛按钮 👁 就会收起，上方的分隔数据框会撑满；再点一次打开。想每次打开 App 都先收起，到「设置 › 一般设置」关掉「显示 SQL 条件区块」。</td></tr>
+      <tr><td class="nowrap">SQL 加上字段名称或改格式</td><td>点「SQL 条件」标题右边的格式选项按钮 ☰，可以填「字段名称」（例如 <code>ima01</code>，会输出 <code>ima01 IN (...)</code>）、勾选「数值不加引号」（全部都是数字才生效，有前导零的料号如 <code>001</code> 仍会加引号），以及设置「每行笔数」（括号内每 N 笔换一行，0 表示不换行，方便粘贴进 4GL 或 SQL*Plus）。设置会记住，下次打开沿用。</td></tr>
       <tr><td class="nowrap">把整列复制回 Excel</td><td>点数据表左上角的「行号」表头，会复制全部数据（一条一行），可以直接粘贴回 Excel。</td></tr>
       <tr><td class="nowrap">重新开始</td><td>点「清空数据」。</td></tr>
       <tr><td class="nowrap">调整左右宽度</td><td>用鼠标拖动左右两个面板中间的空隙。</td></tr>
+      <tr><td class="nowrap">调整上下高度</td><td>拖动「PIP 分隔数据」与「SQL 条件」中间的分隔条（有三个小点），位置会记住。</td></tr>
     </tbody>
   </table>
 
@@ -140,6 +142,10 @@
   <details>
     <summary>数据里有单引号，SQL 会不会坏掉？</summary>
     <p>不会。单引号会自动变成两个单引号，例如 <code>O'Brien</code> 会输出成 <code>'O''Brien'</code>，这是 SQL 的标准写法。</p>
+  </details>
+  <details>
+    <summary>超过 1000 笔，Oracle 出现 ORA-01795？</summary>
+    <p>Oracle 的单一 IN 列表最多 1000 个值。超过 1000 笔时，程序会自动每 1000 笔拆成一组，用 <code>OR</code> 连接，例如 <code>(ima01 IN (...) OR ima01 IN (...))</code>，外面再包一层括号，接在其他 <code>AND</code> 条件后面也不会出错。没有填字段名称时暂用 <code>col</code>，SQL 条件下方会有黄色提醒，请到格式选项填入或粘贴后自行替换。</p>
   </details>
   <details>
     <summary>我在工具栏换了语言或主题，下次打开又变回来？</summary>
@@ -215,6 +221,7 @@
       <tr><td class="nowrap">精简标题栏</td><td>开启后隐藏系统标题栏，改用精简的标题栏，只留侧边栏开关与最小化、最大化、关闭按钮（类似 Claude 桌面版）。空白处可以拖动窗口，双击可放大或还原。</td></tr>
       <tr><td class="nowrap">语言</td><td>繁体中文、简体中文、English、日本語、한국어。</td></tr>
       <tr><td class="nowrap">说明打开方式</td><td>「内置窗口」是在程序里显示这份说明（默认）；「默认浏览器」是按 <kbd>F1</kbd> 时改用你的浏览器打开，方便放在另一个屏幕对照。侧边栏「说明」下方的「GitHub」按钮会加载 GitHub 上的项目页（需要网络），也按照这个设置打开。</td></tr>
+      <tr><td class="nowrap">通知位置</td><td>复制成功、设置已保存等应用内通知要从哪里出现：从右下出现（默认）、从右上出现、从左下出现。通知会堆叠显示，最多同时 3 条，鼠标停在通知上会暂停自动关闭，点 ✕ 可立即关闭。</td></tr>
       <tr><th colspan="2">用户界面偏好设置</th></tr>
       <tr><td class="nowrap">主题</td><td>GitHub 暗黑、光线模式、蒂芙尼蓝、彩虹幻境。</td></tr>
       <tr><td class="nowrap">字体与字体大小</td><td>觉得字太小可以在这里放大，这份说明的字也会一起变大。字体大小那一行点一下会展开滑块、预览与「还原默认」。</td></tr>

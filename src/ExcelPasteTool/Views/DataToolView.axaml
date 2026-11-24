@@ -42,7 +42,15 @@
 				</Grid.ColumnDefinitions>
 				<!-- 左側：分隔資料 / SQL 條件 -->
 				<Border Grid.Column="0" Classes="panel" Padding="16">
-					<Grid Name="LeftPanelGrid" RowDefinitions="Auto,*,Auto,*">
+					<!-- 上：分隔資料；中：上下拖曳的分隔條；下：SQL 條件（標題、格式選項、輸出框）。
+					     分隔條的位置存在設定檔 LeftPanelSplitRatio；隱藏 SQL 條件時分隔條一併隱藏，只留標題列 -->
+					<Grid Name="LeftPanelGrid">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="*" MinHeight="90"/>
+							<RowDefinition Height="14"/>
+							<RowDefinition Height="*" MinHeight="140"/>
+						</Grid.RowDefinitions>
 						<!-- PIP 分隔資料標題 -->
 						<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
 							<StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
@@ -53,25 +61,59 @@
 								<Path Data="{x:Static local:IconManager.PasteIcon}" Width="15" Height="15" Stretch="Uniform"/>
 							</Button>
 						</Grid>
-						<TextBox Grid.Row="1" Name="TopBox" Classes="input" MinHeight="90"/>
+						<TextBox Grid.Row="1" Name="TopBox" Classes="input"/>
 
-						<!-- SQL 條件標題 -->
-						<Grid Grid.Row="2" ColumnDefinitions="*,Auto" Margin="0,16,0,8">
-							<StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-								<Path Data="{x:Static local:IconManager.ContentIcon}" Width="18" Height="18" Stretch="Uniform" VerticalAlignment="Center"/>
-								<TextBlock Name="SqlConditionTitle" Classes="section-title" VerticalAlignment="Center"/>
-							</StackPanel>
-							<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
-								<Button Name="CopyBottomBoxButton" Classes="copy-button" ToolTip.Tip="複製SQL條件">
-									<Path Data="{x:Static local:IconManager.PasteIcon}" Width="15" Height="15" Stretch="Uniform"/>
-								</Button>
-								<!-- 顯示 / 隱藏 SQL 條件：隱藏時只留這一列標題，上方的分隔資料框撐滿（見 ApplySqlPanelVisibility） -->
-								<Button Name="ToggleSqlPanelButton" Classes="copy-button" Cursor="Hand">
-									<Path Name="ToggleSqlPanelIcon" Data="{x:Static local:IconManager.EyeOffIcon}" Width="16" Height="16" Stretch="Uniform"/>
-								</Button>
-							</StackPanel>
+						<GridSplitter Grid.Row="2" Name="LeftPanelSplitter" ResizeDirection="Rows"
+									  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,3"/>
+
+						<Grid Grid.Row="3" Name="SqlSection" RowDefinitions="Auto,Auto,Auto,*">
+							<!-- SQL 條件標題 -->
+							<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+								<StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+									<Path Data="{x:Static local:IconManager.ContentIcon}" Width="18" Height="18" Stretch="Uniform" VerticalAlignment="Center"/>
+									<TextBlock Name="SqlConditionTitle" Classes="section-title" VerticalAlignment="Center"/>
+								</StackPanel>
+								<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+									<!-- 格式選項：欄位名稱、數值不加引號、每行筆數 -->
+									<Button Name="SqlOptionsButton" Classes="copy-button" Cursor="Hand">
+										<Path Data="{x:Static local:IconManager.TuneIcon}" Width="15" Height="15" Stretch="Uniform"/>
+									</Button>
+									<Button Name="CopyBottomBoxButton" Classes="copy-button" ToolTip.Tip="複製SQL條件">
+										<Path Data="{x:Static local:IconManager.PasteIcon}" Width="15" Height="15" Stretch="Uniform"/>
+									</Button>
+									<!-- 顯示 / 隱藏 SQL 條件：隱藏時只留這一列標題，上方的分隔資料框撐滿（見 IsSqlPanelVisible） -->
+									<Button Name="ToggleSqlPanelButton" Classes="copy-button" Cursor="Hand">
+										<Path Name="ToggleSqlPanelIcon" Data="{x:Static local:IconManager.EyeOffIcon}" Width="16" Height="16" Stretch="Uniform"/>
+									</Button>
+								</StackPanel>
+							</Grid>
+
+							<!-- 格式選項（設定存在設定檔，下次開啟沿用） -->
+							<Border Grid.Row="1" Name="SqlOptionsPanel" Classes="sql-options" Margin="0,0,0,8" IsVisible="False">
+								<StackPanel Spacing="6">
+									<WrapPanel Orientation="Horizontal" ItemSpacing="16" LineSpacing="8">
+										<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+											<TextBlock Name="SqlColumnLabel" Classes="field-label"/>
+											<TextBox Name="SqlColumnBox" Classes="input" Width="130" MinHeight="30" Padding="8,4"
+													 AcceptsReturn="False" TextWrapping="NoWrap" VerticalContentAlignment="Center"
+													 VerticalAlignment="Center"/>
+										</StackPanel>
+										<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+											<TextBlock Name="SqlItemsPerLineLabel" Classes="field-label"/>
+											<NumericUpDown Name="SqlItemsPerLineBox" Width="110" Minimum="0" Maximum="100" Increment="1"
+														   FormatString="0" ParsingNumberStyle="Integer" VerticalAlignment="Center"/>
+										</StackPanel>
+										<CheckBox Name="SqlUnquoteNumbersBox" VerticalAlignment="Center"/>
+									</WrapPanel>
+									<TextBlock Name="SqlOptionsHint" Classes="muted" TextWrapping="Wrap"/>
+								</StackPanel>
+							</Border>
+
+							<!-- 提醒：超過 1000 筆已拆組、沒填欄位名稱、資料不全是數字 -->
+							<TextBlock Grid.Row="2" Name="SqlWarningText" Classes="sql-warning" Margin="0,0,0,6" IsVisible="False"/>
+
+							<TextBox Grid.Row="3" Name="BottomBox" Classes="input sql-output" MinHeight="90" IsReadOnly="True"/>
 						</Grid>
-						<TextBox Grid.Row="3" Name="BottomBox" Classes="input sql-output" MinHeight="90" IsReadOnly="True"/>
 					</Grid>
 				</Border>
 
@@ -91,9 +133,9 @@
 								</StackPanel>
 							</Button>
 							<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" Margin="8,0,0,0">
-								<!-- 重複項：最近一次貼上時被濾掉的重複值，沒有重複時停用；精簡模式時重複數顯示在右上角標 -->
+								<!-- 重複項：最近一次貼上時被濾掉的重複值，沒有重複時停用；不具破壞性，用中性色（紅色只給清空資料）；精簡模式時重複數顯示在右上角標 -->
 								<Panel>
-									<Button Name="DuplicatesButton" Classes="secondary" Cursor="Hand" IsEnabled="False">
+									<Button Name="DuplicatesButton" Classes="neutral" Cursor="Hand" IsEnabled="False">
 										<StackPanel Orientation="Horizontal" Spacing="6">
 											<Path Data="{x:Static local:IconManager.ListIcon}" Width="15" Height="15" Stretch="Uniform" VerticalAlignment="Center"/>
 											<TextBlock Name="DuplicatesButtonText" VerticalAlignment="Center"/>
