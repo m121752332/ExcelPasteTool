@@ -15,7 +15,7 @@
 | UI 框架 | [Avalonia UI](https://avaloniaui.net/) 12.1.6（Fluent 主題 + DataGrid；說明頁用 Avalonia.Controls.WebView） |
 | 目標框架 | .NET 11（`net11.0`，STS 標準支援版本） |
 | 架構模式 | MVVM（Views / ViewModels / Models / Services / Helpers） |
-| 版本號 | 定義於 `src/ExcelPasteTool/ExcelPasteTool.csproj`，目前為 `1.7.0` |
+| 版本號 | 定義於 `src/ExcelPasteTool/ExcelPasteTool.csproj`，目前為 `1.7.1` |
 
 ---
 
@@ -277,7 +277,7 @@ avares://DataSplitter/Assets/Fonts#Noto Sans TC
 dotnet publish src/ExcelPasteTool -c Release -p:PublishProfile=win-x64
 
 # 打包成和 Release 相同的 zip（需要 jq、zip；macOS 版要在 Mac 上跑，會做 .app 封裝與 ad-hoc 簽章）
-bash packaging/publish.sh win-x64 1.7.0
+bash packaging/publish.sh win-x64 1.7.1
 ```
 
 要改發佈參數（例如開壓縮 `EnableCompressionInSingleFile`），四個 pubxml 都要一起改，不要在 `publish.sh` 或 workflow 另外加參數，否則 Visual Studio 和 CI 的結果會不一致。

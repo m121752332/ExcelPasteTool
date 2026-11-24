@@ -47,7 +47,7 @@ ExcelPasteTool/                     # 倉庫根目錄
 | 單元測試 | `dotnet test tests/ExcelPasteTool.Tests` |
 | UI 畫面測試 | `pwsh tests/run-ui-tests.ps1` |
 | 發佈單一平台 | `dotnet publish src/ExcelPasteTool -c Release -p:PublishProfile=win-x64` |
-| 打包單一平台 zip | `bash packaging/publish.sh win-x64 1.7.0` |
+| 打包單一平台 zip | `bash packaging/publish.sh win-x64 1.7.1` |
 
 ## 搬檔時要一起改的地方
 

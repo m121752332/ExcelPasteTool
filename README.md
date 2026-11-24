@@ -179,7 +179,7 @@ pwsh tests/run-ui-tests.ps1
 | --- | --- | --- |
 | Visual Studio | 在專案按右鍵「發佈」，選 `win-x64`、`linux-x64`、`osx-x64` 或 `osx-arm64` | `artifacts/<rid>/` |
 | 命令列 | `dotnet publish src/ExcelPasteTool -c Release -p:PublishProfile=win-x64` | `artifacts/<rid>/` |
-| 打包成 zip | `bash packaging/publish.sh win-x64 1.7.0`（需要 `jq`、`zip`；macOS 版要在 Mac 上跑） | 根目錄的 `DataSplitter_win_x64.zip` |
+| 打包成 zip | `bash packaging/publish.sh win-x64 1.7.1`（需要 `jq`、`zip`；macOS 版要在 Mac 上跑） | 根目錄的 `DataSplitter_win_x64.zip` |
 
 `artifacts/` 已列入 `.gitignore`。手動交給別人使用時，把 `packaging/config.json` 一起放進輸出資料夾；`publish.sh` 會自動放。
 
@@ -188,12 +188,12 @@ pwsh tests/run-ui-tests.ps1
 推送版本 tag 後，`release.yml` 會用 `packaging/publish.sh` 打包四個平台的 zip 並建立 GitHub Release：
 
 1. 把 `src/ExcelPasteTool/ExcelPasteTool.csproj` 的 `Version`、`AssemblyVersion`、`FileVersion`、`InformationalVersion` 改成新版本，並在 `src/ExcelPasteTool/Resources/Changelog.json` 最前面加一筆五種語言的改版說明（單元測試會檢查），合併到 `master`。
-2. 建立並推送 tag（`1.7.0` 或 `v1.7.0` 都可以）：
+2. 建立並推送 tag（`1.7.1` 或 `v1.7.1` 都可以）：
 
    ```bash
    git checkout master && git pull
-   git tag 1.7.0
-   git push origin 1.7.0
+   git tag 1.7.1
+   git push origin 1.7.1
    ```
 
 3. 等 workflow 跑完，到 Releases 頁面確認四個 zip 都已上傳。

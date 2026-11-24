@@ -179,7 +179,7 @@ The publish settings for the four platforms (self-contained .NET 11, single file
 | --- | --- | --- |
 | Visual Studio | Right-click the project → **Publish**, pick `win-x64`, `linux-x64`, `osx-x64` or `osx-arm64` | `artifacts/<rid>/` |
 | Command line | `dotnet publish src/ExcelPasteTool -c Release -p:PublishProfile=win-x64` | `artifacts/<rid>/` |
-| Zip package | `bash packaging/publish.sh win-x64 1.7.0` (needs `jq` and `zip`; run the macOS builds on a Mac) | `DataSplitter_win_x64.zip` in the repository root |
+| Zip package | `bash packaging/publish.sh win-x64 1.7.1` (needs `jq` and `zip`; run the macOS builds on a Mac) | `DataSplitter_win_x64.zip` in the repository root |
 
 `artifacts/` is in `.gitignore`. When you hand a manual build to someone, add `packaging/config.json` to the output folder; `publish.sh` does this for you.
 
@@ -188,12 +188,12 @@ The publish settings for the four platforms (self-contained .NET 11, single file
 When you push a version tag, `release.yml` builds the four zips with `packaging/publish.sh` and creates a GitHub Release:
 
 1. Set `Version`, `AssemblyVersion`, `FileVersion` and `InformationalVersion` in `src/ExcelPasteTool/ExcelPasteTool.csproj` to the new version, and add an entry with notes in all five languages at the top of `src/ExcelPasteTool/Resources/Changelog.json` (the unit tests check this). Merge into `master`.
-2. Create and push the tag (`1.7.0` or `v1.7.0` both work):
+2. Create and push the tag (`1.7.1` or `v1.7.1` both work):
 
    ```bash
    git checkout master && git pull
-   git tag 1.7.0
-   git push origin 1.7.0
+   git tag 1.7.1
+   git push origin 1.7.1
    ```
 
 3. When the workflow finishes, check that the Releases page has all four zips.
