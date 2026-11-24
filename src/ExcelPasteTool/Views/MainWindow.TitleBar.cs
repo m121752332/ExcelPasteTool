@@ -114,6 +114,13 @@ public partial class MainWindow
     /// <summary>處理 Alt 快捷鍵；有處理回傳 true。</summary>
     private bool HandleAltShortcut(KeyEventArgs e)
     {
+        // Alt+Shift+P：追加貼上（接在現有資料後面，重複的略過）
+        if (e.Key == Key.P && e.KeyModifiers == (KeyModifiers.Alt | KeyModifiers.Shift) && !Tour.IsActive)
+        {
+            e.Handled = true;
+            AppendPasteToDataTool();
+            return true;
+        }
         if (e.KeyModifiers != KeyModifiers.Alt) return false;
 
         // Alt+F4：強制關閉（導覽中、有對話框時也一律結束程式）
@@ -147,6 +154,15 @@ public partial class MainWindow
             desktop.Shutdown();
         else
             Close();
+    }
+
+    /// <summary>Alt+Shift+P：切到「工具」頁，把剪貼簿內容接在現有資料後面（等同按「追加貼上」）。</summary>
+    private async void AppendPasteToDataTool()
+    {
+        if (Sidebar.SelectedPage != SidebarPage.Tools)
+            OnSidebarItemClick(SidebarPage.Tools);
+        if (this.FindControl<ContentControl>("MainContent")?.Content is DataToolView tool)
+            await tool.AppendFromClipboardAsync(Clipboard);
     }
 
     /// <summary>Alt+P：切到「工具」頁，把剪貼簿內容貼到右側資料表（等同按「資料貼上」）。</summary>

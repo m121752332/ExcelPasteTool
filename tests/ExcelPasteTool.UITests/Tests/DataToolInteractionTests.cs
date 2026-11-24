@@ -133,4 +133,77 @@ public class DataToolInteractionTests
         Assert.Equal(2, view.DataItems[1].RowNumber);
         Assert.Equal("('A01', 'C01')", host.Find<TextBox>("BottomBox").Text);
     }
+
+    [AvaloniaFact]
+    public async Task AppendPaste_AddsAfterExisting_SkipsDuplicates()
+    {
+        using var host = MainWindowHost.Open();
+        var view = (DataToolView)host.Find<ContentControl>("MainContent").Content!;
+        var clipboard = host.Window.Clipboard!;
+        host.TypeInto(host.Find<TextBox>("TopBox"), "A01|B01");
+
+        await clipboard.SetTextAsync("B01\r\nC01\r\nC01\r\nD01");
+        await view.AppendFromClipboardAsync(clipboard);
+        MainWindowHost.Pump();
+
+        Assert.Equal(new[] { "A01", "B01", "C01", "D01" }, view.DataItems.Select(x => x.Value));
+        Assert.Equal(new[] { 1, 2, 3, 4 }, view.DataItems.Select(x => x.RowNumber));
+        Assert.Equal("A01|B01|C01|D01", host.Find<TextBox>("TopBox").Text);
+        Assert.Equal("('A01', 'B01', 'C01', 'D01')", host.Find<TextBox>("BottomBox").Text);
+        Assert.True(host.Find<Button>("DuplicatesButton").IsEnabled); // B01、C01 被略過
+    }
+
+    [AvaloniaFact]
+    public void InsertBelowSelected_AddsEditableRow_CommitSyncs_EmptyOrDuplicateIsDropped()
+    {
+        using var host = MainWindowHost.Open();
+        var view = (DataToolView)host.Find<ContentControl>("MainContent").Content!;
+        host.TypeInto(host.Find<TextBox>("TopBox"), "A01|B01|C01");
+
+        view.SelectRow(view.DataItems[0]);
+        var item = view.InsertBelowSelected()!;
+        MainWindowHost.Pump();
+        MainWindowHost.Pump();
+        Assert.Same(item, view.DataItems[1]);
+        Assert.True(item.IsEditing);
+        Assert.True(item.IsSelected);
+        // 暫存列還沒輸入時，分隔資料與 SQL 不受影響
+        Assert.Equal("A01|B01|C01", host.Find<TextBox>("TopBox").Text);
+
+        view.CommitEdit(item, "A02");
+        MainWindowHost.Pump();
+        Assert.Equal(new[] { "A01", "A02", "B01", "C01" }, view.DataItems.Select(x => x.Value));
+        Assert.Equal(new[] { 1, 2, 3, 4 }, view.DataItems.Select(x => x.RowNumber));
+        Assert.Equal("A01|A02|B01|C01", host.Find<TextBox>("TopBox").Text);
+
+        // 新增後輸入重複值或空白：暫存列直接拿掉
+        var dup = view.InsertBelowSelected()!;
+        MainWindowHost.Pump();
+        MainWindowHost.Pump();
+        view.CommitEdit(dup, "C01");
+        var empty = view.AddNewRow(view.DataItems.Count)!;
+        MainWindowHost.Pump();
+        MainWindowHost.Pump();
+        view.CommitEdit(empty, "  ");
+        MainWindowHost.Pump();
+        Assert.Equal(new[] { "A01", "A02", "B01", "C01" }, view.DataItems.Select(x => x.Value));
+        Assert.Equal("('A01', 'A02', 'B01', 'C01')", host.Find<TextBox>("BottomBox").Text);
+    }
+
+    [AvaloniaFact]
+    public void AddRowButton_AddsRowAtEnd_AndMatchesBaseline()
+    {
+        using var host = MainWindowHost.Open();
+        var view = (DataToolView)host.Find<ContentControl>("MainContent").Content!;
+        host.TypeInto(host.Find<TextBox>("TopBox"), "A01|B01|C01");
+
+        host.Find<Button>("AddRowButton").RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(Button.ClickEvent));
+        MainWindowHost.Pump();
+        MainWindowHost.Pump();
+        var item = view.DataItems[^1];
+        Assert.True(item.IsNew);
+        Assert.True(item.IsEditing);
+        Assert.Equal(4, item.RowNumber);
+        VisualAssert.MatchesBaseline(host.Window, "tools-add-row-dark");
+    }
 }

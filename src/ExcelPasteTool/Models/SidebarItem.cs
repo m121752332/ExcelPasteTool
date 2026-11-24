@@ -15,7 +15,15 @@ public class SidebarItem : INotifyPropertyChanged
     // 名稱依目前語系取得，切換語言時會通知 UI 更新
     public string Name => LanguageManager.GetText(_nameKey, _defaultName);
     // 滑鼠提示：有指定時用自己的文字（例如附上快捷鍵），否則跟名稱相同
-    public string ToolTipText => _tooltipKey is null ? Name : LanguageManager.GetText(_tooltipKey, _defaultTooltip ?? _defaultName);
+    // macOS 的主要修飾鍵是 Command，提示文字裡的 Ctrl+, 改顯示成 ⌘+,
+    public string ToolTipText
+    {
+        get
+        {
+            var text = _tooltipKey is null ? Name : LanguageManager.GetText(_tooltipKey, _defaultTooltip ?? _defaultName);
+            return OperatingSystem.IsMacOS() ? text.Replace("Ctrl+,", "⌘+,") : text;
+        }
+    }
     public string Icon { get; }
     public SidebarItem(SidebarPage page, string nameKey, string defaultName, string icon,
         string? tooltipKey = null, string? defaultTooltip = null)

@@ -113,6 +113,8 @@
       <tr><td class="nowrap">다른 구분 기호 사용</td><td>위쪽 도구 모음의 「구분 기호」 목록에서 선택합니다. 이미 붙여넣은 데이터는 새 기호로 즉시 다시 연결됩니다.</td></tr>
       <tr><td class="nowrap">일부 값 제외</td><td>데이터 표의 행 위에 마우스를 올리고 오른쪽의 ✕를 클릭합니다.</td></tr>
       <tr><td class="nowrap">직접 추가·수정</td><td>「PIP 구분 데이터」 칸에 직접 입력합니다. 값 사이는 현재 구분 기호로 구분하세요. 예: <code>A-001|A-002</code></td></tr>
+      <tr><td class="nowrap">덮어쓰지 않고 추가</td><td>「데이터 붙여넣기」 옆의 「추가 붙여넣기」를 누르거나 <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>를 누르면 클립보드 내용이 기존 행 뒤에 추가되고, 이미 있는 값은 건너뜁니다. 표 맨 아래의 「＋ 행 추가」로 직접 입력할 수도 있고(<kbd>Enter</kbd>로 확정하면 다음 행이 열림), 행을 클릭한 뒤 <kbd>Insert</kbd>를 누르면 그 아래에 삽입됩니다.</td></tr>
+      <tr><td class="nowrap">값 수정</td><td>표에서 값을 두 번 클릭하면 바로 수정할 수 있습니다. <kbd>Enter</kbd>나 다른 곳 클릭으로 확정, <kbd>Esc</kbd>로 취소합니다. 다른 행과 같은 값으로는 바꿀 수 없고, 비우면 삭제됩니다. 왼쪽 구분 데이터와 SQL도 함께 갱신됩니다.</td></tr>
       <tr><td class="nowrap">SQL 조건 숨기기</td><td>「SQL 조건」 제목 오른쪽의 눈 버튼 👁 을 누르면 접히고 위의 구분 데이터 칸이 넓어집니다. 다시 누르면 표시됩니다. 앱을 시작할 때부터 숨기려면 「설정 › 일반 설정」에서 「SQL 조건 표시」를 끕니다.</td></tr>
       <tr><td class="nowrap">SQL에 열 이름 추가·형식 변경</td><td>「SQL 조건」 제목 오른쪽의 형식 옵션 버튼 ☰을 누르면 「열 이름」(예: <code>ima01</code>을 입력하면 <code>ima01 IN (...)</code> 출력), 「숫자는 따옴표 없이」(모든 값이 숫자일 때만 적용되며 <code>001</code>처럼 앞자리가 0인 품번은 따옴표로 감쌉니다), 「줄당 개수」(괄호 안을 N개마다 줄바꿈, 0은 줄바꿈 없음. 4GL이나 SQL*Plus에 붙여넣을 때 편리)를 설정할 수 있습니다. 설정은 다음에도 유지됩니다.</td></tr>
       <tr><td class="nowrap">열을 Excel로 다시 복사</td><td>표 왼쪽 위의 「행 번호」 머리글을 클릭합니다. 모든 값이 한 줄에 하나씩 복사되어 Excel에 그대로 붙여넣을 수 있습니다.</td></tr>
@@ -165,12 +167,15 @@
     <thead><tr><th class="nowrap">키</th><th>동작</th></tr></thead>
     <tbody>
       <tr><td class="nowrap"><kbd>F1</kbd></td><td>어느 페이지에서든 이 도움말을 엽니다.</td></tr>
+      <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>,</kbd></td><td>어느 페이지에서든 「설정」을 엽니다. Mac에서는 <kbd>⌘</kbd> + <kbd>,</kbd>를 누릅니다.</td></tr>
       <tr><td class="nowrap">둘러보기 (도구 페이지 오른쪽 위)</td><td>사용법 둘러보기를 다시 봅니다. 처음 실행할 때도 한 번 자동으로 재생됩니다. <kbd>←</kbd> <kbd>→</kbd>로 단계를 이동하고 <kbd>Space</kbd>로 다음 단계로 넘어가며 <kbd>Esc</kbd>로 건너뜁니다.</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>C</kbd></td><td>텍스트 상자나 데이터 표에서 선택한 내용을 복사합니다.</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>V</kbd></td><td>「PIP 구분 데이터」 칸에 텍스트를 붙여넣습니다.</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>A</kbd></td><td>텍스트 상자 안의 내용을 모두 선택합니다.</td></tr>
       <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>Q</kbd></td><td>왼쪽 메뉴(사이드바)를 열거나 닫습니다.</td></tr>
       <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>P</kbd></td><td>클립보드 내용을 「도구」 페이지 오른쪽 데이터 표에 붙여넣습니다(「데이터 붙여넣기」와 같음). 다른 페이지에서 누르면 「도구」 페이지로 돌아갑니다.</td></tr>
+      <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd></td><td>추가 붙여넣기: 클립보드 내용을 데이터 표의 기존 행 뒤에 추가합니다(중복은 건너뜀).</td></tr>
+      <tr><td class="nowrap"><kbd>Insert</kbd></td><td>데이터 표에서 선택한 행 아래에 한 행을 삽입합니다(먼저 행을 클릭).</td></tr>
       <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>F4</kbd></td><td>앱을 강제로 닫습니다(안내 중이거나 대화 상자가 열려 있어도 종료).</td></tr>
     </tbody>
   </table>

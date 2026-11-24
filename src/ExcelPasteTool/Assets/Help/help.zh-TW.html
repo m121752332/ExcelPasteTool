@@ -113,6 +113,8 @@
       <tr><td class="nowrap">換一種分隔符號</td><td>在上方工具列的「分隔符號」選單選擇。已貼上的資料會立刻用新符號重新串接。</td></tr>
       <tr><td class="nowrap">拿掉其中幾筆</td><td>滑鼠移到資料表的那一列，按右邊的 ✕。</td></tr>
       <tr><td class="nowrap">手動加資料或修改</td><td>直接在「PIP 分隔資料」框裡打字，每一筆之間用目前的分隔符號隔開，例如 <code>A-001|A-002</code>。</td></tr>
+      <tr><td class="nowrap">補資料，不要蓋掉</td><td>按「資料貼上」旁的「追加貼上」或 <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd>，剪貼簿內容會接在現有資料後面，已經有的值自動略過。也可以按表格最下面的「＋ 新增一筆」手動輸入（按 <kbd>Enter</kbd> 確認後會接著開下一筆），或點一下某一列再按 <kbd>Insert</kbd>，在它下面插入一筆。</td></tr>
+      <tr><td class="nowrap">修改某一筆</td><td>在資料表雙擊那一筆就能直接修改，<kbd>Enter</kbd> 或點別處確認、<kbd>Esc</kbd> 取消。改成和別筆一樣的值不會生效；清空就等於刪除。左邊的分隔資料和 SQL 會一起更新。</td></tr>
       <tr><td class="nowrap">不需要 SQL 條件</td><td>按「SQL 條件」標題右邊的眼睛按鈕 👁 就會收起來，上方的分隔資料框會撐滿；再按一次打開。想每次開 App 都先收起來，到「設定 › 一般設置」關掉「顯示 SQL 條件區塊」。</td></tr>
       <tr><td class="nowrap">SQL 加上欄位名稱或改格式</td><td>按「SQL 條件」標題右邊的格式選項按鈕 ☰，可以填「欄位名稱」（例如 <code>ima01</code>，會輸出 <code>ima01 IN (...)</code>）、勾選「數值不加引號」（全部都是數字才生效，有前導零的料號如 <code>001</code> 仍會加引號），以及設定「每行筆數」（括號內每 N 筆換一行，0 代表不換行，方便貼進 4GL 或 SQL*Plus）。設定會記住，下次開啟沿用。</td></tr>
       <tr><td class="nowrap">把整欄複製回 Excel</td><td>按資料表左上角的「行號」表頭，會複製全部資料（一筆一行），可以直接貼回 Excel。</td></tr>
@@ -165,12 +167,15 @@
     <thead><tr><th class="nowrap">按鍵</th><th>功能</th></tr></thead>
     <tbody>
       <tr><td class="nowrap"><kbd>F1</kbd></td><td>開啟這份說明（在任何頁面都可以按）。</td></tr>
+      <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>,</kbd></td><td>開啟「設定」頁（在任何頁面都可以按）。Mac 請按 <kbd>⌘</kbd> + <kbd>,</kbd>。</td></tr>
       <tr><td class="nowrap">工具頁右上角「導覽」</td><td>重看操作導覽（第一次開啟程式時會自動播放一次）。導覽中可按 <kbd>←</kbd> <kbd>→</kbd> 切換步驟、<kbd>Space</kbd> 前往下一步、<kbd>Esc</kbd> 略過。</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>C</kbd></td><td>複製輸入框或資料表中選取的文字。</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>V</kbd></td><td>在「PIP 分隔資料」框內貼上文字。</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>A</kbd></td><td>在輸入框內全選。</td></tr>
       <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>Q</kbd></td><td>開啟或收合左側選單（側邊欄）。</td></tr>
       <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>P</kbd></td><td>把剪貼簿內容貼到「工具」頁右側的資料表，等同按「資料貼上」；在其他頁面按也會自動切回「工具」頁。</td></tr>
+      <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd></td><td>追加貼上：把剪貼簿內容接在資料表現有資料後面，重複的略過。</td></tr>
+      <tr><td class="nowrap"><kbd>Insert</kbd></td><td>在資料表選取的那一列下面插入一筆（先點一下該列）。</td></tr>
       <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>F4</kbd></td><td>強制關閉程式（導覽進行中或有對話框時也會直接結束）。</td></tr>
     </tbody>
   </table>

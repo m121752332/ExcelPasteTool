@@ -123,14 +123,21 @@
 					<Grid RowDefinitions="Auto,*">
 						<!-- 按鈕列：左邊「資料貼上」佔剩餘寬度（太窄時文字以…截斷，不會被裁掉），右邊「重複項」「清空資料」。
 						     右欄寬度低於 CompactToolbarThreshold 時，右邊兩顆改成只顯示圖示（重複數改角標、說明放 ToolTip），見 ApplyToolbarLayout -->
-						<Grid Grid.Row="0" Name="ToolbarRow" ColumnDefinitions="*,Auto" Margin="0,0,0,12">
+						<Grid Grid.Row="0" Name="ToolbarRow" ColumnDefinitions="Auto,Auto,*,Auto" Margin="0,0,0,12">
 							<Button Grid.Column="0" Name="PasteDataButton" Classes="primary" Cursor="Hand" HorizontalAlignment="Left">
 								<StackPanel Orientation="Horizontal" Spacing="6">
 									<Path Data="{x:Static local:IconManager.PasteIcon}" Width="15" Height="15" Stretch="Uniform" VerticalAlignment="Center"/>
 									<TextBlock Name="PasteButtonText" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
 								</StackPanel>
 							</Button>
-							<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" Margin="8,0,0,0">
+							<!-- 追加貼上：接在現有資料後面（Alt+Shift+P），重複的略過 -->
+							<Button Grid.Column="1" Name="AppendPasteButton" Classes="neutral" Cursor="Hand" Margin="8,0,0,0">
+								<StackPanel Orientation="Horizontal" Spacing="6">
+									<Path Data="{x:Static local:IconManager.PasteAppendIcon}" Width="15" Height="15" Stretch="Uniform" VerticalAlignment="Center"/>
+									<TextBlock Name="AppendPasteButtonText" VerticalAlignment="Center"/>
+								</StackPanel>
+							</Button>
+							<StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8" Margin="8,0,0,0">
 								<!-- 重複項：最近一次貼上時被濾掉的重複值，沒有重複時停用；不具破壞性，用中性色（紅色只給清空資料）；精簡模式時重複數顯示在右上角標 -->
 								<Panel>
 									<Button Name="DuplicatesButton" Classes="neutral" Cursor="Hand" IsEnabled="False">
@@ -155,7 +162,7 @@
 
 						<!-- 資料表格：表頭固定，只有資料列捲動；關閉水平捲動讓長字串自動換行，表頭與資料列欄寬一致 -->
 						<Border Grid.Row="1" Name="TableContainer" Classes="table-container">
-							<Grid RowDefinitions="Auto,*">
+							<Grid RowDefinitions="Auto,*,Auto">
 								<Grid Grid.Row="0" ColumnDefinitions="64,*" Classes="data-table-header" MinHeight="36">
 									<Border Grid.Column="0" Classes="grid-cell" BorderThickness="0,0,1,1">
 										<Button Name="CopyTableButton" Background="Transparent" BorderThickness="0" Padding="0" Cursor="Hand"
@@ -190,7 +197,7 @@
 										</ItemsControl.ItemsPanel>
 										<ItemsControl.ItemTemplate>
 											<DataTemplate x:DataType="local:DataItem">
-												<Grid Classes="data-row" Classes.even="{Binding IsEven}" ColumnDefinitions="64,*" MinHeight="30">
+												<Grid Classes="data-row" Classes.even="{Binding IsEven}" Classes.selected="{Binding IsSelected}" ColumnDefinitions="64,*" MinHeight="30">
 													<Border Grid.Column="0" Classes="grid-cell" BorderThickness="0,0,1,1">
 														<TextBlock Text="{Binding RowNumber}" Classes="row-number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 													</Border>
@@ -222,6 +229,14 @@
 								<!-- 無資料提示 -->
 								<TextBlock Grid.Row="1" Name="EmptyStateText" Classes="empty-state"
 										   HorizontalAlignment="Center" VerticalAlignment="Center" Margin="24"/>
+
+								<!-- 表格最下面的「新增一筆」列：固定在底部不跟著捲動，按下後在最後面加一筆並直接輸入 -->
+								<Button Grid.Row="2" Name="AddRowButton" Classes="add-row" Cursor="Hand">
+									<StackPanel Orientation="Horizontal" Spacing="6">
+										<Path Data="{x:Static local:IconManager.PlusIcon}" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center"/>
+										<TextBlock Name="AddRowButtonText" VerticalAlignment="Center"/>
+									</StackPanel>
+								</Button>
 							</Grid>
 						</Border>
 					</Grid>

@@ -36,6 +36,25 @@ public class DataItem : INotifyPropertyChanged
 
     public bool IsEven => RowNumber % 2 == 0;
 
+    private bool _isSelected;
+
+    /// <summary>資料表中目前選取的一列（按 Insert 會在它下面插入一筆）。</summary>
+    public bool IsSelected
+    {
+        get => _isSelected;
+        set
+        {
+            if (_isSelected != value)
+            {
+                _isSelected = value;
+                OnPropertyChanged(nameof(IsSelected));
+            }
+        }
+    }
+
+    /// <summary>剛新增、還沒確認內容的一筆；確認時空白或重複就直接移除。</summary>
+    public bool IsNew { get; set; }
+
     private bool _isEditing;
 
     /// <summary>是否正在資料表裡直接編輯這一筆（雙擊進入，Enter / 離開確認，Esc 取消）。</summary>

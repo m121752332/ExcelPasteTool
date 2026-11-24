@@ -113,6 +113,8 @@
       <tr><td class="nowrap">別の区切り文字を使う</td><td>上部ツールバーの「区切り文字」リストから選びます。貼り付け済みのデータは新しい記号ですぐにつなぎ直されます。</td></tr>
       <tr><td class="nowrap">一部の値を除く</td><td>データ表の行にマウスを乗せ、右側の ✕ をクリックします。</td></tr>
       <tr><td class="nowrap">手動で追加・編集する</td><td>「PIP 区切りデータ」欄に直接入力します。値の間は現在の区切り文字で区切ります（例：<code>A-001|A-002</code>）。</td></tr>
+      <tr><td class="nowrap">上書きせずに追加する</td><td>「データ貼り付け」の隣の「追加貼り付け」か <kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd> を押すと、クリップボードの内容が既存の行の後ろに追加され、すでにある値はスキップされます。表の一番下の「＋ 1 行追加」で手入力することもでき（<kbd>Enter</kbd> で確定すると次の行が開きます）、行をクリックして <kbd>Insert</kbd> を押すとその下に挿入できます。</td></tr>
+      <tr><td class="nowrap">値を修正する</td><td>表の値をダブルクリックすると直接編集できます。<kbd>Enter</kbd> かほかの場所のクリックで確定、<kbd>Esc</kbd> で取り消し。ほかの行と同じ値にはできず、空にすると削除になります。左の区切りデータと SQL も更新されます。</td></tr>
       <tr><td class="nowrap">SQL 条件を隠す</td><td>「SQL 条件」タイトル右の目のボタン 👁 を押すと折りたたまれ、上の区切りデータ欄が広がります。もう一度押すと表示されます。起動時から隠しておくには「設定 › 一般設定」で「SQL 条件を表示」をオフにします。</td></tr>
       <tr><td class="nowrap">SQL に列名を付ける・書式を変える</td><td>「SQL 条件」タイトル右の書式オプションボタン ☰ を押すと、「列名」（例：<code>ima01</code> と入れると <code>ima01 IN (...)</code> を出力）、「数値は引用符なし」（すべてが数値のときだけ有効。<code>001</code> のような先頭ゼロ付きの品番は引用符で囲みます）、「1 行の件数」（括弧内を N 件ごとに改行。0 は改行なし。4GL や SQL*Plus に貼るときに便利）を設定できます。設定は次回も引き継がれます。</td></tr>
       <tr><td class="nowrap">列を Excel に戻す</td><td>表の左上にある「行番号」見出しをクリックします。全データが 1 行に 1 件ずつコピーされ、そのまま Excel に貼り付けられます。</td></tr>
@@ -165,12 +167,15 @@
     <thead><tr><th class="nowrap">キー</th><th>動作</th></tr></thead>
     <tbody>
       <tr><td class="nowrap"><kbd>F1</kbd></td><td>どのページからでもこのヘルプを開きます。</td></tr>
+      <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>,</kbd></td><td>どのページからでも「設定」を開きます。Mac では <kbd>⌘</kbd> + <kbd>,</kbd> を押します。</td></tr>
       <tr><td class="nowrap">ツアー（ツール右上）</td><td>操作ツアーをもう一度見ます。初回起動時にも一度自動で再生されます。<kbd>←</kbd> <kbd>→</kbd> でステップを移動、<kbd>Space</kbd> で次へ進み、<kbd>Esc</kbd> でスキップします。</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>C</kbd></td><td>テキストボックスまたはデータ表で選択した内容をコピーします。</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>V</kbd></td><td>「PIP 区切りデータ」欄にテキストを貼り付けます。</td></tr>
       <tr><td class="nowrap"><kbd>Ctrl</kbd> + <kbd>A</kbd></td><td>テキストボックス内をすべて選択します。</td></tr>
       <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>Q</kbd></td><td>左側のメニュー（サイドバー）を開閉します。</td></tr>
       <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>P</kbd></td><td>クリップボードの内容を「ツール」ページ右側のデータ表に貼り付けます（「データ貼り付け」と同じ）。ほかのページで押すと「ツール」ページに切り替わります。</td></tr>
+      <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>Shift</kbd> + <kbd>P</kbd></td><td>追加貼り付け：クリップボードの内容をデータ表の既存の行の後ろに追加します（重複はスキップ）。</td></tr>
+      <tr><td class="nowrap"><kbd>Insert</kbd></td><td>データ表で選択した行の下に 1 行挿入します（先に行をクリック）。</td></tr>
       <tr><td class="nowrap"><kbd>Alt</kbd> + <kbd>F4</kbd></td><td>アプリを強制的に閉じます（ガイド中やダイアログ表示中でも終了します）。</td></tr>
     </tbody>
   </table>

@@ -48,6 +48,9 @@ public partial class DataToolView : UserControl
         // SelectableTextBlock 會自己處理雙擊（選字），所以連已處理的事件也要接
         DataRows.AddHandler(InputElement.DoubleTappedEvent, OnRowDoubleTapped,
             Avalonia.Interactivity.RoutingStrategies.Bubble, handledEventsToo: true);
+        // 點一下選取該列（按 Insert 會在它下面插入一筆）
+        DataRows.AddHandler(InputElement.PointerPressedEvent, OnRowPointerPressed,
+            Avalonia.Interactivity.RoutingStrategies.Bubble, handledEventsToo: true);
         ToggleSqlPanelButton.Click += (_, _) => IsSqlPanelVisible = !IsSqlPanelVisible;
         // 設定頁切換「顯示 SQL 條件區塊」時立即套用（單例，不會重複訂閱；工具頁本身也有快取只建一次）
         SettingsViewModel.Instance.ShowSqlPanelChanged += visible => IsSqlPanelVisible = visible;
@@ -195,6 +198,8 @@ public partial class DataToolView : UserControl
     private void ApplyToolbarLayout(double rightPanelWidth)
     {
         IsToolbarCompact = rightPanelWidth < CompactToolbarThreshold;
+        AppendPasteButtonText.IsVisible = !IsToolbarCompact;
+        AppendPasteButton.Classes.Set("icon-only", IsToolbarCompact);
         DuplicatesButtonText.IsVisible = !IsToolbarCompact;
         ClearButtonText.IsVisible = !IsToolbarCompact;
         DuplicatesButton.Classes.Set("icon-only", IsToolbarCompact);
@@ -213,6 +218,8 @@ public partial class DataToolView : UserControl
             SeparatorComboBox.SelectionChanged += SeparatorComboBox_SelectionChanged;
             TopBox.TextChanged += TopBoxChanged;
             PasteDataButton.Click += PasteData_Click;
+            AppendPasteButton.Click += async (_, _) => await AppendFromClipboardAsync(TopLevel.GetTopLevel(this)?.Clipboard);
+            AddRowButton.Click += (_, _) => AddNewRow(DataItems.Count);
             ClearDataButton.Click += ClearData_Click;
             DuplicatesButton.Click += DuplicatesButton_Click;
             CopyTopBoxButton.Click += CopyTopBoxButton_Click;
@@ -265,6 +272,9 @@ public partial class DataToolView : UserControl
         ToolTip.SetTip(CopyTableButton, LanguageManager.GetText("CopyTableTooltip", "複製全部資料"));
         ToolTip.SetTip(ClearDataButton, ClearButtonText.Text);
         ToolTip.SetTip(PasteDataButton, LanguageManager.GetText("PasteDataTooltip", "貼上剪貼簿資料 (Alt+P)"));
+        AppendPasteButtonText.Text = LanguageManager.GetText("AppendPasteButton", "追加貼上");
+        ToolTip.SetTip(AppendPasteButton, LanguageManager.GetText("AppendPasteTooltip", "把剪貼簿資料接在現有資料後面，重複的略過 (Alt+Shift+P)"));
+        AddRowButtonText.Text = LanguageManager.GetText("AddRowButton", "新增一筆（選取某列後按 Insert 可插在它下面）");
 
         _suppressEvents = true;
         try
@@ -496,13 +506,18 @@ public partial class DataToolView : UserControl
         if (sender is not TextBox editor || editor.DataContext is not DataItem item) return;
         if (e.Key == Key.Enter)
         {
+            // 在最後一列新增時，按 Enter 確認後直接開下一筆，方便連續輸入
+            var continueAdding = item.IsNew && DataItems.IndexOf(item) == DataItems.Count - 1 && !string.IsNullOrWhiteSpace(editor.Text);
             CommitEdit(item, editor.Text);
             e.Handled = true;
+            if (continueAdding && !item.IsNew && DataItems.Contains(item))
+                AddNewRow(DataItems.Count);
         }
         else if (e.Key == Key.Escape)
         {
             item.IsEditing = false; // 取消：不改資料
             _activeEditor = null;
+            if (item.IsNew) RemoveRowAt(DataItems.IndexOf(item)); // 取消新增：拿掉暫存列
             e.Handled = true;
         }
     }
@@ -528,7 +543,7 @@ public partial class DataToolView : UserControl
         if (index < 0) return;
 
         var value = (text ?? string.Empty).Trim();
-        if (value == item.Value) return;
+        if (value == item.Value && !item.IsNew) return;
         if (value.Length == 0)
         {
             RemoveRowAt(index);
@@ -537,11 +552,106 @@ public partial class DataToolView : UserControl
         if (Items.Where((x, i) => i != index).Contains(value))
         {
             EnqueueToast(string.Format(LanguageManager.GetText("EditDuplicateToast", "「{0}」已經在資料表裡，未修改"), value), ToastSeverity.Warning);
+            if (item.IsNew) RemoveRowAt(index); // 新增的那筆是空白暫存列，重複就不留
             return;
         }
+        item.IsNew = false;
         item.Value = value;
         if (index < Items.Count) Items[index] = value;
         UpdateTopAndBottom();
+    }
+
+    // ===== 追加資料：追加貼上、表格底部新增列、Insert 插入 =====
+
+    /// <summary>
+    /// 追加貼上（「追加貼上」按鈕與 Alt+Shift+P）：把剪貼簿內容接在現有資料後面，
+    /// 已經有的值和剪貼簿裡重複的值都略過；「重複項」視窗列出這次合併後被略過的值。
+    /// </summary>
+    public async Task AppendFromClipboardAsync(IClipboard? clipboard)
+    {
+        if (clipboard == null) return;
+        var text = await clipboard.TryGetTextAsync();
+        if (string.IsNullOrWhiteSpace(text)) return;
+        AppendValues(PasteDataHelper.ParsePastedText(text));
+    }
+
+    /// <summary>把一批值接在現有資料後面（重複的略過），回傳實際加入的筆數。</summary>
+    public int AppendValues(IReadOnlyList<string> pasted)
+    {
+        if (pasted.Count == 0) return 0;
+        var combined = Items.Concat(pasted).ToList();
+        var existing = new HashSet<string>(Items);
+        var added = 0;
+        foreach (var value in pasted)
+        {
+            if (!existing.Add(value)) continue;
+            DataItems.Add(new DataItem(DataItems.Count + 1, value));
+            Items.Add(value);
+            added++;
+        }
+        SetDuplicates(combined);
+        UpdateTopAndBottom();
+        Avalonia.Threading.Dispatcher.UIThread.Post(() => TableScroll.ScrollToEnd(), Avalonia.Threading.DispatcherPriority.Background);
+
+        var skipped = pasted.Count - added;
+        EnqueueToast(skipped > 0
+            ? string.Format(LanguageManager.GetText("AppendDoneSkippedToast", "已追加 {0} 筆，略過 {1} 筆重複"), added, skipped)
+            : string.Format(LanguageManager.GetText("AppendDoneToast", "已追加 {0} 筆"), added),
+            added == 0 ? ToastSeverity.Warning : ToastSeverity.Success);
+        return added;
+    }
+
+    private void OnRowPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        if (e.Source is Control { DataContext: DataItem item }) SelectRow(item);
+    }
+
+    /// <summary>選取一列（同時只選一列）。</summary>
+    public void SelectRow(DataItem? item)
+    {
+        foreach (var other in DataItems.Where(x => x.IsSelected && x != item))
+            other.IsSelected = false;
+        if (item != null) item.IsSelected = true;
+    }
+
+    /// <summary>目前選取的列。</summary>
+    public DataItem? SelectedItem => DataItems.FirstOrDefault(x => x.IsSelected);
+
+    /// <summary>Insert：在選取的列下面插入一筆並直接輸入；沒有選取時加在最後面。</summary>
+    public DataItem? InsertBelowSelected()
+    {
+        var selected = SelectedItem;
+        return AddNewRow(selected == null ? DataItems.Count : DataItems.IndexOf(selected) + 1);
+    }
+
+    /// <summary>在指定位置加一筆空白暫存列並進入編輯；確認時空白或重複就自動拿掉。</summary>
+    public DataItem? AddNewRow(int index)
+    {
+        // 正在編輯的那一筆先確認，避免同時有兩筆暫存列
+        foreach (var editing in DataItems.Where(x => x.IsEditing).ToList())
+            CommitEdit(editing, _activeEditor?.Text ?? editing.Value);
+
+        index = System.Math.Clamp(index, 0, DataItems.Count);
+        var item = new DataItem(index + 1, string.Empty) { IsNew = true };
+        DataItems.Insert(index, item);
+        Items.Insert(index, string.Empty);
+        for (int i = index + 1; i < DataItems.Count; i++)
+            DataItems[i].RowNumber = i + 1;
+        SelectRow(item);
+
+        // 等新的一列畫出來，再找到它的輸入框開始編輯
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (!DataItems.Contains(item)) return;
+            DataRows.ScrollIntoView(DataItems.IndexOf(item));
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                var editor = DataRows.GetVisualDescendants().OfType<TextBox>()
+                    .FirstOrDefault(t => t.Classes.Contains("cell-editor") && ReferenceEquals(t.DataContext, item));
+                if (editor != null) BeginEdit(item, editor);
+            }, Avalonia.Threading.DispatcherPriority.Background);
+        }, Avalonia.Threading.DispatcherPriority.Background);
+        return item;
     }
 
     private void RemoveRowAt(int index)
@@ -575,17 +685,20 @@ public partial class DataToolView : UserControl
     // 最近一次由程式寫進 TopBox 的內容（見 TopBoxChanged）
     private string? _programmaticTopText;
 
+    /// <summary>已確認的資料（排除正在新增、還沒輸入內容的空白暫存列）。</summary>
+    private IEnumerable<string> CommittedItems => Items.Where(x => x.Length > 0);
+
     private void UpdateTopAndBottom()
     {
         _suppressEvents = true;
-        try { TopBox.Text = _programmaticTopText = SeparatorHelper.Join(Items, _separator); }
+        try { TopBox.Text = _programmaticTopText = SeparatorHelper.Join(CommittedItems, _separator); }
         finally { _suppressEvents = false; }
         UpdateBottom();
     }
 
     private void UpdateBottom()
     {
-        BottomBox.Text = PasteDataHelper.BuildSqlCondition(Items, _sqlOptions);
+        BottomBox.Text = PasteDataHelper.BuildSqlCondition(CommittedItems, _sqlOptions);
         UpdateSqlWarning();
     }
 

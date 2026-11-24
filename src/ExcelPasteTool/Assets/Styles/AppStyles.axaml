@@ -280,6 +280,32 @@
   <Style Selector="Grid.data-row:pointerover">
     <Setter Property="Background" Value="{DynamicResource TableRowHoverBrush}"/>
   </Style>
+  <!-- 選取的列（按 Insert 會在它下面插入）：底色加深、行號改強調色 -->
+  <Style Selector="Grid.data-row.selected">
+    <Setter Property="Background" Value="{DynamicResource ControlHoverBrush}"/>
+  </Style>
+  <!-- 表格底部的「新增一筆」列 -->
+  <Style Selector="Button.add-row">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource TableGridLineBrush}"/>
+    <Setter Property="BorderThickness" Value="0,1,0,0"/>
+    <Setter Property="CornerRadius" Value="0"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="HorizontalContentAlignment" Value="Left"/>
+    <Setter Property="Padding" Value="22,7"/>
+    <Setter Property="MinHeight" Value="34"/>
+  </Style>
+  <Style Selector="Button.add-row Path">
+    <Setter Property="Fill" Value="{DynamicResource TextSecondaryBrush}"/>
+  </Style>
+  <Style Selector="Button.add-row:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource TableRowHoverBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
+  </Style>
+  <Style Selector="Button.add-row:pointerover Path">
+    <Setter Property="Fill" Value="{DynamicResource AccentTextBrush}"/>
+  </Style>
   <!-- 資料列的移除按鈕：滑鼠移到該列才顯示 -->
   <Style Selector="Button.row-remove">
     <Setter Property="Opacity" Value="0"/>
@@ -742,5 +768,10 @@
   </Style>
   <Style Selector="Button.copy-button.active Path">
     <Setter Property="Fill" Value="{DynamicResource AccentTextBrush}"/>
+  </Style>
+  <!-- 選取列的行號（要放在 TextBlock.row-number 之後才蓋得過） -->
+  <Style Selector="Grid.data-row.selected TextBlock.row-number">
+    <Setter Property="Foreground" Value="{DynamicResource AccentTextBrush}"/>
+    <Setter Property="FontWeight" Value="Bold"/>
   </Style>
 </Styles>

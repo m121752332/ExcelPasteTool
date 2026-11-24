@@ -18,7 +18,7 @@ public partial class MainWindow : Window
         // 工具：使用 DataIcon
         new SidebarItem(SidebarPage.Tools, "SidebarTools", "工具", IconManager.DataIcon),
         // 設定：使用 SettingsIcon
-        new SidebarItem(SidebarPage.Settings, "SidebarSettings", "設定", IconManager.SettingsIcon),
+        new SidebarItem(SidebarPage.Settings, "SidebarSettings", "設定", IconManager.SettingsIcon, "SidebarSettingsTooltip", "設定 (Ctrl+,)"),
         // 說明：使用 BookIcon（F1 也會開啟）；標籤不放快捷鍵，只在 ToolTip 顯示
         new SidebarItem(SidebarPage.Help, "SidebarHelp", "說明", IconManager.BookIcon, "SidebarHelpTooltip", "說明 (F1)"),
         // GitHub 專案頁：GitHub 貓圖示，在 App 內載入 GitHub 上的 README（需要網路）；名稱固定為 GitHub，不做多語系
@@ -45,6 +45,10 @@ public partial class MainWindow : Window
         InitTitleBar();
     }
 
+    /// <summary>平台的主要修飾鍵：Windows / Linux 是 Ctrl，macOS 是 Command（⌘）。</summary>
+    public static Avalonia.Input.KeyModifiers PrimaryModifier =>
+        OperatingSystem.IsMacOS() ? Avalonia.Input.KeyModifiers.Meta : Avalonia.Input.KeyModifiers.Control;
+
     private void OnWindowKeyDown(object? sender, Avalonia.Input.KeyEventArgs e)
     {
         // Alt+F4 / Alt+Q / Alt+P（見 MainWindow.TitleBar.cs）
@@ -55,6 +59,23 @@ public partial class MainWindow : Window
         {
             HandleTourKey(e);
             e.Handled = true;
+            return;
+        }
+        // Ctrl+,（macOS 是 ⌘+,）：開啟設定頁，同 VS Code / 多數桌面 App 的習慣
+        if (e.Key == Avalonia.Input.Key.OemComma && e.KeyModifiers == PrimaryModifier && !Tour.IsActive)
+        {
+            e.Handled = true;
+            OnSidebarItemClick(SidebarPage.Settings);
+            return;
+        }
+        // Insert：在工具頁資料表選取的列下面插入一筆（焦點在輸入框時不攔，避免干擾打字）
+        if (e.Key == Avalonia.Input.Key.Insert && e.KeyModifiers == Avalonia.Input.KeyModifiers.None
+            && Sidebar.SelectedPage == SidebarPage.Tools
+            && FocusManager?.GetFocusedElement() is not TextBox
+            && this.FindControl<ContentControl>("MainContent")?.Content is DataToolView insertTool)
+        {
+            e.Handled = true;
+            insertTool.InsertBelowSelected();
             return;
         }
         if (e.Key == Avalonia.Input.Key.F1 && e.KeyModifiers == Avalonia.Input.KeyModifiers.None)
