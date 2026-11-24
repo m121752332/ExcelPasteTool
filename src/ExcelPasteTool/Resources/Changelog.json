@@ -1,5 +1,30 @@
 [
   {
+    "version": "1.7.0",
+    "date": "2026-11-24",
+    "notes": {
+      "TraditionalChinese": [
+        "升級到 Avalonia 12，內部元件全面更新",
+        "側邊欄「說明」下方新增「GitHub」按鈕，在程式內直接載入 GitHub 專案頁（需要網路）；說明開啟方式設為「預設瀏覽器」或電腦沒有內嵌瀏覽器元件時，會改用預設瀏覽器開啟"
+      ],
+      "SimplifiedChinese": [
+        "升级到 Avalonia 12，内部组件全面更新",
+        "侧边栏「说明」下方新增「GitHub」按钮，在程序内直接加载 GitHub 项目页（需要网络）；说明打开方式设为「默认浏览器」或电脑没有内嵌浏览器组件时，会改用默认浏览器打开"
+      ],
+      "English": [
+        "Upgraded to Avalonia 12 with all UI components updated",
+        "Added a \"GitHub\" button below Help in the sidebar that loads the project page inside the app (internet required). If Help is set to open in the default browser, or the computer has no embedded browser component, it opens in your default browser instead"
+      ],
+      "Japanese": [
+        "Avalonia 12 にアップグレードし、内部コンポーネントをすべて更新しました",
+        "サイドバーの「ヘルプ」の下に「GitHub」ボタンを追加し、プロジェクトページをアプリ内で表示できるようにしました（インターネット接続が必要）。ヘルプの表示方法が「既定のブラウザー」の場合や、埋め込みブラウザーが使えない場合は、既定のブラウザーで開きます"
+      ],
+      "Korean": [
+        "Avalonia 12로 업그레이드하고 내부 구성 요소를 모두 갱신했습니다",
+        "사이드바의 「도움말」 아래에 「GitHub」 버튼을 추가해 프로젝트 페이지를 앱 안에서 바로 불러옵니다(인터넷 연결 필요). 도움말 열기 방식이 「기본 브라우저」이거나 내장 브라우저 구성 요소가 없으면 기본 브라우저로 엽니다"
+      ]
+    }
+  },  {
     "version": "1.6.2",
     "date": "2026-11-24",
     "notes": {

@@ -179,7 +179,7 @@ The publish settings for the four platforms (self-contained .NET 11, single file
 | --- | --- | --- |
 | Visual Studio | Right-click the project → **Publish**, pick `win-x64`, `linux-x64`, `osx-x64` or `osx-arm64` | `artifacts/<rid>/` |
 | Command line | `dotnet publish src/ExcelPasteTool -c Release -p:PublishProfile=win-x64` | `artifacts/<rid>/` |
-| Zip package | `bash packaging/publish.sh win-x64 1.6.2` (needs `jq` and `zip`; run the macOS builds on a Mac) | `DataSplitter_win_x64.zip` in the repository root |
+| Zip package | `bash packaging/publish.sh win-x64 1.7.0` (needs `jq` and `zip`; run the macOS builds on a Mac) | `DataSplitter_win_x64.zip` in the repository root |
 
 `artifacts/` is in `.gitignore`. When you hand a manual build to someone, add `packaging/config.json` to the output folder; `publish.sh` does this for you.
 
