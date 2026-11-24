@@ -1,5 +1,31 @@
 [
   {
+    "version": "1.6.2",
+    "date": "2026-11-24",
+    "notes": {
+      "TraditionalChinese": [
+        "設定頁改成三層式（設定 › 分類 › 參數）：一般設置、使用者介面偏好設置、更新設置；分類卡片會直接顯示目前的值，可用 Alt+← 回到上一層",
+        "「檢查更新」與「改版資訊」從「關於」頁移到「設定 › 更新設置」；點「關於」頁的版本號可直接跳過去"
+      ],
+      "SimplifiedChinese": [
+        "设定页改成三层式（设定 › 分类 › 参数）：一般设置、用户界面偏好设置、更新设置；分类卡片会直接显示当前的值，可用 Alt+← 回到上一层",
+        "「检查更新」与「更新记录」从「关于」页移到「设定 › 更新设置」；点「关于」页的版本号可直接跳过去"
+      ],
+      "English": [
+        "Settings now use three levels (Settings › category › options): General, Interface preferences and Updates. Category cards show the current values, and Alt+← goes back one level",
+        "Check for updates and Release Notes moved from the About page to Settings › Updates; click the version number on the About page to jump there"
+      ],
+      "Japanese": [
+        "設定を 3 階層（設定 › 分類 › 項目）に変更しました：一般設定、インターフェースの設定、更新設定。分類カードには現在の値が表示され、Alt+← で 1 つ前に戻れます",
+        "「更新を確認」と「更新履歴」を「バージョン情報」ページから「設定 › 更新設定」に移しました。「バージョン情報」のバージョン番号をクリックするとそこへ移動します"
+      ],
+      "Korean": [
+        "설정을 3단계(설정 › 분류 › 항목)로 바꿨습니다: 일반 설정, 인터페이스 환경 설정, 업데이트 설정. 분류 카드에 현재 값이 표시되며 Alt+←로 한 단계 뒤로 갈 수 있습니다",
+        "「업데이트 확인」과 「변경 내역」을 「정보」 페이지에서 「설정 › 업데이트 설정」으로 옮겼습니다. 「정보」 페이지의 버전 번호를 누르면 바로 이동합니다"
+      ]
+    }
+  },
+  {
     "version": "1.6.1",
     "date": "2026-11-23",
     "notes": {
