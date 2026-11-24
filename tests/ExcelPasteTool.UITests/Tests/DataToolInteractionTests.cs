@@ -49,4 +49,46 @@ public class DataToolInteractionTests
 
         VisualAssert.MatchesBaseline(host.Window, "tools-with-data-dark");
     }
+
+    [AvaloniaFact]
+    public void ToggleSqlPanelButton_HidesAndShowsSqlCondition()
+    {
+        using var host = MainWindowHost.Open();
+        var view = (DataToolView)host.Find<ContentControl>("MainContent").Content!;
+        var button = host.Find<Button>("ToggleSqlPanelButton");
+        Assert.True(host.Find<TextBox>("BottomBox").IsVisible);
+
+        button.RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(Button.ClickEvent));
+        MainWindowHost.Pump();
+        Assert.False(view.IsSqlPanelVisible);
+        Assert.False(host.Find<TextBox>("BottomBox").IsVisible);
+        // 隱藏後仍會照常組 SQL 條件，再打開時內容是最新的；眼睛按鈕不會改設定
+        host.TypeInto(host.Find<TextBox>("TopBox"), "A01|B01");
+        Assert.True(ConfigServices.Config.ShowSqlPanel);
+        VisualAssert.MatchesBaseline(host.Window, "tools-sql-hidden-dark");
+
+        button.RaiseEvent(new Avalonia.Interactivity.RoutedEventArgs(Button.ClickEvent));
+        MainWindowHost.Pump();
+        Assert.True(host.Find<TextBox>("BottomBox").IsVisible);
+        Assert.Equal("('A01', 'B01')", host.Find<TextBox>("BottomBox").Text);
+    }
+
+    [AvaloniaFact]
+    public void ShowSqlPanelSetting_Off_HidesSqlConditionImmediately()
+    {
+        using var host = MainWindowHost.Open();
+        var view = (DataToolView)host.Find<ContentControl>("MainContent").Content!;
+        try
+        {
+            SettingsViewModel.Instance.ShowSqlPanel = false;
+            MainWindowHost.Pump();
+            Assert.False(view.IsSqlPanelVisible);
+            Assert.False(host.Find<TextBox>("BottomBox").IsVisible);
+        }
+        finally
+        {
+            SettingsViewModel.Instance.ShowSqlPanel = true;
+        }
+        Assert.True(view.IsSqlPanelVisible);
+    }
 }

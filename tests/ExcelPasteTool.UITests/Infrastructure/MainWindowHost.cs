@@ -38,6 +38,7 @@ public sealed class MainWindowHost : IDisposable
         MainWindow.SkipStartupChecks = true;
         ConfigServices.Config.TourCompleted = true;
         ConfigServices.Config.CompactTitleBar = false;
+        ConfigServices.Config.ShowSqlPanel = true;
         SidebarPageToContentConverter.ResetCache();
 
         LanguageManager.CurrentLanguage = language;

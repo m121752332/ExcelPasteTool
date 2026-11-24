@@ -44,7 +44,35 @@ public partial class DataToolView : UserControl
         DataItems.CollectionChanged += OnDataItemsChanged;
         RightPanel.SizeChanged += (_, e) => ApplyToolbarLayout(e.NewSize.Width);
         Loaded += OnLoaded;
+        ToggleSqlPanelButton.Click += (_, _) => IsSqlPanelVisible = !IsSqlPanelVisible;
+        // 設定頁切換「顯示 SQL 條件區塊」時立即套用（單例，不會重複訂閱；工具頁本身也有快取只建一次）
+        SettingsViewModel.Instance.ShowSqlPanelChanged += visible => IsSqlPanelVisible = visible;
+        IsSqlPanelVisible = ConfigServices.Config.ShowSqlPanel;
     }
+
+    private bool _isSqlPanelVisible = true;
+
+    /// <summary>
+    /// SQL 條件區塊是否顯示。啟動時依設定頁「顯示 SQL 條件區塊」決定；
+    /// 標題旁的眼睛按鈕只切換當次畫面，不會改設定。隱藏時只留標題列，上方的分隔資料框撐滿。
+    /// </summary>
+    public bool IsSqlPanelVisible
+    {
+        get => _isSqlPanelVisible;
+        set
+        {
+            _isSqlPanelVisible = value;
+            BottomBox.IsVisible = value;
+            LeftPanelGrid.RowDefinitions[3].Height = value ? new GridLength(1, GridUnitType.Star) : GridLength.Auto;
+            ToggleSqlPanelIcon.Data = Avalonia.Media.StreamGeometry.Parse(value ? IconManager.EyeOffIcon : IconManager.EyeIcon);
+            UpdateSqlPanelTooltip();
+        }
+    }
+
+    private void UpdateSqlPanelTooltip() =>
+        ToolTip.SetTip(ToggleSqlPanelButton, _isSqlPanelVisible
+            ? LanguageManager.GetText("SqlPanelHideTooltip", "隱藏 SQL 條件")
+            : LanguageManager.GetText("SqlPanelShowTooltip", "顯示 SQL 條件"));
 
     /// <summary>右欄寬度低於這個值時，「重複項」「清空資料」改成只顯示圖示。</summary>
     public const double CompactToolbarThreshold = 420;
@@ -113,6 +141,7 @@ public partial class DataToolView : UserControl
         TopBox.PlaceholderText = LanguageManager.GetText("TopBoxWatermark", "也可以直接在這裡輸入以分隔符號串接的資料");
         ToolTip.SetTip(CopyTopBoxButton, LanguageManager.GetText("CopyTopBoxTooltip", "複製分隔資料"));
         ToolTip.SetTip(CopyBottomBoxButton, LanguageManager.GetText("CopySqlTooltip", "複製SQL條件"));
+        UpdateSqlPanelTooltip();
         ToolTip.SetTip(CopyTableButton, LanguageManager.GetText("CopyTableTooltip", "複製全部資料"));
         ToolTip.SetTip(ClearDataButton, ClearButtonText.Text);
         ToolTip.SetTip(PasteDataButton, LanguageManager.GetText("PasteDataTooltip", "貼上剪貼簿資料 (Alt+P)"));

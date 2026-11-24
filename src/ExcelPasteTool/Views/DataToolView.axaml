@@ -42,7 +42,7 @@
 				</Grid.ColumnDefinitions>
 				<!-- 左側：分隔資料 / SQL 條件 -->
 				<Border Grid.Column="0" Classes="panel" Padding="16">
-					<Grid RowDefinitions="Auto,*,Auto,*">
+					<Grid Name="LeftPanelGrid" RowDefinitions="Auto,*,Auto,*">
 						<!-- PIP 分隔資料標題 -->
 						<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
 							<StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
@@ -61,9 +61,15 @@
 								<Path Data="{x:Static local:IconManager.ContentIcon}" Width="18" Height="18" Stretch="Uniform" VerticalAlignment="Center"/>
 								<TextBlock Name="SqlConditionTitle" Classes="section-title" VerticalAlignment="Center"/>
 							</StackPanel>
-							<Button Name="CopyBottomBoxButton" Classes="copy-button" Grid.Column="1" ToolTip.Tip="複製SQL條件">
-								<Path Data="{x:Static local:IconManager.PasteIcon}" Width="15" Height="15" Stretch="Uniform"/>
-							</Button>
+							<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+								<Button Name="CopyBottomBoxButton" Classes="copy-button" ToolTip.Tip="複製SQL條件">
+									<Path Data="{x:Static local:IconManager.PasteIcon}" Width="15" Height="15" Stretch="Uniform"/>
+								</Button>
+								<!-- 顯示 / 隱藏 SQL 條件：隱藏時只留這一列標題，上方的分隔資料框撐滿（見 ApplySqlPanelVisibility） -->
+								<Button Name="ToggleSqlPanelButton" Classes="copy-button" Cursor="Hand">
+									<Path Name="ToggleSqlPanelIcon" Data="{x:Static local:IconManager.EyeOffIcon}" Width="16" Height="16" Stretch="Uniform"/>
+								</Button>
+							</StackPanel>
 						</Grid>
 						<TextBox Grid.Row="3" Name="BottomBox" Classes="input sql-output" MinHeight="90" IsReadOnly="True"/>
 					</Grid>

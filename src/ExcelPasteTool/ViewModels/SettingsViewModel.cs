@@ -35,6 +35,8 @@ public class SettingsViewModel : INotifyPropertyChanged
     public LocalizedText HelpViewerDescText { get; } = new("HelpViewerDesc", "按 F1 或點選「說明」時，要在 App 內顯示還是用預設瀏覽器開啟");
     public LocalizedText TitleBarTitleText { get; } = new("TitleBarTitle", "精簡標題列");
     public LocalizedText TitleBarDescText { get; } = new("TitleBarDesc", "隱藏系統標題列，改用精簡的標題列，只保留側邊欄開關與最小化、最大化、關閉按鈕");
+    public LocalizedText SqlPanelTitleText { get; } = new("SqlPanelSettingTitle", "顯示 SQL 條件區塊");
+    public LocalizedText SqlPanelDescText { get; } = new("SqlPanelSettingDesc", "開啟 App 時，工具頁是否顯示「SQL 條件」區塊；隱藏後可按標題旁的眼睛按鈕再打開");
     public LocalizedText ToggleOnText { get; } = new("ToggleOn", "開啟");
     public LocalizedText ToggleOffText { get; } = new("ToggleOff", "關閉");
 
@@ -112,7 +114,8 @@ public class SettingsViewModel : INotifyPropertyChanged
     public string GeneralSummary => string.Join(" · ",
         _selectedLanguage,
         _selectedHelpViewer,
-        $"{TitleBarTitleText.Text} {(CompactTitleBar ? ToggleOnText.Text : ToggleOffText.Text)}");
+        $"{TitleBarTitleText.Text} {(CompactTitleBar ? ToggleOnText.Text : ToggleOffText.Text)}",
+        $"{SqlPanelTitleText.Text} {(ShowSqlPanel ? ToggleOnText.Text : ToggleOffText.Text)}");
 
     public string PreferencesSummary => string.Join(" · ", _selectedTheme, _selectedFontFamily, FontSizeDisplay);
 
@@ -241,6 +244,25 @@ public class SettingsViewModel : INotifyPropertyChanged
             ConfigServices.Save();
             CompactTitleBarChanged?.Invoke(value);
             EnqueueToast?.Invoke(LanguageManager.GetText("TitleBarChangedToast", "標題列設定已儲存"));
+            OnPropertyChanged();
+            NotifySummaries();
+        }
+    }
+
+    /// <summary>「顯示 SQL 條件區塊」變更時通知工具頁立即顯示 / 隱藏（參數：是否顯示）。</summary>
+    public event Action<bool>? ShowSqlPanelChanged;
+
+    /// <summary>工具頁是否預設顯示 SQL 條件區塊，變更後立即套用並存檔。工具頁上的眼睛按鈕只影響當次，不會改這個設定。</summary>
+    public bool ShowSqlPanel
+    {
+        get => ConfigServices.Config.ShowSqlPanel;
+        set
+        {
+            if (ConfigServices.Config.ShowSqlPanel == value) return;
+            ConfigServices.Config.ShowSqlPanel = value;
+            ConfigServices.Save();
+            ShowSqlPanelChanged?.Invoke(value);
+            EnqueueToast?.Invoke(LanguageManager.GetText("SqlPanelChangedToast", "SQL 條件區塊設定已儲存"));
             OnPropertyChanged();
             NotifySummaries();
         }

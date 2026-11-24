@@ -16,6 +16,8 @@ public class AppConfig
     public bool TourCompleted { get; set; }
     /// <summary>是否使用精簡標題列（隱藏系統標題列，只留側邊欄開關與最小化 / 最大化 / 關閉）。</summary>
     public bool CompactTitleBar { get; set; }
+    /// <summary>工具頁的「SQL 條件」區塊是否預設顯示（預設顯示；舊版設定檔沒有此欄位時也是顯示）。</summary>
+    public bool ShowSqlPanel { get; set; } = true;
 }
 
 public static class ConfigServices

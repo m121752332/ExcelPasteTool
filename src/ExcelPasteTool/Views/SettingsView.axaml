@@ -76,6 +76,19 @@
                 </Border>
                 <Border Classes="setting-row">
                     <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.EyeIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                            <TextBlock Text="{Binding SqlPanelTitleText.Text}" Classes="setting-title"/>
+                            <TextBlock Text="{Binding SqlPanelDescText.Text}" Classes="setting-desc"/>
+                        </StackPanel>
+                        <ToggleSwitch Name="ShowSqlPanelToggle" Grid.Column="2" VerticalAlignment="Center"
+                                      IsChecked="{Binding ShowSqlPanel, Mode=TwoWay}"
+                                      OnContent="{Binding ToggleOnText.Text}"
+                                      OffContent="{Binding ToggleOffText.Text}"/>
+                    </Grid>
+                </Border>
+                <Border Classes="setting-row">
+                    <Grid ColumnDefinitions="40,*,Auto">
                         <Path Classes="setting-icon" Data="{x:Static local:IconManager.LanguageIcon}"/>
                         <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
                             <TextBlock Text="{Binding LanguageRowTitleText.Text}" Classes="setting-title"/>
