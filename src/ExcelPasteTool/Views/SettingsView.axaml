@@ -1,91 +1,203 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ExcelPasteTool"
              x:Class="ExcelPasteTool.SettingsView">
-    <Grid>
-        <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-            <StackPanel Margin="32,24" Spacing="12" Width="720" HorizontalAlignment="Left">
-                <TextBlock Text="{Binding TitleText.Text}" Classes="page-title" Margin="0,0,0,4"/>
+    <!--
+      三層式設定（仿 Win11）：
+        第 1 層：主側邊欄的「設定」
+        第 2 層：HomePanel，分類卡片（圖示、名稱、目前值摘要、›）
+        第 3 層：各分類的參數列，標題列是麵包屑「設定 › 分類」，點「設定」或按 Alt+← 回到第 2 層
+      目前停留的分類存在 SettingsViewModel.CurrentCategory。
+    -->
+    <ScrollViewer Name="SettingsScroll" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="32,24" Spacing="6" MaxWidth="1000" HorizontalAlignment="Stretch">
 
-                <!-- 語言 -->
-                <Border Classes="setting-card">
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="{Binding LanguageTitleText.Text}" Classes="section-title"/>
-                        <TextBlock Text="{Binding LanguageDescText.Text}" Classes="muted" Margin="0,0,0,6"/>
-                        <ComboBox Width="320"
-                                  ItemsSource="{Binding Languages, Mode=OneWay}"
-                                  SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"/>
-                    </StackPanel>
-                </Border>
+            <!-- 標題 / 麵包屑 -->
+            <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,0,0,14">
+                <TextBlock Name="SettingsHomeTitle" Text="{Binding TitleText.Text}" Classes="page-title"
+                           IsVisible="{Binding IsHome}"/>
+                <Button Name="BreadcrumbRootButton" Classes="breadcrumb" Content="{Binding TitleText.Text}"
+                        ToolTip.Tip="{Binding BackTooltipText.Text}" IsVisible="{Binding IsCategoryPage}"/>
+                <Path Classes="setting-chevron" Data="M0,0 L5,5 L0,10" Width="9" Height="16"
+                      IsVisible="{Binding IsCategoryPage}"/>
+                <TextBlock Name="BreadcrumbCurrentText" Text="{Binding CurrentCategoryTitle}" Classes="page-title"
+                           IsVisible="{Binding IsCategoryPage}"/>
+            </StackPanel>
 
-                <!-- 主題 -->
-                <Border Classes="setting-card">
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="{Binding ThemeTitleText.Text}" Classes="section-title"/>
-                        <TextBlock Text="{Binding ThemeDescText.Text}" Classes="muted" Margin="0,0,0,6"/>
-                        <ComboBox Width="320"
-                                  ItemsSource="{Binding Themes, Mode=OneWay}"
-                                  SelectedItem="{Binding SelectedTheme, Mode=TwoWay}"/>
-                    </StackPanel>
-                </Border>
-
-                <!-- 字型 -->
-                <Border Classes="setting-card">
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="{Binding FontTitleText.Text}" Classes="section-title"/>
-                        <TextBlock Text="{Binding FontDescText.Text}" Classes="muted" Margin="0,0,0,6"/>
-                        <ComboBox Width="320" MaxDropDownHeight="360"
-                                  ItemsSource="{Binding FontFamilies, Mode=OneWay}"
-                                  SelectedItem="{Binding SelectedFontFamily, Mode=TwoWay}"/>
-                    </StackPanel>
-                </Border>
-
-                <!-- 字體大小 -->
-                <Border Classes="setting-card">
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="{Binding FontSizeTitleText.Text}" Classes="section-title"/>
-                        <TextBlock Text="{Binding FontSizeDescText.Text}" Classes="muted" Margin="0,0,0,6"/>
-                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" Margin="0,0,0,4">
-                            <Button Grid.Column="0" Name="DecreaseFontButton" Classes="ghost" Content="A−" Width="44" HorizontalContentAlignment="Center"/>
-                            <Slider Grid.Column="1" Margin="12,0" VerticalAlignment="Center"
-                                    Minimum="{Binding MinFontSize}" Maximum="{Binding MaxFontSize}"
-                                    TickFrequency="1" IsSnapToTickEnabled="True" SmallChange="1" LargeChange="2"
-                                    Value="{Binding FontSize, Mode=TwoWay}"/>
-                            <Button Grid.Column="2" Name="IncreaseFontButton" Classes="ghost" Content="A+" Width="44" HorizontalContentAlignment="Center"/>
-                            <TextBlock Grid.Column="3" Text="{Binding FontSizeDisplay}" Width="60" TextAlignment="Right"
-                                       VerticalAlignment="Center" FontWeight="SemiBold"/>
-                        </Grid>
-                        <Border Classes="font-preview">
-                            <TextBlock Text="{Binding FontPreviewText.Text}" TextWrapping="Wrap"/>
-                        </Border>
-                        <Button Name="ResetFontButton" Classes="ghost" Content="{Binding FontResetText.Text}" Margin="0,6,0,0"/>
-                    </StackPanel>
-                </Border>
-
-                <!-- 說明開啟方式 -->
-                <Border Classes="setting-card">
-                    <StackPanel Spacing="6">
-                        <TextBlock Text="{Binding HelpViewerTitleText.Text}" Classes="section-title"/>
-                        <TextBlock Text="{Binding HelpViewerDescText.Text}" Classes="muted" Margin="0,0,0,6" TextWrapping="Wrap"/>
-                        <ComboBox Width="320"
-                                  ItemsSource="{Binding HelpViewers, Mode=OneWay}"
-                                  SelectedItem="{Binding SelectedHelpViewer, Mode=TwoWay}"/>
-                    </StackPanel>
-                </Border>
-
-                <!-- 精簡標題列 -->
-                <Border Classes="setting-card">
-                    <Grid ColumnDefinitions="*,Auto">
-                        <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,16,0">
-                            <TextBlock Text="{Binding TitleBarTitleText.Text}" Classes="section-title"/>
-                            <TextBlock Text="{Binding TitleBarDescText.Text}" Classes="muted" TextWrapping="Wrap"/>
+            <!-- ===== 第 2 層：分類卡片 ===== -->
+            <StackPanel Name="HomePanel" Spacing="6" IsVisible="{Binding IsHome}">
+                <Button Name="GeneralCategoryButton" Classes="setting-nav">
+                    <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.CogOutlineIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding GeneralCategoryText.Text}" Classes="setting-title"/>
+                            <TextBlock Name="GeneralSummaryText" Text="{Binding GeneralSummary}" Classes="setting-desc"/>
                         </StackPanel>
-                        <ToggleSwitch Grid.Column="1" VerticalAlignment="Center"
+                        <Path Grid.Column="2" Classes="setting-chevron" Data="M0,0 L5,5 L0,10" Margin="12,0,4,0"/>
+                    </Grid>
+                </Button>
+                <Button Name="PreferencesCategoryButton" Classes="setting-nav">
+                    <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.ThemeIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding PreferencesCategoryText.Text}" Classes="setting-title"/>
+                            <TextBlock Name="PreferencesSummaryText" Text="{Binding PreferencesSummary}" Classes="setting-desc"/>
+                        </StackPanel>
+                        <Path Grid.Column="2" Classes="setting-chevron" Data="M0,0 L5,5 L0,10" Margin="12,0,4,0"/>
+                    </Grid>
+                </Button>
+                <Button Name="UpdateCategoryButton" Classes="setting-nav">
+                    <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.UpdateIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding UpdateCategoryText.Text}" Classes="setting-title"/>
+                            <TextBlock Name="UpdateSummaryText" Text="{Binding UpdateSummary}" Classes="setting-desc"/>
+                        </StackPanel>
+                        <Path Grid.Column="2" Classes="setting-chevron" Data="M0,0 L5,5 L0,10" Margin="12,0,4,0"/>
+                    </Grid>
+                </Button>
+            </StackPanel>
+
+            <!-- ===== 第 3 層：一般設置 ===== -->
+            <StackPanel Name="GeneralPanel" Spacing="6" IsVisible="{Binding IsGeneral}">
+                <Border Classes="setting-row">
+                    <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.WindowIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                            <TextBlock Text="{Binding TitleBarTitleText.Text}" Classes="setting-title"/>
+                            <TextBlock Text="{Binding TitleBarDescText.Text}" Classes="setting-desc"/>
+                        </StackPanel>
+                        <ToggleSwitch Name="CompactTitleBarToggle" Grid.Column="2" VerticalAlignment="Center"
                                       IsChecked="{Binding CompactTitleBar, Mode=TwoWay}"
                                       OnContent="{Binding ToggleOnText.Text}"
                                       OffContent="{Binding ToggleOffText.Text}"/>
                     </Grid>
                 </Border>
+                <Border Classes="setting-row">
+                    <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.LanguageIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                            <TextBlock Text="{Binding LanguageRowTitleText.Text}" Classes="setting-title"/>
+                            <TextBlock Text="{Binding LanguageDescText.Text}" Classes="setting-desc"/>
+                        </StackPanel>
+                        <ComboBox Name="LanguageComboBox" Grid.Column="2" Width="240"
+                                  ItemsSource="{Binding Languages, Mode=OneWay}"
+                                  SelectedItem="{Binding SelectedLanguage, Mode=TwoWay}"/>
+                    </Grid>
+                </Border>
+                <Border Classes="setting-row">
+                    <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.BookIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                            <TextBlock Text="{Binding HelpViewerTitleText.Text}" Classes="setting-title"/>
+                            <TextBlock Text="{Binding HelpViewerDescText.Text}" Classes="setting-desc"/>
+                        </StackPanel>
+                        <ComboBox Name="HelpViewerComboBox" Grid.Column="2" Width="240"
+                                  ItemsSource="{Binding HelpViewers, Mode=OneWay}"
+                                  SelectedItem="{Binding SelectedHelpViewer, Mode=TwoWay}"/>
+                    </Grid>
+                </Border>
             </StackPanel>
-        </ScrollViewer>
-    </Grid>
+
+            <!-- ===== 第 3 層：使用者介面偏好設置 ===== -->
+            <StackPanel Name="PreferencesPanel" Spacing="6" IsVisible="{Binding IsPreferences}">
+                <Border Classes="setting-row">
+                    <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.ThemeIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                            <TextBlock Text="{Binding ThemeRowTitleText.Text}" Classes="setting-title"/>
+                            <TextBlock Text="{Binding ThemeDescText.Text}" Classes="setting-desc"/>
+                        </StackPanel>
+                        <ComboBox Name="ThemeComboBox" Grid.Column="2" Width="240"
+                                  ItemsSource="{Binding Themes, Mode=OneWay}"
+                                  SelectedItem="{Binding SelectedTheme, Mode=TwoWay}"/>
+                    </Grid>
+                </Border>
+                <Border Classes="setting-row">
+                    <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.FontIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                            <TextBlock Text="{Binding FontTitleText.Text}" Classes="setting-title"/>
+                            <TextBlock Text="{Binding FontDescText.Text}" Classes="setting-desc"/>
+                        </StackPanel>
+                        <ComboBox Name="FontComboBox" Grid.Column="2" Width="240" MaxDropDownHeight="360"
+                                  ItemsSource="{Binding FontFamilies, Mode=OneWay}"
+                                  SelectedItem="{Binding SelectedFontFamily, Mode=TwoWay}"/>
+                    </Grid>
+                </Border>
+
+                <!-- 字體大小：可展開列，平常只顯示目前大小 -->
+                <StackPanel Spacing="0">
+                    <Button Name="FontSizeExpandButton" Classes="setting-nav"
+                            Classes.expanded="{Binding IsFontSizeExpanded}">
+                        <Grid ColumnDefinitions="40,*,Auto,Auto">
+                            <Path Classes="setting-icon" Data="{x:Static local:IconManager.FontSizeIcon}"/>
+                            <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                                <TextBlock Text="{Binding FontSizeTitleText.Text}" Classes="setting-title"/>
+                                <TextBlock Text="{Binding FontSizeDescText.Text}" Classes="setting-desc"/>
+                            </StackPanel>
+                            <TextBlock Grid.Column="2" Text="{Binding FontSizeDisplay}" FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                            <Panel Grid.Column="3" Margin="14,0,4,0" VerticalAlignment="Center">
+                                <Path Classes="setting-chevron" Data="M0,0 L5,5 L10,0" IsVisible="{Binding !IsFontSizeExpanded}"/>
+                                <Path Classes="setting-chevron" Data="M0,5 L5,0 L10,5" IsVisible="{Binding IsFontSizeExpanded}"/>
+                            </Panel>
+                        </Grid>
+                    </Button>
+                    <Border Name="FontSizeDetail" Classes="setting-row-detail" IsVisible="{Binding IsFontSizeExpanded}">
+                        <StackPanel Spacing="10">
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <Button Grid.Column="0" Name="DecreaseFontButton" Classes="ghost" Content="A−" Width="44" HorizontalContentAlignment="Center"/>
+                                <Slider Grid.Column="1" Name="FontSizeSlider" Margin="12,0" VerticalAlignment="Center"
+                                        Minimum="{Binding MinFontSize}" Maximum="{Binding MaxFontSize}"
+                                        TickFrequency="1" IsSnapToTickEnabled="True" SmallChange="1" LargeChange="2"
+                                        Value="{Binding FontSize, Mode=TwoWay}"/>
+                                <Button Grid.Column="2" Name="IncreaseFontButton" Classes="ghost" Content="A+" Width="44" HorizontalContentAlignment="Center"/>
+                            </Grid>
+                            <Border Classes="font-preview">
+                                <TextBlock Text="{Binding FontPreviewText.Text}" TextWrapping="Wrap"/>
+                            </Border>
+                            <Button Name="ResetFontButton" Classes="ghost" Content="{Binding FontResetText.Text}"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- ===== 第 3 層：更新設置（原本在「關於」頁）===== -->
+            <StackPanel Name="UpdatePanel" Spacing="6" IsVisible="{Binding IsUpdate}">
+                <Border Classes="setting-row">
+                    <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.InfoOutlineIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="{Binding CurrentVersionTitleText.Text}" Classes="setting-title"/>
+                                <TextBlock Name="CurrentVersionText" Text="{Binding CurrentVersionDisplay}"
+                                           Classes="setting-title" Foreground="{DynamicResource AccentTextBrush}"/>
+                            </StackPanel>
+                            <TextBlock Text="{Binding CurrentVersionDescText.Text}" Classes="setting-desc"/>
+                        </StackPanel>
+                        <Button Name="CheckUpdateButton" Grid.Column="2" Classes="ghost" MinWidth="120"
+                                HorizontalContentAlignment="Center" IsEnabled="{Binding CanCheckUpdate}">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Path Data="{x:Static local:IconManager.UpdateIcon}" Width="15" Height="15" Stretch="Uniform"
+                                      VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding CheckUpdateButtonText}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Border>
+                <Border Classes="setting-row">
+                    <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.HistoryIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                            <TextBlock Text="{Binding ChangelogTitleText.Text}" Classes="setting-title"/>
+                            <TextBlock Text="{Binding ChangelogDescText.Text}" Classes="setting-desc"/>
+                        </StackPanel>
+                        <Button Name="ChangelogButton" Grid.Column="2" Classes="ghost" MinWidth="120"
+                                HorizontalContentAlignment="Center" Content="{Binding ChangelogOpenText.Text}"/>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
 </UserControl>

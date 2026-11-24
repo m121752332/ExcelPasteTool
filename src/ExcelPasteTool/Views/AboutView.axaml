@@ -47,30 +47,6 @@
 							   FontSize="12" FontWeight="SemiBold" Foreground="White"/>
 				</Border>
 
-				<!-- 檢查更新 / 改版資訊：同一組操作，並排顯示；圖示用向量 Path，與側邊欄同風格 -->
-				<StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Center">
-					<Button x:Name="CheckUpdateButton"
-							Padding="14,8" CornerRadius="16"
-							Background="#33FFFFFF" Foreground="White" BorderBrush="#66FFFFFF" BorderThickness="1"
-							FontSize="13" Cursor="Hand">
-						<StackPanel Orientation="Horizontal" Spacing="6">
-							<Path Data="{x:Static local:IconManager.UpdateIcon}" Width="16" Height="16" Stretch="Uniform"
-								  Fill="White" VerticalAlignment="Center"/>
-							<TextBlock x:Name="CheckUpdateText" Text="檢查更新" VerticalAlignment="Center"/>
-						</StackPanel>
-					</Button>
-					<Button x:Name="ChangelogButton"
-							Padding="14,8" CornerRadius="16"
-							Background="#33FFFFFF" Foreground="White" BorderBrush="#66FFFFFF" BorderThickness="1"
-							FontSize="13" Cursor="Hand">
-						<StackPanel Orientation="Horizontal" Spacing="6">
-							<Path Data="{x:Static local:IconManager.HistoryIcon}" Width="16" Height="16" Stretch="Uniform"
-								  Fill="White" VerticalAlignment="Center"/>
-							<TextBlock x:Name="ChangelogText" Text="改版資訊" VerticalAlignment="Center"/>
-						</StackPanel>
-					</Button>
-				</StackPanel>
-
 			</StackPanel>
 		</Border>
 

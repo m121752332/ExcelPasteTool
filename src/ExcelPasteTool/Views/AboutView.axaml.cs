@@ -49,14 +49,6 @@ public partial class AboutView : UserControl
         if (developerHotArea != null)
             developerHotArea.PointerPressed += DeveloperHotArea_OnPointerPressed;
 
-        var checkUpdateButton = this.FindControl<Button>("CheckUpdateButton");
-        if (checkUpdateButton != null)
-            checkUpdateButton.Click += CheckUpdateButton_OnClick;
-
-        var changelogButton = this.FindControl<Button>("ChangelogButton");
-        if (changelogButton != null)
-            changelogButton.Click += ChangelogButton_OnClick;
-
         var gitHubLink = this.FindControl<HyperlinkButton>("GitHubLink");
         if (gitHubLink != null)
         {
@@ -116,19 +108,9 @@ public partial class AboutView : UserControl
             Dispatcher.UIThread.Post(UpdateLocalizedTexts);
             return;
         }
-        // 按鈕內是「向量圖示 + 文字」，只更新文字，保留圖示
-        var changelogText = this.FindControl<TextBlock>("ChangelogText");
-        if (changelogText != null)
-            changelogText.Text = LanguageManager.GetText("ChangelogTitle", "改版資訊");
         var gitHubTitle = this.FindControl<TextBlock>("GitHubTitleText");
         if (gitHubTitle != null)
             gitHubTitle.Text = LanguageManager.GetText("AboutGitHubTitle", "GitHub 專案");
-    }
-
-    private async void ChangelogButton_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        if (TopLevel.GetTopLevel(this) is not Window owner) return;
-        await new ChangelogWindow().ShowDialog(owner);
     }
 
     private void GitHubLink_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
@@ -138,27 +120,6 @@ public partial class AboutView : UserControl
             Process.Start(new ProcessStartInfo(UpdateService.RepoPageUrl) { UseShellExecute = true });
         }
         catch { }
-    }
-
-    private async void CheckUpdateButton_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        if (sender is not Button button) return;
-        if (TopLevel.GetTopLevel(this) is not Window owner) return;
-
-        // 只換按鈕文字，保留更新圖示
-        var label = this.FindControl<TextBlock>("CheckUpdateText");
-        var original = label?.Text;
-        button.IsEnabled = false;
-        if (label != null) label.Text = "檢查中…";
-        try
-        {
-            await MainWindow.CheckForUpdateManuallyAsync(owner);
-        }
-        finally
-        {
-            if (label != null) label.Text = original;
-            button.IsEnabled = true;
-        }
     }
 
     private async void DeveloperHotArea_OnPointerPressed(object? sender, Avalonia.Input.PointerPressedEventArgs e)

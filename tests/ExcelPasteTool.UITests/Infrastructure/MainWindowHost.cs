@@ -44,6 +44,11 @@ public sealed class MainWindowHost : IDisposable
         ThemeManager.CurrentTheme = theme;
         ThemeManager.ApplyTheme(theme);
         FontManager.Apply("", 14);
+
+        // 設定頁：回到第 2 層首頁、字體大小列收合；版本號固定，升版時基準圖不必重建
+        SettingsViewModel.VersionTextOverride = "1.0.0";
+        SettingsViewModel.Instance.CurrentCategory = SettingsCategory.Home;
+        SettingsViewModel.Instance.IsFontSizeExpanded = false;
         Pump();
     }
 

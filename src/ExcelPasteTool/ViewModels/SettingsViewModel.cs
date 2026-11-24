@@ -7,6 +7,15 @@ using System.Linq;
 
 namespace ExcelPasteTool;
 
+/// <summary>設定頁的分類：Home 是第 2 層的分類清單，其餘是第 3 層的參數頁。</summary>
+public enum SettingsCategory
+{
+    Home,
+    General,
+    Preferences,
+    Update
+}
+
 public class SettingsViewModel : INotifyPropertyChanged
 {
     public static SettingsViewModel Instance { get; } = new SettingsViewModel();
@@ -28,6 +37,117 @@ public class SettingsViewModel : INotifyPropertyChanged
     public LocalizedText TitleBarDescText { get; } = new("TitleBarDesc", "隱藏系統標題列，改用精簡的標題列，只保留側邊欄開關與最小化、最大化、關閉按鈕");
     public LocalizedText ToggleOnText { get; } = new("ToggleOn", "開啟");
     public LocalizedText ToggleOffText { get; } = new("ToggleOff", "關閉");
+
+    // ===== 三層式導覽（設定 › 分類 › 參數）=====
+    public LocalizedText GeneralCategoryText { get; } = new("SettingsGeneralTitle", "一般設置");
+    public LocalizedText PreferencesCategoryText { get; } = new("SettingsPreferencesTitle", "使用者介面偏好設置");
+    public LocalizedText UpdateCategoryText { get; } = new("SettingsUpdateTitle", "更新設置");
+    public LocalizedText BackTooltipText { get; } = new("SettingsBackTooltip", "回到設定 (Alt+←)");
+    public LocalizedText LanguageRowTitleText { get; } = new("SettingsLanguageTitle", "語言");
+    public LocalizedText ThemeRowTitleText { get; } = new("SettingsThemeTitle", "主題");
+    public LocalizedText CurrentVersionTitleText { get; } = new("SettingsCurrentVersionTitle", "目前版本");
+    public LocalizedText CurrentVersionDescText { get; } = new("SettingsCurrentVersionDesc", "程式啟動時會自動檢查，也可以隨時手動檢查是否有新版本");
+    public LocalizedText ChangelogTitleText { get; } = new("ChangelogTitle", "改版資訊");
+    public LocalizedText ChangelogDescText { get; } = new("SettingsChangelogDesc", "查看每個版本更新了哪些內容");
+    public LocalizedText ChangelogOpenText { get; } = new("SettingsChangelogOpen", "查看");
+
+    private SettingsCategory _currentCategory = SettingsCategory.Home;
+
+    /// <summary>目前停留的分類。存在單例裡，離開設定頁再回來會停在上次的分類（同 Win11）。</summary>
+    public SettingsCategory CurrentCategory
+    {
+        get => _currentCategory;
+        set
+        {
+            if (_currentCategory == value) return;
+            _currentCategory = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(IsHome));
+            OnPropertyChanged(nameof(IsCategoryPage));
+            OnPropertyChanged(nameof(IsGeneral));
+            OnPropertyChanged(nameof(IsPreferences));
+            OnPropertyChanged(nameof(IsUpdate));
+            OnPropertyChanged(nameof(CurrentCategoryTitle));
+        }
+    }
+
+    public bool IsHome => _currentCategory == SettingsCategory.Home;
+    public bool IsCategoryPage => _currentCategory != SettingsCategory.Home;
+    public bool IsGeneral => _currentCategory == SettingsCategory.General;
+    public bool IsPreferences => _currentCategory == SettingsCategory.Preferences;
+    public bool IsUpdate => _currentCategory == SettingsCategory.Update;
+
+    /// <summary>麵包屑第二段的文字（目前分類名稱）。</summary>
+    public string CurrentCategoryTitle => _currentCategory switch
+    {
+        SettingsCategory.General => GeneralCategoryText.Text,
+        SettingsCategory.Preferences => PreferencesCategoryText.Text,
+        SettingsCategory.Update => UpdateCategoryText.Text,
+        _ => TitleText.Text
+    };
+
+    public void NavigateTo(SettingsCategory category) => CurrentCategory = category;
+    public void GoHome() => CurrentCategory = SettingsCategory.Home;
+
+    private bool _isFontSizeExpanded;
+
+    /// <summary>字體大小那一列是否展開（展開後才顯示滑桿、預覽與還原預設）。</summary>
+    public bool IsFontSizeExpanded
+    {
+        get => _isFontSizeExpanded;
+        set
+        {
+            if (_isFontSizeExpanded == value) return;
+            _isFontSizeExpanded = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>測試用：固定顯示的版本號，避免每次升版都要重建基準圖。</summary>
+    internal static string? VersionTextOverride { get; set; }
+
+    public string CurrentVersionDisplay => $"v{VersionTextOverride ?? UpdateService.CurrentVersionText}";
+
+    // 分類卡片上的摘要：不用點進去就看得到目前的值
+    public string GeneralSummary => string.Join(" · ",
+        _selectedLanguage,
+        _selectedHelpViewer,
+        $"{TitleBarTitleText.Text} {(CompactTitleBar ? ToggleOnText.Text : ToggleOffText.Text)}");
+
+    public string PreferencesSummary => string.Join(" · ", _selectedTheme, _selectedFontFamily, FontSizeDisplay);
+
+    public string UpdateSummary => string.Format(
+        LanguageManager.GetText("UpdateCurrentVersion", "目前版本 v{0}"),
+        VersionTextOverride ?? UpdateService.CurrentVersionText);
+
+    private bool _isCheckingUpdate;
+
+    /// <summary>手動檢查更新進行中（按鈕暫停使用並顯示「檢查中…」）。</summary>
+    public bool IsCheckingUpdate
+    {
+        get => _isCheckingUpdate;
+        set
+        {
+            if (_isCheckingUpdate == value) return;
+            _isCheckingUpdate = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(CanCheckUpdate));
+            OnPropertyChanged(nameof(CheckUpdateButtonText));
+        }
+    }
+
+    public bool CanCheckUpdate => !_isCheckingUpdate;
+
+    public string CheckUpdateButtonText => _isCheckingUpdate
+        ? LanguageManager.GetText("SettingsCheckingUpdate", "檢查中…")
+        : LanguageManager.GetText("SettingsCheckUpdateButton", "檢查更新");
+
+    private void NotifySummaries()
+    {
+        OnPropertyChanged(nameof(GeneralSummary));
+        OnPropertyChanged(nameof(PreferencesSummary));
+        OnPropertyChanged(nameof(UpdateSummary));
+    }
 
     public double MinFontSize => FontManager.MinFontSize;
     public double MaxFontSize => FontManager.MaxFontSize;
@@ -122,6 +242,7 @@ public class SettingsViewModel : INotifyPropertyChanged
             CompactTitleBarChanged?.Invoke(value);
             EnqueueToast?.Invoke(LanguageManager.GetText("TitleBarChangedToast", "標題列設定已儲存"));
             OnPropertyChanged();
+            NotifySummaries();
         }
     }
 
@@ -142,6 +263,7 @@ public class SettingsViewModel : INotifyPropertyChanged
                 EnqueueToast?.Invoke(LanguageManager.GetText("HelpViewerChangedToast", "說明開啟方式已儲存"));
             }
             OnPropertyChanged();
+            NotifySummaries();
         }
     }
 
@@ -167,6 +289,7 @@ public class SettingsViewModel : INotifyPropertyChanged
             FontManager.ApplyAndSave(fontKey, FontManager.CurrentFontSize);
             EnqueueToast?.Invoke(LanguageManager.GetText("FontChangedToast", "字型設定已儲存"));
             OnPropertyChanged();
+            NotifySummaries();
         }
     }
 
@@ -181,6 +304,7 @@ public class SettingsViewModel : INotifyPropertyChanged
             FontManager.ApplyAndSave(FontManager.CurrentFontFamily, size);
             OnPropertyChanged();
             OnPropertyChanged(nameof(FontSizeDisplay));
+            NotifySummaries();
         }
     }
 
@@ -197,6 +321,7 @@ public class SettingsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(SelectedFontFamily));
         OnPropertyChanged(nameof(FontSize));
         OnPropertyChanged(nameof(FontSizeDisplay));
+        NotifySummaries();
         EnqueueToast?.Invoke(LanguageManager.GetText("FontChangedToast", "字型設定已儲存"));
     }
 
@@ -340,6 +465,9 @@ public class SettingsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(LanguageTitleText));
         OnPropertyChanged(nameof(LanguageDescText));
         OnPropertyChanged(nameof(ThemeTitleText));
+        OnPropertyChanged(nameof(CurrentCategoryTitle));
+        OnPropertyChanged(nameof(CheckUpdateButtonText));
+        NotifySummaries();
         
         Debug.WriteLine("RefreshAllCollections finished");
     }

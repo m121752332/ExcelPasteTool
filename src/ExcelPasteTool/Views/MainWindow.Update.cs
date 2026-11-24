@@ -81,12 +81,12 @@ public partial class MainWindow
         }
         catch
         {
-            // 離線或 GitHub API 限流時忽略，使用者仍可在「關於」頁手動檢查
+            // 離線或 GitHub API 限流時忽略，使用者仍可在「設定 › 更新設置」手動檢查
         }
     }
 
     /// <summary>
-    /// 手動檢查更新（「關於」頁的按鈕使用），會顯示結果。
+    /// 手動檢查更新（「設定 › 更新設置」的按鈕使用），會顯示結果。
     /// </summary>
     public static async Task CheckForUpdateManuallyAsync(Window owner)
     {

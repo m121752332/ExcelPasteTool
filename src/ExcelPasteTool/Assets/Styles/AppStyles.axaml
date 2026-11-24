@@ -397,6 +397,92 @@
     <Setter Property="Padding" Value="14,10"/>
   </Style>
 
+  <!-- 設定頁三層式（Win11 風格）：第 2 層分類卡片用 Button.setting-nav，第 3 層參數列用 Border.setting-row。
+       一律左圖示、中間標題與說明、右邊控制項；顏色全部取自主題配色。 -->
+  <Style Selector="Border.setting-row">
+    <Setter Property="Background" Value="{DynamicResource PanelBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource PanelBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="Padding" Value="16,12"/>
+    <Setter Property="MinHeight" Value="68"/>
+  </Style>
+  <Style Selector="Border.setting-row-detail">
+    <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource PanelBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1,0,1,1"/>
+    <Setter Property="CornerRadius" Value="0,0,6,6"/>
+    <Setter Property="Padding" Value="56,14,16,16"/>
+  </Style>
+  <Style Selector="Button.setting-nav">
+    <Setter Property="Background" Value="{DynamicResource PanelBackgroundBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource PanelBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="6"/>
+    <Setter Property="Padding" Value="16,12"/>
+    <Setter Property="MinHeight" Value="68"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+  </Style>
+  <Style Selector="Button.setting-nav.expanded">
+    <Setter Property="CornerRadius" Value="6,6,0,0"/>
+  </Style>
+  <Style Selector="Button.setting-nav:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource TableRowHoverBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+  <Style Selector="Button.setting-nav:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+  <Style Selector="Path.setting-icon">
+    <Setter Property="Fill" Value="{DynamicResource TextPrimaryBrush}"/>
+    <Setter Property="Width" Value="20"/>
+    <Setter Property="Height" Value="20"/>
+    <Setter Property="Stretch" Value="Uniform"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="HorizontalAlignment" Value="Left"/>
+  </Style>
+  <!-- 只畫線的箭頭（›、⌄、⌃）：蓋掉全域 Path 的 Fill，避免被填成三角形 -->
+  <Style Selector="Path.setting-chevron">
+    <Setter Property="Fill" Value="Transparent"/>
+    <Setter Property="Stroke" Value="{DynamicResource TextSecondaryBrush}"/>
+    <Setter Property="StrokeThickness" Value="1.5"/>
+    <Setter Property="StrokeLineCap" Value="Round"/>
+    <Setter Property="StrokeJoin" Value="Round"/>
+    <Setter Property="Width" Value="12"/>
+    <Setter Property="Height" Value="12"/>
+    <Setter Property="Stretch" Value="Uniform"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+  </Style>
+  <Style Selector="TextBlock.setting-title">
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+  </Style>
+  <Style Selector="TextBlock.setting-desc">
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+    <Setter Property="FontSize" Value="{DynamicResource AppFontSizeSmall}"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+  </Style>
+  <!-- 麵包屑「設定 ›」：外觀是大標題，可以點回設定首頁 -->
+  <Style Selector="Button.breadcrumb">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
+    <Setter Property="FontSize" Value="{DynamicResource AppFontSizeTitle}"/>
+    <Setter Property="FontWeight" Value="Bold"/>
+    <Setter Property="Cursor" Value="Hand"/>
+  </Style>
+  <Style Selector="Button.breadcrumb:pointerover /template/ ContentPresenter, Button.breadcrumb:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+  </Style>
+
   <!-- ===== App 導覽 ===== -->
   <!-- 右上角「導覽」按鈕 -->
   <Style Selector="Button.tour-button">
