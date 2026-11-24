@@ -16,6 +16,15 @@ public enum HelpViewerMode
     Browser
 }
 
+/// <summary>說明頁顯示的內容來源。</summary>
+public enum HelpSource
+{
+    /// <summary>App 內建的使用說明（Assets/Help）。</summary>
+    Local,
+    /// <summary>GitHub 上的專案頁（README）。</summary>
+    GitHub
+}
+
 /// <summary>
 /// 使用說明：把 Assets/Help 內的內容（各語言一份）套上目前主題的配色，組成一份獨立的 HTML。
 /// App 內的 WebView 與預設瀏覽器共用同一份輸出檔。
@@ -92,6 +101,27 @@ public static class HelpService
             Debug.WriteLine($"[Help] 無法偵測 WebView：{ex.Message}");
             return false;
         }
+    }
+
+    /// <summary>
+    /// GitHub 專案頁：中文介面開 README.md，其他語言開 README.en.md。
+    /// </summary>
+    public static string GitHubHelpUrl => LanguageManager.CurrentLanguage is AppLanguage.TraditionalChinese or AppLanguage.SimplifiedChinese
+        ? $"{UpdateService.RepoPageUrl}#readme"
+        : $"{UpdateService.RepoPageUrl}/blob/master/README.en.md";
+
+    /// <summary>
+    /// 網址是否屬於本專案的 GitHub 頁面（https://github.com/&lt;owner&gt;/&lt;repo&gt; 底下）。
+    /// 這些頁面可以留在 App 內的 WebView 瀏覽，其他網站一律交給預設瀏覽器。
+    /// </summary>
+    public static bool IsGitHubHelpUri(Uri uri)
+    {
+        if (!uri.IsAbsoluteUri || uri.Scheme != Uri.UriSchemeHttps) return false;
+        if (!uri.Host.Equals("github.com", StringComparison.OrdinalIgnoreCase)) return false;
+        var prefix = $"/{UpdateService.RepoOwner}/{UpdateService.RepoName}";
+        var path = uri.AbsolutePath;
+        return path.Equals(prefix, StringComparison.OrdinalIgnoreCase)
+            || path.StartsWith(prefix + "/", StringComparison.OrdinalIgnoreCase);
     }
 
     /// <summary>WebView2 的使用者資料夾：放在使用者的本機資料夾，不要寫在執行檔旁邊。</summary>

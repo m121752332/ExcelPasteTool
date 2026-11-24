@@ -21,6 +21,8 @@ public partial class MainWindow : Window
         new SidebarItem(SidebarPage.Settings, "SidebarSettings", "設定", IconManager.SettingsIcon),
         // 說明：使用 BookIcon（F1 也會開啟）；標籤不放快捷鍵，只在 ToolTip 顯示
         new SidebarItem(SidebarPage.Help, "SidebarHelp", "說明", IconManager.BookIcon, "SidebarHelpTooltip", "說明 (F1)"),
+        // GitHub 專案頁：GitHub 貓圖示，在 App 內載入 GitHub 上的 README（需要網路）；名稱固定為 GitHub，不做多語系
+        new SidebarItem(SidebarPage.GitHub, "SidebarGitHub", "GitHub", IconManager.GitHubIcon),
         // 關於：使用 HelpIcon（已內建）
         new SidebarItem(SidebarPage.About, "SidebarAbout", "關於", IconManager.GetIcon("help")),
     };
@@ -66,6 +68,8 @@ public partial class MainWindow : Window
     {
         // 說明設定為「預設瀏覽器」時不切換頁面，直接開瀏覽器；開啟失敗才退回內建說明頁
         if (page == SidebarPage.Help && HelpService.ViewerMode == HelpViewerMode.Browser && HelpService.OpenInBrowser())
+            return;
+        if (page == SidebarPage.GitHub && HelpService.ViewerMode == HelpViewerMode.Browser && HelpService.OpenExternal(HelpService.GitHubHelpUrl))
             return;
 
         Sidebar.SelectedPage = page;

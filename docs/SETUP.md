@@ -12,7 +12,7 @@
 | 產品名稱 | DataSplitter Pro |
 | 執行檔名稱（AssemblyName） | `DataSplitter`（Windows 為 `DataSplitter.exe`） |
 | 類型 | 跨平台桌面應用程式（Windows / macOS / Linux） |
-| UI 框架 | [Avalonia UI](https://avaloniaui.net/) 11.3.3（Fluent 主題 + DataGrid） |
+| UI 框架 | [Avalonia UI](https://avaloniaui.net/) 12.1.6（Fluent 主題 + DataGrid；說明頁用 Avalonia.Controls.WebView） |
 | 目標框架 | .NET 11（`net11.0`，STS 標準支援版本） |
 | 架構模式 | MVVM（Views / ViewModels / Models / Services / Helpers） |
 | 版本號 | 定義於 `src/ExcelPasteTool/ExcelPasteTool.csproj`，目前為 `1.6.2` |
@@ -90,13 +90,14 @@ dotnet build -c Release
 
 | 套件 | 版本 |
 | --- | --- |
-| Avalonia | `$(AvaloniaVersion)` = 11.3.3 |
+| Avalonia | `$(AvaloniaVersion)` = 12.1.6 |
 | Avalonia.Desktop | 同上 |
-| Avalonia.Controls.DataGrid | 同上 |
 | Avalonia.Themes.Fluent | 同上 |
+| Avalonia.Controls.DataGrid | 12.1.2（Avalonia 12 起獨立發版） |
+| Avalonia.Controls.WebView | 12.1.2（說明頁與 GitHub 頁的內嵌瀏覽器，獨立發版） |
 | System.ComponentModel.Annotations | 5.0.0 |
 
-- **升級 Avalonia**：只要修改 `Directory.Packages.props` 中的 `<AvaloniaVersion>`，四個 Avalonia 套件會一起升級，避免版本不一致。
+- **升級 Avalonia**：只要修改 `Directory.Packages.props` 中的 `<AvaloniaVersion>`，Avalonia 本體家族會一起升級（DataGrid、WebView 要另外改），避免版本不一致。
 - **新增套件**：先在 `Directory.Packages.props` 加入 `<PackageVersion Include="套件名" Version="x.y.z" />`，再於 `.csproj` 加入不含版本的 `<PackageReference Include="套件名" />`。若直接用 `dotnet add package`，請確認版本有寫到 `Directory.Packages.props`，否則會出現 NU1008 / NU1010 錯誤。
 
 ---

@@ -41,7 +41,8 @@ public partial class MainWindow
     {
         _compactTitleBar = compact;
         ExtendClientAreaToDecorationsHint = compact;
-        ExtendClientAreaChromeHints = compact ? ExtendClientAreaChromeHints.NoChrome : ExtendClientAreaChromeHints.Default;
+        // Avalonia 12：用 WindowDecorations 取代已移除的 ExtendClientAreaChromeHints；BorderOnly 保留可拖曳調整大小的邊框，但不畫系統標題列按鈕
+        WindowDecorations = compact ? WindowDecorations.BorderOnly : WindowDecorations.Full;
         ExtendClientAreaTitleBarHeightHint = compact ? 0 : -1;
 
         if (this.FindControl<Grid>("CompactTitleBar") is { } bar)

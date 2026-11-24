@@ -41,8 +41,6 @@
 	<PackageReference Include="Avalonia.Controls.DataGrid" />
 	<PackageReference Include="Avalonia.Themes.Fluent" />
 	<PackageReference Include="Avalonia.Controls.WebView" />
-	<!-- 安全性修正：覆蓋 Avalonia 間接帶入的版本，版本號見 Directory.Packages.props -->
-	<PackageReference Include="Tmds.DBus.Protocol" />
   </ItemGroup>
 
   <ItemGroup>

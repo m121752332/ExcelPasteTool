@@ -13,7 +13,7 @@ Copy a column of part numbers, order numbers or codes from Excel, click **Paste 
 | Data table | One numbered row per value | Check the count, remove unwanted items |
 
 - The repository is `ExcelPasteTool`, the product is **DataSplitter Pro**, and the executable is `DataSplitter`.
-- Runs on Windows, macOS and Linux. Built with [.NET 11](https://dotnet.microsoft.com/) and [Avalonia UI](https://avaloniaui.net/) 11.
+- Runs on Windows, macOS and Linux. Built with [.NET 11](https://dotnet.microsoft.com/) and [Avalonia UI](https://avaloniaui.net/) 12.
 - The download bundles the .NET runtime, so **you do not need to install .NET**.
 
 ## Contents

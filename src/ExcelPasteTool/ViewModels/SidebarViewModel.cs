@@ -8,6 +8,7 @@ public enum SidebarPage
     Tools,
     Settings,
     Help,
+    GitHub,
     About
 }
 

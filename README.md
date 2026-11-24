@@ -13,7 +13,7 @@
 | 資料表 | 逐筆列出並編號 | 檢查筆數、移除不要的項目 |
 
 - 專案名稱是 `ExcelPasteTool`，產品名稱是 **DataSplitter Pro**，執行檔叫 `DataSplitter`。
-- 支援 Windows、macOS、Linux，以 [.NET 11](https://dotnet.microsoft.com/) 和 [Avalonia UI](https://avaloniaui.net/) 11 開發。
+- 支援 Windows、macOS、Linux，以 [.NET 11](https://dotnet.microsoft.com/) 和 [Avalonia UI](https://avaloniaui.net/) 12 開發。
 - 下載的 zip 已內含 .NET 執行環境，**使用者不需要安裝 .NET**。
 
 ## 目錄

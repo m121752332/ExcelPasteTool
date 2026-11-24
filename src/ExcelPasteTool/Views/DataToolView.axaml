@@ -1,7 +1,8 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ExcelPasteTool"
-             x:Class="ExcelPasteTool.DataToolView">
+             x:Class="ExcelPasteTool.DataToolView"
+             x:DataType="local:DataToolView">
 	<Grid>
 		<!-- 版面：上方工具列（Auto）＋ 下方內容（填滿剩餘高度），不再包外層 ScrollViewer，
 		     讓左右面板與表格可以正確撐滿視窗，貼上大量資料時只有表格本身捲動 -->
@@ -142,7 +143,7 @@
 											</ItemsPanelTemplate>
 										</ItemsControl.ItemsPanel>
 										<ItemsControl.ItemTemplate>
-											<DataTemplate>
+											<DataTemplate x:DataType="local:DataItem">
 												<Grid Classes="data-row" Classes.even="{Binding IsEven}" ColumnDefinitions="64,*" MinHeight="30">
 													<Border Grid.Column="0" Classes="grid-cell" BorderThickness="0,0,1,1">
 														<TextBlock Text="{Binding RowNumber}" Classes="row-number" HorizontalAlignment="Center" VerticalAlignment="Center"/>

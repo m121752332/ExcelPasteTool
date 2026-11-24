@@ -135,7 +135,7 @@
   <Style Selector="TextBox.input:focus">
     <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
   </Style>
-  <Style Selector="TextBox.input /template/ TextBlock#PART_Watermark">
+  <Style Selector="TextBox.input /template/ TextBlock#PART_Placeholder">
     <Setter Property="Foreground" Value="{DynamicResource EmptyStateBrush}"/>
   </Style>
   <Style Selector="TextBox.sql-output, TextBox.sql-output:pointerover, TextBox.sql-output:focus">

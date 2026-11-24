@@ -6,6 +6,7 @@
         mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="700"
         x:Class="ExcelPasteTool.MainWindow"
         x:Name="MainWindowInstance"
+        x:DataType="local:MainWindow"
         Width="1100" Height="700"
         MinWidth="900" MinHeight="560"
         WindowStartupLocation="CenterScreen">
@@ -57,10 +58,10 @@
 				<!-- 導覽按鈕 -->
 				<ItemsControl ItemsSource="{Binding SidebarItems}">
 					<ItemsControl.ItemTemplate>
-						<DataTemplate>
+						<DataTemplate x:DataType="local:SidebarItem">
 							<Border Classes="sidebar-item" Classes.selected="{Binding IsSelected}" Margin="4,2">
 								<Button Classes="sidebar-button"
-										Command="{Binding DataContext.SidebarItemClickCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+										Command="{Binding $parent[local:MainWindow].SidebarItemClickCommand}"
 										CommandParameter="{Binding Page}"
 										Height="44"
 										ToolTip.Tip="{Binding ToolTipText}">
@@ -71,7 +72,7 @@
 											  HorizontalAlignment="Center" VerticalAlignment="Center"/>
 										<TextBlock Grid.Column="2" Text="{Binding Name}" Margin="4,0,0,0" VerticalAlignment="Center" FontWeight="SemiBold"
 												   TextTrimming="CharacterEllipsis"
-												   IsVisible="{Binding DataContext.Sidebar.IsExpanded, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource SidebarExpandVisibilityConverter}}"/>
+												   IsVisible="{Binding $parent[local:MainWindow].Sidebar.IsExpanded, Converter={StaticResource SidebarExpandVisibilityConverter}}"/>
 									</Grid>
 								</Button>
 							</Border>

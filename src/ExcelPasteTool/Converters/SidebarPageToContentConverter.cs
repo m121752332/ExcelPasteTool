@@ -12,6 +12,7 @@ public class SidebarPageToContentConverter : IValueConverter
     private static SettingsView? _settingsViewInstance;
     private static AboutView? _aboutViewInstance;
     private static HelpView? _helpViewInstance;
+    private static HelpView? _gitHubViewInstance;
 
     /// <summary>清掉快取的頁面（UI 自動測試每次開新主視窗前呼叫，避免同一個頁面被掛到兩個視窗）。</summary>
     internal static void ResetCache()
@@ -20,6 +21,7 @@ public class SidebarPageToContentConverter : IValueConverter
         _settingsViewInstance = null;
         _aboutViewInstance = null;
         _helpViewInstance = null;
+        _gitHubViewInstance = null;
     }
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
@@ -33,7 +35,9 @@ public class SidebarPageToContentConverter : IValueConverter
                 case SidebarPage.Settings:
                     return _settingsViewInstance ??= new SettingsView();
                 case SidebarPage.Help:
-                    return _helpViewInstance ??= new HelpView();
+                    return _helpViewInstance ??= new HelpView(HelpSource.Local);
+                case SidebarPage.GitHub:
+                    return _gitHubViewInstance ??= new HelpView(HelpSource.GitHub);
                 case SidebarPage.About:
                     return _aboutViewInstance ??= new AboutView();
                 default:
