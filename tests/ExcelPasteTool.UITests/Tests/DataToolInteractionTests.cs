@@ -1,3 +1,4 @@
+using Avalonia.VisualTree;
 using Avalonia.Input.Platform;
 using Avalonia.Controls;
 using ExcelPasteTool.UITests.Infrastructure;
@@ -90,5 +91,46 @@ public class DataToolInteractionTests
             SettingsViewModel.Instance.ShowSqlPanel = true;
         }
         Assert.True(view.IsSqlPanelVisible);
+    }
+
+    private static TextBox EditorFor(MainWindowHost host, DataItem item) =>
+        host.Window.GetVisualDescendants().OfType<TextBox>()
+            .First(t => t.Classes.Contains("cell-editor") && ReferenceEquals(t.DataContext, item));
+
+    [AvaloniaFact]
+    public void EditCell_UpdatesSeparatedDataAndSql_DuplicateIsRejected_EmptyRemovesRow()
+    {
+        using var host = MainWindowHost.Open();
+        var view = (DataToolView)host.Find<ContentControl>("MainContent").Content!;
+        host.TypeInto(host.Find<TextBox>("TopBox"), "A01|B01|C01");
+
+        // 修改第 2 筆
+        var item = view.DataItems[1];
+        var editor = EditorFor(host, item);
+        view.BeginEdit(item, editor);
+        MainWindowHost.Pump();
+        Assert.True(editor.IsVisible);
+        Assert.Equal("B01", editor.Text);
+        view.CommitEdit(item, " B02 ");
+        MainWindowHost.Pump();
+        Assert.False(item.IsEditing);
+        Assert.Equal("A01|B02|C01", host.Find<TextBox>("TopBox").Text);
+        Assert.Equal("('A01', 'B02', 'C01')", host.Find<TextBox>("BottomBox").Text);
+        Assert.Same(item, view.DataItems[1]); // 修改後不會整個重建資料表
+
+        // 改成和別筆重複：不修改
+        view.BeginEdit(item, editor);
+        view.CommitEdit(item, "A01");
+        MainWindowHost.Pump();
+        Assert.Equal("B02", item.Value);
+        Assert.Equal("A01|B02|C01", host.Find<TextBox>("TopBox").Text);
+
+        // 清空：刪除這筆，行號重排
+        view.BeginEdit(item, editor);
+        view.CommitEdit(item, "");
+        MainWindowHost.Pump();
+        Assert.Equal(new[] { "A01", "C01" }, view.DataItems.Select(x => x.Value));
+        Assert.Equal(2, view.DataItems[1].RowNumber);
+        Assert.Equal("('A01', 'C01')", host.Find<TextBox>("BottomBox").Text);
     }
 }

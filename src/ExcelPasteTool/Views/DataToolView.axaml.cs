@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.Input;
 using Avalonia.Input.Platform;
 using Avalonia.Interactivity;
 using Avalonia.VisualTree;
@@ -44,6 +45,9 @@ public partial class DataToolView : UserControl
         DataItems.CollectionChanged += OnDataItemsChanged;
         RightPanel.SizeChanged += (_, e) => ApplyToolbarLayout(e.NewSize.Width);
         Loaded += OnLoaded;
+        // SelectableTextBlock 會自己處理雙擊（選字），所以連已處理的事件也要接
+        DataRows.AddHandler(InputElement.DoubleTappedEvent, OnRowDoubleTapped,
+            Avalonia.Interactivity.RoutingStrategies.Bubble, handledEventsToo: true);
         ToggleSqlPanelButton.Click += (_, _) => IsSqlPanelVisible = !IsSqlPanelVisible;
         // 設定頁切換「顯示 SQL 條件區塊」時立即套用（單例，不會重複訂閱；工具頁本身也有快取只建一次）
         SettingsViewModel.Instance.ShowSqlPanelChanged += visible => IsSqlPanelVisible = visible;
@@ -100,17 +104,23 @@ public partial class DataToolView : UserControl
         }
         finally { _suppressEvents = false; }
 
-        SqlOptionsButton.Click += (_, _) => SetSqlOptionsOpen(!SqlOptionsPanel.IsVisible);
+        // 選單開著時按鈕維持高亮
+        if (SqlOptionsButton.Flyout is { } flyout)
+        {
+            flyout.Opened += (_, _) => SqlOptionsButton.Classes.Set("active", true);
+            flyout.Closed += (_, _) => SqlOptionsButton.Classes.Set("active", false);
+        }
         SqlColumnBox.TextChanged += (_, _) => OnSqlOptionsChanged();
         SqlItemsPerLineBox.ValueChanged += (_, _) => OnSqlOptionsChanged();
         SqlUnquoteNumbersBox.IsCheckedChanged += (_, _) => OnSqlOptionsChanged();
     }
 
-    private void SetSqlOptionsOpen(bool open)
-    {
-        SqlOptionsPanel.IsVisible = open && _isSqlPanelVisible;
-        SqlOptionsButton.Classes.Set("active", SqlOptionsPanel.IsVisible);
-    }
+    /// <summary>SQL 格式選項的浮出選單是否開著。</summary>
+    public bool IsSqlOptionsOpen => SqlOptionsButton.Flyout?.IsOpen == true;
+
+    public void ShowSqlOptions() => SqlOptionsButton.Flyout?.ShowAt(SqlOptionsButton);
+
+    public void HideSqlOptions() => SqlOptionsButton.Flyout?.Hide();
 
     private void OnSqlOptionsChanged()
     {
@@ -160,9 +170,10 @@ public partial class DataToolView : UserControl
             LeftPanelSplitter.IsVisible = value;
             var sqlRow = LeftPanelGrid.RowDefinitions[3];
             sqlRow.Height = value ? _sqlRowHeight : GridLength.Auto;
-            sqlRow.MinHeight = value ? 140 : 0;
+            sqlRow.MinHeight = value ? 150 : 0;
             LeftPanelGrid.RowDefinitions[2].Height = new GridLength(value ? 14 : 8);
-            SetSqlOptionsOpen(value && SqlOptionsPanel.IsVisible);
+            if (!value) HideSqlOptions();
+            SqlOptionsButton.IsVisible = value;
             if (!value) SqlWarningText.IsVisible = false;
             else UpdateSqlWarning();
             ToggleSqlPanelIcon.Data = Avalonia.Media.StreamGeometry.Parse(value ? IconManager.EyeOffIcon : IconManager.EyeIcon);
@@ -433,9 +444,109 @@ public partial class DataToolView : UserControl
     private void RemoveRow_Click(object? sender, RoutedEventArgs e)
     {
         if ((sender as Control)?.DataContext is not DataItem item) return;
+        RemoveRowAt(DataItems.IndexOf(item));
+    }
+
+    // ===== 資料表直接編輯 =====
+
+    private void OnRowDoubleTapped(object? sender, TappedEventArgs e)
+    {
+        if (e.Source is not Control source || source.DataContext is not DataItem item) return;
+        if (source is TextBox || source.FindAncestorOfType<Button>() != null || source is Button) return;
+        var row = source.FindAncestorOfType<Grid>(includeSelf: true);
+        while (row != null && !row.Classes.Contains("data-row"))
+            row = row.FindAncestorOfType<Grid>();
+        var editor = row?.GetVisualDescendants().OfType<TextBox>().FirstOrDefault(t => t.Classes.Contains("cell-editor"));
+        if (editor != null) BeginEdit(item, editor);
+    }
+
+    // 提示「雙擊可修改」，和移除按鈕一樣在滑入時才設定
+    private void RowValue_PointerEntered(object? sender, PointerEventArgs e)
+    {
+        if (sender is Control control)
+            ToolTip.SetTip(control, LanguageManager.GetText("EditCellTooltip", "雙擊可修改這筆資料"));
+    }
+
+    /// <summary>開始編輯一筆資料（同時間只編輯一筆）。</summary>
+    public void BeginEdit(DataItem item, TextBox editor)
+    {
+        foreach (var other in DataItems.Where(x => x.IsEditing && x != item))
+            other.IsEditing = false;
+        _activeEditor = editor;
+        _activeEditorFocused = false;
+        editor.Text = item.Value;
+        item.IsEditing = true;
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            // 還在編輯同一筆才把焦點放進去（期間可能已經確認或取消）
+            if (!item.IsEditing || !ReferenceEquals(editor.DataContext, item)) return;
+            editor.Focus();
+            editor.SelectAll();
+            _activeEditorFocused = editor.IsFocused;
+        });
+    }
+
+    // 目前正在編輯的輸入框；只有它真的拿到過焦點之後，「離開輸入框」才算確認，
+    // 避免隱藏中的輸入框因焦點移動觸發 LostFocus，把剛開始的編輯提早結束
+    private TextBox? _activeEditor;
+    private bool _activeEditorFocused;
+
+    private void CellEditor_KeyDown(object? sender, KeyEventArgs e)
+    {
+        if (sender is not TextBox editor || editor.DataContext is not DataItem item) return;
+        if (e.Key == Key.Enter)
+        {
+            CommitEdit(item, editor.Text);
+            e.Handled = true;
+        }
+        else if (e.Key == Key.Escape)
+        {
+            item.IsEditing = false; // 取消：不改資料
+            _activeEditor = null;
+            e.Handled = true;
+        }
+    }
+
+    private void CellEditor_LostFocus(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not TextBox editor || !ReferenceEquals(editor, _activeEditor) || !_activeEditorFocused) return;
+        if (editor.DataContext is DataItem item)
+            CommitEdit(item, editor.Text);
+    }
+
+    /// <summary>
+    /// 確認編輯：去掉前後空白；清空等於刪除這筆；和其他筆重複時不修改並提示（資料表維持不重複）。
+    /// 修改後同步左邊的分隔資料與 SQL 條件。
+    /// </summary>
+    public void CommitEdit(DataItem item, string? text)
+    {
+        if (!item.IsEditing) return;
+        item.IsEditing = false;
+        _activeEditor = null;
+        _activeEditorFocused = false;
         var index = DataItems.IndexOf(item);
         if (index < 0) return;
 
+        var value = (text ?? string.Empty).Trim();
+        if (value == item.Value) return;
+        if (value.Length == 0)
+        {
+            RemoveRowAt(index);
+            return;
+        }
+        if (Items.Where((x, i) => i != index).Contains(value))
+        {
+            EnqueueToast(string.Format(LanguageManager.GetText("EditDuplicateToast", "「{0}」已經在資料表裡，未修改"), value), ToastSeverity.Warning);
+            return;
+        }
+        item.Value = value;
+        if (index < Items.Count) Items[index] = value;
+        UpdateTopAndBottom();
+    }
+
+    private void RemoveRowAt(int index)
+    {
+        if (index < 0 || index >= DataItems.Count) return;
         DataItems.RemoveAt(index);
         if (index < Items.Count) Items.RemoveAt(index);
         for (int i = index; i < DataItems.Count; i++)
@@ -454,14 +565,20 @@ public partial class DataToolView : UserControl
     {
         if (_suppressEvents) return;
         var text = TopBox.Text ?? string.Empty;
+        // Avalonia 12 的 TextChanged 是事後才發出（不在設定 Text 的當下），_suppressEvents 擋不住；
+        // 程式自己寫進去的內容（例如刪除、編輯一筆後重新串接）不必再拆一次，否則資料表會整個重建、捲動位置跑掉
+        if (text == _programmaticTopText) return;
         SetItems(SeparatorHelper.Split(text, _separator).Select(x => x.Trim()).Where(x => x.Length > 0));
         UpdateBottom();
     }
 
+    // 最近一次由程式寫進 TopBox 的內容（見 TopBoxChanged）
+    private string? _programmaticTopText;
+
     private void UpdateTopAndBottom()
     {
         _suppressEvents = true;
-        try { TopBox.Text = SeparatorHelper.Join(Items, _separator); }
+        try { TopBox.Text = _programmaticTopText = SeparatorHelper.Join(Items, _separator); }
         finally { _suppressEvents = false; }
         UpdateBottom();
     }

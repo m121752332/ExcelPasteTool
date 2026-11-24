@@ -123,6 +123,18 @@
                                   SelectedItem="{Binding SelectedToastPosition, Mode=TwoWay}"/>
                     </Grid>
                 </Border>
+                <Border Classes="setting-row">
+                    <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.ListIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                            <TextBlock Text="{Binding ToastMaxVisibleTitleText.Text}" Classes="setting-title"/>
+                            <TextBlock Text="{Binding ToastMaxVisibleDescText.Text}" Classes="setting-desc"/>
+                        </StackPanel>
+                        <ComboBox Name="ToastMaxVisibleComboBox" Grid.Column="2" Width="240"
+                                  ItemsSource="{Binding ToastMaxVisibleOptions, Mode=OneWay}"
+                                  SelectedItem="{Binding ToastMaxVisible, Mode=TwoWay}"/>
+                    </Grid>
+                </Border>
             </StackPanel>
 
             <!-- ===== 第 3 層：使用者介面偏好設置 ===== -->

@@ -49,7 +49,7 @@
 							<RowDefinition Height="Auto"/>
 							<RowDefinition Height="*" MinHeight="90"/>
 							<RowDefinition Height="14"/>
-							<RowDefinition Height="*" MinHeight="140"/>
+							<RowDefinition Height="*" MinHeight="150"/>
 						</Grid.RowDefinitions>
 						<!-- PIP 分隔資料標題 -->
 						<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
@@ -66,7 +66,7 @@
 						<GridSplitter Grid.Row="2" Name="LeftPanelSplitter" ResizeDirection="Rows"
 									  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,3"/>
 
-						<Grid Grid.Row="3" Name="SqlSection" RowDefinitions="Auto,Auto,Auto,*">
+						<Grid Grid.Row="3" Name="SqlSection" RowDefinitions="Auto,Auto,*">
 							<!-- SQL 條件標題 -->
 							<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
 								<StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
@@ -74,9 +74,28 @@
 									<TextBlock Name="SqlConditionTitle" Classes="section-title" VerticalAlignment="Center"/>
 								</StackPanel>
 								<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
-									<!-- 格式選項：欄位名稱、數值不加引號、每行筆數 -->
+									<!-- 格式選項（欄位名稱、每行筆數、數值不加引號）：浮出式選單，不佔左側版面，
+									     視窗再矮也不會把輸出框擠出去；設定存在設定檔，下次開啟沿用 -->
 									<Button Name="SqlOptionsButton" Classes="copy-button" Cursor="Hand">
 										<Path Data="{x:Static local:IconManager.TuneIcon}" Width="15" Height="15" Stretch="Uniform"/>
+										<Button.Flyout>
+											<Flyout Placement="BottomEdgeAlignedRight" FlyoutPresenterClasses="sql-options-flyout">
+											<Border Name="SqlOptionsPanel" Classes="sql-options" Width="340">
+												<StackPanel Spacing="10">
+													<Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+														<TextBlock Grid.Row="0" Name="SqlColumnLabel" Classes="field-label"/>
+														<TextBox Grid.Row="0" Grid.Column="1" Name="SqlColumnBox" Classes="input" MinHeight="32" Padding="8,4"
+																 AcceptsReturn="False" TextWrapping="NoWrap" VerticalContentAlignment="Center"/>
+														<TextBlock Grid.Row="1" Name="SqlItemsPerLineLabel" Classes="field-label"/>
+														<NumericUpDown Grid.Row="1" Grid.Column="1" Name="SqlItemsPerLineBox" Minimum="0" Maximum="100" Increment="1"
+																	   FormatString="0" ParsingNumberStyle="Integer" HorizontalAlignment="Stretch"/>
+														<CheckBox Grid.Row="2" Grid.Column="1" Name="SqlUnquoteNumbersBox"/>
+													</Grid>
+													<TextBlock Name="SqlOptionsHint" Classes="muted" TextWrapping="Wrap"/>
+												</StackPanel>
+											</Border>
+											</Flyout>
+										</Button.Flyout>
 									</Button>
 									<Button Name="CopyBottomBoxButton" Classes="copy-button" ToolTip.Tip="複製SQL條件">
 										<Path Data="{x:Static local:IconManager.PasteIcon}" Width="15" Height="15" Stretch="Uniform"/>
@@ -88,31 +107,10 @@
 								</StackPanel>
 							</Grid>
 
-							<!-- 格式選項（設定存在設定檔，下次開啟沿用） -->
-							<Border Grid.Row="1" Name="SqlOptionsPanel" Classes="sql-options" Margin="0,0,0,8" IsVisible="False">
-								<StackPanel Spacing="6">
-									<WrapPanel Orientation="Horizontal" ItemSpacing="16" LineSpacing="8">
-										<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-											<TextBlock Name="SqlColumnLabel" Classes="field-label"/>
-											<TextBox Name="SqlColumnBox" Classes="input" Width="130" MinHeight="30" Padding="8,4"
-													 AcceptsReturn="False" TextWrapping="NoWrap" VerticalContentAlignment="Center"
-													 VerticalAlignment="Center"/>
-										</StackPanel>
-										<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-											<TextBlock Name="SqlItemsPerLineLabel" Classes="field-label"/>
-											<NumericUpDown Name="SqlItemsPerLineBox" Width="110" Minimum="0" Maximum="100" Increment="1"
-														   FormatString="0" ParsingNumberStyle="Integer" VerticalAlignment="Center"/>
-										</StackPanel>
-										<CheckBox Name="SqlUnquoteNumbersBox" VerticalAlignment="Center"/>
-									</WrapPanel>
-									<TextBlock Name="SqlOptionsHint" Classes="muted" TextWrapping="Wrap"/>
-								</StackPanel>
-							</Border>
-
 							<!-- 提醒：超過 1000 筆已拆組、沒填欄位名稱、資料不全是數字 -->
-							<TextBlock Grid.Row="2" Name="SqlWarningText" Classes="sql-warning" Margin="0,0,0,6" IsVisible="False"/>
+							<TextBlock Grid.Row="1" Name="SqlWarningText" Classes="sql-warning" Margin="0,0,0,6" IsVisible="False"/>
 
-							<TextBox Grid.Row="3" Name="BottomBox" Classes="input sql-output" MinHeight="90" IsReadOnly="True"/>
+							<TextBox Grid.Row="2" Name="BottomBox" Classes="input sql-output" MinHeight="60" IsReadOnly="True"/>
 						</Grid>
 					</Grid>
 				</Border>
@@ -198,9 +196,15 @@
 													</Border>
 													<Border Grid.Column="1" Classes="grid-cell" BorderThickness="0,0,0,1">
 														<Grid ColumnDefinitions="*,Auto">
+															<!-- 雙擊進入編輯（見 DataToolView 的 OnRowDoubleTapped），編輯時換成輸入框 -->
 															<SelectableTextBlock Grid.Column="0" Text="{Binding Value}" Classes="row-data" Margin="10,5" VerticalAlignment="Center"
 																				 Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap"
-																				 SelectionBrush="{DynamicResource SelectionBrush}"/>
+																				 SelectionBrush="{DynamicResource SelectionBrush}"
+																				 IsVisible="{Binding !IsEditing}"
+																				 PointerEntered="RowValue_PointerEntered"/>
+															<TextBox Grid.Column="0" Classes="cell-editor" Margin="4,2" VerticalAlignment="Center"
+																	 IsVisible="{Binding IsEditing}"
+																	 KeyDown="CellEditor_KeyDown" LostFocus="CellEditor_LostFocus"/>
 															<!-- 移除此筆：平常透明，滑鼠移到該列才顯示（用透明度而非 IsVisible，避免列寬跳動） -->
 															<Button Grid.Column="1" Classes="row-remove" Margin="0,0,8,0" VerticalAlignment="Center"
 																	Focusable="False" Cursor="Hand"

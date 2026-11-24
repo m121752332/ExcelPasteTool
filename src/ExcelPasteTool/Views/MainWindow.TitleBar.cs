@@ -31,6 +31,8 @@ public partial class MainWindow
             ExcelPasteTool.Helpers.ToastQueueHelper.ApplyPosition(toastHost, ExcelPasteTool.Helpers.ToastQueueHelper.CurrentPosition);
             SettingsViewModel.Instance.ToastPositionChanged += position =>
                 ExcelPasteTool.Helpers.ToastQueueHelper.ApplyPosition(toastHost, position);
+            SettingsViewModel.Instance.ToastMaxVisibleChanged += _ =>
+                ExcelPasteTool.Helpers.ToastQueueHelper.TrimToLimit(toastHost);
         }
         SettingsViewModel.Instance.CompactTitleBarChanged += compact =>
             Avalonia.Threading.Dispatcher.UIThread.Post(() => ApplyTitleBarMode(compact));

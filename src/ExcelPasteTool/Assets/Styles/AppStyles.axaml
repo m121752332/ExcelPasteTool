@@ -311,6 +311,26 @@
     <Setter Property="Foreground" Value="{DynamicResource TextSecondaryBrush}"/>
     <Setter Property="FontSize" Value="{DynamicResource AppFontSizeSmall}"/>
   </Style>
+  <!-- 資料表直接編輯的輸入框 -->
+  <Style Selector="TextBox.cell-editor">
+    <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource InputFocusBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="Padding" Value="6,3"/>
+    <Setter Property="MinHeight" Value="26"/>
+    <Setter Property="CaretBrush" Value="{DynamicResource AccentTextBrush}"/>
+    <Setter Property="SelectionBrush" Value="{DynamicResource SelectionBrush}"/>
+    <Setter Property="SelectionForegroundBrush" Value="{DynamicResource SelectionTextBrush}"/>
+    <Setter Property="AcceptsReturn" Value="False"/>
+    <Setter Property="TextWrapping" Value="NoWrap"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+  </Style>
+  <Style Selector="TextBox.cell-editor:focus /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource InputFocusBorderBrush}"/>
+  </Style>
   <Style Selector="TextBlock.row-data">
     <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
     <Setter Property="TextWrapping" Value="Wrap"/>
@@ -626,13 +646,27 @@
     <Setter Property="BorderThickness" Value="1"/>
     <Setter Property="CornerRadius" Value="8"/>
     <Setter Property="ClipToBounds" Value="True"/>
-    <Setter Property="BoxShadow" Value="0 6 18 0 #40000000"/>
+    <Setter Property="BoxShadow" Value="0 8 24 0 #3D000000"/>
     <Setter Property="Cursor" Value="Arrow"/>
   </Style>
   <Style Selector="Border.toast TextBlock.toast-text">
     <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
-    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="FontWeight" Value="Normal"/>
     <Setter Property="TextWrapping" Value="Wrap"/>
+  </Style>
+  <!-- 依種類淡淡染色的底層 -->
+  <Style Selector="Border.toast Border.toast-tint">
+    <Setter Property="Background" Value="{DynamicResource AccentTextBrush}"/>
+    <Setter Property="Opacity" Value="0.08"/>
+  </Style>
+  <Style Selector="Border.toast.success Border.toast-tint">
+    <Setter Property="Background" Value="{DynamicResource SuccessBrush}"/>
+  </Style>
+  <Style Selector="Border.toast.warning Border.toast-tint">
+    <Setter Property="Background" Value="{DynamicResource WarningBrush}"/>
+  </Style>
+  <Style Selector="Border.toast.error Border.toast-tint">
+    <Setter Property="Background" Value="{DynamicResource DangerBrush}"/>
   </Style>
   <Style Selector="Border.toast Border.toast-strip">
     <Setter Property="Background" Value="{DynamicResource AccentTextBrush}"/>
@@ -662,10 +696,11 @@
     <Setter Property="Background" Value="Transparent"/>
     <Setter Property="BorderThickness" Value="0"/>
     <Setter Property="CornerRadius" Value="4"/>
-    <Setter Property="Width" Value="24"/>
-    <Setter Property="Height" Value="24"/>
+    <Setter Property="Width" Value="28"/>
+    <Setter Property="Height" Value="28"/>
     <Setter Property="Padding" Value="0"/>
     <Setter Property="Cursor" Value="Hand"/>
+    <Setter Property="Opacity" Value="0.7"/>
     <Setter Property="HorizontalContentAlignment" Value="Center"/>
     <Setter Property="VerticalContentAlignment" Value="Center"/>
   </Style>
@@ -675,14 +710,27 @@
   <Style Selector="Button.toast-close:pointerover /template/ ContentPresenter">
     <Setter Property="Background" Value="{DynamicResource ControlHoverBrush}"/>
   </Style>
+  <Style Selector="Button.toast-close:pointerover">
+    <Setter Property="Opacity" Value="1"/>
+  </Style>
 
   <!-- ===== SQL 格式選項 ===== -->
+  <!-- 浮出式選單的外框交給內層 Border.sql-options 畫，FlyoutPresenter 本身透明、不留內距 -->
+  <Style Selector="FlyoutPresenter.sql-options-flyout">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="MaxWidth" Value="400"/>
+  </Style>
   <Style Selector="Border.sql-options">
-    <Setter Property="Background" Value="{DynamicResource ControlBackgroundBrush}"/>
-    <Setter Property="BorderBrush" Value="{DynamicResource ControlBorderBrush}"/>
+    <Setter Property="Background" Value="{DynamicResource ToastBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource ToastBorderBrush}"/>
     <Setter Property="BorderThickness" Value="1"/>
-    <Setter Property="CornerRadius" Value="6"/>
-    <Setter Property="Padding" Value="10,8"/>
+    <Setter Property="CornerRadius" Value="8"/>
+    <Setter Property="Padding" Value="14,12"/>
+    <Setter Property="Margin" Value="0,4,0,0"/>
+    <Setter Property="BoxShadow" Value="0 6 18 0 #40000000"/>
   </Style>
   <Style Selector="TextBlock.sql-warning">
     <Setter Property="Foreground" Value="{DynamicResource WarningBrush}"/>

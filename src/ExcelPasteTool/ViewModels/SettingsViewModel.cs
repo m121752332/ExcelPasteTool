@@ -39,6 +39,8 @@ public class SettingsViewModel : INotifyPropertyChanged
     public LocalizedText SqlPanelDescText { get; } = new("SqlPanelSettingDesc", "開啟 App 時，工具頁是否顯示「SQL 條件」區塊；隱藏後可按標題旁的眼睛按鈕再打開");
     public LocalizedText ToastPositionTitleText { get; } = new("ToastPositionTitle", "通知位置");
     public LocalizedText ToastPositionDescText { get; } = new("ToastPositionDesc", "複製、儲存設定等應用程式內通知要從畫面的哪個角落出現");
+    public LocalizedText ToastMaxVisibleTitleText { get; } = new("ToastMaxVisibleTitle", "同時顯示的通知數");
+    public LocalizedText ToastMaxVisibleDescText { get; } = new("ToastMaxVisibleDesc", "通知會疊在一起顯示，超過這個數量時最舊的先關閉（1 ~ 5 則）");
     public LocalizedText ToggleOnText { get; } = new("ToggleOn", "開啟");
     public LocalizedText ToggleOffText { get; } = new("ToggleOff", "關閉");
 
@@ -117,6 +119,7 @@ public class SettingsViewModel : INotifyPropertyChanged
         _selectedLanguage,
         _selectedHelpViewer,
         _selectedToastPosition,
+        string.Format(LanguageManager.GetText("ToastMaxVisibleSummary", "通知 {0} 則"), ToastMaxVisible),
         $"{TitleBarTitleText.Text} {(CompactTitleBar ? ToggleOnText.Text : ToggleOffText.Text)}",
         $"{SqlPanelTitleText.Text} {(ShowSqlPanel ? ToggleOnText.Text : ToggleOffText.Text)}");
 
@@ -163,6 +166,29 @@ public class SettingsViewModel : INotifyPropertyChanged
     public ObservableCollection<string> FontFamilies { get; } = new();
     public ObservableCollection<string> HelpViewers { get; } = new();
     public ObservableCollection<string> ToastPositions { get; } = new();
+
+    /// <summary>「同時顯示的通知數」下拉選項：1 ~ 5。</summary>
+    public IReadOnlyList<int> ToastMaxVisibleOptions { get; } =
+        Enumerable.Range(ToastQueueHelper.MinVisibleLimit, ToastQueueHelper.MaxVisibleLimit - ToastQueueHelper.MinVisibleLimit + 1).ToList();
+
+    public event Action<int>? ToastMaxVisibleChanged;
+
+    /// <summary>同時最多顯示幾則通知，變更後立即存檔，畫面上多出來的舊通知會先關閉。</summary>
+    public int ToastMaxVisible
+    {
+        get => ToastQueueHelper.MaxVisible;
+        set
+        {
+            value = Math.Clamp(value, ToastQueueHelper.MinVisibleLimit, ToastQueueHelper.MaxVisibleLimit);
+            if (ConfigServices.Config.ToastMaxVisible == value) return;
+            ConfigServices.Config.ToastMaxVisible = value;
+            ConfigServices.Save();
+            ToastMaxVisibleChanged?.Invoke(value);
+            EnqueueToast?.Invoke(LanguageManager.GetText("ToastMaxVisibleChangedToast", "通知數量設定已儲存"));
+            OnPropertyChanged();
+            NotifySummaries();
+        }
+    }
 
     public Action<string>? EnqueueToast { get; set; }
 

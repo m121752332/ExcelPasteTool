@@ -36,6 +36,22 @@ public class DataItem : INotifyPropertyChanged
 
     public bool IsEven => RowNumber % 2 == 0;
 
+    private bool _isEditing;
+
+    /// <summary>是否正在資料表裡直接編輯這一筆（雙擊進入，Enter / 離開確認，Esc 取消）。</summary>
+    public bool IsEditing
+    {
+        get => _isEditing;
+        set
+        {
+            if (_isEditing != value)
+            {
+                _isEditing = value;
+                OnPropertyChanged(nameof(IsEditing));
+            }
+        }
+    }
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     protected virtual void OnPropertyChanged(string propertyName)

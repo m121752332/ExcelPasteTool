@@ -1,4 +1,5 @@
 using Avalonia.Controls;
+using Avalonia.VisualTree;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using ExcelPasteTool.Helpers;
@@ -15,25 +16,56 @@ public class SqlOptionsAndToastTests
         MainWindowHost.Pump();
     }
 
+    private static T InView<T>(DataToolView view, string name) where T : Control =>
+        view.FindControl<T>(name) ?? throw new Xunit.Sdk.XunitException($"找不到 {name}");
+
     [AvaloniaFact]
     public void SqlOptions_ColumnAndUnquote_ChangeSqlCondition_AndAreSaved()
     {
         using var host = MainWindowHost.Open();
-        Assert.False(host.Find<Border>("SqlOptionsPanel").IsVisible);
-        Click(host.Find<Button>("SqlOptionsButton"));
-        Assert.True(host.Find<Border>("SqlOptionsPanel").IsVisible);
+        var view = (DataToolView)host.Find<ContentControl>("MainContent").Content!;
+        Assert.False(view.IsSqlOptionsOpen);
+        view.ShowSqlOptions();
+        MainWindowHost.Pump();
+        Assert.True(view.IsSqlOptionsOpen);
 
         host.TypeInto(host.Find<TextBox>("TopBox"), "1|2|3");
-        host.Find<TextBox>("SqlColumnBox").Text = "ima01";
-        host.Find<CheckBox>("SqlUnquoteNumbersBox").IsChecked = true;
+        InView<TextBox>(view, "SqlColumnBox").Text = "ima01";
+        InView<CheckBox>(view, "SqlUnquoteNumbersBox").IsChecked = true;
         MainWindowHost.Pump();
 
         Assert.Equal("ima01 IN (1, 2, 3)", host.Find<TextBox>("BottomBox").Text);
         Assert.Equal("ima01", ConfigServices.Config.SqlColumnName);
         Assert.True(ConfigServices.Config.SqlUnquoteNumbers);
         Assert.False(host.Find<TextBlock>("SqlWarningText").IsVisible);
+        view.HideSqlOptions();
+    }
 
-        VisualAssert.MatchesBaseline(host.Window, "tools-sql-options-dark");
+    /// <summary>
+    /// 使用者回報：視窗矮時展開格式選項會把 SQL 輸出框擠出左側面板。格式選項改成浮出選單後，
+    /// 在最小視窗、選單開著、又有拆組提醒時，輸出框仍要完整留在左側面板內、保有最小高度。
+    /// </summary>
+    [AvaloniaFact]
+    public void SqlOptionsOpen_OnSmallestWindow_DoesNotPushSqlBoxOutOfPanel()
+    {
+        using var host = MainWindowHost.Open(width: 900, height: 560);
+        var view = (DataToolView)host.Find<ContentControl>("MainContent").Content!;
+        host.TypeInto(host.Find<TextBox>("TopBox"), string.Join("|", Enumerable.Range(1, 1001).Select(i => $"P{i}")));
+        view.ShowSqlOptions();
+        MainWindowHost.Pump();
+        Assert.True(view.IsSqlOptionsOpen);
+        Assert.True(host.Find<TextBlock>("SqlWarningText").IsVisible);
+
+        var bottomBox = host.Find<TextBox>("BottomBox");
+        var leftGrid = host.Find<Grid>("LeftPanelGrid");
+        var sqlSection = host.Find<Grid>("SqlSection");
+        // Bounds 是相對父層：BottomBox 在 SqlSection 裡、SqlSection 在 LeftPanelGrid 裡
+        Assert.True(bottomBox.Bounds.Height >= 60, $"SQL 輸出框高度只有 {bottomBox.Bounds.Height}");
+        Assert.True(bottomBox.Bounds.Bottom <= sqlSection.Bounds.Height + 0.5, $"SQL 輸出框底部 {bottomBox.Bounds.Bottom} 超出 SQL 區塊 {sqlSection.Bounds.Height}");
+        Assert.True(sqlSection.Bounds.Bottom <= leftGrid.Bounds.Height + 0.5, $"SQL 區塊底部 {sqlSection.Bounds.Bottom} 超出左側面板 {leftGrid.Bounds.Height}");
+
+        VisualAssert.MatchesBaseline(host.Window, "tools-sql-options-small-dark");
+        view.HideSqlOptions();
     }
 
     [AvaloniaFact]
@@ -50,7 +82,8 @@ public class SqlOptionsAndToastTests
         Assert.Contains("1001", warning.Text);
 
         // 填了欄位名稱後，col 換成欄位名稱，提醒只剩拆組那一行
-        host.Find<TextBox>("SqlColumnBox").Text = "ima01";
+        var view = (DataToolView)host.Find<ContentControl>("MainContent").Content!;
+        InView<TextBox>(view, "SqlColumnBox").Text = "ima01";
         MainWindowHost.Pump();
         Assert.StartsWith("(ima01 IN ('P1', ", host.Find<TextBox>("BottomBox").Text);
         Assert.DoesNotContain("\n", warning.Text);
@@ -112,5 +145,33 @@ public class SqlOptionsAndToastTests
         var open = toastHost.Children.OfType<ToastCard>().Where(c => !c.IsClosing).Select(c => c.Message);
         Assert.Equal(new[] { "B", "C", "D" }, open);
         toastHost.Children.Clear();
+    }
+
+    [AvaloniaTheory]
+    [InlineData(1)]
+    [InlineData(5)]
+    public void ToastMaxVisibleSetting_LimitsStackedToasts(int limit)
+    {
+        using var host = MainWindowHost.Open();
+        var vm = SettingsViewModel.Instance;
+        var toastHost = host.Find<StackPanel>(ToastQueueHelper.HostName);
+        try
+        {
+            vm.ToastMaxVisible = limit;
+            toastHost.Children.Clear();
+            var helper = new ToastQueueHelper(host.Window);
+            foreach (var m in new[] { "1", "2", "3", "4", "5", "6" })
+                helper.EnqueueToast(m);
+            MainWindowHost.Pump();
+
+            var open = toastHost.Children.OfType<ToastCard>().Where(c => !c.IsClosing).Select(c => c.Message).ToList();
+            Assert.Equal(limit, open.Count);
+            Assert.Equal("6", open[^1]); // 右下：最新的在最下面
+        }
+        finally
+        {
+            vm.ToastMaxVisible = ToastQueueHelper.DefaultMaxVisible;
+            toastHost.Children.Clear();
+        }
     }
 }

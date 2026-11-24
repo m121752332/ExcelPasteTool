@@ -20,6 +20,8 @@ public class AppConfig
     public bool ShowSqlPanel { get; set; } = true;
     /// <summary>應用程式內通知出現的位置：BottomRight（預設）、TopRight、BottomLeft。</summary>
     public string ToastPosition { get; set; } = "BottomRight";
+    /// <summary>同時最多顯示幾則通知（1 ~ 5，預設 3），超過時最舊的先關閉。</summary>
+    public int ToastMaxVisible { get; set; } = 3;
     /// <summary>SQL 條件的欄位名稱（例如 ima01）；空白時只輸出括號內容。</summary>
     public string SqlColumnName { get; set; } = "";
     /// <summary>SQL 條件：全部都是數字時不加單引號。</summary>
