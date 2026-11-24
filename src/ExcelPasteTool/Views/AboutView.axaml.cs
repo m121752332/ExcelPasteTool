@@ -49,6 +49,10 @@ public partial class AboutView : UserControl
         if (developerHotArea != null)
             developerHotArea.PointerPressed += DeveloperHotArea_OnPointerPressed;
 
+        var versionButton = this.FindControl<Button>("VersionButton");
+        if (versionButton != null)
+            versionButton.Click += VersionButton_OnClick;
+
         var gitHubLink = this.FindControl<HyperlinkButton>("GitHubLink");
         if (gitHubLink != null)
         {
@@ -108,9 +112,20 @@ public partial class AboutView : UserControl
             Dispatcher.UIThread.Post(UpdateLocalizedTexts);
             return;
         }
+        var versionButton = this.FindControl<Button>("VersionButton");
+        if (versionButton != null)
+            ToolTip.SetTip(versionButton, LanguageManager.GetText("AboutVersionTooltip", "檢查更新與改版資訊"));
         var gitHubTitle = this.FindControl<TextBlock>("GitHubTitleText");
         if (gitHubTitle != null)
             gitHubTitle.Text = LanguageManager.GetText("AboutGitHubTitle", "GitHub 專案");
+    }
+
+    /// <summary>版本按鈕：切到「設定」頁並直接打開「更新設置」分類。</summary>
+    private void VersionButton_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        SettingsViewModel.Instance.NavigateTo(SettingsCategory.Update);
+        if (TopLevel.GetTopLevel(this) is MainWindow window)
+            window.SidebarItemClickCommand.Execute(SidebarPage.Settings);
     }
 
     private void GitHubLink_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

@@ -168,4 +168,19 @@ public class SettingsPageTests
         Assert.DoesNotContain(about.GetVisualDescendants().OfType<Button>(),
             b => b.Name is "CheckUpdateButton" or "ChangelogButton");
     }
+
+    [AvaloniaFact]
+    public void AboutVersionButton_JumpsToUpdateSettings()
+    {
+        using var host = MainWindowHost.Open();
+        host.Window.SidebarItemClickCommand.Execute(SidebarPage.About);
+        MainWindowHost.Pump();
+
+        Click(host, "VersionButton");
+
+        Assert.Equal(SidebarPage.Settings, host.Window.Sidebar.SelectedPage);
+        Assert.IsType<SettingsView>(host.Find<ContentControl>("MainContent").Content);
+        Assert.True(IsShown(host, "UpdatePanel"));
+        Assert.Equal("更新設置", host.Find<TextBlock>("BreadcrumbCurrentText").Text);
+    }
 }

@@ -483,6 +483,21 @@
     <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
   </Style>
 
+  <!-- 關於頁的版本按鈕：外觀維持漸層膠囊，滑過時稍微變亮 -->
+  <Style Selector="Button.version-badge">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="Cursor" Value="Hand"/>
+  </Style>
+  <Style Selector="Button.version-badge:pointerover /template/ ContentPresenter, Button.version-badge:pressed /template/ ContentPresenter">
+    <Setter Property="Background" Value="Transparent"/>
+  </Style>
+  <Style Selector="Button.version-badge:pointerover Border.version-pill">
+    <Setter Property="Opacity" Value="0.85"/>
+    <Setter Property="BoxShadow" Value="0 2 8 0 #4D000000"/>
+  </Style>
+
   <!-- ===== App 導覽 ===== -->
   <!-- 右上角「導覽」按鈕 -->
   <Style Selector="Button.tour-button">
