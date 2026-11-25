@@ -176,8 +176,7 @@
 
                 <!-- 字體大小：可展開列，平常只顯示目前大小 -->
                 <StackPanel Spacing="0">
-                    <Button Name="FontSizeExpandButton" Classes="setting-nav"
-                            Classes.expanded="{Binding IsFontSizeExpanded}">
+                    <Button Name="FontSizeExpandButton" Classes="setting-nav">
                         <Grid ColumnDefinitions="40,*,Auto,Auto">
                             <Path Classes="setting-icon" Data="{x:Static local:IconManager.FontSizeIcon}"/>
                             <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
@@ -187,12 +186,12 @@
                             <TextBlock Grid.Column="2" Text="{Binding FontSizeDisplay}" FontWeight="SemiBold"
                                        VerticalAlignment="Center"/>
                             <Panel Grid.Column="3" Margin="14,0,4,0" VerticalAlignment="Center">
-                                <Path Classes="setting-chevron" Data="M0,0 L5,5 L10,0" IsVisible="{Binding !IsFontSizeExpanded}"/>
-                                <Path Classes="setting-chevron" Data="M0,5 L5,0 L10,5" IsVisible="{Binding IsFontSizeExpanded}"/>
+                                <!-- 展開時轉 180 度（動畫見 ExpanderAnimator） -->
+                                <Path Name="FontSizeChevron" Classes="setting-chevron" Data="M0,0 L5,5 L10,0"/>
                             </Panel>
                         </Grid>
                     </Button>
-                    <Border Name="FontSizeDetail" Classes="setting-row-detail" IsVisible="{Binding IsFontSizeExpanded}">
+                    <Border Name="FontSizeDetail" Classes="setting-row-detail" ClipToBounds="True">
                         <StackPanel Spacing="10">
                             <Grid ColumnDefinitions="Auto,*,Auto">
                                 <Button Grid.Column="0" Name="DecreaseFontButton" Classes="ghost" Content="A−" Width="44" HorizontalContentAlignment="Center"/>
@@ -215,8 +214,7 @@
             <StackPanel Name="DeveloperPanel" Spacing="6" IsVisible="{Binding IsDeveloper}">
                 <!-- 開發者選項：Win11 風格的可收合群組卡片，標題列＋縮排的子設定列（同 設定 › 個人化 › 工作列） -->
                 <StackPanel Name="DeveloperGroup" Spacing="0">
-                    <Button Name="DeveloperGroupExpandButton" Classes="setting-nav"
-                            Classes.expanded="{Binding IsDeveloperGroupExpanded}">
+                    <Button Name="DeveloperGroupExpandButton" Classes="setting-nav">
                         <Grid ColumnDefinitions="40,*,Auto,Auto">
                             <Path Classes="setting-icon" Data="{x:Static local:IconManager.CodeIcon}"/>
                             <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
@@ -226,12 +224,12 @@
                             <TextBlock Name="DeveloperGroupStatusText" Grid.Column="2" Text="{Binding DeveloperModeStatus}"
                                        Classes="setting-desc" VerticalAlignment="Center"/>
                             <Panel Grid.Column="3" Margin="14,0,4,0" VerticalAlignment="Center">
-                                <Path Classes="setting-chevron" Data="M0,0 L5,5 L10,0" IsVisible="{Binding !IsDeveloperGroupExpanded}"/>
-                                <Path Classes="setting-chevron" Data="M0,5 L5,0 L10,5" IsVisible="{Binding IsDeveloperGroupExpanded}"/>
+                                <!-- 展開時轉 180 度（動畫見 ExpanderAnimator） -->
+                                <Path Name="DeveloperGroupChevron" Classes="setting-chevron" Data="M0,0 L5,5 L10,0"/>
                             </Panel>
                         </Grid>
                     </Button>
-                    <Border Name="DeveloperGroupBody" Classes="setting-group-body" IsVisible="{Binding IsDeveloperGroupExpanded}">
+                    <Border Name="DeveloperGroupBody" Classes="setting-group-body" ClipToBounds="True">
                         <Grid RowDefinitions="Auto,Auto">
                             <!-- 開發者模式 -->
                             <Border Grid.Row="0" Classes="setting-subrow">

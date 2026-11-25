@@ -48,7 +48,7 @@ public class DeveloperModeTests
         Assert.False(host.Find<StackPanel>("GeneralPanel").IsVisible);
         Assert.Equal("開發者設置", host.Find<TextBlock>("BreadcrumbCurrentText").Text);
         // 一般設置裡不再有開發者選項
-        Assert.False(host.Find<ToggleSwitch>("DeveloperModeToggle").GetVisualAncestors().OfType<StackPanel>().Any(p => p.Name == "GeneralPanel"));
+        Assert.DoesNotContain(host.Find<ToggleSwitch>("DeveloperModeToggle").GetVisualAncestors().OfType<StackPanel>(), p => p.Name == "GeneralPanel");
 
         // 群組在自己的分類頁預設展開，可收合
         var body = host.Find<Border>("DeveloperGroupBody");

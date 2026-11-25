@@ -60,6 +60,8 @@ public sealed class MainWindowHost : IDisposable
         SettingsViewModel.Instance.CurrentCategory = SettingsCategory.Home;
         SettingsViewModel.Instance.IsFontSizeExpanded = false;
         SettingsViewModel.Instance.IsDeveloperGroupExpanded = true;
+        // 展開 / 收合動畫預設關閉，截圖與斷言直接看最終狀態；動畫本身由 ExpanderAnimationTests 另外測
+        ExcelPasteTool.Helpers.ExpanderAnimator.AnimationsEnabled = false;
         Pump();
     }
 

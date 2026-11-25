@@ -27,6 +27,26 @@ public partial class SettingsView : UserControl
 
         FontSizeExpandButton.Click += (_, _) => vm.IsFontSizeExpanded = !vm.IsFontSizeExpanded;
         DeveloperGroupExpandButton.Click += (_, _) => vm.IsDeveloperGroupExpanded = !vm.IsDeveloperGroupExpanded;
+
+        // 展開 / 收合動畫：狀態仍存在 ViewModel，畫面跟著動畫過去
+        var fontSizeAnimator = new ExpanderAnimator(FontSizeExpandButton, FontSizeDetail, FontSizeChevron, vm.IsFontSizeExpanded);
+        var developerAnimator = new ExpanderAnimator(DeveloperGroupExpandButton, DeveloperGroupBody, DeveloperGroupChevron, vm.IsDeveloperGroupExpanded);
+        void OnVmChanged(object? s, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SettingsViewModel.IsFontSizeExpanded))
+                fontSizeAnimator.SetExpanded(vm.IsFontSizeExpanded);
+            else if (e.PropertyName == nameof(SettingsViewModel.IsDeveloperGroupExpanded))
+                developerAnimator.SetExpanded(vm.IsDeveloperGroupExpanded);
+        }
+        // ViewModel 是單例，頁面卸載時要退訂，避免舊頁面一直被留著
+        AttachedToVisualTree += (_, _) =>
+        {
+            vm.PropertyChanged -= OnVmChanged;
+            vm.PropertyChanged += OnVmChanged;
+            fontSizeAnimator.SetExpanded(vm.IsFontSizeExpanded);
+            developerAnimator.SetExpanded(vm.IsDeveloperGroupExpanded);
+        };
+        DetachedFromVisualTree += (_, _) => vm.PropertyChanged -= OnVmChanged;
         DecreaseFontButton.Click += (_, _) => vm.DecreaseFontSize();
         IncreaseFontButton.Click += (_, _) => vm.IncreaseFontSize();
         ResetFontButton.Click += (_, _) => vm.ResetFont();
