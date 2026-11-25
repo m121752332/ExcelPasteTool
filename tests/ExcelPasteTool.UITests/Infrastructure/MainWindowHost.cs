@@ -45,6 +45,8 @@ public sealed class MainWindowHost : IDisposable
         ConfigServices.Config.LeftPanelSplitRatio = 0;
         ConfigServices.Config.ToastPosition = "BottomRight";
         ConfigServices.Config.ToastMaxVisible = 3;
+        ConfigServices.Config.DeveloperMode = false;
+        DeveloperModeService.Current?.Close();
         SidebarPageToContentConverter.ResetCache();
 
         LanguageManager.CurrentLanguage = language;

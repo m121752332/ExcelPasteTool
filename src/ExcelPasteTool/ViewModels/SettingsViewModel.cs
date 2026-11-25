@@ -41,6 +41,8 @@ public class SettingsViewModel : INotifyPropertyChanged
     public LocalizedText ToastPositionDescText { get; } = new("ToastPositionDesc", "複製、儲存設定等應用程式內通知要從畫面的哪個角落出現");
     public LocalizedText ToastMaxVisibleTitleText { get; } = new("ToastMaxVisibleTitle", "同時顯示的通知數");
     public LocalizedText ToastMaxVisibleDescText { get; } = new("ToastMaxVisibleDesc", "通知會疊在一起顯示，超過這個數量時最舊的先關閉（1 ~ 5 則）");
+    public LocalizedText DeveloperModeTitleText { get; } = new("DeveloperModeTitle", "開發者模式");
+    public LocalizedText DeveloperModeDescText { get; } = new("DeveloperModeDesc", "開啟後在主視窗按 F12 可開啟開發者工具，檢視畫面的視覺樹與控制項屬性");
     public LocalizedText ToggleOnText { get; } = new("ToggleOn", "開啟");
     public LocalizedText ToggleOffText { get; } = new("ToggleOff", "關閉");
 
@@ -295,6 +297,21 @@ public class SettingsViewModel : INotifyPropertyChanged
             EnqueueToast?.Invoke(LanguageManager.GetText("SqlPanelChangedToast", "SQL 條件區塊設定已儲存"));
             OnPropertyChanged();
             NotifySummaries();
+        }
+    }
+
+    /// <summary>開發者模式：開啟後主視窗按 F12 開啟開發者工具，變更後立即存檔；關閉時會一併關掉已開著的開發者工具。</summary>
+    public bool DeveloperMode
+    {
+        get => ConfigServices.Config.DeveloperMode;
+        set
+        {
+            if (ConfigServices.Config.DeveloperMode == value) return;
+            ConfigServices.Config.DeveloperMode = value;
+            ConfigServices.Save();
+            DeveloperModeService.Apply(value);
+            EnqueueToast?.Invoke(LanguageManager.GetText("DeveloperModeChangedToast", "開發者模式設定已儲存"));
+            OnPropertyChanged();
         }
     }
 

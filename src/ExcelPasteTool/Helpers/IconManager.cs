@@ -76,6 +76,8 @@ public static class IconManager
     public static string FontIcon => "M9.62,12L12,5.67L14.37,12M11,3L5.5,17H7.75L8.87,14H15.12L16.25,17H18.5L13,3H11Z";
     public static string FontSizeIcon => "M2,4V7H7V19H10V7H15V4H2M21,9H12V12H15V19H18V12H21V9Z";
     public static string AccountOutlineIcon => "M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,6A2,2 0 0,0 10,8A2,2 0 0,0 12,10A2,2 0 0,0 14,8A2,2 0 0,0 12,6M12,13C14.67,13 20,14.33 20,17V20H4V17C4,14.33 9.33,13 12,13M12,14.9C9.03,14.9 5.9,16.36 5.9,17V18.1H18.1V17C18.1,16.36 14.97,14.9 12,14.9Z";
+    /// <summary>程式碼（&lt;/&gt;）：設定頁「開發者模式」。</summary>
+    public static string CodeIcon => "M14.6,16.6L19.2,12L14.6,7.4L16,6L22,12L16,18L14.6,16.6M9.4,16.6L4.8,12L9.4,7.4L8,6L2,12L8,18L9.4,16.6Z";
 
     /// <summary>
     /// 根據圖標類型返回對應的SVG路徑

@@ -82,6 +82,14 @@ public partial class MainWindow : Window
         {
             e.Handled = true;
             OnSidebarItemClick(SidebarPage.Help);
+            return;
+        }
+        // F12：開發者模式開啟時打開內建的開發者工具（視覺樹與屬性）；關閉時不攔，F12 沒有作用
+        if (e.Key == Avalonia.Input.Key.F12 && e.KeyModifiers == Avalonia.Input.KeyModifiers.None
+            && DeveloperModeService.IsEnabled)
+        {
+            e.Handled = true;
+            DeveloperModeService.Open(this);
         }
     }
 

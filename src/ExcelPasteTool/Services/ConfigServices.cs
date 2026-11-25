@@ -30,6 +30,8 @@ public class AppConfig
     public int SqlItemsPerLine { get; set; }
     /// <summary>工具頁左側「分隔資料」與「SQL 條件」的高度比例（分隔資料所佔比例，0.2 ~ 0.8；0 代表預設各半）。</summary>
     public double LeftPanelSplitRatio { get; set; }
+    /// <summary>開發者模式：開啟後按 F12 連線到 Avalonia Developer Tools（預設關閉；關閉時 F12 沒有作用）。</summary>
+    public bool DeveloperMode { get; set; }
 }
 
 public static class ConfigServices

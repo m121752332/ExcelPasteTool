@@ -135,6 +135,19 @@
                                   SelectedItem="{Binding ToastMaxVisible, Mode=TwoWay}"/>
                     </Grid>
                 </Border>
+                <Border Classes="setting-row">
+                    <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.CodeIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                            <TextBlock Text="{Binding DeveloperModeTitleText.Text}" Classes="setting-title"/>
+                            <TextBlock Text="{Binding DeveloperModeDescText.Text}" Classes="setting-desc"/>
+                        </StackPanel>
+                        <ToggleSwitch Name="DeveloperModeToggle" Grid.Column="2" VerticalAlignment="Center"
+                                      IsChecked="{Binding DeveloperMode, Mode=TwoWay}"
+                                      OnContent="{Binding ToggleOnText.Text}"
+                                      OffContent="{Binding ToggleOffText.Text}"/>
+                    </Grid>
+                </Border>
             </StackPanel>
 
             <!-- ===== 第 3 層：使用者介面偏好設置 ===== -->
