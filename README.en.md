@@ -40,7 +40,7 @@ Copy a column of part numbers, order numbers or codes from Excel, click **Paste 
 - **SQL-safe quoting**: a single quote in a value becomes two single quotes.
 - **Look and feel**: five languages (Traditional Chinese, Simplified Chinese, English, Japanese, Korean), four themes (GitHub Dark, Light, Tiffany Blue, Rainbow Wonderland), adjustable font and font size, and an optional compact title bar.
 - **Guided tour and help**: the **Tour** button on the Tools page walks through each area (Space goes to the next step); press `F1` for the illustrated help.
-- **In-app screenshots**: press `Alt+F5` (`⌥F5` on a Mac) to save the current app screen as a PNG (in Pictures/DataSplitter by default). The **Screenshots** page in the sidebar lets you preview, copy to the clipboard, delete and open the folder.
+- **In-app screenshots**: press `Alt+F5` (`⌥F5` on a Mac) to save the current app screen as a PNG (in Pictures/DataSplitter/<year-month> by default, for example `202611`). The **Screenshots** page in the sidebar groups them by month and lets you preview, copy to the clipboard, delete one screenshot or a whole month, and open the folder.
 - **Shortcuts**: `Alt+P` pastes the clipboard, `Alt+Q` toggles the sidebar, `Alt+F5` takes a screenshot, `Alt+F4` closes the app.
 - **Automatic updates**: checks GitHub for a new version at startup, downloads it inside the app, and shows the release notes of each version.
 

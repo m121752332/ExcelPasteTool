@@ -31,8 +31,18 @@ public partial class ScreenshotsView : UserControl
             if (ViewModel.SelectedItem is { } item) ScreenshotService.RevealInFolder(item.FilePath);
         };
 
+        Get<Button>("OpenMonthFolderButton").Click += (_, _) =>
+        {
+            if (ViewModel.SelectedGroup is { } group) ScreenshotService.OpenFolder(group.FolderPath);
+        };
+
         var list = Get<ListBox>("ScreenshotList");
-        list.DoubleTapped += (_, _) => OpenSelected();
+        // 雙擊：截圖用預設程式開啟；月份展開 / 收合
+        list.DoubleTapped += (_, _) =>
+        {
+            if (ViewModel.SelectedGroup is { } group) ViewModel.ToggleGroup(group);
+            else OpenSelected();
+        };
         list.KeyDown += OnListKeyDown;
 
         // 在其他頁按 Alt+F5 拍的截圖，回到這頁時要看得到；頁面顯示中拍的也立即出現在清單最上面
@@ -89,15 +99,67 @@ public partial class ScreenshotsView : UserControl
             ok ? ToastSeverity.Success : ToastSeverity.Error);
     }
 
+    /// <summary>刪除選取的整個月份（確認視窗的「刪除整個月份」按鈕、或測試直接呼叫）。</summary>
+    internal void DeleteSelectedMonth()
+    {
+        if (ViewModel.SelectedGroup is not { } group) return;
+        var title = group.Title;
+        _deleting = true;
+        try
+        {
+            var count = ViewModel.DeleteSelectedMonth();
+            _toast.EnqueueToast(string.Format(
+                LanguageManager.GetText("ScreenshotMonthDeletedToast", "已刪除「{0}」的 {1} 張截圖"), title, count));
+        }
+        catch (Exception ex)
+        {
+            _toast.EnqueueToast(string.Format(
+                LanguageManager.GetText("ScreenshotMonthDeleteFailedToast", "無法刪除整個月份：{0}"), ex.Message), ToastSeverity.Error);
+        }
+        finally
+        {
+            _deleting = false;
+        }
+    }
+
+    private void DeleteMonthConfirmButton_Click(object? sender, RoutedEventArgs e)
+    {
+        Get<Button>("DeleteMonthButton").Flyout?.Hide();
+        DeleteSelectedMonth();
+    }
+
+    /// <summary>月份列左邊的箭頭：展開 / 收合。</summary>
+    private void MonthToggle_Click(object? sender, RoutedEventArgs e)
+    {
+        if ((sender as Control)?.DataContext is ScreenshotMonthGroup group)
+            ViewModel.ToggleGroup(group);
+        e.Handled = true;
+    }
+
     private void DeleteConfirmButton_Click(object? sender, RoutedEventArgs e)
     {
         Get<Button>("DeleteScreenshotButton").Flyout?.Hide();
         DeleteSelected();
     }
 
-    // 清單上：Enter 開啟、Delete 跳出刪除確認、Ctrl+C（macOS ⌘C）複製圖片
+    // 清單上：Enter 開啟、Delete 跳出刪除確認、Ctrl+C（macOS ⌘C）複製圖片；
+    // 選到月份時：Enter / → / ← 展開或收合、Delete 跳出「刪除整個月份」確認
     private async void OnListKeyDown(object? sender, KeyEventArgs e)
     {
+        if (ViewModel.SelectedGroup is { } group && e.KeyModifiers == KeyModifiers.None)
+        {
+            if (e.Key == Key.Enter || (e.Key == Key.Right && !group.IsExpanded) || (e.Key == Key.Left && group.IsExpanded))
+            {
+                e.Handled = true;
+                ViewModel.ToggleGroup(group);
+            }
+            else if (e.Key == Key.Delete)
+            {
+                e.Handled = true;
+                Get<Button>("DeleteMonthButton").Flyout?.ShowAt(Get<Button>("DeleteMonthButton"));
+            }
+            return;
+        }
         if (ViewModel.SelectedItem == null) return;
         if (e.Key == Key.Enter && e.KeyModifiers == KeyModifiers.None)
         {

@@ -24,7 +24,7 @@ public class ScreenshotTests
             var deadline = DateTime.UtcNow.AddSeconds(10);
             while (DateTime.UtcNow < deadline)
             {
-                var files = Directory.Exists(s.ScreenshotFolder) ? Directory.GetFiles(s.ScreenshotFolder, "DataSplitter_*.png") : Array.Empty<string>();
+                var files = Directory.Exists(s.ScreenshotFolder) ? Directory.GetFiles(s.ScreenshotFolder, "DataSplitter_*.png", SearchOption.AllDirectories) : Array.Empty<string>();
                 if (files.Length == 1 && new FileInfo(files[0]).Length > 0) return files[0];
                 Thread.Sleep(100);
             }
@@ -38,6 +38,13 @@ public class ScreenshotTests
             if (image.Width < 900 || image.Height < 560)
                 throw new InvalidOperationException($"截圖尺寸 {image.Width}×{image.Height} 比視窗最小尺寸 900×560 還小");
             return image.Size;
+        });
+
+        s.Step("存在月份資料夾（yyyyMM）裡", () =>
+        {
+            var month = Path.GetFileName(Path.GetDirectoryName(file))!;
+            if (month != DateTime.Now.ToString("yyyyMM"))
+                throw new InvalidOperationException($"截圖應該存在 {DateTime.Now:yyyyMM} 資料夾，實際在 {month}");
         });
 
         s.Step("切到「截圖」頁", () => s.Invoke("Sidebar_Screenshots"));

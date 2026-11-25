@@ -6,8 +6,10 @@
     <!--
       截圖管理（類似檔案總管的「詳細資料 + 預覽窗格」）：
         上方：標題、拍攝截圖 / 開啟資料夾 / 重新整理，下面一行是資料夾位置與張數
-        左邊：截圖清單（縮圖、檔名、時間 · 大小），最新的在最上面；雙擊用預設程式開啟
-        右邊：選取那張的預覽，以及 複製 / 開啟 / 在資料夾中顯示 / 刪除（刪除前會再確認一次）
+        左邊：依月份資料夾（yyyyMM）分組的清單。月份列顯示張數與總大小，點箭頭或雙擊展開 / 收合；
+              底下是截圖（縮圖、檔名、時間、大小），最新的在最上面，雙擊用預設程式開啟
+        右邊：選截圖 → 預覽，以及 複製 / 開啟 / 在資料夾中顯示 / 刪除（刪除前會再確認一次）
+              選月份 → 張數、大小、資料夾位置，以及 開啟這個資料夾 / 刪除整個月份（會再確認一次）
       卡片外觀沿用設定頁（Border.panel、setting-title、setting-desc），顏色全部取自主題配色。
     -->
     <Grid Margin="32,24" RowDefinitions="Auto,Auto,*">
@@ -54,10 +56,28 @@
         <Grid Grid.Row="2" Name="ScreenshotsBrowser" ColumnDefinitions="360,*" ColumnSpacing="16" IsVisible="{Binding HasItems}">
             <Border Grid.Column="0" Classes="panel" Padding="6">
                 <ListBox Name="ScreenshotList" AutomationProperties.AutomationId="ScreenshotList" Classes="screenshot-list"
-                         ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate x:DataType="local:ScreenshotItem">
-                            <Grid ColumnDefinitions="96,*" ColumnSpacing="12" ToolTip.Tip="{Binding FilePath}">
+                         ItemsSource="{Binding Rows}" SelectedItem="{Binding SelectedRow, Mode=TwoWay}">
+                    <ListBox.DataTemplates>
+                        <!-- 月份資料夾列 -->
+                        <DataTemplate DataType="local:ScreenshotMonthGroup" x:DataType="local:ScreenshotMonthGroup">
+                            <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="8" ToolTip.Tip="{Binding FolderPath}">
+                                <Button Classes="month-toggle" Click="MonthToggle_Click" Width="26" Height="26" Padding="0"
+                                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                        ToolTip.Tip="{Binding $parent[local:ScreenshotsView].ViewModel.ToggleMonthTooltipText.Text}">
+                                    <Path Classes="setting-chevron month-chevron" Classes.expanded="{Binding IsExpanded}"
+                                          Data="M0,0 L5,5 L0,10" Width="10" Height="10"/>
+                                </Button>
+                                <Path Grid.Column="1" Data="{x:Static local:IconManager.FolderIcon}" Width="22" Height="22"
+                                      Stretch="Uniform" VerticalAlignment="Center"/>
+                                <StackPanel Grid.Column="2" Spacing="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding Title}" Classes="setting-title"/>
+                                    <TextBlock Text="{Binding DetailText}" Classes="setting-desc"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                        <!-- 月份底下的截圖（往右縮排） -->
+                        <DataTemplate DataType="local:ScreenshotItem" x:DataType="local:ScreenshotItem">
+                            <Grid ColumnDefinitions="96,*" ColumnSpacing="12" Margin="22,0,0,0" ToolTip.Tip="{Binding FilePath}">
                                 <Border Classes="screenshot-thumb" Width="96" Height="60">
                                     <Image Source="{Binding Thumbnail}" Stretch="Uniform"/>
                                 </Border>
@@ -69,12 +89,46 @@
                                 </StackPanel>
                             </Grid>
                         </DataTemplate>
-                    </ListBox.ItemTemplate>
+                    </ListBox.DataTemplates>
                 </ListBox>
             </Border>
 
             <Border Grid.Column="1" Classes="panel" Padding="16">
-                <Grid RowDefinitions="*,Auto,Auto" RowSpacing="12">
+                <Panel>
+                <!-- 選取月份：張數、大小、資料夾，開啟資料夾 / 刪除整個月份 -->
+                <StackPanel Name="MonthDetailPanel" Spacing="10" IsVisible="{Binding HasGroupSelection}"
+                            HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="460">
+                    <Path Data="{x:Static local:IconManager.FolderIcon}" Width="56" Height="56" Stretch="Uniform" HorizontalAlignment="Center"/>
+                    <TextBlock Name="SelectedMonthTitle" Text="{Binding SelectedGroupTitle}" Classes="section-title" HorizontalAlignment="Center"/>
+                    <TextBlock Name="SelectedMonthDetail" Text="{Binding SelectedGroupDetail}" Classes="setting-title" HorizontalAlignment="Center"/>
+                    <TextBlock Text="{Binding SelectedGroupFolderText}" Classes="setting-desc" HorizontalAlignment="Center" TextAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center" Margin="0,8,0,0">
+                        <Button Name="OpenMonthFolderButton" AutomationProperties.AutomationId="OpenMonthFolderButton" Classes="ghost">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Path Data="{x:Static local:IconManager.FolderIcon}" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding OpenMonthFolderText.Text}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Name="DeleteMonthButton" AutomationProperties.AutomationId="DeleteMonthButton" Classes="secondary">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Path Data="{x:Static local:IconManager.DeleteIcon}" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding DeleteMonthText.Text}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <Button.Flyout>
+                                <Flyout Placement="TopEdgeAlignedRight">
+                                    <StackPanel Spacing="12" MaxWidth="280">
+                                        <TextBlock Text="{Binding DeleteMonthConfirmText}" TextWrapping="Wrap"/>
+                                        <Button Name="DeleteMonthConfirmButton" AutomationProperties.AutomationId="DeleteMonthConfirmButton"
+                                                Classes="secondary" HorizontalAlignment="Right"
+                                                Content="{Binding DeleteMonthText.Text}" Click="DeleteMonthConfirmButton_Click"/>
+                                    </StackPanel>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+
+                <Grid RowDefinitions="*,Auto,Auto" RowSpacing="12" IsVisible="{Binding !HasGroupSelection}">
                     <Border Grid.Row="0" Classes="screenshot-preview">
                         <Panel>
                             <Image Name="ScreenshotPreviewImage" Source="{Binding Preview}" Stretch="Uniform"/>
@@ -125,6 +179,7 @@
                         </Button>
                     </WrapPanel>
                 </Grid>
+                </Panel>
             </Border>
         </Grid>
     </Grid>

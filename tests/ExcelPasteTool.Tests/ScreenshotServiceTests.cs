@@ -80,6 +80,91 @@ public class ScreenshotServiceTests : IDisposable
     }
 
     [Fact]
+    public void MonthFolderName_IsYearMonth()
+    {
+        Assert.Equal("202611", ScreenshotService.MonthFolderName(new DateTime(2026, 11, 25)));
+        Assert.Equal("202601", ScreenshotService.MonthFolderName(new DateTime(2026, 1, 3)));
+        Assert.Equal("2026/11", ScreenshotService.FormatMonth("202611"));
+    }
+
+    [Theory]
+    [InlineData("202611", true)]
+    [InlineData("202601", true)]
+    [InlineData("202613", false)]
+    [InlineData("202600", false)]
+    [InlineData("2026-11", false)]
+    [InlineData("backup", false)]
+    public void IsMonthFolderName_AcceptsOnlyYyyyMm(string name, bool expected)
+    {
+        Assert.Equal(expected, ScreenshotService.IsMonthFolderName(name));
+    }
+
+    private string Png(string? month, string name, DateTime time, int bytes = 10)
+    {
+        var folder = month == null ? _dir : Path.Combine(_dir, month);
+        Directory.CreateDirectory(folder);
+        var path = Path.Combine(folder, name);
+        File.WriteAllBytes(path, new byte[bytes]);
+        File.SetLastWriteTime(path, time);
+        return path;
+    }
+
+    [Fact]
+    public void ListMonths_NewestMonthFirst_UnsortedLast_SkipsOtherFolders()
+    {
+        Png("202610", "DataSplitter_20261030_080000.png", new DateTime(2026, 10, 30, 8, 0, 0));
+        Png("202611", "DataSplitter_20261124_080000.png", new DateTime(2026, 11, 24, 8, 0, 0), 1024);
+        Png("202611", "DataSplitter_20261125_080000.png", new DateTime(2026, 11, 25, 8, 0, 0), 2048);
+        Png(null, "DataSplitter_20260901_080000.png", new DateTime(2026, 9, 1, 8, 0, 0));
+        Png("backup", "old.png", new DateTime(2026, 1, 1));
+        Directory.CreateDirectory(Path.Combine(_dir, "202609")); // 空的月份資料夾不列出
+
+        var months = ScreenshotService.ListMonths(_dir);
+
+        Assert.Equal(new string?[] { "202611", "202610", null }, months.Select(m => m.Key));
+        Assert.Equal(2, months[0].Count);
+        Assert.Equal(3072, months[0].TotalBytes);
+        Assert.Equal("3.0 KB", months[0].TotalSizeText);
+        Assert.Equal("DataSplitter_20261125_080000.png", months[0].Files[0].FileName);
+        Assert.True(months[2].IsUnsorted);
+        Assert.Equal(_dir, months[2].FolderPath);
+    }
+
+    [Fact]
+    public void DeleteMonth_RemovesPngsAndEmptyFolder()
+    {
+        Png("202611", "DataSplitter_20261125_080000.png", new DateTime(2026, 11, 25, 8, 0, 0));
+        Png("202611", "DataSplitter_20261124_080000.png", new DateTime(2026, 11, 24, 8, 0, 0));
+        var month = ScreenshotService.ListMonths(_dir).Single();
+
+        Assert.Equal(2, ScreenshotService.DeleteMonth(month));
+        Assert.False(Directory.Exists(Path.Combine(_dir, "202611")));
+    }
+
+    [Fact]
+    public void DeleteMonth_KeepsFolder_WhenUserPutOtherFilesThere()
+    {
+        Png("202611", "DataSplitter_20261125_080000.png", new DateTime(2026, 11, 25, 8, 0, 0));
+        File.WriteAllText(Path.Combine(_dir, "202611", "notes.txt"), "x");
+        var month = ScreenshotService.ListMonths(_dir).Single();
+
+        Assert.Equal(1, ScreenshotService.DeleteMonth(month));
+        Assert.True(File.Exists(Path.Combine(_dir, "202611", "notes.txt")));
+    }
+
+    [Fact]
+    public void DeleteMonth_Unsorted_OnlyDeletesRootPngs()
+    {
+        var kept = Png("202611", "DataSplitter_20261125_080000.png", new DateTime(2026, 11, 25, 8, 0, 0));
+        Png(null, "DataSplitter_20260901_080000.png", new DateTime(2026, 9, 1, 8, 0, 0));
+        var unsorted = ScreenshotService.ListMonths(_dir).Single(m => m.IsUnsorted);
+
+        Assert.Equal(1, ScreenshotService.DeleteMonth(unsorted));
+        Assert.True(File.Exists(kept));
+        Assert.True(Directory.Exists(_dir));
+    }
+
+    [Fact]
     public void List_MissingFolder_ReturnsEmpty()
     {
         Assert.Empty(ScreenshotService.List(Path.Combine(_dir, "not-here")));

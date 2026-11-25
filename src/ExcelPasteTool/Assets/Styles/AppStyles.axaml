@@ -609,6 +609,21 @@
     <Setter Property="Background" Value="{DynamicResource ControlHoverBrush}"/>
     <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
   </Style>
+  <!-- 月份資料夾列的展開箭頭：收合時朝右，展開時轉 90 度朝下 -->
+  <Style Selector="Button.month-toggle">
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="CornerRadius" Value="4"/>
+  </Style>
+  <Style Selector="Button.month-toggle:pointerover /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource ControlHoverBrush}"/>
+  </Style>
+  <Style Selector="Path.month-chevron">
+    <Setter Property="RenderTransform" Value="rotate(0deg)"/>
+  </Style>
+  <Style Selector="Path.month-chevron.expanded">
+    <Setter Property="RenderTransform" Value="rotate(90deg)"/>
+  </Style>
   <Style Selector="Border.screenshot-thumb">
     <Setter Property="Background" Value="{DynamicResource InputBackgroundBrush}"/>
     <Setter Property="BorderBrush" Value="{DynamicResource PanelBorderBrush}"/>

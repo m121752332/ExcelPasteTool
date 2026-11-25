@@ -146,7 +146,7 @@ dotnet run --project src/ExcelPasteTool
 
 | `TourCompleted` | `true`、`false` | `false` | 是否已看過 App 導覽。`false`（或舊設定檔沒有此欄位）時，啟動後會自動播放一次導覽，看完或略過即寫回 `true`；改回 `false` 可讓下次啟動再播一次 |
 | `CompactTitleBar` | `true`、`false` | `false` | 是否使用精簡標題列（隱藏系統標題列，只留側邊欄開關與最小化 / 最大化 / 關閉），可在「設定」頁切換，實作在 `Views/MainWindow.TitleBar.cs` |
-| `ScreenshotFolder` | 空字串，或資料夾完整路徑 | `""` | `Alt+F5` 截圖存放的資料夾；空字串代表「圖片」資料夾底下的 `DataSplitter`。可在 設定 › 一般設置 › 截圖資料夾 變更，詳見 [截圖說明](Screenshots.md) |
+| `ScreenshotFolder` | 空字串，或資料夾完整路徑 | `""` | `Alt+F5` 截圖存放的資料夾；空字串代表「圖片」資料夾底下的 `DataSplitter`；截圖再依年月存到子資料夾（例如 `202611`）。可在 設定 › 一般設置 › 截圖資料夾 變更，詳見 [截圖說明](Screenshots.md) |
 
 快捷鍵（`Views/MainWindow.TitleBar.cs`，只在對應按鈕的 ToolTip 中提示，說明頁 `#shortcut-map` 有圖文對照）：`Alt+F4` 強制關閉、`Alt+Q` 開關側邊欄、`Alt+P` 把剪貼簿貼到「工具」頁右側資料表、`Alt+F5`（macOS `⌥F5`）拍下目前的 App 畫面（見 [截圖說明](Screenshots.md)）。
 
