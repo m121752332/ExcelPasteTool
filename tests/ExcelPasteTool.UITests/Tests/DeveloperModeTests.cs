@@ -197,6 +197,51 @@ public class DeveloperModeTests
     }
 
     [AvaloniaFact]
+    public void DevToolsFontSize_IsSeparateFromAppFont_AndAppliesImmediately()
+    {
+        Assert.Equal("Medium", new AppConfig().DevToolsFontSize);
+        Assert.Equal(8, DeveloperModeService.GetPointSize(DevToolsFontSize.Small));
+        Assert.Equal(12, DeveloperModeService.GetPointSize(DevToolsFontSize.Medium));
+        Assert.Equal(16, DeveloperModeService.GetPointSize(DevToolsFontSize.Large));
+
+        using var host = MainWindowHost.Open();
+        host.Window.SidebarItemClickCommand.Execute(SidebarPage.Settings);
+        MainWindowHost.Pump();
+        host.Find<Button>("GeneralCategoryButton").RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        MainWindowHost.Pump();
+        var combo = host.Find<ComboBox>("DevToolsFontSizeComboBox");
+
+        // 開發者模式關閉時不能調
+        Assert.False(combo.IsEnabled);
+        host.Find<ToggleSwitch>("DeveloperModeToggle").IsChecked = true;
+        MainWindowHost.Pump();
+        Assert.True(combo.IsEnabled);
+        Assert.Equal(3, combo.ItemCount);
+        Assert.Equal("中（12 pt）", combo.SelectedItem);
+
+        combo.SelectedItem = "小（8 pt）";
+        MainWindowHost.Pump();
+        Assert.Equal("Small", ConfigServices.Config.DevToolsFontSize);
+
+        var devTools = PressF12AndGetDevTools(host);
+        devTools.SelectVisual(host.Find<ComboBox>("DevToolsFontSizeComboBox"));
+        MainWindowHost.Pump();
+        Assert.Equal(8, devTools.AppliedFontSize);
+        Assert.All(devTools.GetVisualDescendants().OfType<TextBlock>().Where(t => t.IsEffectivelyVisible && t is SelectableTextBlock),
+            t => Assert.Equal(8, t.FontSize));
+        // App 本身的字體大小不受影響
+        Assert.Equal(14, FontManager.CurrentFontSize);
+        Assert.Equal(14, host.Find<ToggleSwitch>("DeveloperModeToggle").FontSize);
+
+        // 開著的時候改成「大」：立即套用
+        combo.SelectedItem = "大（16 pt）";
+        MainWindowHost.Pump();
+        Assert.Equal(16, devTools.AppliedFontSize);
+        Assert.All(devTools.GetVisualDescendants().OfType<SelectableTextBlock>().Where(t => t.IsEffectivelyVisible),
+            t => Assert.Equal(16, t.FontSize));
+    }
+
+    [AvaloniaFact]
     public void DevToolsWindow_Screenshot()
     {
         using var host = MainWindowHost.Open();

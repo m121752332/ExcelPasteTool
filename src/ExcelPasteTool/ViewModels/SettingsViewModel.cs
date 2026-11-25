@@ -43,6 +43,8 @@ public class SettingsViewModel : INotifyPropertyChanged
     public LocalizedText ToastMaxVisibleDescText { get; } = new("ToastMaxVisibleDesc", "通知會疊在一起顯示，超過這個數量時最舊的先關閉（1 ~ 5 則）");
     public LocalizedText DeveloperModeTitleText { get; } = new("DeveloperModeTitle", "開發者模式");
     public LocalizedText DeveloperModeDescText { get; } = new("DeveloperModeDesc", "開啟後在主視窗按 F12 可開啟開發者工具，檢視畫面的視覺樹與控制項屬性");
+    public LocalizedText DevToolsFontSizeTitleText { get; } = new("DevToolsFontSizeTitle", "開發者工具文字大小");
+    public LocalizedText DevToolsFontSizeDescText { get; } = new("DevToolsFontSizeDesc", "開發者工具視窗使用的文字大小，跟 App 本身的字體大小分開設定");
     public LocalizedText ToggleOnText { get; } = new("ToggleOn", "開啟");
     public LocalizedText ToggleOffText { get; } = new("ToggleOff", "關閉");
 
@@ -315,6 +317,38 @@ public class SettingsViewModel : INotifyPropertyChanged
         }
     }
 
+    /// <summary>開發者工具文字大小的下拉選項：小（8 pt）／中（12 pt）／大（16 pt）。</summary>
+    public ObservableCollection<string> DevToolsFontSizes { get; } = new();
+
+    private string _selectedDevToolsFontSize = "";
+
+    /// <summary>開發者工具視窗的文字大小（跟 App 字體大小分開），變更後立即存檔並套用到已開著的開發者工具。</summary>
+    public string SelectedDevToolsFontSize
+    {
+        get => _selectedDevToolsFontSize;
+        set
+        {
+            if (_selectedDevToolsFontSize == value || string.IsNullOrEmpty(value) || _isUpdating) return;
+            _selectedDevToolsFontSize = value;
+            var size = DeveloperModeService.AllFontSizes.FirstOrDefault(s => DeveloperModeService.GetFontSizeName(s) == value);
+            if (DeveloperModeService.GetFontSizeName(size) == value)
+            {
+                DeveloperModeService.FontSize = size;
+                ConfigServices.Save();
+                EnqueueToast?.Invoke(LanguageManager.GetText("DevToolsFontSizeChangedToast", "開發者工具文字大小已儲存"));
+            }
+            OnPropertyChanged();
+        }
+    }
+
+    private void RefreshDevToolsFontSizes()
+    {
+        DevToolsFontSizes.Clear();
+        foreach (var size in DeveloperModeService.AllFontSizes)
+            DevToolsFontSizes.Add(DeveloperModeService.GetFontSizeName(size));
+        _selectedDevToolsFontSize = DeveloperModeService.GetFontSizeName(DeveloperModeService.FontSize);
+    }
+
     private string _selectedHelpViewer = "";
 
     /// <summary>說明的開啟方式（內建視窗 / 預設瀏覽器），變更後立即存檔。</summary>
@@ -499,6 +533,8 @@ public class SettingsViewModel : INotifyPropertyChanged
         _selectedFontFamily = "";
         _selectedHelpViewer = "";
         _selectedToastPosition = "";
+        _selectedDevToolsFontSize = "";
+        OnPropertyChanged(nameof(SelectedDevToolsFontSize));
         OnPropertyChanged(nameof(SelectedHelpViewer));
         OnPropertyChanged(nameof(SelectedToastPosition));
         OnPropertyChanged(nameof(SelectedLanguage));
@@ -553,6 +589,7 @@ public class SettingsViewModel : INotifyPropertyChanged
         RefreshFontFamilies();
         RefreshHelpViewers();
         RefreshToastPositions();
+        RefreshDevToolsFontSizes();
 
         _isUpdating = false;
         
@@ -565,6 +602,7 @@ public class SettingsViewModel : INotifyPropertyChanged
         
         OnPropertyChanged(nameof(SelectedHelpViewer));
         OnPropertyChanged(nameof(SelectedToastPosition));
+        OnPropertyChanged(nameof(SelectedDevToolsFontSize));
 
         // 更新本地化文字
         OnPropertyChanged(nameof(TitleText));

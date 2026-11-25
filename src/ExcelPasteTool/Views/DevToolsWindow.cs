@@ -73,6 +73,7 @@ public sealed class DevToolsWindow : Window
         FilterBox.TextChanged += (_, _) => RenderProperties();
 
         Content = BuildLayout();
+        ApplyFontSize(DeveloperModeService.GetPointSize(DeveloperModeService.FontSize));
         BuildTree();
         SelectVisual(target);
 
@@ -89,6 +90,29 @@ public sealed class DevToolsWindow : Window
             ClearHighlight();
         };
     }
+
+    /// <summary>目前套用的文字大小（測試用）。</summary>
+    internal double AppliedFontSize { get; private set; }
+
+    /// <summary>
+    /// 套用開發者工具自己的文字大小：在視窗層級蓋掉 App 的字級資源（AppFontSize* 與 Fluent 的 ControlContentThemeFontSize），
+    /// 視窗裡的樣式都用 DynamicResource，會先找到這裡的值，所以跟 App 本身的字體大小互不影響。
+    /// </summary>
+    internal void ApplyFontSize(double size)
+    {
+        AppliedFontSize = size;
+        Resources["AppFontSize"] = size;
+        Resources["AppFontSizeSmall"] = Math.Max(7, size - 1);
+        Resources["AppFontSizeLarge"] = size + 2;
+        Resources["ControlContentThemeFontSize"] = size;
+        // Fluent 的樹狀節點預設最小高度 32，字變小時行距也跟著縮，一次看得到更多節點
+        Resources["TreeViewItemMinHeight"] = Math.Round(size * 2 + 4);
+        FontSize = size;
+        _nameColumnWidth = Math.Round(size * 15);
+        if (SelectedVisual != null) RenderProperties();
+    }
+
+    private double _nameColumnWidth = 180;
 
     // ------------------------------------------------------------------
     // 選取元素模式（同 Edge / Chrome DevTools 的 Ctrl+Shift+C）
@@ -504,7 +528,7 @@ public sealed class DevToolsWindow : Window
             _propertyRows.Children.Add(CreateRow(row));
     }
 
-    private static Control CreateRow(PropertyRow row)
+    private Control CreateRow(PropertyRow row)
     {
         if (row.IsHeader)
         {
@@ -512,7 +536,11 @@ public sealed class DevToolsWindow : Window
             return header;
         }
 
-        var grid = new Grid { ColumnDefinitions = new ColumnDefinitions("200,*"), Margin = new Thickness(10, 2) };
+        var grid = new Grid
+        {
+            ColumnDefinitions = new ColumnDefinitions { new(_nameColumnWidth, GridUnitType.Pixel), new(1, GridUnitType.Star) },
+            Margin = new Thickness(10, 2)
+        };
         var name = new SelectableTextBlock { Text = row.Name, TextTrimming = TextTrimming.CharacterEllipsis };
         var value = new SelectableTextBlock { Text = row.Value, TextWrapping = TextWrapping.Wrap };
         name.Bind(TextBlock.ForegroundProperty, name.GetResourceObservable(row.IsSet ? "AccentTextBrush" : "TextSecondaryBrush"));

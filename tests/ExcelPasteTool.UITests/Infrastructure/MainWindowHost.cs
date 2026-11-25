@@ -46,6 +46,7 @@ public sealed class MainWindowHost : IDisposable
         ConfigServices.Config.ToastPosition = "BottomRight";
         ConfigServices.Config.ToastMaxVisible = 3;
         ConfigServices.Config.DeveloperMode = false;
+        ConfigServices.Config.DevToolsFontSize = "Medium";
         DeveloperModeService.Current?.Close();
         SidebarPageToContentConverter.ResetCache();
 

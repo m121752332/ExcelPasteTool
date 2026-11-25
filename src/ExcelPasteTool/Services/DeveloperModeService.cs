@@ -10,8 +10,48 @@ namespace ExcelPasteTool;
 /// 開發者模式關閉時不能開啟，已開著的視窗也會一併關閉。
 /// </para>
 /// </summary>
+/// <summary>開發者工具視窗的文字大小（跟 App 本身的字體大小分開設定）。</summary>
+public enum DevToolsFontSize
+{
+    Small,
+    Medium,
+    Large
+}
+
 public static class DeveloperModeService
 {
+    /// <summary>三種文字大小對應的字級。</summary>
+    public static double GetPointSize(DevToolsFontSize size) => size switch
+    {
+        DevToolsFontSize.Small => 8,
+        DevToolsFontSize.Large => 16,
+        _ => 12
+    };
+
+    public static IReadOnlyList<DevToolsFontSize> AllFontSizes { get; } =
+        new[] { DevToolsFontSize.Small, DevToolsFontSize.Medium, DevToolsFontSize.Large };
+
+    /// <summary>下拉選單顯示的名稱，例如「小（8 pt）」。</summary>
+    public static string GetFontSizeName(DevToolsFontSize size) => size switch
+    {
+        DevToolsFontSize.Small => LanguageManager.GetText("DevToolsFontSmall", "小（8 pt）"),
+        DevToolsFontSize.Large => LanguageManager.GetText("DevToolsFontLarge", "大（16 pt）"),
+        _ => LanguageManager.GetText("DevToolsFontMedium", "中（12 pt）")
+    };
+
+    /// <summary>目前設定的文字大小；設定檔的值不認得時用預設的「中」。</summary>
+    public static DevToolsFontSize FontSize
+    {
+        get => Enum.TryParse<DevToolsFontSize>(ConfigServices.Config.DevToolsFontSize, out var size) && Enum.IsDefined(size)
+            ? size
+            : DevToolsFontSize.Medium;
+        set
+        {
+            ConfigServices.Config.DevToolsFontSize = value.ToString();
+            Current?.ApplyFontSize(GetPointSize(value));
+        }
+    }
+
     /// <summary>目前是否為開發者模式（設定頁開關，存在設定檔）。</summary>
     public static bool IsEnabled => ConfigServices.Config.DeveloperMode;
 

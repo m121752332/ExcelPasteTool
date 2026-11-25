@@ -32,6 +32,8 @@ public class AppConfig
     public double LeftPanelSplitRatio { get; set; }
     /// <summary>開發者模式：開啟後按 F12 連線到 Avalonia Developer Tools（預設關閉；關閉時 F12 沒有作用）。</summary>
     public bool DeveloperMode { get; set; }
+    /// <summary>開發者工具視窗的文字大小：Small（8）、Medium（12，預設）、Large（16），跟 App 本身的字體大小分開。</summary>
+    public string DevToolsFontSize { get; set; } = "Medium";
 }
 
 public static class ConfigServices
