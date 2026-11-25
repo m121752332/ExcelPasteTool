@@ -14,7 +14,7 @@
 					<!-- 分隔符號 -->
 					<StackPanel Name="SeparatorPanel" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
 						<TextBlock Name="SeparatorLabel" Classes="field-label"/>
-						<ComboBox Name="SeparatorComboBox" MinWidth="120" SelectedIndex="0"/>
+						<ComboBox Name="SeparatorComboBox" AutomationProperties.AutomationId="SeparatorComboBox" MinWidth="120" SelectedIndex="0"/>
 					</StackPanel>
 					<!-- 語言 -->
 					<StackPanel Name="LanguagePanel" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
@@ -57,11 +57,11 @@
 								<Path Data="{x:Static local:IconManager.DataIcon}" Width="18" Height="18" Stretch="Uniform" VerticalAlignment="Center"/>
 								<TextBlock Name="PipDataTitle" Classes="section-title" VerticalAlignment="Center"/>
 							</StackPanel>
-							<Button Name="CopyTopBoxButton" Classes="copy-button" Grid.Column="1" ToolTip.Tip="複製分隔資料">
+							<Button Name="CopyTopBoxButton" AutomationProperties.AutomationId="CopyTopBoxButton" Classes="copy-button" Grid.Column="1" ToolTip.Tip="複製分隔資料">
 								<Path Data="{x:Static local:IconManager.PasteIcon}" Width="15" Height="15" Stretch="Uniform"/>
 							</Button>
 						</Grid>
-						<TextBox Grid.Row="1" Name="TopBox" Classes="input"/>
+						<TextBox Grid.Row="1" Name="TopBox" AutomationProperties.AutomationId="TopBox" Classes="input"/>
 
 						<GridSplitter Grid.Row="2" Name="LeftPanelSplitter" ResizeDirection="Rows"
 									  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,3"/>
@@ -76,7 +76,7 @@
 								<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
 									<!-- 格式選項（欄位名稱、每行筆數、數值不加引號）：浮出式選單，不佔左側版面，
 									     視窗再矮也不會把輸出框擠出去；設定存在設定檔，下次開啟沿用 -->
-									<Button Name="SqlOptionsButton" Classes="copy-button" Cursor="Hand">
+									<Button Name="SqlOptionsButton" AutomationProperties.AutomationId="SqlOptionsButton" Classes="copy-button" Cursor="Hand">
 										<Path Data="{x:Static local:IconManager.TuneIcon}" Width="15" Height="15" Stretch="Uniform"/>
 										<Button.Flyout>
 											<Flyout Placement="BottomEdgeAlignedRight" FlyoutPresenterClasses="sql-options-flyout">
@@ -97,11 +97,11 @@
 											</Flyout>
 										</Button.Flyout>
 									</Button>
-									<Button Name="CopyBottomBoxButton" Classes="copy-button" ToolTip.Tip="複製SQL條件">
+									<Button Name="CopyBottomBoxButton" AutomationProperties.AutomationId="CopyBottomBoxButton" Classes="copy-button" ToolTip.Tip="複製SQL條件">
 										<Path Data="{x:Static local:IconManager.PasteIcon}" Width="15" Height="15" Stretch="Uniform"/>
 									</Button>
 									<!-- 顯示 / 隱藏 SQL 條件：隱藏時只留這一列標題，上方的分隔資料框撐滿（見 IsSqlPanelVisible） -->
-									<Button Name="ToggleSqlPanelButton" Classes="copy-button" Cursor="Hand">
+									<Button Name="ToggleSqlPanelButton" AutomationProperties.AutomationId="ToggleSqlPanelButton" Classes="copy-button" Cursor="Hand">
 										<Path Name="ToggleSqlPanelIcon" Data="{x:Static local:IconManager.EyeOffIcon}" Width="16" Height="16" Stretch="Uniform"/>
 									</Button>
 								</StackPanel>
@@ -110,7 +110,7 @@
 							<!-- 提醒：超過 1000 筆已拆組、沒填欄位名稱、資料不全是數字 -->
 							<TextBlock Grid.Row="1" Name="SqlWarningText" Classes="sql-warning" Margin="0,0,0,6" IsVisible="False"/>
 
-							<TextBox Grid.Row="2" Name="BottomBox" Classes="input sql-output" MinHeight="60" IsReadOnly="True"/>
+							<TextBox Grid.Row="2" Name="BottomBox" AutomationProperties.AutomationId="BottomBox" Classes="input sql-output" MinHeight="60" IsReadOnly="True"/>
 						</Grid>
 					</Grid>
 				</Border>
@@ -124,14 +124,14 @@
 						<!-- 按鈕列：左邊「資料貼上」佔剩餘寬度（太窄時文字以…截斷，不會被裁掉），右邊「重複項」「清空資料」。
 						     右欄寬度低於 CompactToolbarThreshold 時，右邊兩顆改成只顯示圖示（重複數改角標、說明放 ToolTip），見 ApplyToolbarLayout -->
 						<Grid Grid.Row="0" Name="ToolbarRow" ColumnDefinitions="Auto,Auto,*,Auto" Margin="0,0,0,12">
-							<Button Grid.Column="0" Name="PasteDataButton" Classes="primary" Cursor="Hand" HorizontalAlignment="Left">
+							<Button Grid.Column="0" Name="PasteDataButton" AutomationProperties.AutomationId="PasteDataButton" Classes="primary" Cursor="Hand" HorizontalAlignment="Left">
 								<StackPanel Orientation="Horizontal" Spacing="6">
 									<Path Data="{x:Static local:IconManager.PasteIcon}" Width="15" Height="15" Stretch="Uniform" VerticalAlignment="Center"/>
 									<TextBlock Name="PasteButtonText" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
 								</StackPanel>
 							</Button>
 							<!-- 追加貼上：接在現有資料後面（Alt+Shift+P），重複的略過 -->
-							<Button Grid.Column="1" Name="AppendPasteButton" Classes="neutral" Cursor="Hand" Margin="8,0,0,0">
+							<Button Grid.Column="1" Name="AppendPasteButton" AutomationProperties.AutomationId="AppendPasteButton" Classes="neutral" Cursor="Hand" Margin="8,0,0,0">
 								<StackPanel Orientation="Horizontal" Spacing="6">
 									<Path Data="{x:Static local:IconManager.PasteAppendIcon}" Width="15" Height="15" Stretch="Uniform" VerticalAlignment="Center"/>
 									<TextBlock Name="AppendPasteButtonText" VerticalAlignment="Center"/>
@@ -140,7 +140,7 @@
 							<StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8" Margin="8,0,0,0">
 								<!-- 重複項：最近一次貼上時被濾掉的重複值，沒有重複時停用；不具破壞性，用中性色（紅色只給清空資料）；精簡模式時重複數顯示在右上角標 -->
 								<Panel>
-									<Button Name="DuplicatesButton" Classes="neutral" Cursor="Hand" IsEnabled="False">
+									<Button Name="DuplicatesButton" AutomationProperties.AutomationId="DuplicatesButton" Classes="neutral" Cursor="Hand" IsEnabled="False">
 										<StackPanel Orientation="Horizontal" Spacing="6">
 											<Path Data="{x:Static local:IconManager.ListIcon}" Width="15" Height="15" Stretch="Uniform" VerticalAlignment="Center"/>
 											<TextBlock Name="DuplicatesButtonText" VerticalAlignment="Center"/>
@@ -151,7 +151,7 @@
 										<TextBlock Name="DuplicatesCountText"/>
 									</Border>
 								</Panel>
-								<Button Name="ClearDataButton" Classes="secondary" Cursor="Hand">
+								<Button Name="ClearDataButton" AutomationProperties.AutomationId="ClearDataButton" Classes="secondary" Cursor="Hand">
 									<StackPanel Orientation="Horizontal" Spacing="6">
 										<Path Data="{x:Static local:IconManager.ClearIcon}" Width="15" Height="15" Stretch="Uniform" VerticalAlignment="Center"/>
 										<TextBlock Name="ClearButtonText" VerticalAlignment="Center"/>
@@ -161,7 +161,7 @@
 						</Grid>
 
 						<!-- 資料表格：表頭固定，只有資料列捲動；關閉水平捲動讓長字串自動換行，表頭與資料列欄寬一致 -->
-						<Border Grid.Row="1" Name="TableContainer" Classes="table-container">
+						<Border Grid.Row="1" Name="TableContainer" AutomationProperties.AutomationId="TableContainer" Classes="table-container">
 							<Grid RowDefinitions="Auto,*,Auto">
 								<Grid Grid.Row="0" ColumnDefinitions="64,*" Classes="data-table-header" MinHeight="36">
 									<Border Grid.Column="0" Classes="grid-cell" BorderThickness="0,0,1,1">
@@ -180,7 +180,7 @@
 												<TextBlock Name="DataContentHeader" Classes="data-table-header" VerticalAlignment="Center"/>
 											</StackPanel>
 											<Border Grid.Column="1" Name="RowCountBadge" Classes="badge" Margin="8,0,0,0">
-												<TextBlock Name="RowCountText"/>
+												<TextBlock Name="RowCountText" AutomationProperties.AutomationId="RowCountText"/>
 											</Border>
 										</Grid>
 									</Border>

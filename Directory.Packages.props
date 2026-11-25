@@ -26,5 +26,8 @@
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
     <!-- UI 測試（tests/ExcelPasteTool.UITests）：Avalonia.Headless.XUnit 12 建立在 xUnit v3 上 -->
     <PackageVersion Include="xunit.v3" Version="3.2.2" />
+    <!-- 端到端測試（tests/ExcelPasteTool.E2ETests）：用 FlaUI（UIA3）操作真實執行檔，只在 Windows 本機跑 -->
+    <PackageVersion Include="FlaUI.Core" Version="5.0.0" />
+    <PackageVersion Include="FlaUI.UIA3" Version="5.0.0" />
   </ItemGroup>
 </Project>

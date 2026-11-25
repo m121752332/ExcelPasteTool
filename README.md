@@ -149,9 +149,12 @@ dotnet test tests/ExcelPasteTool.Tests
 
 # UI 畫面測試（Avalonia Headless：擷取畫面並和基準圖比對）
 pwsh tests/run-ui-tests.ps1
+
+# 端到端 smoke 測試（僅 Windows 本機：FlaUI 啟動真實 exe、點按鈕、截圖）
+pwsh tests/run-e2e-tests.ps1
 ```
 
-- UI 測試的報告在 `TestResults/ui/summary.json`，用法與基準圖更新方式見 [docs/UI-TESTING.md](docs/UI-TESTING.md)。
+- UI 測試的報告在 `TestResults/ui/summary.json`，端到端測試在 `TestResults/e2e/summary.json`；用法與基準圖更新方式見 [docs/UI-TESTING.md](docs/UI-TESTING.md)。
 - CI（`build.yml`）在開 PR 和推送到 `master` 時建置 Release 組態並跑單元測試。
 
 自動測試沒涵蓋的部分，修改程式後請手動確認以下項目：
@@ -227,7 +230,9 @@ ExcelPasteTool/                     # 倉庫根目錄
 ├── tests/
 │   ├── ExcelPasteTool.Tests/       # 單元測試（xUnit）
 │   ├── ExcelPasteTool.UITests/     # Avalonia Headless 畫面測試與基準圖
-│   └── run-ui-tests.ps1            # UI 測試一鍵執行與報告
+│   ├── ExcelPasteTool.E2ETests/    # FlaUI 端到端 smoke 測試（啟動真實 exe，僅 Windows 本機）
+│   ├── run-ui-tests.ps1            # UI 測試一鍵執行與報告
+│   └── run-e2e-tests.ps1           # 端到端測試一鍵執行與報告
 │
 ├── packaging/
 │   ├── publish.sh                  # 單一平台發佈＋壓 zip（release.yml 呼叫）

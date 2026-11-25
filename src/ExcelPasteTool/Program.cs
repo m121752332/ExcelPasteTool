@@ -6,8 +6,12 @@ namespace ExcelPasteTool;
 class Program
 {
     [STAThread]
-    public static void Main(string[] args) => BuildAvaloniaApp()
-        .StartWithClassicDesktopLifetime(args);
+    public static void Main(string[] args)
+    {
+        // 端到端 UI 測試（FlaUI）帶 --ui-test 啟動；一般執行不受影響
+        UiTestMode.EnableIfRequested(args);
+        BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+    }
 
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()

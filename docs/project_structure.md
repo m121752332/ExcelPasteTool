@@ -27,7 +27,9 @@ ExcelPasteTool/                     # 倉庫根目錄
 ├── tests/
 │   ├── ExcelPasteTool.Tests/       # 單元測試（xUnit）
 │   ├── ExcelPasteTool.UITests/     # Avalonia Headless 畫面測試與基準圖
-│   └── run-ui-tests.ps1            # UI 測試一鍵執行與報告
+│   ├── ExcelPasteTool.E2ETests/    # FlaUI 端到端 smoke 測試（啟動真實 exe，僅 Windows 本機）
+│   ├── run-ui-tests.ps1            # UI 測試一鍵執行與報告
+│   └── run-e2e-tests.ps1           # 端到端測試一鍵執行與報告
 │
 ├── packaging/
 │   ├── publish.sh                  # 單一平台發佈＋壓 zip（release.yml 呼叫）
@@ -46,6 +48,7 @@ ExcelPasteTool/                     # 倉庫根目錄
 | 執行程式 | `dotnet run --project src/ExcelPasteTool` |
 | 單元測試 | `dotnet test tests/ExcelPasteTool.Tests` |
 | UI 畫面測試 | `pwsh tests/run-ui-tests.ps1` |
+| 端到端 smoke 測試（Windows） | `pwsh tests/run-e2e-tests.ps1` |
 | 發佈單一平台 | `dotnet publish src/ExcelPasteTool -c Release -p:PublishProfile=win-x64` |
 | 打包單一平台 zip | `bash packaging/publish.sh win-x64 1.7.1` |
 
@@ -53,6 +56,6 @@ ExcelPasteTool/                     # 倉庫根目錄
 
 - `ExcelPasteTool.sln` 的專案路徑。
 - 測試專案的 `ProjectReference`，以及 `ExcelPasteTool.Tests.csproj` 直接讀取的 `Changelog.json` 與 `ExcelPasteTool.csproj`。
-- `tests/ExcelPasteTool.UITests/Infrastructure/UiTestPaths.cs` 以 `ExcelPasteTool.sln` 定位倉庫根目錄。
+- `tests/ExcelPasteTool.UITests/Infrastructure/UiTestPaths.cs` 與 `tests/ExcelPasteTool.E2ETests/Infrastructure/E2EPaths.cs` 以 `ExcelPasteTool.sln` 定位倉庫根目錄；`E2EPaths.cs` 也寫死了主程式 exe 的建置輸出路徑。
 - `packaging/publish.sh` 的專案路徑、`bin/` 路徑與 `config.json` 路徑，以及 `.github/workflows/*.yml` 的專案路徑。
 - `avares://DataSplitter/...` 資源路徑相對於主程式專案資料夾，只要資料夾內的結構不變就不用改。
