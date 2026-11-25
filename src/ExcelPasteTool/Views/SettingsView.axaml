@@ -123,6 +123,24 @@
                 </Border>
                 <Border Classes="setting-row">
                     <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.ScreenshotsIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                            <TextBlock Text="{Binding ScreenshotFolderTitleText.Text}" Classes="setting-title"/>
+                            <TextBlock Name="ScreenshotFolderDescText" Text="{Binding ScreenshotFolderDescText}" Classes="setting-desc"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                            <Button Name="ChangeScreenshotFolderButton" AutomationProperties.AutomationId="ChangeScreenshotFolderButton"
+                                    Classes="ghost" MinWidth="96" HorizontalContentAlignment="Center"
+                                    Content="{Binding ScreenshotFolderChangeText.Text}"/>
+                            <Button Name="ResetScreenshotFolderButton" AutomationProperties.AutomationId="ResetScreenshotFolderButton"
+                                    Classes="ghost" MinWidth="96" HorizontalContentAlignment="Center"
+                                    IsEnabled="{Binding IsCustomScreenshotFolder}"
+                                    Content="{Binding ScreenshotFolderResetText.Text}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                <Border Classes="setting-row">
+                    <Grid ColumnDefinitions="40,*,Auto">
                         <Path Classes="setting-icon" Data="{x:Static local:IconManager.BellIcon}"/>
                         <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
                             <TextBlock Text="{Binding ToastPositionTitleText.Text}" Classes="setting-title"/>

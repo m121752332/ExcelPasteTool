@@ -36,7 +36,7 @@ ExcelPasteTool/                     # 倉庫根目錄
 │   ├── config.json                 # 預設設定範本（打包時放進 zip）
 │   └── macos/                      # .app 的 Info.plist、圖示、相容啟動腳本
 │
-├── docs/                           # 補充文件
+├── docs/                           # 補充文件（SETUP、UI-TESTING、Screenshots 等）
 └── .github/workflows/              # build.yml（建置＋單元測試）、release.yml（打包發佈）
 ```
 

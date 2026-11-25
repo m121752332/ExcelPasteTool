@@ -182,6 +182,14 @@ public sealed class AppSession : IDisposable
         return last;
     }
 
+    /// <summary>同時按下一組鍵（例如 Alt+F5）。會先把主視窗拉到前景，按鍵才送得到程式。</summary>
+    public void PressKeys(params FlaUI.Core.WindowsAPI.VirtualKeyShort[] keys)
+    {
+        MainWindow.SetForeground();
+        FlaUI.Core.Input.Keyboard.TypeSimultaneously(keys);
+        Log($"   按鍵 {string.Join("+", keys)}");
+    }
+
     // ===== 剪貼簿 =====
 
     public void SetClipboard(string text)
@@ -291,6 +299,9 @@ public sealed class AppSession : IDisposable
 
     private string SandboxDir => Path.Combine(E2EPaths.ResultsDir, "_app");
 
+    /// <summary>測試用的截圖資料夾（寫進 config.json 的 ScreenshotFolder，不會動到使用者的「圖片」資料夾）；每次啟動前清空。</summary>
+    public string ScreenshotFolder => Path.Combine(SandboxDir, "Screenshots");
+
     /// <summary>
     /// 把建置好的程式複製到 TestResults/e2e/_app，並放一份固定的 config.json。
     /// 設定檔放在 exe 旁邊，所以這樣不會動到開發時 bin/ 底下或使用者自己的設定。
@@ -344,7 +355,9 @@ public sealed class AppSession : IDisposable
             TourCompleted = true,
             CompactTitleBar = false,
             ShowSqlPanel = true,
+            ScreenshotFolder,
         };
+        if (Directory.Exists(ScreenshotFolder)) Directory.Delete(ScreenshotFolder, recursive: true);
         File.WriteAllText(Path.Combine(SandboxDir, "config.json"), JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true }));
         Log($"   config.json：Theme={theme}, Language={language}, TourCompleted=true");
     }

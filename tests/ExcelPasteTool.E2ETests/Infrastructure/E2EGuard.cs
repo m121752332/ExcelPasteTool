@@ -1,3 +1,7 @@
+// 每個測試都會啟動同一份 TestResults/e2e/_app 裡的程式（啟動前還會結束上次殘留的程序）、共用系統剪貼簿，
+// 所以測試類別之間不能平行執行，否則後啟動的會把先啟動的程式關掉
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
+
 namespace ExcelPasteTool.E2ETests.Infrastructure;
 
 /// <summary>

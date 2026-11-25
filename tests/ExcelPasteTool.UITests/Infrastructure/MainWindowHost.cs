@@ -15,6 +15,12 @@ public sealed class MainWindowHost : IDisposable
     public const double DefaultWidth = 1100;
     public const double DefaultHeight = 700;
 
+    /// <summary>UI 測試的截圖資料夾（取代使用者的「圖片\DataSplitter」）。</summary>
+    public static readonly string ScreenshotTestFolder = Path.Combine(Path.GetTempPath(), "DataSplitter.UITests", "Screenshots");
+
+    /// <summary>畫面上顯示的截圖資料夾路徑（固定文字）。</summary>
+    public const string ScreenshotDisplayFolder = @"C:\Users\tester\Pictures\DataSplitter";
+
     public MainWindow Window { get; }
 
     private MainWindowHost(MainWindow window) => Window = window;
@@ -48,6 +54,11 @@ public sealed class MainWindowHost : IDisposable
         ConfigServices.Config.DeveloperMode = false;
         ConfigServices.Config.DevToolsFontSize = "Medium";
         DeveloperModeService.Current?.Close();
+        // 截圖：存到暫存資料夾（每個測試開始時清空），畫面上顯示固定的路徑，基準圖才不會因電腦而不同
+        ConfigServices.Config.ScreenshotFolder = "";
+        ScreenshotService.DefaultFolderOverride = ScreenshotTestFolder;
+        ScreenshotService.FolderDisplayOverride = ScreenshotDisplayFolder;
+        try { if (Directory.Exists(ScreenshotTestFolder)) Directory.Delete(ScreenshotTestFolder, recursive: true); } catch { }
         SidebarPageToContentConverter.ResetCache();
 
         LanguageManager.CurrentLanguage = language;

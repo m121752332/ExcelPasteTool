@@ -34,6 +34,8 @@ public class AppConfig
     public bool DeveloperMode { get; set; }
     /// <summary>開發者工具視窗的文字大小：Small（8）、Medium（12，預設）、Large（16），跟 App 本身的字體大小分開。</summary>
     public string DevToolsFontSize { get; set; } = "Medium";
+    /// <summary>截圖（Alt+F5）存放的資料夾；空字串代表預設的「圖片\DataSplitter」（見 ScreenshotService.DefaultFolder）。</summary>
+    public string ScreenshotFolder { get; set; } = "";
 }
 
 public static class ConfigServices

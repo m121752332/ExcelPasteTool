@@ -11,6 +11,7 @@ public class SidebarPageToContentConverter : IValueConverter
     private static DataToolView? _dataToolViewInstance;
     private static SettingsView? _settingsViewInstance;
     private static AboutView? _aboutViewInstance;
+    private static ScreenshotsView? _screenshotsViewInstance;
     private static HelpView? _helpViewInstance;
     private static HelpView? _gitHubViewInstance;
 
@@ -20,6 +21,7 @@ public class SidebarPageToContentConverter : IValueConverter
         _dataToolViewInstance = null;
         _settingsViewInstance = null;
         _aboutViewInstance = null;
+        _screenshotsViewInstance = null;
         _helpViewInstance = null;
         _gitHubViewInstance = null;
     }
@@ -32,6 +34,8 @@ public class SidebarPageToContentConverter : IValueConverter
             {
                 case SidebarPage.Tools:
                     return _dataToolViewInstance ??= new DataToolView();
+                case SidebarPage.Screenshots:
+                    return _screenshotsViewInstance ??= new ScreenshotsView();
                 case SidebarPage.Settings:
                     return _settingsViewInstance ??= new SettingsView();
                 case SidebarPage.Help:

@@ -48,6 +48,9 @@ public class SettingsViewModel : INotifyPropertyChanged
     public LocalizedText DeveloperGroupDescText { get; } = new("DeveloperGroupDesc", "開發者模式與開發者工具（F12）的設定");
     public LocalizedText DevToolsFontSizeTitleText { get; } = new("DevToolsFontSizeTitle", "開發者工具文字大小");
     public LocalizedText DevToolsFontSizeDescText { get; } = new("DevToolsFontSizeDesc", "開發者工具視窗使用的文字大小，跟 App 本身的字體大小分開設定");
+    public LocalizedText ScreenshotFolderTitleText { get; } = new("ScreenshotFolderTitle", "截圖資料夾");
+    public LocalizedText ScreenshotFolderChangeText { get; } = new("ScreenshotFolderChange", "變更…");
+    public LocalizedText ScreenshotFolderResetText { get; } = new("ScreenshotFolderReset", "還原預設");
     public LocalizedText ToggleOnText { get; } = new("ToggleOn", "開啟");
     public LocalizedText ToggleOffText { get; } = new("ToggleOff", "關閉");
 
@@ -312,6 +315,39 @@ public class SettingsViewModel : INotifyPropertyChanged
             NotifySummaries();
         }
     }
+
+    /// <summary>「截圖資料夾」那一列的說明：快捷鍵與目前的資料夾路徑（預設資料夾會標示「預設」）。</summary>
+    public string ScreenshotFolderDescText => string.Format(
+        LanguageManager.GetText("ScreenshotFolderDesc", "按 {0} 拍下的 App 畫面存放的位置：{1}"),
+        ScreenshotService.ShortcutText,
+        ScreenshotService.IsCustomFolder
+            ? ScreenshotService.FolderDisplay
+            : $"{ScreenshotService.FolderDisplay} ({LanguageManager.GetText("ScreenshotFolderDefaultTag", "預設")})");
+
+    public bool IsCustomScreenshotFolder => ScreenshotService.IsCustomFolder;
+
+    /// <summary>改用指定的截圖資料夾（設定頁「變更…」選好資料夾後呼叫），立即存檔。</summary>
+    public void SetScreenshotFolder(string? folder)
+    {
+        folder = folder?.Trim() ?? "";
+        // 選到的剛好是預設資料夾時存成空字串，之後預設位置改變也會跟著走
+        if (string.Equals(Path.GetFullPath(folder.Length == 0 ? ScreenshotService.DefaultFolder : folder).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
+                Path.GetFullPath(ScreenshotService.DefaultFolder).TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar),
+                OperatingSystem.IsWindows() ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal))
+            folder = "";
+        if (ConfigServices.Config.ScreenshotFolder == folder) return;
+        ConfigServices.Config.ScreenshotFolder = folder;
+        ConfigServices.Save();
+        OnPropertyChanged(nameof(ScreenshotFolderDescText));
+        OnPropertyChanged(nameof(IsCustomScreenshotFolder));
+        ScreenshotFolderChanged?.Invoke();
+        EnqueueToast?.Invoke(LanguageManager.GetText("ScreenshotFolderChangedToast", "截圖資料夾已儲存"));
+    }
+
+    public void ResetScreenshotFolder() => SetScreenshotFolder("");
+
+    /// <summary>截圖資料夾變更時通知（截圖管理頁重新讀取清單）。</summary>
+    public event Action? ScreenshotFolderChanged;
 
     /// <summary>開發者模式：開啟後主視窗按 F12 開啟開發者工具，變更後立即存檔；關閉時會一併關掉已開著的開發者工具。</summary>
     public bool DeveloperMode
@@ -644,6 +680,8 @@ public class SettingsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(ThemeTitleText));
         OnPropertyChanged(nameof(CurrentCategoryTitle));
         OnPropertyChanged(nameof(CheckUpdateButtonText));
+        OnPropertyChanged(nameof(ScreenshotFolderDescText));
+        OnPropertyChanged(nameof(IsCustomScreenshotFolder));
         NotifySummaries();
         
         Debug.WriteLine("RefreshAllCollections finished");

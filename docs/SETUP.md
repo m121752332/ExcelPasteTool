@@ -146,8 +146,9 @@ dotnet run --project src/ExcelPasteTool
 
 | `TourCompleted` | `true`、`false` | `false` | 是否已看過 App 導覽。`false`（或舊設定檔沒有此欄位）時，啟動後會自動播放一次導覽，看完或略過即寫回 `true`；改回 `false` 可讓下次啟動再播一次 |
 | `CompactTitleBar` | `true`、`false` | `false` | 是否使用精簡標題列（隱藏系統標題列，只留側邊欄開關與最小化 / 最大化 / 關閉），可在「設定」頁切換，實作在 `Views/MainWindow.TitleBar.cs` |
+| `ScreenshotFolder` | 空字串，或資料夾完整路徑 | `""` | `Alt+F5` 截圖存放的資料夾；空字串代表「圖片」資料夾底下的 `DataSplitter`。可在 設定 › 一般設置 › 截圖資料夾 變更，詳見 [截圖說明](Screenshots.md) |
 
-快捷鍵（`Views/MainWindow.TitleBar.cs`，只在對應按鈕的 ToolTip 中提示，說明頁 `#shortcut-map` 有圖文對照）：`Alt+F4` 強制關閉、`Alt+Q` 開關側邊欄、`Alt+P` 把剪貼簿貼到「工具」頁右側資料表。
+快捷鍵（`Views/MainWindow.TitleBar.cs`，只在對應按鈕的 ToolTip 中提示，說明頁 `#shortcut-map` 有圖文對照）：`Alt+F4` 強制關閉、`Alt+Q` 開關側邊欄、`Alt+P` 把剪貼簿貼到「工具」頁右側資料表、`Alt+F5`（macOS `⌥F5`）拍下目前的 App 畫面（見 [截圖說明](Screenshots.md)）。
 
 前四項都可以在 App 的「設定」頁變更，變更後會自動存檔。導覽可隨時在「工具」頁按右上角的「導覽」按鈕重看（其他頁面不顯示此按鈕）；Toast 通知統一放在主視窗最上層（`MainWindow.axaml` 的 `ToastPanel`）（實作在 `Controls/TourOverlay.cs` 與 `Views/MainWindow.Tour.cs`，步驟文字在 `Helpers/LanguageManager.cs` 的 `Tour*` 鍵）。
 
@@ -329,10 +330,10 @@ bash packaging/publish.sh win-x64 1.7.1
 | 目錄 / 檔案 | 用途 |
 | --- | --- |
 | `Program.cs`、`App.axaml(.cs)` | 程式進入點與應用程式初始化 |
-| `Views/` | 畫面（`MainWindow`、`DataToolView`、`SettingsView`、`AboutView`） |
-| `ViewModels/` | 畫面邏輯（`SettingsViewModel`、`SidebarViewModel`） |
+| `Views/` | 畫面（`MainWindow`、`DataToolView`、`ScreenshotsView`、`SettingsView`、`AboutView`） |
+| `ViewModels/` | 畫面邏輯（`SettingsViewModel`、`SidebarViewModel`、`ScreenshotsViewModel`） |
 | `Models/` | 資料模型（`DataItem`、`SidebarItem`） |
-| `Services/` | 設定檔讀寫（`ConfigServices`）、版本檢查與自動更新（`UpdateService`） |
+| `Services/` | 設定檔讀寫（`ConfigServices`）、版本檢查與自動更新（`UpdateService`）、App 內截圖（`ScreenshotService`） |
 | `Helpers/` | 主題、語言、字型、圖示、Toast 提示等工具類 |
 | `Converters/` | Binding 用的 `IValueConverter` |
 | `Assets/Themes/` | 各主題配色（只放顏色） |

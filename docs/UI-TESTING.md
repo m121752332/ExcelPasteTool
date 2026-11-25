@@ -112,7 +112,8 @@ tests/
    ├─ Tests/
    │  ├─ MainWindowSmokeTests.cs        主視窗、側邊欄收合、切頁
    │  ├─ DataToolInteractionTests.cs    打字 → 資料表 / SQL 條件；剪貼簿貼上去重複
-   │  └─ ThemeVisualTests.cs            四個主題 + 英文介面的截圖比對
+   │  ├─ ThemeVisualTests.cs            四個主題 + 英文介面的截圖比對
+   │  └─ ScreenshotTests.cs             Alt+F5 截圖、截圖管理頁（清單 / 預覽 / 刪除 / 複製）、截圖資料夾設定
    └─ Baselines/*.png                   基準圖（進版控）
 
 tests/run-e2e-tests.ps1                 端到端測試一鍵執行 + 報告彙整
@@ -122,7 +123,9 @@ tests/ExcelPasteTool.E2ETests/          FlaUI 端到端 smoke 測試（見文末
 │  ├─ E2EGuard.cs                       只在 Windows 本機執行（CI 略過）
 │  ├─ E2EPaths.cs                       exe 與產出物路徑
 │  └─ ClipboardHelper.cs                STA 執行緒讀寫系統剪貼簿
-└─ Tests/SmokeTests.cs                  啟動 → 資料貼上 → 檢查分隔資料 / SQL / 重複項 → 清除
+└─ Tests/
+   ├─ SmokeTests.cs                     啟動 → 資料貼上 → 檢查分隔資料 / SQL / 重複項 → 清除
+   └─ ScreenshotTests.cs                Alt+F5 → 截圖資料夾出現 PNG → 截圖頁 → 「複製」後剪貼簿有圖片
 ```
 
 ## 撰寫新測試
@@ -180,6 +183,8 @@ Headless 測試不開實體視窗，測不到「真的執行起來」才會出�
 | 啟動方式 | `DataSplitter.exe --ui-test`（不檢查更新、不播導覽，並把程式內部記錄寫到 `app.log`） |
 | 隔離 | 程式複製到 `TestResults/e2e/_app/`，放一份固定的 `config.json`（淺色主題、繁中），不會動到 `bin/` 或使用者的設定檔 |
 | 剪貼簿 | 測試會暫時改寫系統剪貼簿，結束後還原原本的文字 |
+| 截圖 | `config.json` 的 `ScreenshotFolder` 指到 `TestResults/e2e/_app/Screenshots`（每次啟動前清空），不會寫到使用者的「圖片」資料夾 |
+| 平行執行 | 關閉（`E2EGuard.cs` 的 `CollectionBehavior`）：每個測試都啟動同一份 `_app` 的程式並共用剪貼簿，平行跑時後啟動的會把先啟動的程式關掉 |
 
 ## 一鍵執行
 
@@ -295,7 +300,9 @@ Avalonia 沒設 `AutomationProperties.AutomationId` 時會用控制項的 `Name`
 
 | 位置 | AutomationId |
 |---|---|
-| `Views/MainWindow.axaml` | `SidebarToggleButton`、`TitleBarSidebarButton`、`TourButton`、`MainContent`、側邊欄 `Sidebar_Tools` / `Sidebar_Settings` / `Sidebar_Help` / `Sidebar_GitHub` / `Sidebar_About` |
+| `Views/MainWindow.axaml` | `SidebarToggleButton`、`TitleBarSidebarButton`、`TourButton`、`MainContent`、側邊欄 `Sidebar_Tools` / `Sidebar_Screenshots` / `Sidebar_Settings` / `Sidebar_Help` / `Sidebar_GitHub` / `Sidebar_About` |
+| `Views/ScreenshotsView.axaml` | `CaptureScreenshotButton`、`OpenScreenshotFolderButton`、`RefreshScreenshotsButton`、`ScreenshotsSummaryText`、`ScreenshotList`、`CopyScreenshotButton`、`OpenScreenshotButton`、`RevealScreenshotButton`、`DeleteScreenshotButton`、`DeleteScreenshotConfirmButton` |
+| `Views/SettingsView.axaml` | `ChangeScreenshotFolderButton`、`ResetScreenshotFolderButton` |
 | `Views/DataToolView.axaml` | `PasteDataButton`、`AppendPasteButton`、`DuplicatesButton`、`ClearDataButton`、`TopBox`、`BottomBox`、`CopyTopBoxButton`、`CopyBottomBoxButton`、`SqlOptionsButton`、`ToggleSqlPanelButton`、`SeparatorComboBox`、`TableContainer`、`RowCountText` |
 
 新增要被測試操作的控制項時，請一併加上 `AutomationProperties.AutomationId`（和 `Name` 同名即可）。

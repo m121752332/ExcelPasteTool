@@ -17,6 +17,14 @@ public static class ClipboardHelper
         return true;
     });
 
+    /// <summary>剪貼簿裡的圖片大小（像素）；沒有圖片時回傳 null。</summary>
+    public static System.Drawing.Size? GetImageSize() => RunSta<System.Drawing.Size?>(() =>
+    {
+        if (!Clipboard.ContainsImage()) return null;
+        using var image = Clipboard.GetImage();
+        return image?.Size;
+    });
+
     public static void Clear() => RunSta(() =>
     {
         Clipboard.Clear();

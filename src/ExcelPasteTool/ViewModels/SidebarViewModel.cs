@@ -6,6 +6,7 @@ namespace ExcelPasteTool;
 public enum SidebarPage
 {
     Tools,
+    Screenshots,
     Settings,
     Help,
     GitHub,

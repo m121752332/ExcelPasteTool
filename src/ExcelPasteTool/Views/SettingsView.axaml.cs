@@ -1,3 +1,4 @@
+using Avalonia.Platform.Storage;
 using Avalonia.Controls;
 using Avalonia.Input;
 using ExcelPasteTool.Helpers;
@@ -51,6 +52,9 @@ public partial class SettingsView : UserControl
         IncreaseFontButton.Click += (_, _) => vm.IncreaseFontSize();
         ResetFontButton.Click += (_, _) => vm.ResetFont();
 
+        ChangeScreenshotFolderButton.Click += ChangeScreenshotFolderButton_OnClick;
+        ResetScreenshotFolderButton.Click += (_, _) => vm.ResetScreenshotFolder();
+
         CheckUpdateButton.Click += CheckUpdateButton_OnClick;
         ChangelogButton.Click += ChangelogButton_OnClick;
 
@@ -97,6 +101,27 @@ public partial class SettingsView : UserControl
         {
             vm.IsCheckingUpdate = false;
         }
+    }
+
+    /// <summary>「截圖資料夾 › 變更…」：用系統的資料夾選擇視窗挑一個資料夾。</summary>
+    private async void ChangeScreenshotFolderButton_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (TopLevel.GetTopLevel(this)?.StorageProvider is not { CanPickFolder: true } storage) return;
+        try
+        {
+            Directory.CreateDirectory(ScreenshotService.Folder);
+        }
+        catch { /* 資料夾建不起來就從預設位置開始選 */ }
+        var start = await storage.TryGetFolderFromPathAsync(ScreenshotService.Folder);
+        var picked = await storage.OpenFolderPickerAsync(new Avalonia.Platform.Storage.FolderPickerOpenOptions
+        {
+            Title = LanguageManager.GetText("ScreenshotFolderPickerTitle", "選擇截圖資料夾"),
+            AllowMultiple = false,
+            SuggestedStartLocation = start
+        });
+        var path = picked.Count > 0 ? picked[0].TryGetLocalPath() : null;
+        if (!string.IsNullOrEmpty(path))
+            SettingsViewModel.Instance.SetScreenshotFolder(path);
     }
 
     private async void ChangelogButton_OnClick(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

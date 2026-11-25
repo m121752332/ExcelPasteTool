@@ -17,6 +17,8 @@ public partial class MainWindow : Window
     {
         // 工具：使用 DataIcon
         new SidebarItem(SidebarPage.Tools, "SidebarTools", "工具", IconManager.DataIcon),
+        // 截圖管理：Alt+F5（macOS ⌥F5）拍下的 App 畫面都在這裡（見 MainWindow.Screenshot.cs）
+        new SidebarItem(SidebarPage.Screenshots, "SidebarScreenshots", "截圖", IconManager.ScreenshotsIcon, "SidebarScreenshotsTooltip", "截圖管理 (Alt+F5 截圖)"),
         // 設定：使用 SettingsIcon
         new SidebarItem(SidebarPage.Settings, "SidebarSettings", "設定", IconManager.SettingsIcon, "SidebarSettingsTooltip", "設定 (Ctrl+,)"),
         // 說明：使用 BookIcon（F1 也會開啟）；標籤不放快捷鍵，只在 ToolTip 顯示

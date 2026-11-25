@@ -74,6 +74,13 @@ TestResults/e2e/
 
 完整說明：`docs/UI-TESTING.md`。
 
+## 截圖功能（Alt+F5）
+
+- `Alt+F5`（macOS `⌥F5`）用 `RenderTargetBitmap` 拍下主視窗存成 PNG，側邊欄「截圖」頁管理；說明見 `docs/Screenshots.md`。
+- 預設存到「圖片」資料夾底下的 `DataSplitter`，`config.json` 的 `ScreenshotFolder` 可改。
+- 測試不可寫到使用者的「圖片」資料夾：UI 測試由 `MainWindowHost.ResetAppState` 改到暫存資料夾並固定顯示路徑；E2E 由 `AppSession` 在 `config.json` 指定 `TestResults/e2e/_app/Screenshots`。新增測試時沿用這兩個機制。
+- E2E 測試類別之間不平行執行（共用 `_app` 與剪貼簿），新增測試類別不必另外處理。
+
 ## 發版
 
 - 版本號在 `src/ExcelPasteTool/ExcelPasteTool.csproj`，改版資訊在 `src/ExcelPasteTool/Resources/Changelog.json`（五種語言都要寫，測試會檢查）。

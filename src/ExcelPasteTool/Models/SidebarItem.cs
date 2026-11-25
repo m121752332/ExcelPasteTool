@@ -21,7 +21,7 @@ public class SidebarItem : INotifyPropertyChanged
         get
         {
             var text = _tooltipKey is null ? Name : LanguageManager.GetText(_tooltipKey, _defaultTooltip ?? _defaultName);
-            return OperatingSystem.IsMacOS() ? text.Replace("Ctrl+,", "⌘+,") : text;
+            return OperatingSystem.IsMacOS() ? text.Replace("Ctrl+,", "⌘+,").Replace("Alt+F5", "⌥F5") : text;
         }
     }
     public string Icon { get; }

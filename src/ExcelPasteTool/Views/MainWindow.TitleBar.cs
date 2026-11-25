@@ -12,7 +12,8 @@ namespace ExcelPasteTool;
 /// MainWindow 的標題列與快捷鍵：
 /// - 設定頁「精簡標題列」開啟時，隱藏系統標題列，改用自訂的精簡標題列
 ///   （只留側邊欄開關與最小化 / 最大化 / 關閉，空白處可拖曳、雙擊放大）。
-/// - 快捷鍵：Alt+F4 強制關閉、Alt+Q 開關側邊欄、Alt+P 貼上剪貼簿資料到工具頁右側資料表。
+/// - 快捷鍵：Alt+F4 強制關閉、Alt+Q 開關側邊欄、Alt+P 貼上剪貼簿資料到工具頁右側資料表、
+///   Alt+F5 截圖（見 MainWindow.Screenshot.cs）。
 ///   快捷鍵只在對應按鈕的提示（ToolTip）中顯示。
 /// </summary>
 public partial class MainWindow
@@ -128,6 +129,14 @@ public partial class MainWindow
         {
             e.Handled = true;
             ForceClose();
+            return true;
+        }
+
+        // Alt+F5（macOS 的 Option 鍵在 Avalonia 也是 Alt，所以是 ⌥F5）：拍下目前的 App 畫面（導覽中也可以拍）
+        if (e.Key == Key.F5)
+        {
+            e.Handled = true;
+            TakeScreenshot();
             return true;
         }
 

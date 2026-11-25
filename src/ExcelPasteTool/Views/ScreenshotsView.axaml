@@ -1,0 +1,131 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:ExcelPasteTool"
+             x:Class="ExcelPasteTool.ScreenshotsView"
+             x:DataType="local:ScreenshotsViewModel">
+    <!--
+      截圖管理（類似檔案總管的「詳細資料 + 預覽窗格」）：
+        上方：標題、拍攝截圖 / 開啟資料夾 / 重新整理，下面一行是資料夾位置與張數
+        左邊：截圖清單（縮圖、檔名、時間 · 大小），最新的在最上面；雙擊用預設程式開啟
+        右邊：選取那張的預覽，以及 複製 / 開啟 / 在資料夾中顯示 / 刪除（刪除前會再確認一次）
+      卡片外觀沿用設定頁（Border.panel、setting-title、setting-desc），顏色全部取自主題配色。
+    -->
+    <Grid Margin="32,24" RowDefinitions="Auto,Auto,*">
+
+        <!-- 標題與操作按鈕 -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,6">
+            <TextBlock Name="ScreenshotsTitle" Classes="page-title" Text="{Binding TitleText.Text}" VerticalAlignment="Center"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <Button Name="CaptureScreenshotButton" AutomationProperties.AutomationId="CaptureScreenshotButton"
+                        Classes="primary" ToolTip.Tip="{Binding CaptureTooltipText}">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Path Data="{x:Static local:IconManager.CameraIcon}" Width="15" Height="15" Stretch="Uniform" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding CaptureText.Text}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Name="OpenScreenshotFolderButton" AutomationProperties.AutomationId="OpenScreenshotFolderButton" Classes="ghost">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Path Data="{x:Static local:IconManager.FolderIcon}" Width="15" Height="15" Stretch="Uniform" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding OpenFolderText.Text}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+                <Button Name="RefreshScreenshotsButton" AutomationProperties.AutomationId="RefreshScreenshotsButton" Classes="ghost"
+                        ToolTip.Tip="{Binding RefreshTooltipText.Text}" Padding="9,5">
+                    <Path Data="{x:Static local:IconManager.RefreshIcon}" Width="15" Height="15" Stretch="Uniform" VerticalAlignment="Center"/>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <TextBlock Grid.Row="1" Name="ScreenshotsSummaryText" AutomationProperties.AutomationId="ScreenshotsSummaryText"
+                   Classes="setting-desc" Text="{Binding SummaryText}" Margin="0,0,0,14"/>
+
+        <!-- 沒有截圖時 -->
+        <Border Grid.Row="2" Name="ScreenshotsEmptyPanel" Classes="panel" Padding="24,48"
+                VerticalAlignment="Top" IsVisible="{Binding IsEmpty}">
+            <StackPanel Spacing="10" HorizontalAlignment="Center">
+                <Path Classes="setting-icon" Data="{x:Static local:IconManager.ScreenshotsIcon}" Width="44" Height="44"
+                      HorizontalAlignment="Center" Fill="{DynamicResource TextSecondaryBrush}"/>
+                <TextBlock Text="{Binding EmptyTitleText.Text}" Classes="setting-title" HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding EmptyDescText}" Classes="setting-desc" HorizontalAlignment="Center" TextAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <!-- 清單 + 預覽 -->
+        <Grid Grid.Row="2" Name="ScreenshotsBrowser" ColumnDefinitions="360,*" ColumnSpacing="16" IsVisible="{Binding HasItems}">
+            <Border Grid.Column="0" Classes="panel" Padding="6">
+                <ListBox Name="ScreenshotList" AutomationProperties.AutomationId="ScreenshotList" Classes="screenshot-list"
+                         ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="local:ScreenshotItem">
+                            <Grid ColumnDefinitions="96,*" ColumnSpacing="12" ToolTip.Tip="{Binding FilePath}">
+                                <Border Classes="screenshot-thumb" Width="96" Height="60">
+                                    <Image Source="{Binding Thumbnail}" Stretch="Uniform"/>
+                                </Border>
+                                <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding FileName}" Classes="setting-title"
+                                               TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                                    <TextBlock Text="{Binding ModifiedText}" Classes="setting-desc"/>
+                                    <TextBlock Text="{Binding SizeText}" Classes="setting-desc"/>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+
+            <Border Grid.Column="1" Classes="panel" Padding="16">
+                <Grid RowDefinitions="*,Auto,Auto" RowSpacing="12">
+                    <Border Grid.Row="0" Classes="screenshot-preview">
+                        <Panel>
+                            <Image Name="ScreenshotPreviewImage" Source="{Binding Preview}" Stretch="Uniform"/>
+                            <TextBlock Text="{Binding NoSelectionText.Text}" Classes="setting-desc"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       IsVisible="{Binding ShowNoSelection}"/>
+                        </Panel>
+                    </Border>
+                    <StackPanel Grid.Row="1" Spacing="2" IsVisible="{Binding HasSelection}">
+                        <TextBlock Name="SelectedScreenshotName" Text="{Binding SelectedItem.FileName, FallbackValue=''}" Classes="setting-title"
+                                   TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"/>
+                        <TextBlock Text="{Binding SelectedItem.DetailText, FallbackValue=''}" Classes="setting-desc"/>
+                    </StackPanel>
+                    <WrapPanel Grid.Row="2" Orientation="Horizontal" ItemSpacing="8" LineSpacing="8" IsVisible="{Binding HasSelection}">
+                        <Button Name="CopyScreenshotButton" AutomationProperties.AutomationId="CopyScreenshotButton" Classes="ghost">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Path Data="{x:Static local:IconManager.CopyIcon}" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding CopyText.Text}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Name="OpenScreenshotButton" AutomationProperties.AutomationId="OpenScreenshotButton" Classes="ghost">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Path Data="{x:Static local:IconManager.OpenInNewIcon}" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding OpenFileText.Text}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Name="RevealScreenshotButton" AutomationProperties.AutomationId="RevealScreenshotButton" Classes="ghost">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Path Data="{x:Static local:IconManager.FolderIcon}" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding RevealText.Text}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+                        <Button Name="DeleteScreenshotButton" AutomationProperties.AutomationId="DeleteScreenshotButton" Classes="secondary">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <Path Data="{x:Static local:IconManager.DeleteIcon}" Width="14" Height="14" Stretch="Uniform" VerticalAlignment="Center"/>
+                                <TextBlock Text="{Binding DeleteText.Text}" VerticalAlignment="Center"/>
+                            </StackPanel>
+                            <Button.Flyout>
+                                <Flyout Placement="TopEdgeAlignedRight">
+                                    <StackPanel Spacing="12" MaxWidth="260">
+                                        <TextBlock Text="{Binding DeleteConfirmText.Text}" TextWrapping="Wrap"/>
+                                        <Button Name="DeleteScreenshotConfirmButton" AutomationProperties.AutomationId="DeleteScreenshotConfirmButton"
+                                                Classes="secondary" HorizontalAlignment="Right"
+                                                Content="{Binding DeleteConfirmButtonText.Text}" Click="DeleteConfirmButton_Click"/>
+                                    </StackPanel>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                    </WrapPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
