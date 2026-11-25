@@ -22,6 +22,7 @@ public partial class SettingsView : UserControl
         GeneralCategoryButton.Click += (_, _) => NavigateTo(SettingsCategory.General);
         PreferencesCategoryButton.Click += (_, _) => NavigateTo(SettingsCategory.Preferences);
         UpdateCategoryButton.Click += (_, _) => NavigateTo(SettingsCategory.Update);
+        DeveloperCategoryButton.Click += (_, _) => NavigateTo(SettingsCategory.Developer);
         BreadcrumbRootButton.Click += (_, _) => NavigateTo(SettingsCategory.Home);
 
         FontSizeExpandButton.Click += (_, _) => vm.IsFontSizeExpanded = !vm.IsFontSizeExpanded;

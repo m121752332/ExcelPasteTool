@@ -13,7 +13,8 @@ public enum SettingsCategory
     Home,
     General,
     Preferences,
-    Update
+    Update,
+    Developer
 }
 
 public class SettingsViewModel : INotifyPropertyChanged
@@ -54,6 +55,7 @@ public class SettingsViewModel : INotifyPropertyChanged
     public LocalizedText GeneralCategoryText { get; } = new("SettingsGeneralTitle", "一般設置");
     public LocalizedText PreferencesCategoryText { get; } = new("SettingsPreferencesTitle", "使用者介面偏好設置");
     public LocalizedText UpdateCategoryText { get; } = new("SettingsUpdateTitle", "更新設置");
+    public LocalizedText DeveloperCategoryText { get; } = new("SettingsDeveloperTitle", "開發者設置");
     public LocalizedText BackTooltipText { get; } = new("SettingsBackTooltip", "回到設定 (Alt+←)");
     public LocalizedText LanguageRowTitleText { get; } = new("SettingsLanguageTitle", "語言");
     public LocalizedText ThemeRowTitleText { get; } = new("SettingsThemeTitle", "主題");
@@ -79,6 +81,7 @@ public class SettingsViewModel : INotifyPropertyChanged
             OnPropertyChanged(nameof(IsGeneral));
             OnPropertyChanged(nameof(IsPreferences));
             OnPropertyChanged(nameof(IsUpdate));
+            OnPropertyChanged(nameof(IsDeveloper));
             OnPropertyChanged(nameof(CurrentCategoryTitle));
         }
     }
@@ -88,6 +91,7 @@ public class SettingsViewModel : INotifyPropertyChanged
     public bool IsGeneral => _currentCategory == SettingsCategory.General;
     public bool IsPreferences => _currentCategory == SettingsCategory.Preferences;
     public bool IsUpdate => _currentCategory == SettingsCategory.Update;
+    public bool IsDeveloper => _currentCategory == SettingsCategory.Developer;
 
     /// <summary>麵包屑第二段的文字（目前分類名稱）。</summary>
     public string CurrentCategoryTitle => _currentCategory switch
@@ -95,6 +99,7 @@ public class SettingsViewModel : INotifyPropertyChanged
         SettingsCategory.General => GeneralCategoryText.Text,
         SettingsCategory.Preferences => PreferencesCategoryText.Text,
         SettingsCategory.Update => UpdateCategoryText.Text,
+        SettingsCategory.Developer => DeveloperCategoryText.Text,
         _ => TitleText.Text
     };
 
@@ -135,6 +140,9 @@ public class SettingsViewModel : INotifyPropertyChanged
         LanguageManager.GetText("UpdateCurrentVersion", "目前版本 v{0}"),
         VersionTextOverride ?? UpdateService.CurrentVersionText);
 
+    /// <summary>「開發者設置」卡片上的摘要：開發者模式狀態 · 開發者工具文字大小。</summary>
+    public string DeveloperSummary => string.Join(" · ", DeveloperModeStatus, DeveloperModeService.GetFontSizeName(DeveloperModeService.FontSize));
+
     private bool _isCheckingUpdate;
 
     /// <summary>手動檢查更新進行中（按鈕暫停使用並顯示「檢查中…」）。</summary>
@@ -162,6 +170,7 @@ public class SettingsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(GeneralSummary));
         OnPropertyChanged(nameof(PreferencesSummary));
         OnPropertyChanged(nameof(UpdateSummary));
+        OnPropertyChanged(nameof(DeveloperSummary));
     }
 
     public double MinFontSize => FontManager.MinFontSize;
@@ -317,6 +326,7 @@ public class SettingsViewModel : INotifyPropertyChanged
             EnqueueToast?.Invoke(LanguageManager.GetText("DeveloperModeChangedToast", "開發者模式設定已儲存"));
             OnPropertyChanged();
             OnPropertyChanged(nameof(DeveloperModeStatus));
+            NotifySummaries();
         }
     }
 
@@ -324,9 +334,9 @@ public class SettingsViewModel : INotifyPropertyChanged
     public string DeveloperModeStatus =>
         $"{DeveloperModeTitleText.Text} {(DeveloperMode ? ToggleOnText.Text : ToggleOffText.Text)}";
 
-    private bool _isDeveloperGroupExpanded;
+    private bool _isDeveloperGroupExpanded = true;
 
-    /// <summary>「開發者選項」群組是否展開（預設收合，同 Win11；離開設定頁再回來會保留）。</summary>
+    /// <summary>「開發者選項」群組是否展開（在自己的分類頁，預設展開；離開設定頁再回來會保留）。</summary>
     public bool IsDeveloperGroupExpanded
     {
         get => _isDeveloperGroupExpanded;
@@ -356,6 +366,7 @@ public class SettingsViewModel : INotifyPropertyChanged
             {
                 DeveloperModeService.FontSize = size;
                 ConfigServices.Save();
+                NotifySummaries();
                 EnqueueToast?.Invoke(LanguageManager.GetText("DevToolsFontSizeChangedToast", "開發者工具文字大小已儲存"));
             }
             OnPropertyChanged();

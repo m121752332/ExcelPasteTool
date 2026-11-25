@@ -27,37 +27,41 @@ public class DeveloperModeTests
         MainWindowHost.Pump();
     }
 
-    /// <summary>開到 設定 › 一般設置，並展開「開發者選項」群組。</summary>
+    /// <summary>開到 設定 › 開發者設置（「開發者選項」群組預設展開）。</summary>
     private static void OpenDeveloperGroup(MainWindowHost host)
     {
         host.Window.SidebarItemClickCommand.Execute(SidebarPage.Settings);
         MainWindowHost.Pump();
-        Click(host, "GeneralCategoryButton");
-        Click(host, "DeveloperGroupExpandButton");
+        Click(host, "DeveloperCategoryButton");
     }
 
     [AvaloniaFact]
-    public void DeveloperGroup_CollapsedByDefault_ExpandsLikeWin11()
+    public void DeveloperSettingsPage_HasOwnCategory_WithWin11StyleGroup()
     {
         using var host = MainWindowHost.Open();
         host.Window.SidebarItemClickCommand.Execute(SidebarPage.Settings);
         MainWindowHost.Pump();
-        Click(host, "GeneralCategoryButton");
+        Assert.Equal("開發者模式 關閉 · 中（12 pt）", host.Find<TextBlock>("DeveloperSummaryText").Text);
 
+        Click(host, "DeveloperCategoryButton");
+        Assert.True(host.Find<StackPanel>("DeveloperPanel").IsVisible);
+        Assert.False(host.Find<StackPanel>("GeneralPanel").IsVisible);
+        Assert.Equal("開發者設置", host.Find<TextBlock>("BreadcrumbCurrentText").Text);
+        // 一般設置裡不再有開發者選項
+        Assert.False(host.Find<ToggleSwitch>("DeveloperModeToggle").GetVisualAncestors().OfType<StackPanel>().Any(p => p.Name == "GeneralPanel"));
+
+        // 群組在自己的分類頁預設展開，可收合
         var body = host.Find<Border>("DeveloperGroupBody");
-        Assert.False(body.IsVisible);
-        Assert.Equal("開發者模式 關閉", host.Find<TextBlock>("DeveloperGroupStatusText").Text);
-
-        Click(host, "DeveloperGroupExpandButton");
         Assert.True(body.IsVisible);
+        Assert.Equal("開發者模式 關閉", host.Find<TextBlock>("DeveloperGroupStatusText").Text);
         Assert.True(host.Find<ToggleSwitch>("DeveloperModeToggle").IsEffectivelyVisible);
         Assert.True(host.Find<ComboBox>("DevToolsFontSizeComboBox").IsEffectivelyVisible);
-        host.Find<ScrollViewer>("SettingsScroll").ScrollToEnd();
-        MainWindowHost.Pump();
-        VisualAssert.MatchesBaseline(host.Window, "settings-developer-group-dark");
+        VisualAssert.MatchesBaseline(host.Window, "settings-developer-dark");
 
         Click(host, "DeveloperGroupExpandButton");
         Assert.False(body.IsVisible);
+        Click(host, "DeveloperGroupExpandButton");
+        Assert.True(body.IsVisible);
     }
 
     [AvaloniaFact]

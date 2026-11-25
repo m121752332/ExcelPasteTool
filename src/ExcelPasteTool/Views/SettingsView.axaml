@@ -57,6 +57,16 @@
                         <Path Grid.Column="2" Classes="setting-chevron" Data="M0,0 L5,5 L0,10" Margin="12,0,4,0"/>
                     </Grid>
                 </Button>
+                <Button Name="DeveloperCategoryButton" Classes="setting-nav">
+                    <Grid ColumnDefinitions="40,*,Auto">
+                        <Path Classes="setting-icon" Data="{x:Static local:IconManager.CodeIcon}"/>
+                        <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding DeveloperCategoryText.Text}" Classes="setting-title"/>
+                            <TextBlock Name="DeveloperSummaryText" Text="{Binding DeveloperSummary}" Classes="setting-desc"/>
+                        </StackPanel>
+                        <Path Grid.Column="2" Classes="setting-chevron" Data="M0,0 L5,5 L0,10" Margin="12,0,4,0"/>
+                    </Grid>
+                </Button>
             </StackPanel>
 
             <!-- ===== 第 3 層：一般設置 ===== -->
@@ -135,57 +145,6 @@
                                   SelectedItem="{Binding ToastMaxVisible, Mode=TwoWay}"/>
                     </Grid>
                 </Border>
-                <!-- 開發者選項：Win11 風格的可收合群組卡片，標題列＋縮排的子設定列（同 設定 › 個人化 › 工作列） -->
-                <StackPanel Name="DeveloperGroup" Spacing="0">
-                    <Button Name="DeveloperGroupExpandButton" Classes="setting-nav"
-                            Classes.expanded="{Binding IsDeveloperGroupExpanded}">
-                        <Grid ColumnDefinitions="40,*,Auto,Auto">
-                            <Path Classes="setting-icon" Data="{x:Static local:IconManager.CodeIcon}"/>
-                            <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
-                                <TextBlock Text="{Binding DeveloperGroupTitleText.Text}" Classes="setting-title"/>
-                                <TextBlock Text="{Binding DeveloperGroupDescText.Text}" Classes="setting-desc"/>
-                            </StackPanel>
-                            <TextBlock Name="DeveloperGroupStatusText" Grid.Column="2" Text="{Binding DeveloperModeStatus}"
-                                       Classes="setting-desc" VerticalAlignment="Center"/>
-                            <Panel Grid.Column="3" Margin="14,0,4,0" VerticalAlignment="Center">
-                                <Path Classes="setting-chevron" Data="M0,0 L5,5 L10,0" IsVisible="{Binding !IsDeveloperGroupExpanded}"/>
-                                <Path Classes="setting-chevron" Data="M0,5 L5,0 L10,5" IsVisible="{Binding IsDeveloperGroupExpanded}"/>
-                            </Panel>
-                        </Grid>
-                    </Button>
-                    <Border Name="DeveloperGroupBody" Classes="setting-group-body" IsVisible="{Binding IsDeveloperGroupExpanded}">
-                        <Grid RowDefinitions="Auto,Auto">
-                            <!-- 開發者模式 -->
-                            <Border Grid.Row="0" Classes="setting-subrow">
-                                <Grid ColumnDefinitions="32,*,Auto">
-                                    <Path Classes="setting-icon" Width="16" Height="16" Data="{x:Static local:IconManager.CodeIcon}"/>
-                                    <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
-                                        <TextBlock Text="{Binding DeveloperModeTitleText.Text}" Classes="setting-subtitle"/>
-                                        <TextBlock Text="{Binding DeveloperModeDescText.Text}" Classes="setting-desc"/>
-                                    </StackPanel>
-                                    <ToggleSwitch Name="DeveloperModeToggle" Grid.Column="2" VerticalAlignment="Center"
-                                                  IsChecked="{Binding DeveloperMode, Mode=TwoWay}"
-                                                  OnContent="{Binding ToggleOnText.Text}"
-                                                  OffContent="{Binding ToggleOffText.Text}"/>
-                                </Grid>
-                            </Border>
-                            <!-- 開發者工具文字大小：跟 App 字體大小分開，開發者模式開啟時才能調 -->
-                            <Border Grid.Row="1" Classes="setting-subrow">
-                                <Grid ColumnDefinitions="32,*,Auto">
-                                    <Path Classes="setting-icon" Width="16" Height="16" Data="{x:Static local:IconManager.FontSizeIcon}"/>
-                                    <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
-                                        <TextBlock Text="{Binding DevToolsFontSizeTitleText.Text}" Classes="setting-subtitle"/>
-                                        <TextBlock Text="{Binding DevToolsFontSizeDescText.Text}" Classes="setting-desc"/>
-                                    </StackPanel>
-                                    <ComboBox Name="DevToolsFontSizeComboBox" Grid.Column="2" Width="200"
-                                              IsEnabled="{Binding DeveloperMode}"
-                                              ItemsSource="{Binding DevToolsFontSizes, Mode=OneWay}"
-                                              SelectedItem="{Binding SelectedDevToolsFontSize, Mode=TwoWay}"/>
-                                </Grid>
-                            </Border>
-                        </Grid>
-                    </Border>
-                </StackPanel>
             </StackPanel>
 
             <!-- ===== 第 3 層：使用者介面偏好設置 ===== -->
@@ -248,6 +207,61 @@
                             </Border>
                             <Button Name="ResetFontButton" Classes="ghost" Content="{Binding FontResetText.Text}"/>
                         </StackPanel>
+                    </Border>
+                </StackPanel>
+            </StackPanel>
+
+            <!-- ===== 第 3 層：開發者設置 ===== -->
+            <StackPanel Name="DeveloperPanel" Spacing="6" IsVisible="{Binding IsDeveloper}">
+                <!-- 開發者選項：Win11 風格的可收合群組卡片，標題列＋縮排的子設定列（同 設定 › 個人化 › 工作列） -->
+                <StackPanel Name="DeveloperGroup" Spacing="0">
+                    <Button Name="DeveloperGroupExpandButton" Classes="setting-nav"
+                            Classes.expanded="{Binding IsDeveloperGroupExpanded}">
+                        <Grid ColumnDefinitions="40,*,Auto,Auto">
+                            <Path Classes="setting-icon" Data="{x:Static local:IconManager.CodeIcon}"/>
+                            <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                                <TextBlock Text="{Binding DeveloperGroupTitleText.Text}" Classes="setting-title"/>
+                                <TextBlock Text="{Binding DeveloperGroupDescText.Text}" Classes="setting-desc"/>
+                            </StackPanel>
+                            <TextBlock Name="DeveloperGroupStatusText" Grid.Column="2" Text="{Binding DeveloperModeStatus}"
+                                       Classes="setting-desc" VerticalAlignment="Center"/>
+                            <Panel Grid.Column="3" Margin="14,0,4,0" VerticalAlignment="Center">
+                                <Path Classes="setting-chevron" Data="M0,0 L5,5 L10,0" IsVisible="{Binding !IsDeveloperGroupExpanded}"/>
+                                <Path Classes="setting-chevron" Data="M0,5 L5,0 L10,5" IsVisible="{Binding IsDeveloperGroupExpanded}"/>
+                            </Panel>
+                        </Grid>
+                    </Button>
+                    <Border Name="DeveloperGroupBody" Classes="setting-group-body" IsVisible="{Binding IsDeveloperGroupExpanded}">
+                        <Grid RowDefinitions="Auto,Auto">
+                            <!-- 開發者模式 -->
+                            <Border Grid.Row="0" Classes="setting-subrow">
+                                <Grid ColumnDefinitions="32,*,Auto">
+                                    <Path Classes="setting-icon" Width="16" Height="16" Data="{x:Static local:IconManager.CodeIcon}"/>
+                                    <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Text="{Binding DeveloperModeTitleText.Text}" Classes="setting-subtitle"/>
+                                        <TextBlock Text="{Binding DeveloperModeDescText.Text}" Classes="setting-desc"/>
+                                    </StackPanel>
+                                    <ToggleSwitch Name="DeveloperModeToggle" Grid.Column="2" VerticalAlignment="Center"
+                                                  IsChecked="{Binding DeveloperMode, Mode=TwoWay}"
+                                                  OnContent="{Binding ToggleOnText.Text}"
+                                                  OffContent="{Binding ToggleOffText.Text}"/>
+                                </Grid>
+                            </Border>
+                            <!-- 開發者工具文字大小：跟 App 字體大小分開，開發者模式開啟時才能調 -->
+                            <Border Grid.Row="1" Classes="setting-subrow">
+                                <Grid ColumnDefinitions="32,*,Auto">
+                                    <Path Classes="setting-icon" Width="16" Height="16" Data="{x:Static local:IconManager.FontSizeIcon}"/>
+                                    <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center" Margin="0,0,16,0">
+                                        <TextBlock Text="{Binding DevToolsFontSizeTitleText.Text}" Classes="setting-subtitle"/>
+                                        <TextBlock Text="{Binding DevToolsFontSizeDescText.Text}" Classes="setting-desc"/>
+                                    </StackPanel>
+                                    <ComboBox Name="DevToolsFontSizeComboBox" Grid.Column="2" Width="200"
+                                              IsEnabled="{Binding DeveloperMode}"
+                                              ItemsSource="{Binding DevToolsFontSizes, Mode=OneWay}"
+                                              SelectedItem="{Binding SelectedDevToolsFontSize, Mode=TwoWay}"/>
+                                </Grid>
+                            </Border>
+                        </Grid>
                     </Border>
                 </StackPanel>
             </StackPanel>
