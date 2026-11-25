@@ -155,6 +155,48 @@ public class DeveloperModeTests
     }
 
     [AvaloniaFact]
+    public void PickMode_HoverHighlights_ClickSelects_LikeEdge()
+    {
+        using var host = MainWindowHost.Open();
+        ConfigServices.Config.DeveloperMode = true;
+        var devTools = PressF12AndGetDevTools(host);
+        var button = host.Find<Button>("PasteDataButton");
+        var center = button.TranslatePoint(new Point(button.Bounds.Width / 2, button.Bounds.Height / 2), host.Window)!.Value;
+        var clicked = false;
+        button.Click += (_, _) => clicked = true;
+        bool IsButtonOrInside(Visual? v) => v != null && (v == button || button.IsVisualAncestorOf(v));
+
+        // Ctrl+Shift+C（macOS ⌘+Shift+C）在 App 上切換選取模式
+        var modifier = (OperatingSystem.IsMacOS() ? RawInputModifiers.Meta : RawInputModifiers.Control) | RawInputModifiers.Shift;
+        host.PressKey(Key.C, modifier);
+        Assert.True(devTools.IsPicking);
+
+        // 滑鼠移過去：即時標示，但還沒選定
+        host.Window.MouseMove(center);
+        MainWindowHost.Pump();
+        Assert.True(IsButtonOrInside(devTools.HoveredVisual));
+        Assert.True(IsButtonOrInside(AdornerLayer.GetAdornedElement(devTools.Highlight!)));
+        Assert.Same(host.Window, devTools.SelectedVisual);
+
+        // 點一下（不用按修飾鍵）：選定、結束選取模式、不觸發按鈕
+        host.Window.MouseDown(center, MouseButton.Left);
+        host.Window.MouseUp(center, MouseButton.Left);
+        MainWindowHost.Pump();
+        Assert.False(devTools.IsPicking);
+        Assert.True(IsButtonOrInside(devTools.SelectedVisual));
+        Assert.False(clicked);
+
+        // 再進入選取模式後按 Esc 取消，選取不變
+        var selected = devTools.SelectedVisual;
+        host.PressKey(Key.C, modifier);
+        Assert.True(devTools.IsPicking);
+        host.PressKey(Key.Escape);
+        Assert.False(devTools.IsPicking);
+        Assert.Same(selected, devTools.SelectedVisual);
+        Assert.Same(selected, AdornerLayer.GetAdornedElement(devTools.Highlight!));
+    }
+
+    [AvaloniaFact]
     public void DevToolsWindow_Screenshot()
     {
         using var host = MainWindowHost.Open();

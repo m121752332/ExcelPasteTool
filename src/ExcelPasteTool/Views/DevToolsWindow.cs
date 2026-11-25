@@ -76,14 +76,80 @@ public sealed class DevToolsWindow : Window
         BuildTree();
         SelectVisual(target);
 
-        // App 上 Ctrl+Shift+點選：直接選取滑鼠底下的控制項（用 Tunnel 並攔下，避免同時觸發按鈕）
+        // App 上 Ctrl+Shift+點選，或「選取元素」模式下直接點選：選取滑鼠底下的控制項（用 Tunnel 並攔下，避免同時觸發按鈕）
         Target.AddHandler(PointerPressedEvent, OnTargetPointerPressed, RoutingStrategies.Tunnel, handledEventsToo: true);
+        Target.AddHandler(PointerMovedEvent, OnTargetPointerMoved, RoutingStrategies.Tunnel, handledEventsToo: true);
+        Target.AddHandler(KeyDownEvent, OnTargetKeyDown, RoutingStrategies.Tunnel);
         KeyDown += OnKeyDown;
         Closed += (_, _) =>
         {
             Target.RemoveHandler(PointerPressedEvent, OnTargetPointerPressed);
+            Target.RemoveHandler(PointerMovedEvent, OnTargetPointerMoved);
+            Target.RemoveHandler(KeyDownEvent, OnTargetKeyDown);
             ClearHighlight();
         };
+    }
+
+    // ------------------------------------------------------------------
+    // 選取元素模式（同 Edge / Chrome DevTools 的 Ctrl+Shift+C）
+    // ------------------------------------------------------------------
+
+    private ToggleButton? _pickButton;
+
+    /// <summary>
+    /// 是否在「選取元素」模式：滑鼠在 App 上移到哪裡就即時標到哪裡，點一下選定並結束模式，Esc 取消。
+    /// </summary>
+    internal bool IsPicking
+    {
+        get => _isPicking;
+        set
+        {
+            if (_isPicking == value) return;
+            _isPicking = value;
+            HoveredVisual = null;
+            if (_pickButton != null) _pickButton.IsChecked = value;
+            if (value)
+            {
+                Target.Activate();
+            }
+            else if (SelectedVisual != null)
+            {
+                // 結束時標示框回到目前選取的控制項
+                ShowHighlight(SelectedVisual);
+            }
+        }
+    }
+    private bool _isPicking;
+
+    /// <summary>選取元素模式下滑鼠目前指著的控制項（還沒點下去）。</summary>
+    internal Visual? HoveredVisual { get; private set; }
+
+    private static bool IsPickShortcut(KeyEventArgs e) =>
+        e.Key == Key.C && e.KeyModifiers == (MainWindow.PrimaryModifier | KeyModifiers.Shift);
+
+    private Visual? HitTest(Point point) => Target.InputHitTest(point) as Visual;
+
+    private void OnTargetPointerMoved(object? sender, PointerEventArgs e)
+    {
+        if (!IsPicking) return;
+        var hit = HitTest(e.GetPosition(Target));
+        if (hit == null || hit == HoveredVisual) return;
+        HoveredVisual = hit;
+        ShowHighlight(hit);
+    }
+
+    private void OnTargetKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (IsPickShortcut(e))
+        {
+            e.Handled = true;
+            IsPicking = !IsPicking;
+        }
+        else if (IsPicking && e.Key == Key.Escape)
+        {
+            e.Handled = true;
+            IsPicking = false;
+        }
     }
 
     // ------------------------------------------------------------------
@@ -100,6 +166,17 @@ public sealed class DevToolsWindow : Window
         };
         refresh.Click += (_, _) => Refresh();
 
+        var shortcut = OperatingSystem.IsMacOS() ? "⌘+Shift+C" : "Ctrl+Shift+C";
+        _pickButton = new ToggleButton
+        {
+            Name = "DevToolsPickButton",
+            Content = $"{LanguageManager.GetText("DevToolsPick", "選取元素")} ({shortcut})",
+            VerticalAlignment = VerticalAlignment.Center,
+            Margin = new Thickness(0, 0, 8, 0)
+        };
+        ToolTip.SetTip(_pickButton, LanguageManager.GetText("DevToolsPickTooltip", "移到 App 畫面上的控制項會即時標示，點一下就選取；Esc 取消"));
+        _pickButton.IsCheckedChanged += (_, _) => IsPicking = _pickButton.IsChecked == true;
+
         var hint = new TextBlock
         {
             Text = LanguageManager.GetText("DevToolsHint", "Ctrl+Shift+點選 App 畫面可直接選取控制項"),
@@ -110,7 +187,9 @@ public sealed class DevToolsWindow : Window
         hint.Bind(TextBlock.ForegroundProperty, hint.GetResourceObservable("TextSecondaryBrush"));
 
         var toolbar = new DockPanel { Margin = new Thickness(0, 0, 0, 8) };
+        DockPanel.SetDock(_pickButton, Dock.Left);
         DockPanel.SetDock(refresh, Dock.Left);
+        toolbar.Children.Add(_pickButton);
         toolbar.Children.Add(refresh);
         toolbar.Children.Add(hint);
 
@@ -165,11 +244,22 @@ public sealed class DevToolsWindow : Window
 
     private void OnKeyDown(object? sender, KeyEventArgs e)
     {
+        if (IsPickShortcut(e))
+        {
+            e.Handled = true;
+            IsPicking = !IsPicking;
+            return;
+        }
         if (e.KeyModifiers != KeyModifiers.None) return;
         if (e.Key == Key.F5)
         {
             e.Handled = true;
             Refresh();
+        }
+        else if (e.Key == Key.Escape && IsPicking)
+        {
+            e.Handled = true;
+            IsPicking = false;
         }
         else if (e.Key is Key.F12 or Key.Escape)
         {
@@ -299,12 +389,20 @@ public sealed class DevToolsWindow : Window
     private void OnTargetPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         const KeyModifiers pick = KeyModifiers.Control | KeyModifiers.Shift;
-        if ((e.KeyModifiers & pick) != pick) return;
+        if (!IsPicking && (e.KeyModifiers & pick) != pick) return;
         e.Handled = true;
-        if (Target.InputHitTest(e.GetPosition(Target)) is Visual hit)
+        var hit = HitTest(e.GetPosition(Target));
+        HoveredVisual = null;
+        _isPicking = false;
+        if (_pickButton != null) _pickButton.IsChecked = false;
+        if (hit != null)
         {
             SelectVisual(hit);
             Activate();
+        }
+        else if (SelectedVisual != null)
+        {
+            ShowHighlight(SelectedVisual);
         }
     }
 
