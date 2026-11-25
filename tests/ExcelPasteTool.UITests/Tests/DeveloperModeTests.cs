@@ -21,25 +21,62 @@ public class DeveloperModeTests
         return DeveloperModeService.Current ?? throw new Xunit.Sdk.XunitException("F12 沒有開啟開發者工具");
     }
 
+    private static void Click(MainWindowHost host, string buttonName)
+    {
+        host.Find<Button>(buttonName).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
+        MainWindowHost.Pump();
+    }
+
+    /// <summary>開到 設定 › 一般設置，並展開「開發者選項」群組。</summary>
+    private static void OpenDeveloperGroup(MainWindowHost host)
+    {
+        host.Window.SidebarItemClickCommand.Execute(SidebarPage.Settings);
+        MainWindowHost.Pump();
+        Click(host, "GeneralCategoryButton");
+        Click(host, "DeveloperGroupExpandButton");
+    }
+
+    [AvaloniaFact]
+    public void DeveloperGroup_CollapsedByDefault_ExpandsLikeWin11()
+    {
+        using var host = MainWindowHost.Open();
+        host.Window.SidebarItemClickCommand.Execute(SidebarPage.Settings);
+        MainWindowHost.Pump();
+        Click(host, "GeneralCategoryButton");
+
+        var body = host.Find<Border>("DeveloperGroupBody");
+        Assert.False(body.IsVisible);
+        Assert.Equal("開發者模式 關閉", host.Find<TextBlock>("DeveloperGroupStatusText").Text);
+
+        Click(host, "DeveloperGroupExpandButton");
+        Assert.True(body.IsVisible);
+        Assert.True(host.Find<ToggleSwitch>("DeveloperModeToggle").IsEffectivelyVisible);
+        Assert.True(host.Find<ComboBox>("DevToolsFontSizeComboBox").IsEffectivelyVisible);
+        host.Find<ScrollViewer>("SettingsScroll").ScrollToEnd();
+        MainWindowHost.Pump();
+        VisualAssert.MatchesBaseline(host.Window, "settings-developer-group-dark");
+
+        Click(host, "DeveloperGroupExpandButton");
+        Assert.False(body.IsVisible);
+    }
+
     [AvaloniaFact]
     public void Toggle_DefaultsOff_AndSavesToConfig()
     {
         Assert.False(new AppConfig().DeveloperMode);
 
         using var host = MainWindowHost.Open();
-        host.Window.SidebarItemClickCommand.Execute(SidebarPage.Settings);
-        MainWindowHost.Pump();
-        host.Find<Button>("GeneralCategoryButton").RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-        MainWindowHost.Pump();
+        OpenDeveloperGroup(host);
 
         var toggle = host.Find<ToggleSwitch>("DeveloperModeToggle");
-        Assert.True(toggle.IsVisible);
+        Assert.True(toggle.IsEffectivelyVisible);
         Assert.False(toggle.IsChecked);
 
         toggle.IsChecked = true;
         MainWindowHost.Pump();
         Assert.True(ConfigServices.Config.DeveloperMode);
         Assert.True(SettingsViewModel.Instance.DeveloperMode);
+        Assert.Equal("開發者模式 開啟", host.Find<TextBlock>("DeveloperGroupStatusText").Text);
 
         toggle.IsChecked = false;
         MainWindowHost.Pump();
@@ -205,10 +242,7 @@ public class DeveloperModeTests
         Assert.Equal(16, DeveloperModeService.GetPointSize(DevToolsFontSize.Large));
 
         using var host = MainWindowHost.Open();
-        host.Window.SidebarItemClickCommand.Execute(SidebarPage.Settings);
-        MainWindowHost.Pump();
-        host.Find<Button>("GeneralCategoryButton").RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
-        MainWindowHost.Pump();
+        OpenDeveloperGroup(host);
         var combo = host.Find<ComboBox>("DevToolsFontSizeComboBox");
 
         // 開發者模式關閉時不能調

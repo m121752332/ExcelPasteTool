@@ -43,6 +43,8 @@ public class SettingsViewModel : INotifyPropertyChanged
     public LocalizedText ToastMaxVisibleDescText { get; } = new("ToastMaxVisibleDesc", "通知會疊在一起顯示，超過這個數量時最舊的先關閉（1 ~ 5 則）");
     public LocalizedText DeveloperModeTitleText { get; } = new("DeveloperModeTitle", "開發者模式");
     public LocalizedText DeveloperModeDescText { get; } = new("DeveloperModeDesc", "開啟後在主視窗按 F12 可開啟開發者工具，檢視畫面的視覺樹與控制項屬性");
+    public LocalizedText DeveloperGroupTitleText { get; } = new("DeveloperGroupTitle", "開發者選項");
+    public LocalizedText DeveloperGroupDescText { get; } = new("DeveloperGroupDesc", "開發者模式與開發者工具（F12）的設定");
     public LocalizedText DevToolsFontSizeTitleText { get; } = new("DevToolsFontSizeTitle", "開發者工具文字大小");
     public LocalizedText DevToolsFontSizeDescText { get; } = new("DevToolsFontSizeDesc", "開發者工具視窗使用的文字大小，跟 App 本身的字體大小分開設定");
     public LocalizedText ToggleOnText { get; } = new("ToggleOn", "開啟");
@@ -313,6 +315,25 @@ public class SettingsViewModel : INotifyPropertyChanged
             ConfigServices.Save();
             DeveloperModeService.Apply(value);
             EnqueueToast?.Invoke(LanguageManager.GetText("DeveloperModeChangedToast", "開發者模式設定已儲存"));
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(DeveloperModeStatus));
+        }
+    }
+
+    /// <summary>群組標題列右邊的狀態文字（開發者模式 開啟 / 關閉），收合時也看得到。</summary>
+    public string DeveloperModeStatus =>
+        $"{DeveloperModeTitleText.Text} {(DeveloperMode ? ToggleOnText.Text : ToggleOffText.Text)}";
+
+    private bool _isDeveloperGroupExpanded;
+
+    /// <summary>「開發者選項」群組是否展開（預設收合，同 Win11；離開設定頁再回來會保留）。</summary>
+    public bool IsDeveloperGroupExpanded
+    {
+        get => _isDeveloperGroupExpanded;
+        set
+        {
+            if (_isDeveloperGroupExpanded == value) return;
+            _isDeveloperGroupExpanded = value;
             OnPropertyChanged();
         }
     }
@@ -603,6 +624,7 @@ public class SettingsViewModel : INotifyPropertyChanged
         OnPropertyChanged(nameof(SelectedHelpViewer));
         OnPropertyChanged(nameof(SelectedToastPosition));
         OnPropertyChanged(nameof(SelectedDevToolsFontSize));
+        OnPropertyChanged(nameof(DeveloperModeStatus));
 
         // 更新本地化文字
         OnPropertyChanged(nameof(TitleText));

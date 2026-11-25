@@ -59,6 +59,7 @@ public sealed class MainWindowHost : IDisposable
         SettingsViewModel.VersionTextOverride = "1.0.0";
         SettingsViewModel.Instance.CurrentCategory = SettingsCategory.Home;
         SettingsViewModel.Instance.IsFontSizeExpanded = false;
+        SettingsViewModel.Instance.IsDeveloperGroupExpanded = false;
         Pump();
     }
 

@@ -486,6 +486,24 @@
     <Setter Property="CornerRadius" Value="0,0,6,6"/>
     <Setter Property="Padding" Value="56,14,16,16"/>
   </Style>
+  <!-- 可收合群組卡片（同 Win11 設定 › 個人化 › 工作列）：標題列用 Button.setting-nav，展開後的內容用 setting-group-body，
+       裡面每一列是縮排的 setting-subrow，列與列之間一條分隔線 -->
+  <Style Selector="Border.setting-group-body">
+    <Setter Property="Background" Value="{DynamicResource PanelBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{DynamicResource PanelBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="1,0,1,1"/>
+    <Setter Property="CornerRadius" Value="0,0,6,6"/>
+  </Style>
+  <Style Selector="Border.setting-subrow">
+    <Setter Property="BorderBrush" Value="{DynamicResource PanelBorderBrush}"/>
+    <Setter Property="BorderThickness" Value="0,1,0,0"/>
+    <Setter Property="Padding" Value="56,10,16,10"/>
+    <Setter Property="MinHeight" Value="58"/>
+  </Style>
+  <Style Selector="TextBlock.setting-subtitle">
+    <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>
+    <Setter Property="TextWrapping" Value="Wrap"/>
+  </Style>
   <Style Selector="Button.setting-nav">
     <Setter Property="Background" Value="{DynamicResource PanelBackgroundBrush}"/>
     <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}"/>

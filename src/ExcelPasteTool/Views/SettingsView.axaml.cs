@@ -25,6 +25,7 @@ public partial class SettingsView : UserControl
         BreadcrumbRootButton.Click += (_, _) => NavigateTo(SettingsCategory.Home);
 
         FontSizeExpandButton.Click += (_, _) => vm.IsFontSizeExpanded = !vm.IsFontSizeExpanded;
+        DeveloperGroupExpandButton.Click += (_, _) => vm.IsDeveloperGroupExpanded = !vm.IsDeveloperGroupExpanded;
         DecreaseFontButton.Click += (_, _) => vm.DecreaseFontSize();
         IncreaseFontButton.Click += (_, _) => vm.IncreaseFontSize();
         ResetFontButton.Click += (_, _) => vm.ResetFont();
