@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    端到端 smoke 測試（FlaUI / UIA3）：啟動「真實的」DataSplitter.exe，透過 Windows UI Automation
+    點按鈕、讀文字、截圖，並把步驟、控制項樹、例外輸出到 TestResults/e2e/，讓 AI 能自己跑起來除錯。
+
+    - 只在 Windows 本機執行；CI（設了 CI / GITHUB_ACTIONS / TF_BUILD）預設跳過，見 Infrastructure/E2EGuard.cs。
+    - 一鍵執行與結構化報告：tests/run-e2e-tests.ps1（說明見 docs/UI-TESTING.md）
+    - 與 tests/ExcelPasteTool.UITests（Avalonia Headless）互不影響。
+  -->
+  <PropertyGroup>
+    <TargetFramework>net11.0-windows</TargetFramework>
+    <!-- 剪貼簿用 WinForms 的 Clipboard；EnableWindowsTargeting 讓整個方案在 Linux / macOS 也能建置（測試會自動跳過） -->
+    <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <RootNamespace>ExcelPasteTool.E2ETests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- 版本號集中在根目錄的 Directory.Packages.props -->
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit.v3" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="FlaUI.Core" />
+    <PackageReference Include="FlaUI.UIA3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- 只是要讓 dotnet test 先建置主程式（測試啟動的是它的 exe），不參考它的組件 -->
+    <ProjectReference Include="..\..\src\ExcelPasteTool\ExcelPasteTool.csproj" ReferenceOutputAssembly="false" Private="false" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+</Project>

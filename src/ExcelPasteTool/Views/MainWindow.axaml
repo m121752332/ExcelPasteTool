@@ -22,7 +22,7 @@
 	     只留側邊欄開關與最小化 / 最大化 / 關閉，其餘空白處可拖曳視窗、雙擊放大 -->
 	<Grid Grid.Row="0" Name="CompactTitleBar" Classes="compact-titlebar" Height="36"
 		  ColumnDefinitions="Auto,*,Auto,Auto,Auto" IsVisible="False">
-		<Button Grid.Column="0" Name="TitleBarSidebarButton" Classes="sidebar-toggle titlebar-sidebar"
+		<Button Grid.Column="0" Name="TitleBarSidebarButton" AutomationProperties.AutomationId="TitleBarSidebarButton" Classes="sidebar-toggle titlebar-sidebar"
 				Click="SidebarToggleButton_Click" Width="56" Height="36"
 				HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
 			<Path Data="M8,6 H20 A3,3 0 0 1 23,9 V19 A3,3 0 0 1 20,22 H8 A3,3 0 0 1 5,19 V9 A3,3 0 0 1 8,6 Z M11.5,6 V22"
@@ -45,7 +45,7 @@
 				Width="{Binding Sidebar.IsExpanded, Converter={StaticResource SidebarWidthConverter}}">
 			<StackPanel>
 				<!-- 側邊欄切換鈕：圓角面板＋左側分隔線，點擊展開 / 收合側邊欄 -->
-				<Button Name="SidebarToggleButton"
+				<Button Name="SidebarToggleButton" AutomationProperties.AutomationId="SidebarToggleButton"
 						Classes="sidebar-toggle"
 						Click="SidebarToggleButton_Click"
 						Height="48" Margin="4,8,4,8"
@@ -61,6 +61,7 @@
 						<DataTemplate x:DataType="local:SidebarItem">
 							<Border Classes="sidebar-item" Classes.selected="{Binding IsSelected}" Margin="4,2">
 								<Button Classes="sidebar-button"
+										AutomationProperties.AutomationId="{Binding Page, StringFormat='Sidebar_{0}'}"
 										Command="{Binding $parent[local:MainWindow].SidebarItemClickCommand}"
 										CommandParameter="{Binding Page}"
 										Height="44"
@@ -81,10 +82,10 @@
 				</ItemsControl>
 			</StackPanel>
 		</Border>
-		<ContentControl Grid.Column="1" x:Name="MainContent" Content="{Binding Sidebar.SelectedPage, Converter={StaticResource SidebarPageToContentConverter}}" />
+		<ContentControl Grid.Column="1" x:Name="MainContent" AutomationProperties.AutomationId="MainContent" Content="{Binding Sidebar.SelectedPage, Converter={StaticResource SidebarPageToContentConverter}}" />
 
 		<!-- 右上角「導覽」按鈕：只在「工具」頁顯示（由 MainWindow.Tour.cs 控制），可隨時重看操作導覽 -->
-		<Button Grid.Column="1" Name="TourButton" Classes="tour-button"
+		<Button Grid.Column="1" Name="TourButton" AutomationProperties.AutomationId="TourButton" Classes="tour-button"
 				HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,23,26,0"
 				Cursor="Hand" Click="TourButton_Click">
 			<StackPanel Orientation="Horizontal" Spacing="6">
