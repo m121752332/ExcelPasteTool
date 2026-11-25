@@ -1,5 +1,41 @@
 [
   {
+    "version": "1.7.3",
+    "date": "2026-11-25",
+    "notes": {
+      "TraditionalChinese": [
+        "新增 App 內截圖：在任何畫面按 Alt+F5（Mac 是 ⌥F5）拍下目前的 App 畫面存成 PNG，完成時跳出通知",
+        "截圖依年月分資料夾存放（預設在「圖片\\DataSplitter\\202611」這類資料夾），整個月份資料夾刪掉即刪除該月截圖",
+        "側邊欄新增「截圖」頁：依月份分組，可預覽、複製到剪貼簿、開啟、在資料夾中顯示、刪除單張或整個月份",
+        "設定 › 一般設置 新增「截圖資料夾」，可變更存放位置或還原預設"
+      ],
+      "SimplifiedChinese": [
+        "新增 App 内截图：在任何画面按 Alt+F5（Mac 是 ⌥F5）拍下当前的 App 画面保存为 PNG，完成时弹出通知",
+        "截图按年月分文件夹保存（默认在「图片\\DataSplitter\\202611」这类文件夹），整个月份文件夹删掉即删除该月截图",
+        "侧边栏新增「截图」页：按月份分组，可预览、复制到剪贴板、打开、在文件夹中显示、删除单张或整个月份",
+        "设定 › 一般设置 新增「截图文件夹」，可更改保存位置或恢复默认"
+      ],
+      "English": [
+        "New in-app screenshots: press Alt+F5 (⌥F5 on a Mac) on any screen to save the current app screen as a PNG, with a notification when done",
+        "Screenshots are saved in one folder per month (by default Pictures/DataSplitter/202611 and so on), so deleting a month folder deletes that month",
+        "New Screenshots page in the sidebar: grouped by month, with preview, copy to clipboard, open, show in folder, and delete one screenshot or a whole month",
+        "Settings › General has a new Screenshot folder setting to change the location or reset it to the default"
+      ],
+      "Japanese": [
+        "アプリ内スクリーンショットを追加しました。どの画面でも Alt+F5（Mac は ⌥F5）を押すと現在のアプリ画面を PNG で保存し、通知を表示します",
+        "スクリーンショットは年月ごとのフォルダー（既定は「ピクチャ\\DataSplitter\\202611」など）に保存され、月のフォルダーを削除するとその月の分を削除できます",
+        "サイドバーに「スクリーンショット」ページを追加しました。月ごとにまとめて表示し、プレビュー、クリップボードへのコピー、開く、フォルダーに表示、1 枚または月ごとの削除ができます",
+        "設定 › 一般設定に「スクリーンショットの保存先」を追加し、保存先の変更や既定への復元ができます"
+      ],
+      "Korean": [
+        "앱 내 스크린샷을 추가했습니다. 어느 화면에서든 Alt+F5(Mac은 ⌥F5)를 누르면 현재 앱 화면을 PNG로 저장하고 알림을 표시합니다",
+        "스크린샷은 연월별 폴더(기본값 「사진\\DataSplitter\\202611」 등)에 저장되며, 월 폴더를 지우면 그 달의 스크린샷이 삭제됩니다",
+        "사이드바에 「스크린샷」 페이지를 추가했습니다. 월별로 묶어 보여 주며 미리 보기, 클립보드로 복사, 열기, 폴더에서 보기, 한 장 또는 한 달 전체 삭제를 할 수 있습니다",
+        "설정 › 일반 설정에 「스크린샷 폴더」를 추가해 저장 위치를 바꾸거나 기본값으로 되돌릴 수 있습니다"
+      ]
+    }
+  },
+  {
     "version": "1.7.2",
     "date": "2026-11-25",
     "notes": {
